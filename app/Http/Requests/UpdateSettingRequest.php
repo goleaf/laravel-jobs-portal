@@ -14,7 +14,7 @@ class UpdateSettingRequest extends FormRequest
     {
         $companyDescription = trim(request()->get('company_description'));
         $sectionName = request()->all();
-        if ('general' == $sectionName['sectionName']) {
+        if ($sectionName['sectionName'] == 'general') {
             if (empty($companyDescription)) {
                 throw ValidationException::withMessages([
                     'company_description' => 'Company Description is required',
@@ -26,7 +26,7 @@ class UpdateSettingRequest extends FormRequest
                 ]);
             }
         } else {
-            if ('front_office_details' == $sectionName['sectionName']) {
+            if ($sectionName['sectionName'] == 'front_office_details') {
                 if (empty(trim(request()->get('address')))) {
                     throw ValidationException::withMessages([
                         'address' => 'Address is required',
@@ -36,7 +36,7 @@ class UpdateSettingRequest extends FormRequest
                     'email' => 'required|email:filter|unique:users,email',
                 ]);
             } else {
-                if ('about_us' == $sectionName['sectionName']) {
+                if ($sectionName['sectionName'] == 'about_us') {
                     if (empty(request()->get('about_us'))) {
                         throw ValidationException::withMessages([
                             'company_description' => 'About Us is required',

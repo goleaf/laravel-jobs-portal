@@ -5,7 +5,7 @@ use App\Models\Company;
 use App\Models\Country;
 use Illuminate\Support\Str;
 
-if (!function_exists('trans_json')) {
+if (! function_exists('trans_json')) {
     /**
      * Get translation from JSON files.
      */
@@ -15,7 +15,7 @@ if (!function_exists('trans_json')) {
     }
 }
 
-if (!function_exists('is_rtl')) {
+if (! function_exists('is_rtl')) {
     /**
      * Check if current locale is RTL.
      */
@@ -25,7 +25,7 @@ if (!function_exists('is_rtl')) {
     }
 }
 
-if (!function_exists('lang_direction')) {
+if (! function_exists('lang_direction')) {
     /**
      * Get language direction.
      */
@@ -35,7 +35,7 @@ if (!function_exists('lang_direction')) {
     }
 }
 
-if (!function_exists('getCountries')) {
+if (! function_exists('getCountries')) {
     /**
      * Get list of countries.
      *
@@ -52,7 +52,7 @@ if (!function_exists('getCountries')) {
     }
 }
 
-if (!function_exists('getCountries')) {
+if (! function_exists('getCountries')) {
     function getCountries()
     {
         try {
@@ -63,7 +63,7 @@ if (!function_exists('getCountries')) {
     }
 }
 
-if (!function_exists('getUniqueCompanyId')) {
+if (! function_exists('getUniqueCompanyId')) {
     /**
      * Generate a unique company ID.
      */

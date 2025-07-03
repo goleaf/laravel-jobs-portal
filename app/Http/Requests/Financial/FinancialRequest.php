@@ -3,31 +3,31 @@
 namespace App\Http\Requests\Financial;
 
 use App\Http\Requests\Foundation\AbstractBaseRequest;
-use App\Http\Requests\Foundation\Traits\SecurityValidationTrait;
+use App\Http\Requests\Foundation\Traits\AuditLoggingTrait;
 use App\Http\Requests\Foundation\Traits\MultilingualValidationTrait;
 use App\Http\Requests\Foundation\Traits\PerformanceOptimizationTrait;
-use App\Http\Requests\Foundation\Traits\AuditLoggingTrait;
+use App\Http\Requests\Foundation\Traits\SecurityValidationTrait;
 
 /**
  * Financial Request - Base class for financial validation
- * 
+ *
  * Handles validation for:
  * - Payment processing and transactions
  * - Subscription and billing management
  * - Currency and financial calculations
  * - Compliance and security requirements
  * - Financial audit trails
- * 
- * @package App\Http\Requests\Financial
+ *
  * @version 1.0.0
+ *
  * @since 2024-12-28
  */
 abstract class FinancialRequest extends AbstractBaseRequest
 {
-    use SecurityValidationTrait,
-        MultilingualValidationTrait,
-        PerformanceOptimizationTrait,
-        AuditLoggingTrait;
+    use AuditLoggingTrait;
+    use MultilingualValidationTrait;
+    use PerformanceOptimizationTrait;
+    use SecurityValidationTrait;
 
     /**
      * Security level for financial operations (always critical)
@@ -51,7 +51,7 @@ abstract class FinancialRequest extends AbstractBaseRequest
         'payment_security',
         'currency_validation',
         'amount_verification',
-        'compliance_check'
+        'compliance_check',
     ];
 
     /**
@@ -115,7 +115,7 @@ abstract class FinancialRequest extends AbstractBaseRequest
             'card_number' => ['sometimes', 'required', 'string', 'regex:/^\d{13,19}$/'],
             'card_holder_name' => ['sometimes', 'required', 'string', 'max:255'],
             'expiry_month' => ['sometimes', 'required', 'integer', 'between:1,12'],
-            'expiry_year' => ['sometimes', 'required', 'integer', 'min:' . date('Y')],
+            'expiry_year' => ['sometimes', 'required', 'integer', 'min:'.date('Y')],
             'cvv' => ['sometimes', 'required', 'string', 'regex:/^\d{3,4}$/'],
         ];
     }
@@ -176,13 +176,13 @@ abstract class FinancialRequest extends AbstractBaseRequest
 
         // Validate amount limits
         $this->validateAmountLimits($validator);
-        
+
         // Validate currency compatibility
         $this->validateCurrencyCompatibility($validator);
-        
+
         // Validate payment method security
         $this->validatePaymentSecurity($validator);
-        
+
         // Validate compliance requirements
         $this->validateComplianceRequirements($validator);
     }
@@ -197,11 +197,11 @@ abstract class FinancialRequest extends AbstractBaseRequest
 
         if ($amount && $transactionType) {
             $limits = $this->getAmountLimits($transactionType);
-            
+
             if ($amount < $limits['min']) {
                 $validator->errors()->add('amount', __('validation.financial.amount_below_minimum', ['min' => $limits['min']]));
             }
-            
+
             if ($amount > $limits['max']) {
                 $validator->errors()->add('amount', __('validation.financial.amount_above_maximum', ['max' => $limits['max']]));
             }
@@ -218,8 +218,8 @@ abstract class FinancialRequest extends AbstractBaseRequest
 
         if ($currency && $paymentMethod) {
             $supportedCurrencies = $this->getSupportedCurrencies($paymentMethod);
-            
-            if (!in_array($currency, $supportedCurrencies)) {
+
+            if (! in_array($currency, $supportedCurrencies)) {
                 $validator->errors()->add('currency', __('validation.financial.currency_not_supported_for_payment_method'));
             }
         }
@@ -254,7 +254,7 @@ abstract class FinancialRequest extends AbstractBaseRequest
 
         // Anti-money laundering checks
         $this->validateAmlRequirements($validator);
-        
+
         // Tax compliance
         $this->validateTaxCompliance($validator);
     }
@@ -296,7 +296,7 @@ abstract class FinancialRequest extends AbstractBaseRequest
      */
     protected function getAmountLimits(string $transactionType): array
     {
-        return match($transactionType) {
+        return match ($transactionType) {
             'payment' => ['min' => 0.01, 'max' => 100000.00],
             'refund' => ['min' => 0.01, 'max' => 50000.00],
             'subscription' => ['min' => 1.00, 'max' => 10000.00],
@@ -309,7 +309,7 @@ abstract class FinancialRequest extends AbstractBaseRequest
      */
     protected function getSupportedCurrencies(string $paymentMethod): array
     {
-        return match($paymentMethod) {
+        return match ($paymentMethod) {
             'paypal' => ['USD', 'EUR', 'GBP', 'CAD', 'AUD'],
             'stripe' => ['USD', 'EUR', 'GBP', 'JPY', 'CAD', 'AUD', 'CHF', 'NOK', 'SEK', 'DKK'],
             'bank_transfer' => ['USD', 'EUR', 'GBP'],
@@ -330,7 +330,7 @@ abstract class FinancialRequest extends AbstractBaseRequest
         }
 
         if (isset($sanitized['amount'])) {
-            $sanitized['amount'] = round((float)$sanitized['amount'], 2);
+            $sanitized['amount'] = round((float) $sanitized['amount'], 2);
         }
 
         if (isset($sanitized['currency'])) {
@@ -339,4 +339,4 @@ abstract class FinancialRequest extends AbstractBaseRequest
 
         return $sanitized;
     }
-} 
+}

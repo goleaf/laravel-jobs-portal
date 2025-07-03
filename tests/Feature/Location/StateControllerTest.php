@@ -42,7 +42,7 @@ class StateControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanCreateState(): void
+    public function admin_can_create_state(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -57,8 +57,7 @@ class StateControllerTest extends TestCase
         $response->assertStatus(201)
             ->assertJsonStructure([
                 'data' => ['name', 'country_id', 'code', 'is_active', 'id', 'created_at', 'updated_at'],
-            ])
-        ;
+            ]);
 
         $this->assertDatabaseHas('states', [
             'name' => $data['name'] ?? $data[array_key_first($data)],
@@ -66,7 +65,7 @@ class StateControllerTest extends TestCase
     }
 
     /** @test */
-    public function employerCanCreateState(): void
+    public function employer_can_create_state(): void
     {
         Sanctum::actingAs($this->employer);
 
@@ -82,7 +81,7 @@ class StateControllerTest extends TestCase
     }
 
     /** @test */
-    public function candidateCannotCreateState(): void
+    public function candidate_cannot_create_state(): void
     {
         Sanctum::actingAs($this->candidate);
 
@@ -98,7 +97,7 @@ class StateControllerTest extends TestCase
     }
 
     /** @test */
-    public function unauthenticatedUserCannotCreateState(): void
+    public function unauthenticated_user_cannot_create_state(): void
     {
         $data = [
             'name' => 'California',
@@ -112,7 +111,7 @@ class StateControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanUpdateState(): void
+    public function admin_can_update_state(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -134,7 +133,7 @@ class StateControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanDeleteState(): void
+    public function admin_can_delete_state(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -150,7 +149,7 @@ class StateControllerTest extends TestCase
     }
 
     /** @test */
-    public function validationFailsWithInvalidData(): void
+    public function validation_fails_with_invalid_data(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -161,12 +160,11 @@ class StateControllerTest extends TestCase
         $response = $this->postJson('/api/state', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function validationFailsWithDuplicateName(): void
+    public function validation_fails_with_duplicate_name(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -182,12 +180,11 @@ class StateControllerTest extends TestCase
         $response = $this->postJson('/api/state', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function canListStates(): void
+    public function can_list_states(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -200,12 +197,11 @@ class StateControllerTest extends TestCase
                 'data' => [
                     '*' => ['name', 'country_id', 'code', 'is_active', 'id', 'created_at', 'updated_at'],
                 ],
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function canShowSingleState(): void
+    public function can_show_single_state(): void
     {
         Sanctum::actingAs($this->admin);
 

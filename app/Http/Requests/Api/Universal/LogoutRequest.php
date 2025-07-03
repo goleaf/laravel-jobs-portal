@@ -14,7 +14,7 @@ class LogoutRequest extends FormRequest
     public function authorize(): bool
     {
         // User must be authenticated via Sanctum token to logout
-        return null !== $this->user() && null !== $this->user()->currentAccessToken();
+        return $this->user() !== null && $this->user()->currentAccessToken() !== null;
     }
 
     /**
@@ -55,7 +55,7 @@ class LogoutRequest extends FormRequest
     {
         $validator->after(function ($validator) {
             // Verify that the user has a current access token
-            if ($this->user() && !$this->user()->currentAccessToken()) {
+            if ($this->user() && ! $this->user()->currentAccessToken()) {
                 $validator->errors()->add('token', __('auth.no_active_token'));
             }
         });

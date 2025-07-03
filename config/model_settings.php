@@ -9,6 +9,6 @@ return [
     'defaultSettings' => [
         'users' => [
 
-        ]
-    ]
+        ],
+    ],
 ];

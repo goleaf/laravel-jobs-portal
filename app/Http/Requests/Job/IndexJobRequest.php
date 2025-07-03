@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 /**
  * Index Job Request
- * 
+ *
  * Handles validation for listing jobs with Context7 patterns
  * Includes multilingual support and comprehensive validation
  */

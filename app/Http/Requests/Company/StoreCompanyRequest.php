@@ -8,8 +8,6 @@ use App\Models\State;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\File;
-use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class StoreCompanyRequest.
@@ -27,12 +25,12 @@ class StoreCompanyRequest extends FormRequest
         $user = auth()->user();
 
         // Users must be authenticated to create companies
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
         // Check if user already has a company (if business rule restricts multiple companies)
-        if ($user->company && !$user->hasRole(['admin', 'super-admin'])) {
+        if ($user->company && ! $user->hasRole(['admin', 'super-admin'])) {
             return false; // Only allow one company per user unless admin
         }
 
@@ -441,7 +439,7 @@ class StoreCompanyRequest extends FormRequest
 
             // reCAPTCHA for security
             'g-recaptcha-response' => [
-                'required_if:'.('production' === config('app.env') ? 'true' : 'false'),
+                'required_if:'.(config('app.env') === 'production' ? 'true' : 'false'),
                 'string',
             ],
         ];
@@ -578,7 +576,7 @@ class StoreCompanyRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     public function withValidator($validator): void
     {
@@ -673,7 +671,7 @@ class StoreCompanyRequest extends FormRequest
         // Ensure numeric fields are properly typed
         $numericFields = ['founded_year', 'employee_count', 'revenue', 'latitude', 'longitude'];
         foreach ($numericFields as $field) {
-            if ($this->has($field) && !empty($this->{$field})) {
+            if ($this->has($field) && ! empty($this->{$field})) {
                 $this->merge([$field => is_numeric($this->{$field}) ? (float) $this->{$field} : null]);
             }
         }
@@ -683,7 +681,7 @@ class StoreCompanyRequest extends FormRequest
         foreach ($arrayFields as $field) {
             if ($this->has($field) && is_array($this->{$field})) {
                 $cleanArray = array_filter(array_map('trim', $this->{$field}), function ($item) {
-                    return !empty($item);
+                    return ! empty($item);
                 });
                 $this->merge([$field => array_values($cleanArray)]);
             }
@@ -693,7 +691,7 @@ class StoreCompanyRequest extends FormRequest
     /**
      * Validate business logic constraints.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     protected function validateBusinessLogic($validator): void
     {
@@ -723,7 +721,7 @@ class StoreCompanyRequest extends FormRequest
         }
 
         // Validate stock symbol for public companies
-        if ('corporation' === $this->company_type && $this->revenue > 1000000 && !$this->stock_symbol) {
+        if ($this->company_type === 'corporation' && $this->revenue > 1000000 && ! $this->stock_symbol) {
             // Large corporations might be expected to have stock symbols
             // This is a business rule that can be adjusted
         }
@@ -732,8 +730,7 @@ class StoreCompanyRequest extends FormRequest
         if ($this->office_locations) {
             $headquartersCount = collect($this->office_locations)
                 ->where('is_headquarters', true)
-                ->count()
-            ;
+                ->count();
 
             if ($headquartersCount > 1) {
                 $validator->errors()->add('office_locations', __('validation.company_store.multiple_headquarters'));
@@ -744,7 +741,7 @@ class StoreCompanyRequest extends FormRequest
     /**
      * Validate admin-specific fields.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     protected function validateAdminFields($validator): void
     {
@@ -753,7 +750,7 @@ class StoreCompanyRequest extends FormRequest
         // Only admins can set featured/verified status
         $adminOnlyFields = ['is_featured', 'is_verified'];
         foreach ($adminOnlyFields as $field) {
-            if ($this->has($field) && $this->{$field} && (!$user || !$user->hasRole(['admin', 'super-admin']))) {
+            if ($this->has($field) && $this->{$field} && (! $user || ! $user->hasRole(['admin', 'super-admin']))) {
                 $validator->errors()->add($field, __('validation.company_store.admin_only_field'));
             }
         }
@@ -762,7 +759,7 @@ class StoreCompanyRequest extends FormRequest
     /**
      * Validate geographic consistency.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     protected function validateGeographicConsistency($validator): void
     {
@@ -770,10 +767,9 @@ class StoreCompanyRequest extends FormRequest
         if ($this->country_id && $this->state_id) {
             $stateExists = State::where('id', $this->state_id)
                 ->where('country_id', $this->country_id)
-                ->exists()
-            ;
+                ->exists();
 
-            if (!$stateExists) {
+            if (! $stateExists) {
                 $validator->errors()->add('state_id', __('validation.company_store.state_country_mismatch'));
             }
         }
@@ -782,10 +778,9 @@ class StoreCompanyRequest extends FormRequest
         if ($this->state_id && $this->city_id) {
             $cityExists = City::where('id', $this->city_id)
                 ->where('state_id', $this->state_id)
-                ->exists()
-            ;
+                ->exists();
 
-            if (!$cityExists) {
+            if (! $cityExists) {
                 $validator->errors()->add('city_id', __('validation.company_store.city_state_mismatch'));
             }
         }
@@ -794,7 +789,7 @@ class StoreCompanyRequest extends FormRequest
     /**
      * Validate social media consistency.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     protected function validateSocialMediaConsistency($validator): void
     {
@@ -803,13 +798,13 @@ class StoreCompanyRequest extends FormRequest
         $socialCount = 0;
 
         foreach ($socialFields as $field) {
-            if (!empty($this->{$field})) {
-                ++$socialCount;
+            if (! empty($this->{$field})) {
+                $socialCount++;
             }
         }
 
         // For companies with websites, suggest having at least one social media presence
-        if ($this->website && 0 === $socialCount) {
+        if ($this->website && $socialCount === 0) {
             // This is just a suggestion, not an error
             // Could be implemented as a warning in the UI
         }
@@ -818,11 +813,11 @@ class StoreCompanyRequest extends FormRequest
     /**
      * Format URL to ensure proper protocol.
      *
-     * @param mixed $url
+     * @param  mixed  $url
      */
     private function formatUrl($url): string
     {
-        if (!str_starts_with($url, 'http://') && !str_starts_with($url, 'https://')) {
+        if (! str_starts_with($url, 'http://') && ! str_starts_with($url, 'https://')) {
             return 'https://'.$url;
         }
 
@@ -832,7 +827,7 @@ class StoreCompanyRequest extends FormRequest
     /**
      * Format phone number.
      *
-     * @param mixed $phone
+     * @param  mixed  $phone
      */
     private function formatPhone($phone): string
     {

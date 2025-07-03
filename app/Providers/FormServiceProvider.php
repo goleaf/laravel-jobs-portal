@@ -14,7 +14,7 @@ class FormServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton('form', function ($app) {
-            return new FormHelper();
+            return new FormHelper;
         });
     }
 

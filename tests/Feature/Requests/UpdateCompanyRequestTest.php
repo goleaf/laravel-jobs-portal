@@ -30,17 +30,17 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAuthorizationReturnsTrue()
+    public function test_authorization_returns_true()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
 
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function testValidationRulesAreDefined()
+    public function test_validation_rules_are_defined()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $rules = $request->rules();
 
         $this->assertIsArray($rules);
@@ -48,9 +48,9 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationMessagesAreDefined()
+    public function test_validation_messages_are_defined()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
 
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
@@ -61,9 +61,9 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationAttributesAreDefined()
+    public function test_validation_attributes_are_defined()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
 
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
@@ -74,9 +74,9 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testNameValidation()
+    public function test_name_validation()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('name', $rules);
@@ -87,9 +87,9 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testEmailValidation()
+    public function test_email_validation()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('email', $rules);
@@ -100,9 +100,9 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testPhoneValidation()
+    public function test_phone_validation()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('phone', $rules);
@@ -113,9 +113,9 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testWebsiteValidation()
+    public function test_website_validation()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('website', $rules);
@@ -126,9 +126,9 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testIndustryIdValidation()
+    public function test_industry_id_validation()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('industry_id', $rules);
@@ -139,9 +139,9 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testOwnershipTypeIdValidation()
+    public function test_ownership_type_id_validation()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('ownership_type_id', $rules);
@@ -152,9 +152,9 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testCompanySizeIdValidation()
+    public function test_company_size_id_validation()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('company_size_id', $rules);
@@ -165,9 +165,9 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testEstablishedInValidation()
+    public function test_established_in_validation()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('established_in', $rules);
@@ -178,9 +178,9 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testDescriptionValidation()
+    public function test_description_validation()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('description', $rules);
@@ -191,9 +191,9 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testCountryIdValidation()
+    public function test_country_id_validation()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('country_id', $rules);
@@ -204,9 +204,9 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testStateIdValidation()
+    public function test_state_id_validation()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('state_id', $rules);
@@ -217,9 +217,9 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testCityIdValidation()
+    public function test_city_id_validation()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('city_id', $rules);
@@ -230,9 +230,9 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAddressValidation()
+    public function test_address_validation()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('address', $rules);
@@ -243,9 +243,9 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testPostalCodeValidation()
+    public function test_postal_code_validation()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('postal_code', $rules);
@@ -256,9 +256,9 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testLogoValidation()
+    public function test_logo_validation()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('logo', $rules);
@@ -269,9 +269,9 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testIsActiveValidation()
+    public function test_is_active_validation()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('is_active', $rules);
@@ -282,9 +282,9 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testBooleanValidation()
+    public function test_boolean_validation()
     {
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('boolean', $rules);
@@ -295,7 +295,7 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidDataPassesValidation()
+    public function test_valid_data_passes_validation()
     {
         $validData = [
             'name' => 'Test Value',
@@ -317,18 +317,18 @@ class UpdateCompanyRequestTest extends TestCase
             'boolean' => 'Test Value',
         ];
 
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $validator = validator($validData, $request->rules());
 
         $this->assertFalse($validator->fails());
     }
 
     /** @test */
-    public function testRequestHandlesEmptyDataCorrectly()
+    public function test_request_handles_empty_data_correctly()
     {
         $emptyData = [];
 
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $validator = validator($emptyData, $request->rules());
 
         // Should handle empty data according to rules
@@ -336,7 +336,7 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSecurityValidationPreventsXss()
+    public function test_security_validation_prevents_xss()
     {
         $maliciousData = [
             'name' => '<script>alert("xss")</script>',
@@ -344,7 +344,7 @@ class UpdateCompanyRequestTest extends TestCase
             'content' => '<img src=x onerror=alert("xss")>',
         ];
 
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $validator = validator($maliciousData, $request->rules());
 
         // XSS data should either fail validation or be properly sanitized
@@ -359,7 +359,7 @@ class UpdateCompanyRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSqlInjectionPrevention()
+    public function test_sql_injection_prevention()
     {
         $sqlInjectionData = [
             'name' => "'; DROP TABLE users; --",
@@ -367,7 +367,7 @@ class UpdateCompanyRequestTest extends TestCase
             'filter' => 'UNION SELECT * FROM passwords',
         ];
 
-        $request = new UpdateCompanyRequest();
+        $request = new UpdateCompanyRequest;
         $validator = validator($sqlInjectionData, $request->rules());
 
         // SQL injection patterns should be handled safely

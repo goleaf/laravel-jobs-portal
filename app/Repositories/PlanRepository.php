@@ -15,7 +15,7 @@ use Stripe\StripeClient;
 class PlanRepository
 {
     /**
-     * @param mixed $input
+     * @param  mixed  $input
      *
      * @throws \Exception
      */
@@ -78,7 +78,7 @@ class PlanRepository
 
         try {
             $envSetting = getEnvSetting();
-            if (!empty($envSetting['stripe_secret'])) {
+            if (! empty($envSetting['stripe_secret'])) {
                 $stripe = new StripeClient(
                     $envSetting['stripe_secret']
                 );
@@ -109,8 +109,7 @@ class PlanRepository
             ->where('stripe_status', '!=', Subscription::PENDING)
             ->where('stripe_status', '!=', Subscription::REJECTED)
             ->latest()
-            ->first()
-        ;
+            ->first();
 
         $data['activePlanId'] = null;
 

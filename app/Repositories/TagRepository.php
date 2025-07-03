@@ -15,11 +15,10 @@ class TagRepository extends BaseRepository implements TagRepositoryInterface
     /**
      * Get tags by type.
      *
-     * @param string $type
      * @return mixed
      */
     public function getByType(string $type)
     {
         return $this->model->where('type', $type)->get();
     }
-} 
+}

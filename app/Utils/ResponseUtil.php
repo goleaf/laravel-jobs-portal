@@ -5,7 +5,7 @@ namespace App\Utils;
 class ResponseUtil
 {
     /**
-     * @param mixed $data
+     * @param  mixed  $data
      */
     public static function makeResponse(string $message, $data): array
     {
@@ -23,7 +23,7 @@ class ResponseUtil
             'message' => $message,
         ];
 
-        if (!empty($data)) {
+        if (! empty($data)) {
             $res['data'] = $data;
         }
 

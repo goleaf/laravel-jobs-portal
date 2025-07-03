@@ -3,10 +3,10 @@
 namespace Tests\Feature\UniqueValues;
 
 use App\Services\Universal\UniversalUniqueValueService;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use JustBetter\UniqueValues\Support\UniqueValue;
+use Tests\TestCase;
 
 class UniqueValueGenerationTest extends TestCase
 {
@@ -119,13 +119,13 @@ class UniqueValueGenerationTest extends TestCase
     public function it_handles_concurrency_with_subjects()
     {
         $jobId = 123;
-        
+
         // First generation should be the same for the same subject
         $reference1 = $this->service->generateJobReference($jobId);
         $reference2 = $this->service->generateJobReference($jobId);
-        
+
         $this->assertEquals($reference1, $reference2);
-        
+
         // Different subject should generate different value
         $reference3 = $this->service->generateJobReference(456);
         $this->assertNotEquals($reference1, $reference3);
@@ -137,19 +137,19 @@ class UniqueValueGenerationTest extends TestCase
         $custom = $this->service->generateCustomUnique(
             'test-scope',
             function (int $attempt): string {
-                return "TEST-" . str_pad((string) $attempt, 3, '0', STR_PAD_LEFT);
+                return 'TEST-'.str_pad((string) $attempt, 3, '0', STR_PAD_LEFT);
             },
             null,
             5
         );
 
         $this->assertEquals('TEST-000', $custom);
-        
+
         // Second generation should increment
         $custom2 = $this->service->generateCustomUnique(
             'test-scope',
             function (int $attempt): string {
-                return "TEST-" . str_pad((string) $attempt, 3, '0', STR_PAD_LEFT);
+                return 'TEST-'.str_pad((string) $attempt, 3, '0', STR_PAD_LEFT);
             },
             null,
             5
@@ -168,11 +168,11 @@ class UniqueValueGenerationTest extends TestCase
         $this->assertArrayHasKey(1, $results);
         $this->assertArrayHasKey(2, $results);
         $this->assertArrayHasKey(3, $results);
-        
+
         foreach ($results as $result) {
             $this->assertStringStartsWith('JOB-', $result);
         }
-        
+
         // All values should be unique
         $uniqueValues = array_unique(array_values($results));
         $this->assertCount(3, $uniqueValues);
@@ -186,7 +186,7 @@ class UniqueValueGenerationTest extends TestCase
         $this->assertArrayHasKey('scopes', $stats);
         $this->assertArrayHasKey('configuration', $stats);
         $this->assertArrayHasKey('patterns', $stats);
-        
+
         $expectedScopes = [
             'job-reference',
             'application-code',
@@ -197,7 +197,7 @@ class UniqueValueGenerationTest extends TestCase
             'api-key',
             'general-slug',
         ];
-        
+
         foreach ($expectedScopes as $scope) {
             $this->assertContains($scope, $stats['scopes']);
         }
@@ -207,7 +207,7 @@ class UniqueValueGenerationTest extends TestCase
     public function it_handles_failed_generation_gracefully()
     {
         $this->expectException(\Exception::class);
-        
+
         $this->service->generateBatch('invalid-type', [1, 2, 3]);
     }
 
@@ -230,7 +230,7 @@ class UniqueValueGenerationTest extends TestCase
 
         // Second generation should fail after max attempts
         $this->expectException(\Exception::class);
-        
+
         UniqueValue::make()
             ->scope('conflict-test')
             ->attempts(2)
@@ -243,16 +243,16 @@ class UniqueValueGenerationTest extends TestCase
     {
         $value1 = UniqueValue::make()
             ->scope('scope-1')
-            ->generator(fn() => 'TEST-VALUE')
+            ->generator(fn () => 'TEST-VALUE')
             ->generate();
 
         $value2 = UniqueValue::make()
             ->scope('scope-2')
-            ->generator(fn() => 'TEST-VALUE')
+            ->generator(fn () => 'TEST-VALUE')
             ->generate();
 
         // Same value should be allowed in different scopes
         $this->assertEquals('TEST-VALUE', $value1);
         $this->assertEquals('TEST-VALUE', $value2);
     }
-} 
+}

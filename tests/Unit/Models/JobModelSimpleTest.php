@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class JobModelSimpleTest extends TestCase
 {
     /** @test */
-    public function itHasStatusConstants()
+    public function it_has_status_constants()
     {
         $this->assertEquals(0, Job::STATUS_DRAFT);
         $this->assertEquals(1, Job::STATUS_OPEN);
@@ -23,7 +23,7 @@ class JobModelSimpleTest extends TestCase
     }
 
     /** @test */
-    public function itHasBooleanConstants()
+    public function it_has_boolean_constants()
     {
         $this->assertEquals(1, Job::YES);
         $this->assertEquals(0, Job::NO);
@@ -35,9 +35,9 @@ class JobModelSimpleTest extends TestCase
     }
 
     /** @test */
-    public function itHasCorrectFillableAttributes()
+    public function it_has_correct_fillable_attributes()
     {
-        $job = new Job();
+        $job = new Job;
         $fillable = $job->getFillable();
 
         $expectedAttributes = [
@@ -77,7 +77,7 @@ class JobModelSimpleTest extends TestCase
     }
 
     /** @test */
-    public function itHasNoPreferenceConstants()
+    public function it_has_no_preference_constants()
     {
         $expectedNoPreference = [
             2 => 'Both',
@@ -89,7 +89,7 @@ class JobModelSimpleTest extends TestCase
     }
 
     /** @test */
-    public function itHasGenderConstants()
+    public function it_has_gender_constants()
     {
         $expectedGender = [
             0 => 'Male',
@@ -100,7 +100,7 @@ class JobModelSimpleTest extends TestCase
     }
 
     /** @test */
-    public function itHasStatusArrayConstants()
+    public function it_has_status_array_constants()
     {
         $expectedStatus = [
             0 => 'Drafted',
@@ -113,7 +113,7 @@ class JobModelSimpleTest extends TestCase
     }
 
     /** @test */
-    public function itHasStatusColorConstants()
+    public function it_has_status_color_constants()
     {
         $expectedColors = [
             0 => 'warning',
@@ -126,7 +126,7 @@ class JobModelSimpleTest extends TestCase
     }
 
     /** @test */
-    public function itHasFavoriteJobStatusConstants()
+    public function it_has_favorite_job_status_constants()
     {
         $expectedFavoriteStatus = [
             1 => 'Live',
@@ -138,9 +138,9 @@ class JobModelSimpleTest extends TestCase
     }
 
     /** @test */
-    public function itHasRelationshipMethods()
+    public function it_has_relationship_methods()
     {
-        $job = new Job();
+        $job = new Job;
 
         // Test that relationship methods exist by checking they are callable
         $this->assertTrue(method_exists($job, 'company'));
@@ -163,7 +163,7 @@ class JobModelSimpleTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeInstantiatedWithAttributes()
+    public function it_can_be_instantiated_with_attributes()
     {
         $job = new Job([
             'job_id' => 'JOB123456',

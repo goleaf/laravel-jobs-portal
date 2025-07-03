@@ -67,8 +67,7 @@ class JobApplicationStoreRequest extends FormRequest
             if ($this->has(['job_id', 'candidate_id'])) {
                 $existingApplication = JobApplication::where('job_id', $this->job_id)
                     ->where('candidate_id', $this->candidate_id)
-                    ->exists()
-                ;
+                    ->exists();
 
                 if ($existingApplication) {
                     $validator->errors()->add('job_id', 'You have already applied for this job.');
@@ -81,7 +80,7 @@ class JobApplicationStoreRequest extends FormRequest
                 if ($job && $job->deadline && $job->deadline->isPast()) {
                     $validator->errors()->add('job_id', 'This job is no longer accepting applications.');
                 }
-                if ($job && 'published' !== $job->status) {
+                if ($job && $job->status !== 'published') {
                     $validator->errors()->add('job_id', 'This job is not currently available for applications.');
                 }
             }

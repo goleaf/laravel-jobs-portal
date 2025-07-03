@@ -156,7 +156,7 @@ class ShowCompanyResource extends JsonResource
     /**
      * Customize the response for the resource.
      *
-     * @param mixed $response
+     * @param  mixed  $response
      */
     public function withResponse(Request $request, $response): void
     {
@@ -194,8 +194,8 @@ class ShowCompanyResource extends JsonResource
         $completedFields = 0;
 
         foreach ($fields as $field) {
-            if (!empty($this->{$field})) {
-                ++$completedFields;
+            if (! empty($this->{$field})) {
+                $completedFields++;
             }
         }
 

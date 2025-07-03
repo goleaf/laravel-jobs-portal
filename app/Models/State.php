@@ -16,24 +16,24 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Class State.
  *
- * @property int                    $id
- * @property int                    $country_id
- * @property string                 $name
- * @property null|string            $code
- * @property bool                   $is_active
- * @property bool                   $is_featured
- * @property null|float             $latitude
- * @property null|float             $longitude
- * @property null|string            $timezone
- * @property null|int               $population
- * @property null|Carbon            $created_at
- * @property null|Carbon            $updated_at
- * @property null|Carbon            $deleted_at
- * @property Country                $country
- * @property City[]|Collection      $cities
- * @property Collection|User[]      $users
- * @property Collection|Company[]   $companies
- * @property Collection|Job[]       $jobs
+ * @property int $id
+ * @property int $country_id
+ * @property string $name
+ * @property null|string $code
+ * @property bool $is_active
+ * @property bool $is_featured
+ * @property null|float $latitude
+ * @property null|float $longitude
+ * @property null|string $timezone
+ * @property null|int $population
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
+ * @property Country $country
+ * @property City[]|Collection $cities
+ * @property Collection|User[] $users
+ * @property Collection|Company[] $companies
+ * @property Collection|Job[] $jobs
  * @property Candidate[]|Collection $candidates
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\State newModelQuery()
@@ -52,8 +52,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class State extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     /**
      * Validation rules for the model.
@@ -106,8 +106,7 @@ class State extends Model
         return LogOptions::defaults()
             ->logOnly(['name', 'code', 'is_active', 'is_featured', 'country_id'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -185,7 +184,7 @@ class State extends Model
     /**
      * Scope a query to only include active states.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -195,7 +194,7 @@ class State extends Model
     /**
      * Scope a query to only include inactive states.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -205,7 +204,7 @@ class State extends Model
     /**
      * Scope a query to only include featured states.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFeatured($query)
     {
@@ -215,7 +214,7 @@ class State extends Model
     /**
      * Scope a query to only include non-featured states.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNonFeatured($query)
     {
@@ -225,7 +224,7 @@ class State extends Model
     /**
      * Scope a query to filter states by country.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByCountry($query, int $countryId)
     {
@@ -235,7 +234,7 @@ class State extends Model
     /**
      * Scope a query to filter states by multiple countries.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInCountries($query, array $countryIds)
     {
@@ -245,7 +244,7 @@ class State extends Model
     /**
      * Scope a query to filter states by code.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByCode($query, string $code)
     {
@@ -255,21 +254,20 @@ class State extends Model
     /**
      * Scope a query to search states by name or code.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
             $q->where('name', 'like', "%{$term}%")
-                ->orWhere('code', 'like', "%{$term}%")
-            ;
+                ->orWhere('code', 'like', "%{$term}%");
         });
     }
 
     /**
      * Scope a query to get recent states.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -279,7 +277,7 @@ class State extends Model
     /**
      * Scope a query to get old states.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -289,7 +287,7 @@ class State extends Model
     /**
      * Scope a query to get popular states (with most companies).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopular($query, int $limit = 10)
     {
@@ -297,14 +295,13 @@ class State extends Model
             $q->where('is_active', true);
         }])
             ->orderBy('companies_count', 'desc')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     /**
      * Scope a query to get popular states by jobs.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopularByJobs($query, int $limit = 10)
     {
@@ -312,14 +309,13 @@ class State extends Model
             $q->where('status', 'active');
         }])
             ->orderBy('jobs_count', 'desc')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     /**
      * Scope a query to get popular states by candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopularByCandidates($query, int $limit = 10)
     {
@@ -327,14 +323,13 @@ class State extends Model
             $q->where('is_active', true);
         }])
             ->orderBy('candidates_count', 'desc')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     /**
      * Scope a query to order states alphabetically.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
@@ -344,7 +339,7 @@ class State extends Model
     /**
      * Scope a query to include states with cities.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithCities($query)
     {
@@ -354,7 +349,7 @@ class State extends Model
     /**
      * Scope a query to include states without cities.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithoutCities($query)
     {
@@ -364,7 +359,7 @@ class State extends Model
     /**
      * Scope a query to include states with active cities.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithActiveCities($query)
     {
@@ -376,7 +371,7 @@ class State extends Model
     /**
      * Scope a query to include states with companies.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithCompanies($query)
     {
@@ -386,7 +381,7 @@ class State extends Model
     /**
      * Scope a query to include states with active companies.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithActiveCompanies($query)
     {
@@ -398,7 +393,7 @@ class State extends Model
     /**
      * Scope a query to include states with jobs.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithJobs($query)
     {
@@ -408,7 +403,7 @@ class State extends Model
     /**
      * Scope a query to include states with active jobs.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithActiveJobs($query)
     {
@@ -420,7 +415,7 @@ class State extends Model
     /**
      * Scope a query to include states with candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithCandidates($query)
     {
@@ -430,7 +425,7 @@ class State extends Model
     /**
      * Scope a query to include states with active candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithActiveCandidates($query)
     {
@@ -442,7 +437,7 @@ class State extends Model
     /**
      * Scope a query to include states with users.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithUsers($query)
     {
@@ -452,7 +447,7 @@ class State extends Model
     /**
      * Scope a query to include states with active country.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithActiveCountry($query)
     {
@@ -464,7 +459,7 @@ class State extends Model
     /**
      * Scope a query to get states with most cities.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithMostCities($query, int $limit = 10)
     {
@@ -472,29 +467,27 @@ class State extends Model
             $q->where('is_active', true);
         }])
             ->orderBy('cities_count', 'desc')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     /**
      * Scope a query to get metropolitan states.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeMetropolitan($query)
     {
         return $query->where(function ($q) {
             $q->where('name', 'like', '%metro%')
                 ->orWhere('name', 'like', '%capital%')
-                ->orWhere('name', 'like', '%city%')
-            ;
+                ->orWhere('name', 'like', '%city%');
         });
     }
 
     /**
      * Scope a query to filter states by timezone.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByTimezone($query, string $timezone)
     {
@@ -504,7 +497,7 @@ class State extends Model
     /**
      * Scope a query to filter states with population greater than.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopulationGreaterThan($query, int $population)
     {
@@ -514,7 +507,7 @@ class State extends Model
     /**
      * Scope a query to filter states with population less than.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopulationLessThan($query, int $population)
     {
@@ -524,7 +517,7 @@ class State extends Model
     /**
      * Scope a query to filter states by population range.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopulationBetween($query, int $min, int $max)
     {
@@ -534,26 +527,24 @@ class State extends Model
     /**
      * Scope a query to get states with coordinates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithCoordinates($query)
     {
         return $query->whereNotNull('latitude')
-            ->whereNotNull('longitude')
-        ;
+            ->whereNotNull('longitude');
     }
 
     /**
      * Scope a query to get states without coordinates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithoutCoordinates($query)
     {
         return $query->where(function ($q) {
             $q->whereNull('latitude')
-                ->orWhereNull('longitude')
-            ;
+                ->orWhereNull('longitude');
         });
     }
 
@@ -626,7 +617,7 @@ class State extends Model
      */
     public function hasCoordinates(): bool
     {
-        return !is_null($this->latitude) && !is_null($this->longitude);
+        return ! is_null($this->latitude) && ! is_null($this->longitude);
     }
 
     /**

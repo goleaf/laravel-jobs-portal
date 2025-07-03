@@ -29,7 +29,7 @@ class NotificationTest extends TestCase
     }
 
     /** @test */
-    public function userCanMarkNotificationAsRead()
+    public function user_can_mark_notification_as_read()
     {
         // Create an unread notification for the user
         $notification = Notification::factory()->create([
@@ -38,8 +38,7 @@ class NotificationTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->user)
-            ->postJson("/notification/{$notification->id}/read")
-        ;
+            ->postJson("/notification/{$notification->id}/read");
 
         $response->assertStatus(200);
         $response->assertJson(['success' => true]);
@@ -50,7 +49,7 @@ class NotificationTest extends TestCase
     }
 
     /** @test */
-    public function userCannotMarkAnotherUsersNotificationAsRead()
+    public function user_cannot_mark_another_users_notification_as_read()
     {
         // Create another user
         $anotherUser = User::factory()->create();
@@ -62,8 +61,7 @@ class NotificationTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->user)
-            ->postJson("/notification/{$notification->id}/read")
-        ;
+            ->postJson("/notification/{$notification->id}/read");
 
         // Depending on how authorization is implemented, this could:
         // 1. Return 403 for forbidden
@@ -78,7 +76,7 @@ class NotificationTest extends TestCase
     }
 
     /** @test */
-    public function userCanMarkAllNotificationsAsRead()
+    public function user_can_mark_all_notifications_as_read()
     {
         // Create multiple unread notifications for the user
         Notification::factory()->count(3)->create([
@@ -100,8 +98,7 @@ class NotificationTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->user)
-            ->postJson('/read-all-notification')
-        ;
+            ->postJson('/read-all-notification');
 
         $response->assertStatus(200);
         $response->assertJson(['success' => true]);

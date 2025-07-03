@@ -16,12 +16,12 @@ class ShowCandidateRequest extends FormRequest
         $candidate = $this->route('candidate');
 
         // Public profiles can be viewed by anyone
-        if ($candidate && 'public' === $candidate->visibility) {
+        if ($candidate && $candidate->visibility === 'public') {
             return true;
         }
 
         // Private profiles require authentication and ownership or admin access
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
 
@@ -91,7 +91,7 @@ class ShowCandidateRequest extends FormRequest
                 $includes = explode(',', $this->include);
                 foreach ($includes as $include) {
                     $include = trim($include);
-                    if (!in_array($include, $allowedIncludes)) {
+                    if (! in_array($include, $allowedIncludes)) {
                         $validator->errors()->add('include', "Invalid include relationship: {$include}");
                     }
                 }
@@ -108,7 +108,7 @@ class ShowCandidateRequest extends FormRequest
                 $fields = explode(',', $this->fields);
                 foreach ($fields as $field) {
                     $field = trim($field);
-                    if (!in_array($field, $allowedFields)) {
+                    if (! in_array($field, $allowedFields)) {
                         $validator->errors()->add('fields', "Invalid field selection: {$field}");
                     }
                 }

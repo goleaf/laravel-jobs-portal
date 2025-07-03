@@ -3,9 +3,8 @@
 namespace App\Http\Requests\Enhanced;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Cache;
-use Carbon\Carbon;
+use Illuminate\Validation\Rule;
 
 class RealTimeOperationsRequest extends FormRequest
 {
@@ -26,7 +25,7 @@ class RealTimeOperationsRequest extends FormRequest
         $rules = array_merge($rules, $this->getSecurityRules());
         $rules = array_merge($rules, $this->getMonitoringRules());
         $rules = array_merge($rules, $this->getAdvancedFeaturesRules());
-        
+
         return $rules;
     }
 
@@ -41,7 +40,7 @@ class RealTimeOperationsRequest extends FormRequest
             'reconnection_attempts' => ['nullable', 'integer', 'min:1', 'max:10'],
             'reconnection_delay' => ['nullable', 'integer', 'min:1000', 'max:30000'], // milliseconds
             'max_concurrent_connections' => ['nullable', 'integer', 'min:1', 'max:10000'],
-            
+
             // Channel Management
             'channel_name' => ['nullable', 'string', 'max:100', 'regex:/^[a-zA-Z0-9\-_\.]+$/'],
             'channel_type' => ['nullable', 'string', Rule::in(['public', 'private', 'presence', 'encrypted'])],
@@ -50,7 +49,7 @@ class RealTimeOperationsRequest extends FormRequest
             'channel_history_limit' => ['nullable', 'integer', 'min:0', 'max:10000'],
             'auto_join_channels' => ['nullable', 'array'],
             'auto_join_channels.*' => ['string', 'max:100'],
-            
+
             // Authentication & Authorization
             'socket_auth_required' => ['nullable', 'boolean'],
             'auth_token' => ['nullable', 'string', 'max:500'],
@@ -60,7 +59,7 @@ class RealTimeOperationsRequest extends FormRequest
             'access_control_list' => ['nullable', 'array'],
             'ip_whitelist' => ['nullable', 'array'],
             'ip_whitelist.*' => ['ip'],
-            
+
             // Message Broadcasting
             'broadcast_to_channels' => ['nullable', 'array'],
             'broadcast_to_channels.*' => ['string', 'max:100'],
@@ -83,7 +82,7 @@ class RealTimeOperationsRequest extends FormRequest
             'recipient_ids.*' => ['integer', 'exists:users,id'],
             'recipient_groups' => ['nullable', 'array'],
             'recipient_groups.*' => ['string', Rule::in(['all_users', 'job_seekers', 'employers', 'admins', 'premium_users'])],
-            
+
             // Notification Content
             'notification_title' => ['nullable', 'string', 'max:200'],
             'notification_message' => ['nullable', 'string', 'max:1000'],
@@ -92,7 +91,7 @@ class RealTimeOperationsRequest extends FormRequest
             'action_label' => ['nullable', 'string', 'max:50'],
             'notification_image' => ['nullable', 'string', 'max:500'],
             'notification_icon' => ['nullable', 'string', 'max:100'],
-            
+
             // Delivery Configuration
             'delivery_methods' => ['nullable', 'array'],
             'delivery_methods.*' => ['string', Rule::in(['push', 'email', 'sms', 'in_app', 'slack', 'webhook'])],
@@ -101,7 +100,7 @@ class RealTimeOperationsRequest extends FormRequest
             'batch_delivery' => ['nullable', 'boolean'],
             'batch_size' => ['nullable', 'integer', 'min:1', 'max:1000'],
             'delivery_rate_limit' => ['nullable', 'integer', 'min:1', 'max:1000'], // per minute
-            
+
             // Personalization
             'personalization_enabled' => ['nullable', 'boolean'],
             'user_preferences_respected' => ['nullable', 'boolean'],
@@ -109,7 +108,7 @@ class RealTimeOperationsRequest extends FormRequest
             'language_localization' => ['nullable', 'boolean'],
             'content_customization' => ['nullable', 'array'],
             'a_b_test_variant' => ['nullable', 'string', 'max:50'],
-            
+
             // Tracking & Analytics
             'track_delivery' => ['nullable', 'boolean'],
             'track_opens' => ['nullable', 'boolean'],
@@ -130,7 +129,7 @@ class RealTimeOperationsRequest extends FormRequest
             'parent_message_id' => ['nullable', 'string', 'max:255'],
             'message_content' => ['nullable', 'string', 'max:5000'],
             'message_metadata' => ['nullable', 'array'],
-            
+
             // Participants Management
             'sender_id' => ['nullable', 'integer', 'exists:users,id'],
             'recipient_id' => ['nullable', 'integer', 'exists:users,id'],
@@ -138,7 +137,7 @@ class RealTimeOperationsRequest extends FormRequest
             'participants.*' => ['integer', 'exists:users,id'],
             'conversation_type' => ['nullable', 'string', Rule::in(['direct', 'group', 'broadcast', 'channel'])],
             'max_participants' => ['nullable', 'integer', 'min:2', 'max:100'],
-            
+
             // Message Features
             'message_encryption' => ['nullable', 'boolean'],
             'end_to_end_encryption' => ['nullable', 'boolean'],
@@ -148,7 +147,7 @@ class RealTimeOperationsRequest extends FormRequest
             'typing_indicators' => ['nullable', 'boolean'],
             'message_reactions' => ['nullable', 'boolean'],
             'message_threading' => ['nullable', 'boolean'],
-            
+
             // File Sharing
             'file_attachments' => ['nullable', 'array', 'max:10'],
             'file_attachments.*.filename' => ['string', 'max:255'],
@@ -158,7 +157,7 @@ class RealTimeOperationsRequest extends FormRequest
             'max_file_size' => ['nullable', 'integer', 'min:1048576', 'max:104857600'], // 1MB to 100MB
             'allowed_file_types' => ['nullable', 'array'],
             'allowed_file_types.*' => ['string', 'max:10'],
-            
+
             // Moderation
             'content_moderation' => ['nullable', 'boolean'],
             'profanity_filter' => ['nullable', 'boolean'],
@@ -180,7 +179,7 @@ class RealTimeOperationsRequest extends FormRequest
             'batch_size' => ['nullable', 'integer', 'min:1', 'max:1000'],
             'batch_timeout' => ['nullable', 'integer', 'min:100', 'max:30000'], // milliseconds
             'stream_buffer_size' => ['nullable', 'integer', 'min:1024', 'max:1048576'], // bytes
-            
+
             // Data Filtering
             'filter_criteria' => ['nullable', 'array'],
             'geographic_filters' => ['nullable', 'array'],
@@ -193,7 +192,7 @@ class RealTimeOperationsRequest extends FormRequest
             'date_range_filters' => ['nullable', 'array'],
             'date_range_filters.start_date' => ['date'],
             'date_range_filters.end_date' => ['date', 'after:date_range_filters.start_date'],
-            
+
             // Real-time Analytics
             'analytics_enabled' => ['nullable', 'boolean'],
             'metrics_collection' => ['nullable', 'array'],
@@ -203,7 +202,7 @@ class RealTimeOperationsRequest extends FormRequest
             'anomaly_detection' => ['nullable', 'boolean'],
             'trend_analysis' => ['nullable', 'boolean'],
             'predictive_insights' => ['nullable', 'boolean'],
-            
+
             // Performance Optimization
             'data_caching' => ['nullable', 'boolean'],
             'cache_duration' => ['nullable', 'integer', 'min:60', 'max:3600'], // seconds
@@ -223,7 +222,7 @@ class RealTimeOperationsRequest extends FormRequest
             'workspace_id' => ['nullable', 'string', 'max:255'],
             'document_id' => ['nullable', 'string', 'max:255'],
             'collaboration_mode' => ['nullable', 'string', Rule::in(['real_time', 'turn_based', 'async'])],
-            
+
             // Participant Management
             'collaborators' => ['nullable', 'array', 'max:20'],
             'collaborators.*' => ['integer', 'exists:users,id'],
@@ -233,7 +232,7 @@ class RealTimeOperationsRequest extends FormRequest
             'permission_matrix.*.permissions.*' => ['string', Rule::in(['read', 'write', 'comment', 'admin'])],
             'guest_access_enabled' => ['nullable', 'boolean'],
             'public_collaboration' => ['nullable', 'boolean'],
-            
+
             // Live Editing Features
             'concurrent_editing' => ['nullable', 'boolean'],
             'operational_transform' => ['nullable', 'boolean'],
@@ -242,7 +241,7 @@ class RealTimeOperationsRequest extends FormRequest
             'change_tracking' => ['nullable', 'boolean'],
             'live_cursors' => ['nullable', 'boolean'],
             'user_presence_indicators' => ['nullable', 'boolean'],
-            
+
             // Communication Integration
             'voice_chat_enabled' => ['nullable', 'boolean'],
             'video_chat_enabled' => ['nullable', 'boolean'],
@@ -251,7 +250,7 @@ class RealTimeOperationsRequest extends FormRequest
             'annotation_tools' => ['nullable', 'boolean'],
             'comment_system' => ['nullable', 'boolean'],
             'mention_notifications' => ['nullable', 'boolean'],
-            
+
             // Session Management
             'session_timeout' => ['nullable', 'integer', 'min:300', 'max:28800'], // 5 minutes to 8 hours
             'auto_save_interval' => ['nullable', 'integer', 'min:10', 'max:300'], // seconds
@@ -271,7 +270,7 @@ class RealTimeOperationsRequest extends FormRequest
             'event_payload' => ['nullable', 'array'],
             'event_correlation_id' => ['nullable', 'string', 'max:255'],
             'event_sequence_number' => ['nullable', 'integer', 'min:1'],
-            
+
             // Event Routing
             'routing_rules' => ['nullable', 'array'],
             'routing_rules.*.condition' => ['string', 'max:500'],
@@ -281,7 +280,7 @@ class RealTimeOperationsRequest extends FormRequest
             'retry_policy' => ['nullable', 'array'],
             'retry_policy.max_attempts' => ['integer', 'min:1', 'max:10'],
             'retry_policy.backoff_strategy' => ['string', Rule::in(['fixed', 'exponential', 'linear'])],
-            
+
             // Complex Event Processing
             'event_correlation' => ['nullable', 'boolean'],
             'pattern_matching' => ['nullable', 'boolean'],
@@ -290,7 +289,7 @@ class RealTimeOperationsRequest extends FormRequest
             'temporal_windows.*.type' => ['string', Rule::in(['tumbling', 'sliding', 'session'])],
             'aggregation_functions' => ['nullable', 'array'],
             'aggregation_functions.*' => ['string', Rule::in(['count', 'sum', 'avg', 'min', 'max', 'distinct'])],
-            
+
             // Event Enrichment
             'data_enrichment' => ['nullable', 'boolean'],
             'external_data_sources' => ['nullable', 'array'],
@@ -313,7 +312,7 @@ class RealTimeOperationsRequest extends FormRequest
             'scaling_metrics.*' => ['string', Rule::in(['cpu_usage', 'memory_usage', 'connection_count', 'message_rate'])],
             'min_instances' => ['nullable', 'integer', 'min:1', 'max:100'],
             'max_instances' => ['nullable', 'integer', 'min:1', 'max:1000'],
-            
+
             // Caching Strategy
             'distributed_caching' => ['nullable', 'boolean'],
             'cache_strategy' => ['nullable', 'string', Rule::in(['write_through', 'write_behind', 'cache_aside'])],
@@ -321,7 +320,7 @@ class RealTimeOperationsRequest extends FormRequest
             'cache_invalidation' => ['nullable', 'string', Rule::in(['time_based', 'event_based', 'manual'])],
             'cache_partitioning' => ['nullable', 'boolean'],
             'cache_replication' => ['nullable', 'boolean'],
-            
+
             // Message Queue Optimization
             'queue_type' => ['nullable', 'string', Rule::in(['redis', 'rabbitmq', 'apache_kafka', 'amazon_sqs'])],
             'queue_partitioning' => ['nullable', 'boolean'],
@@ -329,7 +328,7 @@ class RealTimeOperationsRequest extends FormRequest
             'duplicate_detection' => ['nullable', 'boolean'],
             'message_compression' => ['nullable', 'boolean'],
             'batch_processing' => ['nullable', 'boolean'],
-            
+
             // Connection Optimization
             'connection_pooling' => ['nullable', 'boolean'],
             'keep_alive_enabled' => ['nullable', 'boolean'],
@@ -348,7 +347,7 @@ class RealTimeOperationsRequest extends FormRequest
             'encryption_algorithm' => ['nullable', 'string', Rule::in(['aes_256', 'chacha20', 'aes_128'])],
             'message_signing' => ['nullable', 'boolean'],
             'signature_algorithm' => ['nullable', 'string', Rule::in(['hmac_sha256', 'rsa_pss', 'ecdsa'])],
-            
+
             // Access Control
             'rate_limiting' => ['nullable', 'boolean'],
             'rate_limit_per_minute' => ['nullable', 'integer', 'min:10', 'max:10000'],
@@ -357,7 +356,7 @@ class RealTimeOperationsRequest extends FormRequest
             'blocked_countries' => ['nullable', 'array'],
             'blocked_countries.*' => ['string', 'size:2'],
             'user_agent_filtering' => ['nullable', 'boolean'],
-            
+
             // Threat Detection
             'anomaly_detection' => ['nullable', 'boolean'],
             'behavioral_analysis' => ['nullable', 'boolean'],
@@ -365,7 +364,7 @@ class RealTimeOperationsRequest extends FormRequest
             'automated_blocking' => ['nullable', 'boolean'],
             'threat_intelligence' => ['nullable', 'boolean'],
             'security_alerts' => ['nullable', 'boolean'],
-            
+
             // Compliance
             'audit_logging' => ['nullable', 'boolean'],
             'compliance_mode' => ['nullable', 'string', Rule::in(['gdpr', 'hipaa', 'sox', 'pci_dss'])],
@@ -384,7 +383,7 @@ class RealTimeOperationsRequest extends FormRequest
             'health_checks' => ['nullable', 'boolean'],
             'uptime_monitoring' => ['nullable', 'boolean'],
             'performance_monitoring' => ['nullable', 'boolean'],
-            
+
             // Alerting
             'alert_thresholds' => ['nullable', 'array'],
             'alert_thresholds.*.metric' => ['string', 'max:100'],
@@ -393,7 +392,7 @@ class RealTimeOperationsRequest extends FormRequest
             'notification_channels' => ['nullable', 'array'],
             'notification_channels.*' => ['string', Rule::in(['email', 'slack', 'webhook', 'sms'])],
             'escalation_rules' => ['nullable', 'array'],
-            
+
             // Logging
             'structured_logging' => ['nullable', 'boolean'],
             'log_level' => ['nullable', 'string', Rule::in(['debug', 'info', 'warning', 'error', 'critical'])],
@@ -413,7 +412,7 @@ class RealTimeOperationsRequest extends FormRequest
             'predictive_notifications' => ['nullable', 'boolean'],
             'intelligent_routing' => ['nullable', 'boolean'],
             'auto_response_generation' => ['nullable', 'boolean'],
-            
+
             // Advanced Analytics
             'real_time_analytics' => ['nullable', 'boolean'],
             'user_journey_tracking' => ['nullable', 'boolean'],
@@ -421,7 +420,7 @@ class RealTimeOperationsRequest extends FormRequest
             'cohort_analysis' => ['nullable', 'boolean'],
             'behavioral_segmentation' => ['nullable', 'boolean'],
             'predictive_modeling' => ['nullable', 'boolean'],
-            
+
             // Integration Capabilities
             'third_party_integrations' => ['nullable', 'array'],
             'webhook_endpoints' => ['nullable', 'array'],
@@ -429,7 +428,7 @@ class RealTimeOperationsRequest extends FormRequest
             'api_gateway_integration' => ['nullable', 'boolean'],
             'microservices_communication' => ['nullable', 'boolean'],
             'event_driven_architecture' => ['nullable', 'boolean'],
-            
+
             // Future-ready Features
             'edge_computing' => ['nullable', 'boolean'],
             'serverless_functions' => ['nullable', 'boolean'],
@@ -448,17 +447,17 @@ class RealTimeOperationsRequest extends FormRequest
             'max_concurrent_connections.max' => __('validation.realtime.too_many_connections'),
             'channel_name.regex' => __('validation.realtime.invalid_channel_name'),
             'channel_capacity.max' => __('validation.realtime.channel_capacity_exceeded'),
-            
+
             // Notification Messages
             'recipient_ids.max' => __('validation.realtime.too_many_recipients'),
             'notification_message.max' => __('validation.realtime.message_too_long'),
             'delivery_rate_limit.max' => __('validation.realtime.delivery_rate_too_high'),
-            
+
             // Messaging Messages
             'message_content.max' => __('validation.realtime.message_content_too_long'),
             'participants.max' => __('validation.realtime.too_many_participants'),
             'file_attachments.max' => __('validation.realtime.too_many_attachments'),
-            
+
             // Performance Messages
             'batch_size.max' => __('validation.realtime.batch_size_too_large'),
             'max_bandwidth_mbps.max' => __('validation.realtime.bandwidth_limit_exceeded'),
@@ -489,7 +488,7 @@ class RealTimeOperationsRequest extends FormRequest
             foreach ($this->file_attachments as $file) {
                 $totalSize += $file['size'] ?? 0;
             }
-            
+
             if ($totalSize > 104857600) { // 100MB total
                 throw new \InvalidArgumentException(__('validation.realtime.total_file_size_exceeded'));
             }
@@ -499,7 +498,7 @@ class RealTimeOperationsRequest extends FormRequest
         if ($this->has(['delivery_rate_limit', 'recipient_ids'])) {
             $recipientCount = count($this->recipient_ids);
             $rateLimit = $this->delivery_rate_limit;
-            
+
             if ($recipientCount > $rateLimit) {
                 throw new \InvalidArgumentException(__('validation.realtime.recipients_exceed_rate_limit'));
             }
@@ -512,17 +511,17 @@ class RealTimeOperationsRequest extends FormRequest
         if ($this->has('max_concurrent_connections')) {
             $connections = $this->max_concurrent_connections;
             $optimizedSettings = $this->calculateOptimalSettings($connections);
-            
+
             $this->merge([
                 'optimized_heartbeat_interval' => $optimizedSettings['heartbeat'],
                 'optimized_batch_size' => $optimizedSettings['batch_size'],
-                'recommended_cache_ttl' => $optimizedSettings['cache_ttl']
+                'recommended_cache_ttl' => $optimizedSettings['cache_ttl'],
             ]);
         }
 
         // Cache real-time configuration
         if ($this->has('connection_id')) {
-            Cache::remember("realtime_config_{$this->connection_id}", 3600, function() {
+            Cache::remember("realtime_config_{$this->connection_id}", 3600, function () {
                 return $this->validated();
             });
         }
@@ -533,7 +532,7 @@ class RealTimeOperationsRequest extends FormRequest
         return [
             'heartbeat' => min(30, max(10, $connections / 100)),
             'batch_size' => min(1000, max(10, $connections / 10)),
-            'cache_ttl' => min(3600, max(300, $connections / 5))
+            'cache_ttl' => min(3600, max(300, $connections / 5)),
         ];
     }
 
@@ -546,18 +545,28 @@ class RealTimeOperationsRequest extends FormRequest
             'user_agent' => request()->userAgent(),
             'ip_address' => request()->ip(),
             'timestamp' => now(),
-            'performance_optimized' => $this->has('optimized_heartbeat_interval')
+            'performance_optimized' => $this->has('optimized_heartbeat_interval'),
         ]);
     }
 
     private function getOperationType(): string
     {
-        if ($this->has('notification_type')) return 'notification_delivery';
-        if ($this->has('message_type')) return 'real_time_messaging';
-        if ($this->has('stream_type')) return 'data_streaming';
-        if ($this->has('collaboration_type')) return 'live_collaboration';
-        if ($this->has('connection_id')) return 'websocket_management';
-        
+        if ($this->has('notification_type')) {
+            return 'notification_delivery';
+        }
+        if ($this->has('message_type')) {
+            return 'real_time_messaging';
+        }
+        if ($this->has('stream_type')) {
+            return 'data_streaming';
+        }
+        if ($this->has('collaboration_type')) {
+            return 'live_collaboration';
+        }
+        if ($this->has('connection_id')) {
+            return 'websocket_management';
+        }
+
         return 'general_realtime_operation';
     }
 }

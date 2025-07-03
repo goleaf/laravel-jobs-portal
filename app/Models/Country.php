@@ -15,45 +15,45 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Country Model - Enhanced with Context7 patterns.
  *
- * @property int                    $id
- * @property string                 $name
- * @property string                 $short_code
- * @property null|string            $phone_code
- * @property null|string            $iso_code
- * @property null|string            $currency
- * @property bool                   $is_active
- * @property bool                   $is_default
- * @property bool                   $is_featured
- * @property null|string            $flag_url
- * @property null|string            $region
- * @property null|string            $continent
- * @property null|int               $population
- * @property null|float             $area_km2
- * @property null|string            $capital
- * @property null|string            $timezone
- * @property null|array             $languages
- * @property null|Carbon            $created_at
- * @property null|Carbon            $updated_at
- * @property Collection|State[]     $states
- * @property City[]|Collection      $cities
- * @property Collection|User[]      $users
- * @property Collection|Company[]   $companies
- * @property Collection|Job[]       $jobs
+ * @property int $id
+ * @property string $name
+ * @property string $short_code
+ * @property null|string $phone_code
+ * @property null|string $iso_code
+ * @property null|string $currency
+ * @property bool $is_active
+ * @property bool $is_default
+ * @property bool $is_featured
+ * @property null|string $flag_url
+ * @property null|string $region
+ * @property null|string $continent
+ * @property null|int $population
+ * @property null|float $area_km2
+ * @property null|string $capital
+ * @property null|string $timezone
+ * @property null|array $languages
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property Collection|State[] $states
+ * @property City[]|Collection $cities
+ * @property Collection|User[] $users
+ * @property Collection|Company[] $companies
+ * @property Collection|Job[] $jobs
  * @property Candidate[]|Collection $candidates
- * @property string                 $display_name
- * @property string                 $full_name
- * @property string                 $flag_emoji
- * @property string                 $population_formatted
- * @property string                 $area_formatted
- * @property int                    $states_count
- * @property int                    $cities_count
- * @property int                    $companies_count
- * @property int                    $active_companies_count
- * @property int                    $jobs_count
- * @property int                    $active_jobs_count
- * @property int                    $candidates_count
- * @property int                    $active_candidates_count
- * @property int                    $users_count
+ * @property string $display_name
+ * @property string $full_name
+ * @property string $flag_emoji
+ * @property string $population_formatted
+ * @property string $area_formatted
+ * @property int $states_count
+ * @property int $cities_count
+ * @property int $companies_count
+ * @property int $active_companies_count
+ * @property int $jobs_count
+ * @property int $active_jobs_count
+ * @property int $candidates_count
+ * @property int $active_candidates_count
+ * @property int $users_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Country newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Country newQuery()
@@ -172,8 +172,7 @@ class Country extends Model
                 'languages',
             ])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -257,7 +256,7 @@ class Country extends Model
     /**
      * Scope a query to only include active countries.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -267,7 +266,7 @@ class Country extends Model
     /**
      * Scope a query to only include inactive countries.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -277,7 +276,7 @@ class Country extends Model
     /**
      * Scope a query to only include featured countries.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFeatured($query)
     {
@@ -287,7 +286,7 @@ class Country extends Model
     /**
      * Scope a query to only include non-featured countries.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNonFeatured($query)
     {
@@ -297,7 +296,7 @@ class Country extends Model
     /**
      * Scope a query to only include default countries.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeDefault($query)
     {
@@ -307,7 +306,7 @@ class Country extends Model
     /**
      * Scope a query to only include custom countries.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeCustom($query)
     {
@@ -321,7 +320,7 @@ class Country extends Model
     /**
      * Scope a query to search countries by name, code, or ISO code.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
@@ -329,15 +328,14 @@ class Country extends Model
             $q->where('name', 'LIKE', "%{$term}%")
                 ->orWhere('short_code', 'LIKE', "%{$term}%")
                 ->orWhere('iso_code', 'LIKE', "%{$term}%")
-                ->orWhere('capital', 'LIKE', "%{$term}%")
-            ;
+                ->orWhere('capital', 'LIKE', "%{$term}%");
         });
     }
 
     /**
      * Scope a query to filter countries by short code.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByCode($query, string $code)
     {
@@ -347,7 +345,7 @@ class Country extends Model
     /**
      * Scope a query to filter countries by ISO code.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByIsoCode($query, string $isoCode)
     {
@@ -357,7 +355,7 @@ class Country extends Model
     /**
      * Scope a query to filter countries by phone code.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByPhoneCode($query, string $phoneCode)
     {
@@ -367,7 +365,7 @@ class Country extends Model
     /**
      * Scope a query to filter countries by currency.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByCurrency($query, string $currency)
     {
@@ -377,7 +375,7 @@ class Country extends Model
     /**
      * Scope a query to filter countries by region.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByRegion($query, string $region)
     {
@@ -387,7 +385,7 @@ class Country extends Model
     /**
      * Scope a query to filter countries by continent.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByContinent($query, string $continent)
     {
@@ -397,7 +395,7 @@ class Country extends Model
     /**
      * Scope a query to get recent countries.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query)
     {
@@ -407,7 +405,7 @@ class Country extends Model
     /**
      * Scope a query to get old countries.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -417,7 +415,7 @@ class Country extends Model
     /**
      * Scope a query to order countries alphabetically.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
@@ -431,7 +429,7 @@ class Country extends Model
     /**
      * Scope a query to include countries with states.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithStates($query)
     {
@@ -441,7 +439,7 @@ class Country extends Model
     /**
      * Scope a query to include countries without states.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithoutStates($query)
     {
@@ -451,7 +449,7 @@ class Country extends Model
     /**
      * Scope a query to include countries with active states.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithActiveStates($query)
     {
@@ -463,7 +461,7 @@ class Country extends Model
     /**
      * Scope a query to include countries with cities.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithCities($query)
     {
@@ -473,7 +471,7 @@ class Country extends Model
     /**
      * Scope a query to include countries with companies.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithCompanies($query)
     {
@@ -483,7 +481,7 @@ class Country extends Model
     /**
      * Scope a query to include countries with active companies.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithActiveCompanies($query)
     {
@@ -495,7 +493,7 @@ class Country extends Model
     /**
      * Scope a query to include countries with jobs.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithJobs($query)
     {
@@ -505,7 +503,7 @@ class Country extends Model
     /**
      * Scope a query to include countries with active jobs.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithActiveJobs($query)
     {
@@ -517,7 +515,7 @@ class Country extends Model
     /**
      * Scope a query to include countries with candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithCandidates($query)
     {
@@ -527,7 +525,7 @@ class Country extends Model
     /**
      * Scope a query to include countries with active candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithActiveCandidates($query)
     {
@@ -539,7 +537,7 @@ class Country extends Model
     /**
      * Scope a query to include countries with users.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithUsers($query)
     {
@@ -549,20 +547,19 @@ class Country extends Model
     /**
      * Scope a query to get popular countries (with most companies).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopular($query)
     {
         return $query->withCount(['companies', 'jobs'])
             ->orderBy('companies_count', 'desc')
-            ->orderBy('jobs_count', 'desc')
-        ;
+            ->orderBy('jobs_count', 'desc');
     }
 
     /**
      * Scope a query to get popular countries by jobs.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopularByJobs($query, int $limit = 10)
     {
@@ -570,14 +567,13 @@ class Country extends Model
             $q->where('status', 'active');
         }])
             ->orderBy('jobs_count', 'desc')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     /**
      * Scope a query to get popular countries by candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopularByCandidates($query, int $limit = 10)
     {
@@ -585,8 +581,7 @@ class Country extends Model
             $q->where('is_active', true);
         }])
             ->orderBy('candidates_count', 'desc')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     // =============================================
@@ -596,7 +591,7 @@ class Country extends Model
     /**
      * Scope a query to get European countries.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeEuropean($query)
     {
@@ -612,7 +607,7 @@ class Country extends Model
     /**
      * Scope a query to get North American countries.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNorthAmerican($query)
     {
@@ -624,7 +619,7 @@ class Country extends Model
     /**
      * Scope a query to get Asian countries.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAsian($query)
     {
@@ -639,7 +634,7 @@ class Country extends Model
     /**
      * Scope a query to get African countries.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAfrican($query)
     {
@@ -654,7 +649,7 @@ class Country extends Model
     /**
      * Scope a query to get South American countries.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSouthAmerican($query)
     {
@@ -666,7 +661,7 @@ class Country extends Model
     /**
      * Scope a query to get Oceanian countries.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOceanian($query)
     {
@@ -810,7 +805,7 @@ class Country extends Model
      */
     public function getFlagEmojiAttribute(): string
     {
-        if (!$this->short_code || 2 !== strlen($this->short_code)) {
+        if (! $this->short_code || strlen($this->short_code) !== 2) {
             return '🏳️';
         }
 
@@ -828,7 +823,7 @@ class Country extends Model
      */
     public function getPopulationFormattedAttribute(): string
     {
-        if (!$this->population) {
+        if (! $this->population) {
             return 'N/A';
         }
 
@@ -850,7 +845,7 @@ class Country extends Model
      */
     public function getAreaFormattedAttribute(): string
     {
-        if (!$this->area_km2) {
+        if (! $this->area_km2) {
             return 'N/A';
         }
 
@@ -982,7 +977,7 @@ class Country extends Model
      */
     public function usesEuro(): bool
     {
-        return 'EUR' === $this->currency;
+        return $this->currency === 'EUR';
     }
 
     /**

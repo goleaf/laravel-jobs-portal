@@ -16,23 +16,23 @@ use Spatie\Activitylog\Traits\LogsActivity;
  *
  * @version June 20, 2020, 5:50 am UTC
  *
- * @property int              $id
- * @property string           $name
- * @property null|string      $description
- * @property int              $level_order
- * @property null|int         $years_required
- * @property bool             $is_default
- * @property bool             $is_active
- * @property null|string      $certification_required
- * @property null|Carbon      $created_at
- * @property null|Carbon      $updated_at
+ * @property int $id
+ * @property string $name
+ * @property null|string $description
+ * @property int $level_order
+ * @property null|int $years_required
+ * @property bool $is_default
+ * @property bool $is_active
+ * @property null|string $certification_required
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
  * @property Collection|Job[] $jobs
- * @property null|int         $jobs_count
- * @property mixed            $usage_count
- * @property mixed            $formatted_usage_stats
- * @property mixed            $education_category
- * @property mixed            $career_progression_level
- * @property mixed            $salary_range_multiplier
+ * @property null|int $jobs_count
+ * @property mixed $usage_count
+ * @property mixed $formatted_usage_stats
+ * @property mixed $education_category
+ * @property mixed $career_progression_level
+ * @property mixed $salary_range_multiplier
  *
  * @method static Builder|RequiredDegreeLevel newModelQuery()
  * @method static Builder|RequiredDegreeLevel newQuery()
@@ -113,8 +113,7 @@ class RequiredDegreeLevel extends Model
         return LogOptions::defaults()
             ->logOnly(['name', 'description', 'level_order', 'years_required', 'is_active', 'is_default', 'certification_required'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -258,8 +257,7 @@ class RequiredDegreeLevel extends Model
     {
         return $query->where('name', 'like', "%{$term}%")
             ->orWhere('description', 'like', "%{$term}%")
-            ->orWhere('certification_required', 'like', "%{$term}%")
-        ;
+            ->orWhere('certification_required', 'like', "%{$term}%");
     }
 
     /**
@@ -269,8 +267,7 @@ class RequiredDegreeLevel extends Model
     {
         return $query->withCount('jobs')
             ->orderByDesc('jobs_count')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     /**
@@ -295,8 +292,7 @@ class RequiredDegreeLevel extends Model
     public function scopeRecent(Builder $query, int $days = 30): Builder
     {
         return $query->where('created_at', '>=', now()->subDays($days))
-            ->orderByDesc('created_at')
-        ;
+            ->orderByDesc('created_at');
     }
 
     /**
@@ -309,8 +305,7 @@ class RequiredDegreeLevel extends Model
                 $q->where('created_at', '>=', now()->subDays(30));
             },
         ])
-            ->orderByDesc('jobs_count')
-        ;
+            ->orderByDesc('jobs_count');
     }
 
     /**
@@ -346,8 +341,7 @@ class RequiredDegreeLevel extends Model
             $q->where('name', 'like', '%master%')
                 ->orWhere('name', 'like', '%doctoral%')
                 ->orWhere('name', 'like', '%phd%')
-                ->orWhere('level_order', '>=', 7)
-            ;
+                ->orWhere('level_order', '>=', 7);
         });
     }
 
@@ -360,8 +354,7 @@ class RequiredDegreeLevel extends Model
             $q->where('name', 'like', '%bachelor%')
                 ->orWhere('name', 'like', '%associate%')
                 ->orWhere('name', 'like', '%diploma%')
-                ->orWhereBetween('level_order', [3, 6])
-            ;
+                ->orWhereBetween('level_order', [3, 6]);
         });
     }
 
@@ -373,8 +366,7 @@ class RequiredDegreeLevel extends Model
         return $query->where(function ($q) {
             $q->where('name', 'like', '%doctoral%')
                 ->orWhere('name', 'like', '%phd%')
-                ->orWhere('name', 'like', '%doctorate%')
-            ;
+                ->orWhere('name', 'like', '%doctorate%');
         });
     }
 
@@ -387,8 +379,7 @@ class RequiredDegreeLevel extends Model
             $q->where('name', 'like', '%professional%')
                 ->orWhere('name', 'like', '%license%')
                 ->orWhere('name', 'like', '%certification%')
-                ->orWhereNotNull('certification_required')
-            ;
+                ->orWhereNotNull('certification_required');
         });
     }
 
@@ -430,8 +421,7 @@ class RequiredDegreeLevel extends Model
     public function scopeRequiresCertification(Builder $query): Builder
     {
         return $query->whereNotNull('certification_required')
-            ->where('certification_required', '!=', '')
-        ;
+            ->where('certification_required', '!=', '');
     }
 
     /**
@@ -444,8 +434,7 @@ class RequiredDegreeLevel extends Model
                 ->whereNotNull('min_salary')
                 ->whereNotNull('max_salary')
                 ->selectRaw('AVG((min_salary + max_salary) / 2) as avg_salary')
-                ->value('avg_salary') ?? 0.0
-            ;
+                ->value('avg_salary') ?? 0.0;
         });
     }
 
@@ -474,8 +463,7 @@ class RequiredDegreeLevel extends Model
         return static::where('level_order', '>', $this->level_order)
             ->active()
             ->orderBy('level_order', 'asc')
-            ->first()
-        ;
+            ->first();
     }
 
     /**
@@ -486,8 +474,7 @@ class RequiredDegreeLevel extends Model
         return static::where('level_order', '<', $this->level_order)
             ->active()
             ->orderBy('level_order', 'desc')
-            ->first()
-        ;
+            ->first();
     }
 
     /**
@@ -499,7 +486,7 @@ class RequiredDegreeLevel extends Model
         $yearsRequired = $this->years_required ?? 4;
         $estimatedCost = $yearsRequired * 15000; // Estimated annual education cost
 
-        if (0 === $estimatedCost) {
+        if ($estimatedCost === 0) {
             return 0.0;
         }
 
@@ -541,8 +528,7 @@ class RequiredDegreeLevel extends Model
                     return $jobs->count();
                 })
                 ->sortDesc()
-                ->take(10)
-            ;
+                ->take(10);
 
             return [
                 'total_jobs' => $this->jobs()->count(),
@@ -605,7 +591,7 @@ class RequiredDegreeLevel extends Model
             now()->subDays(30),
         ])->count();
 
-        if (0 === $previousMonth) {
+        if ($previousMonth === 0) {
             return $currentMonth > 0 ? 'increasing' : 'stable';
         }
 

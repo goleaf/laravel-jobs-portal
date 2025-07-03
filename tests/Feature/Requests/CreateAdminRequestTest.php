@@ -22,9 +22,9 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test that the request has proper validation rules.
      */
-    public function testValidationRulesAreDefined()
+    public function test_validation_rules_are_defined()
     {
-        $request = new CreateAdminRequest();
+        $request = new CreateAdminRequest;
         $rules = $request->rules();
 
         $this->assertIsArray($rules);
@@ -40,14 +40,14 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test authorization requires admin role.
      */
-    public function testAdminUserIsAuthorized()
+    public function test_admin_user_is_authorized()
     {
         // Create admin user
         $admin = User::factory()->create();
         // Note: Update this when role system is implemented
         $this->actingAs($admin);
 
-        $request = new CreateAdminRequest();
+        $request = new CreateAdminRequest;
         // This will return true for now since hasRole method needs implementation
         $this->assertTrue(true); // Placeholder until role system is implemented
     }
@@ -55,12 +55,12 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test authorization denies non-admin users.
      */
-    public function testNonAdminUserIsNotAuthorized()
+    public function test_non_admin_user_is_not_authorized()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $request = new CreateAdminRequest();
+        $request = new CreateAdminRequest;
         // This will return true for now since hasRole method needs implementation
         $this->assertTrue(true); // Placeholder until role system is implemented
     }
@@ -68,9 +68,9 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test authorization denies unauthenticated users.
      */
-    public function testUnauthenticatedUserIsNotAuthorized()
+    public function test_unauthenticated_user_is_not_authorized()
     {
-        $request = new CreateAdminRequest();
+        $request = new CreateAdminRequest;
         // This should return false when auth()->check() is false
         $this->assertTrue(true); // Placeholder until role system is implemented
     }
@@ -78,7 +78,7 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test validation passes with valid data.
      */
-    public function testValidationPassesWithValidData()
+    public function test_validation_passes_with_valid_data()
     {
         $data = [
             'first_name' => 'John',
@@ -90,7 +90,7 @@ class CreateAdminRequestTest extends TestCase
             'is_active' => true,
         ];
 
-        $request = new CreateAdminRequest();
+        $request = new CreateAdminRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->passes());
@@ -99,12 +99,12 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test first_name is required.
      */
-    public function testFirstNameIsRequired()
+    public function test_first_name_is_required()
     {
         $data = $this->getValidData();
         unset($data['first_name']);
 
-        $request = new CreateAdminRequest();
+        $request = new CreateAdminRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -114,12 +114,12 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test last_name is required.
      */
-    public function testLastNameIsRequired()
+    public function test_last_name_is_required()
     {
         $data = $this->getValidData();
         unset($data['last_name']);
 
-        $request = new CreateAdminRequest();
+        $request = new CreateAdminRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -129,12 +129,12 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test email is required.
      */
-    public function testEmailIsRequired()
+    public function test_email_is_required()
     {
         $data = $this->getValidData();
         unset($data['email']);
 
-        $request = new CreateAdminRequest();
+        $request = new CreateAdminRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -144,12 +144,12 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test email must be valid format.
      */
-    public function testEmailMustBeValidFormat()
+    public function test_email_must_be_valid_format()
     {
         $data = $this->getValidData();
         $data['email'] = 'invalid-email';
 
-        $request = new CreateAdminRequest();
+        $request = new CreateAdminRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -159,7 +159,7 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test email must be unique.
      */
-    public function testEmailMustBeUnique()
+    public function test_email_must_be_unique()
     {
         // Create existing user with email
         User::factory()->create(['email' => 'existing@example.com']);
@@ -167,7 +167,7 @@ class CreateAdminRequestTest extends TestCase
         $data = $this->getValidData();
         $data['email'] = 'existing@example.com';
 
-        $request = new CreateAdminRequest();
+        $request = new CreateAdminRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -177,12 +177,12 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test password is required.
      */
-    public function testPasswordIsRequired()
+    public function test_password_is_required()
     {
         $data = $this->getValidData();
         unset($data['password']);
 
-        $request = new CreateAdminRequest();
+        $request = new CreateAdminRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -192,13 +192,13 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test password minimum length.
      */
-    public function testPasswordMinimumLength()
+    public function test_password_minimum_length()
     {
         $data = $this->getValidData();
         $data['password'] = '123';
         $data['password_confirmation'] = '123';
 
-        $request = new CreateAdminRequest();
+        $request = new CreateAdminRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -208,12 +208,12 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test password confirmation is required.
      */
-    public function testPasswordConfirmationIsRequired()
+    public function test_password_confirmation_is_required()
     {
         $data = $this->getValidData();
         unset($data['password_confirmation']);
 
-        $request = new CreateAdminRequest();
+        $request = new CreateAdminRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -223,13 +223,13 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test password confirmation must match.
      */
-    public function testPasswordConfirmationMustMatch()
+    public function test_password_confirmation_must_match()
     {
         $data = $this->getValidData();
         $data['password'] = 'password123';
         $data['password_confirmation'] = 'different123';
 
-        $request = new CreateAdminRequest();
+        $request = new CreateAdminRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -239,9 +239,9 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test custom error messages are defined.
      */
-    public function testCustomErrorMessagesAreDefined()
+    public function test_custom_error_messages_are_defined()
     {
-        $request = new CreateAdminRequest();
+        $request = new CreateAdminRequest;
 
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
@@ -258,9 +258,9 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test custom attributes are defined.
      */
-    public function testCustomAttributesAreDefined()
+    public function test_custom_attributes_are_defined()
     {
-        $request = new CreateAdminRequest();
+        $request = new CreateAdminRequest;
 
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
@@ -273,9 +273,9 @@ class CreateAdminRequestTest extends TestCase
     /**
      * Test data preparation method.
      */
-    public function testDataPreparation()
+    public function test_data_preparation()
     {
-        $request = new CreateAdminRequest();
+        $request = new CreateAdminRequest;
 
         if (method_exists($request, 'prepareForValidation')) {
             // Test that boolean fields are properly handled

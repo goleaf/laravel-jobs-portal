@@ -143,11 +143,11 @@ class CandidateStoreRequest extends FormRequest
             }
 
             // Validate location hierarchy
-            if ($this->has('state_id') && !$this->has('country_id')) {
+            if ($this->has('state_id') && ! $this->has('country_id')) {
                 $validator->errors()->add('country_id', 'Country is required when state is specified.');
             }
 
-            if ($this->has('city_id') && !$this->has('state_id')) {
+            if ($this->has('city_id') && ! $this->has('state_id')) {
                 $validator->errors()->add('state_id', 'State is required when city is specified.');
             }
         });

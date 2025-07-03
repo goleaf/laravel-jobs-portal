@@ -178,7 +178,7 @@ class UserResource extends JsonResource
      */
     private function getGenderLabel(): ?string
     {
-        if (!$this->gender) {
+        if (! $this->gender) {
             return null;
         }
 
@@ -200,11 +200,11 @@ class UserResource extends JsonResource
      */
     private function getStatusLabel(): string
     {
-        if (!($this->is_active ?? true)) {
+        if (! ($this->is_active ?? true)) {
             return __('users.status.inactive');
         }
 
-        if (!($this->is_verified ?? false)) {
+        if (! ($this->is_verified ?? false)) {
             return __('users.status.unverified');
         }
 
@@ -243,8 +243,8 @@ class UserResource extends JsonResource
 
         $completed = 0;
         foreach ($fields as $field) {
-            if (!empty($this->{$field})) {
-                ++$completed;
+            if (! empty($this->{$field})) {
+                $completed++;
             }
         }
 

@@ -121,8 +121,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Model::preventLazyLoading(!app()->isProduction());
-        Model::preventSilentlyDiscardingAttributes(!app()->isProduction());
+        Model::preventLazyLoading(! app()->isProduction());
+        Model::preventSilentlyDiscardingAttributes(! app()->isProduction());
 
         // Force HTTPS in production
         if ($this->app->environment('production')) {
@@ -192,8 +192,7 @@ class AppServiceProvider extends ServiceProvider
                 // Admin Management API
                 Route::apiResource('admins', AdminController::class);
                 Route::patch('/admins/{admin}/toggle-status', [AdminController::class, 'toggleStatus']);
-            })
-        ;
+            });
 
         // Register API routes for candidate controllers
         Route::middleware('api')
@@ -202,10 +201,8 @@ class AppServiceProvider extends ServiceProvider
             ->group(function () {
                 // Candidate Applications API
                 Route::apiResource('applications', CandidateApplicationController::class)
-                    ->names('candidate.applications')
-                ;
-            })
-        ;
+                    ->names('candidate.applications');
+            });
 
         // Register API routes for employer controllers
         Route::middleware('api')
@@ -214,10 +211,8 @@ class AppServiceProvider extends ServiceProvider
             ->group(function () {
                 // Employer Applications API
                 Route::apiResource('applications', EmployerApplicationController::class)
-                    ->names('employer.applications')
-                ;
-            })
-        ;
+                    ->names('employer.applications');
+            });
 
         // Register API routes for front-end controllers
         Route::middleware('api')
@@ -226,8 +221,7 @@ class AppServiceProvider extends ServiceProvider
             ->group(function () {
                 // Blog Comment API
                 Route::apiResource('blog-comments', BlogCommentController::class);
-            })
-        ;
+            });
 
         // Register API routes for admin email templates
         Route::middleware('api')
@@ -236,8 +230,7 @@ class AppServiceProvider extends ServiceProvider
             ->group(function () {
                 // Email Template API
                 Route::apiResource('email-templates', EmailTemplateController::class);
-            })
-        ;
+            });
 
         // Register API routes for admin reported jobs
         Route::middleware('api')
@@ -246,8 +239,7 @@ class AppServiceProvider extends ServiceProvider
             ->group(function () {
                 // Reported Jobs API
                 Route::apiResource('reported-jobs', ReportedJobController::class);
-            })
-        ;
+            });
 
         // Register API routes for admin salary periods
         Route::middleware('api')
@@ -256,8 +248,7 @@ class AppServiceProvider extends ServiceProvider
             ->group(function () {
                 // Salary Periods API
                 Route::apiResource('salary-periods', SalaryPeriodController::class);
-            })
-        ;
+            });
 
         // Register API routes for admin functional areas
         Route::middleware('api')
@@ -266,8 +257,7 @@ class AppServiceProvider extends ServiceProvider
             ->group(function () {
                 // Functional Areas API
                 Route::apiResource('functional-areas', FunctionalAreaController::class);
-            })
-        ;
+            });
 
         // Register API routes for admin salary currencies
         Route::middleware('api')
@@ -276,8 +266,7 @@ class AppServiceProvider extends ServiceProvider
             ->group(function () {
                 // Salary Currencies API
                 Route::apiResource('salary-currencies', SalaryCurrencyController::class);
-            })
-        ;
+            });
 
         // Register API routes for admin ownership types
         Route::middleware('api')
@@ -286,8 +275,7 @@ class AppServiceProvider extends ServiceProvider
             ->group(function () {
                 // Ownership Types API
                 Route::apiResource('ownership-types', OwnershipTypeController::class);
-            })
-        ;
+            });
 
         // Register API routes for admin master data
         Route::middleware('api')
@@ -296,8 +284,7 @@ class AppServiceProvider extends ServiceProvider
             ->group(function () {
                 // Master Data API
                 Route::apiResource('master-data', MasterDataController::class);
-            })
-        ;
+            });
 
         // Register API routes for admin branding sliders
         Route::middleware('api')
@@ -306,8 +293,7 @@ class AppServiceProvider extends ServiceProvider
             ->group(function () {
                 // Branding Sliders API
                 Route::apiResource('branding-sliders', BrandingSliderController::class);
-            })
-        ;
+            });
 
         // Register API routes for admin header sliders
         Route::middleware('api')
@@ -316,8 +302,7 @@ class AppServiceProvider extends ServiceProvider
             ->group(function () {
                 // Header Sliders API
                 Route::apiResource('header-sliders', HeaderSliderController::class);
-            })
-        ;
+            });
 
         // Register API routes for admin image sliders
         Route::middleware('api')
@@ -326,8 +311,7 @@ class AppServiceProvider extends ServiceProvider
             ->group(function () {
                 // Image Sliders API
                 Route::apiResource('image-sliders', ImageSliderController::class);
-            })
-        ;
+            });
 
         // Register API routes for admin CMS
         Route::middleware('api')
@@ -336,8 +320,7 @@ class AppServiceProvider extends ServiceProvider
             ->group(function () {
                 // CMS API
                 Route::apiResource('cms', CmsController::class);
-            })
-        ;
+            });
 
         // Removed Livewire component registration as part of Vue3 migration
     }

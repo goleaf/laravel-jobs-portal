@@ -44,7 +44,7 @@ class AuthController extends Controller
 
             $credentials = $request->only('email', 'password');
 
-            if (!Auth::attempt($credentials)) {
+            if (! Auth::attempt($credentials)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid email or password',
@@ -166,7 +166,7 @@ class AuthController extends Controller
         try {
             $user = $request->user();
 
-            if (!$user) {
+            if (! $user) {
                 return response()->json([
                     'success' => false,
                     'message' => 'User not authenticated',
@@ -260,7 +260,7 @@ class AuthController extends Controller
         try {
             $user = $request->user();
 
-            if (!$user) {
+            if (! $user) {
                 return response()->json([
                     'success' => false,
                     'message' => 'User not authenticated',
@@ -298,7 +298,7 @@ class AuthController extends Controller
         try {
             $user = $request->user();
 
-            if (!$user) {
+            if (! $user) {
                 return response()->json([
                     'success' => false,
                     'message' => 'User not authenticated',

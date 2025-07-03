@@ -38,11 +38,10 @@ class SettingTest extends TestCase
     }
 
     /** @test */
-    public function adminCanViewGeneralSettings()
+    public function admin_can_view_general_settings()
     {
         $response = $this->actingAs($this->adminUser)
-            ->get('/settings')
-        ;
+            ->get('/settings');
 
         $response->assertStatus(200);
         $response->assertViewIs('settings.general');
@@ -50,14 +49,13 @@ class SettingTest extends TestCase
     }
 
     /** @test */
-    public function adminCanViewSpecificSettingsSection()
+    public function admin_can_view_specific_settings_section()
     {
         $sections = ['general', 'env_setting', 'social_settings'];
 
         foreach ($sections as $section) {
             $response = $this->actingAs($this->adminUser)
-                ->get('/settings?section='.$section)
-            ;
+                ->get('/settings?section='.$section);
 
             $response->assertStatus(200);
             $response->assertViewIs('settings.'.$section);
@@ -66,7 +64,7 @@ class SettingTest extends TestCase
     }
 
     /** @test */
-    public function adminCanUpdateGeneralSettings()
+    public function admin_can_update_general_settings()
     {
         $settingData = [
             'app_name' => 'Updated Job Portal',
@@ -77,8 +75,7 @@ class SettingTest extends TestCase
         ];
 
         $response = $this->actingAs($this->adminUser)
-            ->post('/settings', $settingData)
-        ;
+            ->post('/settings', $settingData);
 
         $response->assertStatus(302); // Redirects back
         $response->assertSessionHas('flash_notification');
@@ -89,20 +86,19 @@ class SettingTest extends TestCase
     }
 
     /** @test */
-    public function nonAdminCannotAccessSettings()
+    public function non_admin_cannot_access_settings()
     {
         $employerUser = User::factory()->create(['user_type' => User::EMPLOYER]);
 
         $response = $this->actingAs($employerUser)
-            ->get('/settings')
-        ;
+            ->get('/settings');
 
         // Assuming proper middleware restricting access
         $response->assertStatus(403); // Or 401/404 depending on implementation
     }
 
     /** @test */
-    public function adminCanUpdateEnvSettings()
+    public function admin_can_update_env_settings()
     {
         // Mock the repository to prevent actual .env file changes during tests
         $this->mock(SettingRepository::class, function ($mock) {
@@ -117,8 +113,7 @@ class SettingTest extends TestCase
         ];
 
         $response = $this->actingAs($this->adminUser)
-            ->post('/settings', $envData)
-        ;
+            ->post('/settings', $envData);
 
         $response->assertStatus(302); // Redirects back
         $response->assertSessionHas('flash_notification');

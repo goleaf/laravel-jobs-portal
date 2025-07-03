@@ -21,7 +21,7 @@ class UserModelDatabaseTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function itCanCreateUserViaFactory()
+    public function it_can_create_user_via_factory()
     {
         $user = User::factory()->create([
             'first_name' => 'John',
@@ -39,7 +39,7 @@ class UserModelDatabaseTest extends TestCase
     }
 
     /** @test */
-    public function itGeneratesFullNameAttributeFromDatabase()
+    public function it_generates_full_name_attribute_from_database()
     {
         $user = User::factory()->create([
             'first_name' => 'Jane',
@@ -50,7 +50,7 @@ class UserModelDatabaseTest extends TestCase
     }
 
     /** @test */
-    public function itCanCreateDifferentUserTypes()
+    public function it_can_create_different_user_types()
     {
         $admin = User::factory()->create(['user_type' => User::ADMIN]);
         $employer = User::factory()->create(['user_type' => User::EMPLOYER]);
@@ -62,7 +62,7 @@ class UserModelDatabaseTest extends TestCase
     }
 
     /** @test */
-    public function itHashesPasswordsWhenCreated()
+    public function it_hashes_passwords_when_created()
     {
         $user = User::factory()->create([
             'password' => bcrypt('test123'),
@@ -73,7 +73,7 @@ class UserModelDatabaseTest extends TestCase
     }
 
     /** @test */
-    public function itCanUpdateUserAttributes()
+    public function it_can_update_user_attributes()
     {
         $user = User::factory()->create();
 
@@ -88,7 +88,7 @@ class UserModelDatabaseTest extends TestCase
     }
 
     /** @test */
-    public function itHasRelationshipMethodsThatReturnCorrectTypes()
+    public function it_has_relationship_methods_that_return_correct_types()
     {
         $user = User::factory()->create();
 
@@ -104,7 +104,7 @@ class UserModelDatabaseTest extends TestCase
     }
 
     /** @test */
-    public function itHandlesBooleanCastingCorrectly()
+    public function it_handles_boolean_casting_correctly()
     {
         $user = User::factory()->create([
             'is_active' => 1,
@@ -121,7 +121,7 @@ class UserModelDatabaseTest extends TestCase
     }
 
     /** @test */
-    public function itHandlesDateCastingCorrectly()
+    public function it_handles_date_casting_correctly()
     {
         $user = User::factory()->create([
             'dob' => '1990-01-15',
@@ -134,7 +134,7 @@ class UserModelDatabaseTest extends TestCase
     }
 
     /** @test */
-    public function itFiltersSensitiveDataInArrayConversion()
+    public function it_filters_sensitive_data_in_array_conversion()
     {
         $user = User::factory()->create();
         $userArray = $user->toArray();

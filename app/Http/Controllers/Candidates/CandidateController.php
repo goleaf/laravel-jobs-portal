@@ -66,28 +66,28 @@ class CandidateController extends AppBaseController
         $data = $this->candidateRepository->prepareData();
         $countries = getCountries();
         $states = $cities = null;
-        if (!empty($user->country_id)) {
+        if (! empty($user->country_id)) {
             $states = getStates($user->country_id);
         }
-        if (!empty($user->state_id)) {
+        if (! empty($user->state_id)) {
             $cities = getCities($user->state_id);
         }
         $candidateSkills = $user->candidateSkill()->pluck('skill_id')->toArray();
         $candidateLanguage = $user->candidateLanguage()->pluck('language_id')->toArray();
-        $sectionName = (null === $request->section) ? 'general' : $request->section;
+        $sectionName = ($request->section === null) ? 'general' : $request->section;
         $data['sectionName'] = $sectionName;
-        if ('general' == $sectionName) {
-            if (!empty($user->country_id)) {
+        if ($sectionName == 'general') {
+            if (! empty($user->country_id)) {
                 $states = getStates($user->country_id);
             }
-            if (!empty($user->state_id)) {
+            if (! empty($user->state_id)) {
                 $cities = getCities($user->state_id);
             }
         }
-        if ('resume' == $sectionName) {
+        if ($sectionName == 'resume') {
         }
 
-        if ('career-informations' == $sectionName || 'cv-builder' == $sectionName) {
+        if ($sectionName == 'career-informations' || $sectionName == 'cv-builder') {
             $data['candidateExperiences'] = CandidateExperience::where(
                 'candidate_id',
                 $user->owner_id
@@ -124,7 +124,7 @@ class CandidateController extends AppBaseController
         $userId = getLoggedInUserId();
         $fevouriteJobId = FavouriteJob::whereUserId($userId)->pluck('id')->toArray();
 
-        if (!in_array($favouriteJob->id, $fevouriteJobId)) {
+        if (! in_array($favouriteJob->id, $fevouriteJobId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 
@@ -231,7 +231,7 @@ class CandidateController extends AppBaseController
 
         $path = storage_path('app/public/'.$candidate->resume_path);
 
-        if (!file_exists($path)) {
+        if (! file_exists($path)) {
             \Flash::error(__('messages.common.file_not_found'));
 
             return redirect()->back();
@@ -324,7 +324,7 @@ class CandidateController extends AppBaseController
         $userId = getLoggedInUserId();
         $candidateResumeId = Media::where('model_id', $userId)->pluck('id')->toArray();
 
-        if (!in_array($media->id, $candidateResumeId)) {
+        if (! in_array($media->id, $candidateResumeId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 
@@ -341,7 +341,7 @@ class CandidateController extends AppBaseController
         $userId = getLoggedInUserId();
         $candidateJobApplicationId = JobApplication::where('candidate_id', $userId)->pluck('id')->toArray();
 
-        if (!in_array($jobApplication->id, $candidateJobApplicationId)) {
+        if (! in_array($jobApplication->id, $candidateJobApplicationId)) {
             return view('errors.404');
         }
 
@@ -355,7 +355,7 @@ class CandidateController extends AppBaseController
         $userId = getLoggedInUserId();
         $candidateJobApplicationId = JobApplication::where('candidate_id', $userId)->pluck('id')->toArray();
 
-        if (!in_array($jobApplication->id, $candidateJobApplicationId)) {
+        if (! in_array($jobApplication->id, $candidateJobApplicationId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 
@@ -375,7 +375,7 @@ class CandidateController extends AppBaseController
         $request->validated();
         $scheduleId = $request->get('schedule_id');
         $slotNotes = $request->get('choose_slot_notes');
-        if (!isset($request->rejectSlot)) {
+        if (! isset($request->rejectSlot)) {
             JobApplicationSchedule::whereId($scheduleId)->update(['status' => JobApplicationSchedule::STATUS_SEND, 'rejected_slot_notes' => $slotNotes]);
         } else {
             $jobApplicationSchedules = JobApplicationSchedule::whereJobApplicationId($jobApplication->id);
@@ -403,7 +403,7 @@ class CandidateController extends AppBaseController
         $userId = getLoggedInUserId();
         $favouriteCompanyId = FavouriteCompany::whereUserId($userId)->pluck('id')->toArray();
 
-        if (!in_array($id, $favouriteCompanyId)) {
+        if (! in_array($id, $favouriteCompanyId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 

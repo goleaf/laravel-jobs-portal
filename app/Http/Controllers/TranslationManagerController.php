@@ -40,12 +40,12 @@ class TranslationManagerController extends AppBaseController
         $selectedFile = $request->get('file', 'messages.php');
 
         $langExists = $this->translateManagerRepo->checkLanguageExistOrNot($selectedLang);
-        if (!$langExists) {
+        if (! $langExists) {
             return redirect()->back()->withErrors($selectedLang.' '.__('locale.validation.locale_unsupported'));
         }
 
         $fileExists = $this->translateManagerRepo->checkFileExistOrNot($selectedLang, $selectedFile);
-        if (!$fileExists) {
+        if (! $fileExists) {
             return redirect()->back()->withErrors($selectedFile.' '.__('messages.common.file_not_found'));
         }
 
@@ -91,11 +91,11 @@ class TranslationManagerController extends AppBaseController
         $fileName = $request->get('file_name');
 
         $fileExists = $this->translateManagerRepo->checkFileExistOrNot($lName, $fileName);
-        if (!$fileExists) {
+        if (! $fileExists) {
             return redirect()->back()->withErrors(__('messages.common.file_not_found'));
         }
 
-        if (!empty($lName)) {
+        if (! empty($lName)) {
             $result = $request->except(['_token', 'translate_language', 'file_name']);
             File::put(base_path('lang/'.$lName.'/'.$fileName), '<?php return '.var_export($result, true).'?>');
 
@@ -135,7 +135,7 @@ class TranslationManagerController extends AppBaseController
     {
         $availableLocales = array_keys(Config::get('app.available_locales', []));
 
-        if (!in_array($locale, $availableLocales)) {
+        if (! in_array($locale, $availableLocales)) {
             return $this->sendError(__('locale.validation.locale_unsupported'));
         }
 
@@ -156,7 +156,7 @@ class TranslationManagerController extends AppBaseController
         $baseLocale = $request->input('base_locale', 'en');
         $availableLocales = array_keys(Config::get('app.available_locales', []));
 
-        if (!in_array($locale, $availableLocales) || !in_array($baseLocale, $availableLocales)) {
+        if (! in_array($locale, $availableLocales) || ! in_array($baseLocale, $availableLocales)) {
             return $this->sendError(__('locale.validation.locale_unsupported'));
         }
 
@@ -170,7 +170,7 @@ class TranslationManagerController extends AppBaseController
                 if (isset($baseTranslations[$key])) {
                     // Create placeholder translation
                     $targetTranslations[$key] = "[{$locale}] ".$baseTranslations[$key];
-                    ++$synced;
+                    $synced++;
                 }
             }
 
@@ -197,7 +197,7 @@ class TranslationManagerController extends AppBaseController
     {
         $availableLocales = array_keys(Config::get('app.available_locales', []));
 
-        if (!in_array($locale, $availableLocales)) {
+        if (! in_array($locale, $availableLocales)) {
             abort(400, __('locale.validation.locale_unsupported'));
         }
 
@@ -206,8 +206,7 @@ class TranslationManagerController extends AppBaseController
 
         return response($jsonContent)
             ->header('Content-Type', 'application/json')
-            ->header('Content-Disposition', "attachment; filename=\"{$locale}-translations.json\"")
-        ;
+            ->header('Content-Disposition', "attachment; filename=\"{$locale}-translations.json\"");
     }
 
     /**
@@ -222,7 +221,7 @@ class TranslationManagerController extends AppBaseController
 
         $availableLocales = array_keys(Config::get('app.available_locales', []));
 
-        if (!in_array($locale, $availableLocales)) {
+        if (! in_array($locale, $availableLocales)) {
             return $this->sendError(__('locale.validation.locale_unsupported'));
         }
 
@@ -231,7 +230,7 @@ class TranslationManagerController extends AppBaseController
             $content = File::get($file->path());
             $importedTranslations = json_decode($content, true);
 
-            if (JSON_ERROR_NONE !== json_last_error()) {
+            if (json_last_error() !== JSON_ERROR_NONE) {
                 return $this->sendError(__('messages.flash.invalid_json_file'));
             }
 

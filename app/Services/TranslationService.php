@@ -24,7 +24,7 @@ class TranslationService
         $locale = $locale ?: App::getLocale();
 
         // Load translations if not already loaded
-        if (!isset(self::$loadedTranslations[$locale])) {
+        if (! isset(self::$loadedTranslations[$locale])) {
             self::loadTranslations($locale);
         }
 
@@ -35,7 +35,7 @@ class TranslationService
         if ($value === $key && $locale !== config('app.fallback_locale', 'en')) {
             $fallbackLocale = config('app.fallback_locale', 'en');
 
-            if (!isset(self::$loadedTranslations[$fallbackLocale])) {
+            if (! isset(self::$loadedTranslations[$fallbackLocale])) {
                 self::loadTranslations($fallbackLocale);
             }
 
@@ -55,7 +55,7 @@ class TranslationService
      */
     public static function getAllTranslations(string $locale): array
     {
-        if (!isset(self::$loadedTranslations[$locale])) {
+        if (! isset(self::$loadedTranslations[$locale])) {
             self::loadTranslations($locale);
         }
 
@@ -77,7 +77,7 @@ class TranslationService
         // Search for namespace in nested structure
         $namespaceTranslations = [];
         foreach ($allTranslations as $key => $value) {
-            if (0 === strpos($key, $namespace.'.')) {
+            if (strpos($key, $namespace.'.') === 0) {
                 $namespaceTranslations[$key] = $value;
             }
         }
@@ -103,7 +103,7 @@ class TranslationService
     {
         $locale = $locale ?: App::getLocale();
 
-        if (!isset(self::$loadedTranslations[$locale])) {
+        if (! isset(self::$loadedTranslations[$locale])) {
             self::loadTranslations($locale);
         }
 
@@ -140,7 +140,7 @@ class TranslationService
         $missingKeys = [];
 
         foreach (array_keys($sourceTranslations) as $key) {
-            if (!isset($targetTranslations[$key])) {
+            if (! isset($targetTranslations[$key])) {
                 $missingKeys[] = $key;
             }
         }
@@ -169,7 +169,7 @@ class TranslationService
                 'translated_keys' => $translatedKeys,
                 'missing_keys' => $missingKeys,
                 'coverage_percentage' => $coverage,
-                'is_complete' => 0 === $missingKeys,
+                'is_complete' => $missingKeys === 0,
             ];
         }
 
@@ -203,7 +203,7 @@ class TranslationService
      */
     public static function addLocale(string $locale): void
     {
-        if (!in_array($locale, self::$availableLocales)) {
+        if (! in_array($locale, self::$availableLocales)) {
             self::$availableLocales[] = $locale;
         }
     }
@@ -233,7 +233,7 @@ class TranslationService
                     $phpFiles = File::allFiles($phpLangPath);
 
                     foreach ($phpFiles as $file) {
-                        if ('php' === $file->getExtension()) {
+                        if ($file->getExtension() === 'php') {
                             $namespace = pathinfo($file->getFilename(), PATHINFO_FILENAME);
                             $fileTranslations = include $file->getPathname();
 

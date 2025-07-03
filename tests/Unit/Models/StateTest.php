@@ -49,7 +49,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeCreated()
+    public function it_can_be_created()
     {
         $model = State::factory()->create();
 
@@ -60,9 +60,9 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itHasFillableAttributes()
+    public function it_has_fillable_attributes()
     {
-        $model = new State();
+        $model = new State;
         $fillable = $model->getFillable();
 
         $this->assertIsArray($fillable);
@@ -70,9 +70,9 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itHasProperCasts()
+    public function it_has_proper_casts()
     {
-        $model = new State();
+        $model = new State;
         $casts = $model->getCasts();
 
         $this->assertIsArray($casts);
@@ -80,7 +80,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeUpdated()
+    public function it_can_be_updated()
     {
         $model = State::factory()->create();
         $originalData = $model->toArray();
@@ -95,7 +95,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeDeleted()
+    public function it_can_be_deleted()
     {
         $model = State::factory()->create();
         $modelId = $model->id;
@@ -108,7 +108,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itHasCorrectFillableAttributes()
+    public function it_has_correct_fillable_attributes()
     {
         $expected = [
             'country_id',
@@ -126,7 +126,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itHasCorrectCasts()
+    public function it_has_correct_casts()
     {
         $expected = [
             'is_active' => 'boolean',
@@ -143,7 +143,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itHasValidationRules()
+    public function it_has_validation_rules()
     {
         $rules = State::$rules;
 
@@ -158,7 +158,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itHasUpdateValidationRules()
+    public function it_has_update_validation_rules()
     {
         $rules = State::updateRules($this->state->id);
 
@@ -170,14 +170,14 @@ class StateTest extends TestCase
     // RELATIONSHIP TESTS
 
     /** @test */
-    public function itBelongsToCountry()
+    public function it_belongs_to_country()
     {
         $this->assertInstanceOf(Country::class, $this->state->country);
         $this->assertEquals($this->country->id, $this->state->country->id);
     }
 
     /** @test */
-    public function itHasManyCities()
+    public function it_has_many_cities()
     {
         $city = City::factory()->create(['state_id' => $this->state->id]);
 
@@ -186,7 +186,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itHasManyUsers()
+    public function it_has_many_users()
     {
         $user = User::factory()->create(['state_id' => $this->state->id]);
 
@@ -195,7 +195,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itHasManyCompanies()
+    public function it_has_many_companies()
     {
         $company = Company::factory()->create(['state_id' => $this->state->id]);
 
@@ -204,14 +204,14 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetJobsRelationship()
+    public function it_can_get_jobs_relationship()
     {
         // This test may need adjustment based on actual Job model structure
         $this->assertTrue(method_exists($this->state, 'jobs'));
     }
 
     /** @test */
-    public function itCanGetCandidatesRelationship()
+    public function it_can_get_candidates_relationship()
     {
         // This test may need adjustment based on actual Candidate model structure
         $this->assertTrue(method_exists($this->state, 'candidates'));
@@ -220,7 +220,7 @@ class StateTest extends TestCase
     // SCOPE TESTS
 
     /** @test */
-    public function scopeActiveReturnsOnlyActiveStates()
+    public function scope_active_returns_only_active_states()
     {
         $inactiveState = State::factory()->create([
             'country_id' => $this->country->id,
@@ -234,7 +234,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function scopeInactiveReturnsOnlyInactiveStates()
+    public function scope_inactive_returns_only_inactive_states()
     {
         $inactiveState = State::factory()->create([
             'country_id' => $this->country->id,
@@ -248,7 +248,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function scopeFeaturedReturnsOnlyFeaturedStates()
+    public function scope_featured_returns_only_featured_states()
     {
         $nonFeaturedState = State::factory()->create([
             'country_id' => $this->country->id,
@@ -262,7 +262,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function scopeNonFeaturedReturnsOnlyNonFeaturedStates()
+    public function scope_non_featured_returns_only_non_featured_states()
     {
         $nonFeaturedState = State::factory()->create([
             'country_id' => $this->country->id,
@@ -276,7 +276,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function scopeByCountryFiltersByCountryId()
+    public function scope_by_country_filters_by_country_id()
     {
         $otherCountry = Country::factory()->create();
         $otherState = State::factory()->create(['country_id' => $otherCountry->id]);
@@ -288,7 +288,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function scopeInCountriesFiltersByMultipleCountryIds()
+    public function scope_in_countries_filters_by_multiple_country_ids()
     {
         $country2 = Country::factory()->create();
         $country3 = Country::factory()->create();
@@ -304,7 +304,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function scopeByCodeFiltersByStateCode()
+    public function scope_by_code_filters_by_state_code()
     {
         $otherState = State::factory()->create([
             'country_id' => $this->country->id,
@@ -318,7 +318,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function scopeSearchFindsStatesByNameOrCode()
+    public function scope_search_finds_states_by_name_or_code()
     {
         $states = State::search('Test')->get();
         $this->assertTrue($states->contains($this->state));
@@ -331,7 +331,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function scopeRecentReturnsStatesCreatedWithinDays()
+    public function scope_recent_returns_states_created_within_days()
     {
         $oldState = State::factory()->create([
             'country_id' => $this->country->id,
@@ -345,7 +345,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function scopeOldReturnsStatesCreatedBeforeDays()
+    public function scope_old_returns_states_created_before_days()
     {
         $oldState = State::factory()->create([
             'country_id' => $this->country->id,
@@ -359,7 +359,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function scopeAlphabeticalOrdersStatesByName()
+    public function scope_alphabetical_orders_states_by_name()
     {
         $stateB = State::factory()->create([
             'country_id' => $this->country->id,
@@ -377,7 +377,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function scopeWithCitiesReturnsStatesThatHaveCities()
+    public function scope_with_cities_returns_states_that_have_cities()
     {
         $stateWithoutCities = State::factory()->create(['country_id' => $this->country->id]);
         City::factory()->create(['state_id' => $this->state->id]);
@@ -389,7 +389,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function scopeWithoutCitiesReturnsStatesThatHaveNoCities()
+    public function scope_without_cities_returns_states_that_have_no_cities()
     {
         $stateWithoutCities = State::factory()->create(['country_id' => $this->country->id]);
         City::factory()->create(['state_id' => $this->state->id]);
@@ -401,7 +401,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function scopeWithCoordinatesReturnsStatesWithLatLng()
+    public function scope_with_coordinates_returns_states_with_lat_lng()
     {
         $stateWithoutCoords = State::factory()->create([
             'country_id' => $this->country->id,
@@ -416,7 +416,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function scopeWithoutCoordinatesReturnsStatesWithoutLatLng()
+    public function scope_without_coordinates_returns_states_without_lat_lng()
     {
         $stateWithoutCoords = State::factory()->create([
             'country_id' => $this->country->id,
@@ -431,7 +431,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function scopePopulationGreaterThanFiltersByPopulation()
+    public function scope_population_greater_than_filters_by_population()
     {
         $smallState = State::factory()->create([
             'country_id' => $this->country->id,
@@ -445,7 +445,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function scopePopulationLessThanFiltersByPopulation()
+    public function scope_population_less_than_filters_by_population()
     {
         $smallState = State::factory()->create([
             'country_id' => $this->country->id,
@@ -459,7 +459,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function scopePopulationBetweenFiltersByPopulationRange()
+    public function scope_population_between_filters_by_population_range()
     {
         $states = State::populationBetween(7000000, 9000000)->get();
 
@@ -467,7 +467,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function scopeByTimezoneFiltersByTimezone()
+    public function scope_by_timezone_filters_by_timezone()
     {
         $differentState = State::factory()->create([
             'country_id' => $this->country->id,
@@ -483,7 +483,7 @@ class StateTest extends TestCase
     // HELPER METHOD TESTS
 
     /** @test */
-    public function itCanGetFullNameAttribute()
+    public function it_can_get_full_name_attribute()
     {
         $fullName = $this->state->full_name;
 
@@ -491,7 +491,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetDisplayNameAttribute()
+    public function it_can_get_display_name_attribute()
     {
         $displayName = $this->state->display_name;
 
@@ -499,7 +499,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itCanCheckIfHasCoordinates()
+    public function it_can_check_if_has_coordinates()
     {
         $this->assertTrue($this->state->hasCoordinates());
 
@@ -513,7 +513,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetCoordinatesAttribute()
+    public function it_can_get_coordinates_attribute()
     {
         $coordinates = $this->state->coordinates;
 
@@ -521,7 +521,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetCitiesCountAttribute()
+    public function it_can_get_cities_count_attribute()
     {
         City::factory(3)->create(['state_id' => $this->state->id]);
 
@@ -529,7 +529,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetActiveCitiesCountAttribute()
+    public function it_can_get_active_cities_count_attribute()
     {
         City::factory(2)->create([
             'state_id' => $this->state->id,
@@ -546,7 +546,7 @@ class StateTest extends TestCase
     // CACHING TESTS
 
     /** @test */
-    public function itCanGetCachedStatesByCountry()
+    public function it_can_get_cached_states_by_country()
     {
         Cache::flush();
 
@@ -560,7 +560,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetCachedActiveStates()
+    public function it_can_get_cached_active_states()
     {
         Cache::flush();
 
@@ -574,7 +574,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetCachedFeaturedStates()
+    public function it_can_get_cached_featured_states()
     {
         Cache::flush();
 
@@ -588,7 +588,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itClearsCachesWhenStateIsSaved()
+    public function it_clears_caches_when_state_is_saved()
     {
         // Set up cache
         State::getCachedActive();
@@ -609,7 +609,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itClearsCachesWhenStateIsDeleted()
+    public function it_clears_caches_when_state_is_deleted()
     {
         // Set up cache
         State::getCachedActive();
@@ -630,7 +630,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itUsesSoftDeletes()
+    public function it_uses_soft_deletes()
     {
         $this->state->delete();
 
@@ -639,7 +639,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itLogsActivityWhenStateChanges()
+    public function it_logs_activity_when_state_changes()
     {
         // This test assumes Spatie Activity Log is properly configured
         $originalName = $this->state->name;
@@ -654,7 +654,7 @@ class StateTest extends TestCase
     }
 
     /** @test */
-    public function itHasProperModelFactory()
+    public function it_has_proper_model_factory()
     {
         $state = State::factory()->create();
 

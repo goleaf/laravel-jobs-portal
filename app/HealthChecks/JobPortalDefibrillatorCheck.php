@@ -2,17 +2,15 @@
 
 namespace App\HealthChecks;
 
+use App\Models\Job;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Spatie\Health\Checks\Check;
 use Spatie\Health\Checks\Result;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
-use App\Models\Job;
-use App\Models\JobApplication;
-use Carbon\Carbon;
 
 /**
  * Laravel Defibrillator Health Check
- * 
+ *
  * Integrates our custom defibrillator monitoring with Laravel Health package
  */
 class JobPortalDefibrillatorCheck extends Check
@@ -24,8 +22,8 @@ class JobPortalDefibrillatorCheck extends Check
         try {
             // Get cached health status from our defibrillator system
             $healthStatus = Cache::get('defibrillator:last_health_check');
-            
-            if (!$healthStatus) {
+
+            if (! $healthStatus) {
                 return $result->failed('No defibrillator health data available');
             }
 
@@ -42,21 +40,23 @@ class JobPortalDefibrillatorCheck extends Check
             $issues = $healthStatus['issues'] ?? [];
             $warnings = $healthStatus['warnings'] ?? [];
 
-            if ($systemStatus === 'critical' || !empty($issues)) {
+            if ($systemStatus === 'critical' || ! empty($issues)) {
                 $message = 'System health critical';
-                if (!empty($issues)) {
-                    $message .= ': ' . implode(', ', array_slice($issues, 0, 2));
+                if (! empty($issues)) {
+                    $message .= ': '.implode(', ', array_slice($issues, 0, 2));
                 }
+
                 return $result->failed($message);
             }
 
-            if (!empty($warnings)) {
+            if (! empty($warnings)) {
                 $message = 'System rhythm irregular';
                 if (count($warnings) <= 2) {
-                    $message .= ': ' . implode(', ', $warnings);
+                    $message .= ': '.implode(', ', $warnings);
                 } else {
-                    $message .= ': ' . count($warnings) . ' warnings detected';
+                    $message .= ': '.count($warnings).' warnings detected';
                 }
+
                 return $result->warning($message);
             }
 

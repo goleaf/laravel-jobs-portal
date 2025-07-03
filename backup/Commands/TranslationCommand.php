@@ -104,7 +104,7 @@ class TranslationCommand extends Command
         ];
 
         foreach ($scanPaths as $path) {
-            if (!File::exists($path)) {
+            if (! File::exists($path)) {
                 continue;
             }
 
@@ -117,7 +117,7 @@ class TranslationCommand extends Command
                         preg_match_all($pattern, $content, $matches);
                         foreach ($matches[1] as $match) {
                             // Skip if it's likely a translation key
-                            if (false !== strpos($match, '.') || false !== strpos($match, '_')) {
+                            if (strpos($match, '.') !== false || strpos($match, '_') !== false) {
                                 continue;
                             }
 
@@ -157,11 +157,11 @@ class TranslationCommand extends Command
     {
         $locale = $this->option('locale');
 
-        if (!$locale) {
+        if (! $locale) {
             $locale = $this->choice('Select locale to check for missing translations:', $this->availableLocales);
         }
 
-        if (!in_array($locale, $this->availableLocales)) {
+        if (! in_array($locale, $this->availableLocales)) {
             $this->error("Unsupported locale: {$locale}");
 
             return 1;
@@ -201,11 +201,11 @@ class TranslationCommand extends Command
         $targetLocale = $this->option('locale');
         $sourceLocale = $this->option('source') ?? 'en';
 
-        if (!$targetLocale) {
+        if (! $targetLocale) {
             $targetLocale = $this->choice('Select target locale:', $this->availableLocales);
         }
 
-        if (!in_array($targetLocale, $this->availableLocales) || !in_array($sourceLocale, $this->availableLocales)) {
+        if (! in_array($targetLocale, $this->availableLocales) || ! in_array($sourceLocale, $this->availableLocales)) {
             $this->error('Unsupported locale');
 
             return 1;
@@ -234,7 +234,7 @@ class TranslationCommand extends Command
                 } else {
                     $targetTranslations[$key] = "[{$targetLocale}] ".$sourceTranslations[$key];
                 }
-                ++$synced;
+                $synced++;
             }
         }
 
@@ -290,17 +290,17 @@ class TranslationCommand extends Command
         $format = $this->option('format');
         $file = $this->option('file');
 
-        if (!$locale) {
+        if (! $locale) {
             $locale = $this->choice('Select locale to export:', $this->availableLocales);
         }
 
-        if (!in_array($locale, $this->availableLocales)) {
+        if (! in_array($locale, $this->availableLocales)) {
             $this->error("Unsupported locale: {$locale}");
 
             return 1;
         }
 
-        if (!$file) {
+        if (! $file) {
             $file = storage_path("app/exports/{$locale}-translations.{$format}");
         }
 
@@ -311,7 +311,7 @@ class TranslationCommand extends Command
         // Ensure directory exists
         File::ensureDirectoryExists(dirname($file));
 
-        if ('json' === $format) {
+        if ($format === 'json') {
             $content = json_encode($translations, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         } else {
             $content = "<?php\n\nreturn ".var_export($translations, true).";\n";
@@ -333,17 +333,17 @@ class TranslationCommand extends Command
         $file = $this->option('file');
         $merge = $this->option('merge');
 
-        if (!$locale) {
+        if (! $locale) {
             $locale = $this->choice('Select target locale:', $this->availableLocales);
         }
 
-        if (!$file) {
+        if (! $file) {
             $this->error('File path is required for import');
 
             return 1;
         }
 
-        if (!File::exists($file)) {
+        if (! File::exists($file)) {
             $this->error("File not found: {$file}");
 
             return 1;
@@ -355,7 +355,7 @@ class TranslationCommand extends Command
 
         if (str_ends_with($file, '.json')) {
             $importedTranslations = json_decode($content, true);
-            if (JSON_ERROR_NONE !== json_last_error()) {
+            if (json_last_error() !== JSON_ERROR_NONE) {
                 $this->error('Invalid JSON file');
 
                 return 1;
@@ -363,7 +363,7 @@ class TranslationCommand extends Command
         } else {
             // Assume PHP file
             $importedTranslations = include $file;
-            if (!is_array($importedTranslations)) {
+            if (! is_array($importedTranslations)) {
                 $this->error('Invalid PHP array file');
 
                 return 1;

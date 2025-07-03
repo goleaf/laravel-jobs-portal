@@ -31,11 +31,10 @@ class LoginControllerTest extends TestCase
     /**
      * Universal Pattern: Test index functionality.
      */
-    public function testIndexDisplaysCorrectly(): void
+    public function test_index_displays_correctly(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('login.index'))
-        ;
+            ->get(route('login.index'));
 
         $response->assertStatus(200);
     }
@@ -43,11 +42,10 @@ class LoginControllerTest extends TestCase
     /**
      * Universal Pattern: Test create form display.
      */
-    public function testCreateDisplaysForm(): void
+    public function test_create_displays_form(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('login.create'))
-        ;
+            ->get(route('login.create'));
 
         $response->assertStatus(200);
     }
@@ -55,7 +53,7 @@ class LoginControllerTest extends TestCase
     /**
      * Universal Pattern: Test successful store operation.
      */
-    public function testStoreCreatesNewRecord(): void
+    public function test_store_creates_new_record(): void
     {
         $data = [
             'name' => $this->faker->name,
@@ -65,8 +63,7 @@ class LoginControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->post(route('login.store'), $data)
-        ;
+            ->post(route('login.store'), $data);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('logins', [
@@ -78,11 +75,10 @@ class LoginControllerTest extends TestCase
     /**
      * Universal Pattern: Test validation errors.
      */
-    public function testStoreValidatesRequiredFields(): void
+    public function test_store_validates_required_fields(): void
     {
         $response = $this->actingAs($this->user)
-            ->post(route('login.store'), [])
-        ;
+            ->post(route('login.store'), []);
 
         $response->assertSessionHasErrors(['name']);
     }
@@ -90,13 +86,12 @@ class LoginControllerTest extends TestCase
     /**
      * Universal Pattern: Test show functionality.
      */
-    public function testShowDisplaysRecord(): void
+    public function test_show_displays_record(): void
     {
         $login = Login::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->get(route('login.show', $login))
-        ;
+            ->get(route('login.show', $login));
 
         $response->assertStatus(200);
     }
@@ -104,13 +99,12 @@ class LoginControllerTest extends TestCase
     /**
      * Universal Pattern: Test edit form display.
      */
-    public function testEditDisplaysForm(): void
+    public function test_edit_displays_form(): void
     {
         $login = Login::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->get(route('login.edit', $login))
-        ;
+            ->get(route('login.edit', $login));
 
         $response->assertStatus(200);
     }
@@ -118,7 +112,7 @@ class LoginControllerTest extends TestCase
     /**
      * Universal Pattern: Test successful update operation.
      */
-    public function testUpdateModifiesRecord(): void
+    public function test_update_modifies_record(): void
     {
         $login = Login::factory()->create();
         $newData = [
@@ -127,8 +121,7 @@ class LoginControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->put(route('login.update', $login), $newData)
-        ;
+            ->put(route('login.update', $login), $newData);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('logins', [
@@ -140,13 +133,12 @@ class LoginControllerTest extends TestCase
     /**
      * Universal Pattern: Test successful delete operation.
      */
-    public function testDestroyDeletesRecord(): void
+    public function test_destroy_deletes_record(): void
     {
         $login = Login::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->delete(route('login.destroy', $login))
-        ;
+            ->delete(route('login.destroy', $login));
 
         $response->assertRedirect();
         $this->assertSoftDeleted($login);
@@ -155,7 +147,7 @@ class LoginControllerTest extends TestCase
     /**
      * Universal Pattern: Test authorization.
      */
-    public function testUnauthorizedAccessIsPrevented(): void
+    public function test_unauthorized_access_is_prevented(): void
     {
         $response = $this->get(route('login.index'));
 
@@ -165,7 +157,7 @@ class LoginControllerTest extends TestCase
     /**
      * Universal Pattern: Test with invalid data.
      */
-    public function testStoreWithInvalidEmail(): void
+    public function test_store_with_invalid_email(): void
     {
         $data = [
             'name' => 'Test Name',
@@ -174,8 +166,7 @@ class LoginControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->post(route('login.store'), $data)
-        ;
+            ->post(route('login.store'), $data);
 
         $response->assertSessionHasErrors(['email']);
     }
@@ -183,7 +174,7 @@ class LoginControllerTest extends TestCase
     /**
      * Universal Pattern: Test unique validation.
      */
-    public function testStorePreventsDuplicateNames(): void
+    public function test_store_prevents_duplicate_names(): void
     {
         $existing = Login::factory()->create(['name' => 'Unique Name']);
 

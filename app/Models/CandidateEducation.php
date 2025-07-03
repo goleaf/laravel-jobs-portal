@@ -15,31 +15,31 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * App\Models\CandidateEducation.
  *
- * @property int                 $id
- * @property int                 $candidate_id
- * @property int                 $degree_level_id
- * @property string              $degree_title
- * @property null|int            $country_id
- * @property null|int            $state_id
- * @property null|int            $city_id
- * @property string              $institute
- * @property string              $result
- * @property int                 $year
- * @property null|float          $grade_percentage
- * @property null|string         $field_of_study
- * @property null|string         $description
- * @property bool                $is_verified
- * @property null|Carbon         $created_at
- * @property null|Carbon         $updated_at
- * @property Candidate           $candidate
+ * @property int $id
+ * @property int $candidate_id
+ * @property int $degree_level_id
+ * @property string $degree_title
+ * @property null|int $country_id
+ * @property null|int $state_id
+ * @property null|int $city_id
+ * @property string $institute
+ * @property string $result
+ * @property int $year
+ * @property null|float $grade_percentage
+ * @property null|string $field_of_study
+ * @property null|string $description
+ * @property bool $is_verified
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property Candidate $candidate
  * @property RequiredDegreeLevel $degreeLevel
- * @property null|Country        $country
- * @property null|State          $state
- * @property null|City           $city
- * @property string              $full_location
- * @property string              $duration_description
- * @property string              $grade_display
- * @property bool                $is_recent
+ * @property null|Country $country
+ * @property null|State $state
+ * @property null|City $city
+ * @property string $full_location
+ * @property string $duration_description
+ * @property string $grade_display
+ * @property bool $is_recent
  *
  * @method static Builder|CandidateEducation newModelQuery()
  * @method static Builder|CandidateEducation newQuery()
@@ -92,8 +92,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class CandidateEducation extends Model
 {
     use HasFactory;
-    use LogsActivity;
     use HasSettingsField;
+    use LogsActivity;
 
     /**
      * Validation rules with multilingual support.
@@ -212,44 +212,44 @@ class CandidateEducation extends Model
         'display.show_year' => 'boolean',
         'display.highlight_honors' => 'boolean',
         'display.priority_order' => 'integer|min:0|max:100',
-        
+
         'privacy.public_visibility' => 'boolean',
         'privacy.recruiter_access' => 'boolean',
         'privacy.hide_from_alumni' => 'boolean',
         'privacy.hide_from_current_institute' => 'boolean',
         'privacy.anonymous_institute' => 'boolean',
         'privacy.grade_visibility' => 'string|in:all,recruiters_only,private',
-        
+
         'verification.verification_required' => 'boolean',
         'verification.auto_verify_threshold' => 'numeric|min:0|max:100',
         'verification.verification_documents' => 'array',
         'verification.verification_status' => 'string|in:pending,verified,rejected',
-        
+
         'achievements.honors_and_awards' => 'array',
         'achievements.scholarships' => 'array',
         'achievements.academic_projects' => 'array',
         'achievements.publications' => 'array',
         'achievements.relevant_coursework' => 'array',
         'achievements.extracurricular_activities' => 'array',
-        
+
         'matching.skill_relevance_score' => 'numeric|min:0|max:100',
         'matching.job_market_relevance' => 'string|in:high,medium,low',
         'matching.industry_alignment' => 'array',
         'matching.weight_in_profile' => 'numeric|min:0|max:5',
         'matching.boost_recent_graduates' => 'boolean',
-        
+
         'analytics.profile_views_education' => 'integer|min:0',
         'analytics.recruiter_interest_score' => 'numeric|min:0|max:100',
         'analytics.education_ranking' => 'nullable|integer|min:1',
         'analytics.field_demand_score' => 'numeric|min:0|max:100',
         'analytics.completion_impact' => 'numeric|min:0|max:100',
-        
+
         'formatting.date_format' => 'string|in:year_only,month_year,full_date',
         'formatting.grade_format' => 'string|in:percentage,gpa,letter,pass_fail',
         'formatting.institute_display' => 'string|in:full_name,abbreviation,custom',
         'formatting.location_format' => 'string|in:city_country,full,city_only',
         'formatting.description_length' => 'integer|min:50|max:1000',
-        
+
         'notifications.verification_updates' => 'boolean',
         'notifications.institute_news' => 'boolean',
         'notifications.alumni_connections' => 'boolean',
@@ -273,8 +273,7 @@ class CandidateEducation extends Model
         return LogOptions::defaults()
             ->logOnly(['degree_level_id', 'institute', 'result', 'year', 'is_verified'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     // ==============================================
@@ -332,10 +331,10 @@ class CandidateEducation extends Model
         $currentYear = date('Y');
         $yearsAgo = $currentYear - $this->year;
 
-        if (0 === $yearsAgo) {
+        if ($yearsAgo === 0) {
             return __('education.current_year');
         }
-        if (1 === $yearsAgo) {
+        if ($yearsAgo === 1) {
             return __('education.one_year_ago');
         }
 
@@ -472,8 +471,7 @@ class CandidateEducation extends Model
         return $query->whereHas('degreeLevel', function ($q) {
             $q->where('name', 'LIKE', '%bachelor%')
                 ->orWhere('name', 'LIKE', '%graduate%')
-                ->orWhere('name', 'LIKE', '%degree%')
-            ;
+                ->orWhere('name', 'LIKE', '%degree%');
         });
     }
 
@@ -485,8 +483,7 @@ class CandidateEducation extends Model
         return $query->whereHas('degreeLevel', function ($q) {
             $q->where('name', 'LIKE', '%master%')
                 ->orWhere('name', 'LIKE', '%post%')
-                ->orWhere('name', 'LIKE', '%mba%')
-            ;
+                ->orWhere('name', 'LIKE', '%mba%');
         });
     }
 
@@ -498,8 +495,7 @@ class CandidateEducation extends Model
         return $query->whereHas('degreeLevel', function ($q) {
             $q->where('name', 'LIKE', '%phd%')
                 ->orWhere('name', 'LIKE', '%doctor%')
-                ->orWhere('name', 'LIKE', '%doctorate%')
-            ;
+                ->orWhere('name', 'LIKE', '%doctorate%');
         });
     }
 
@@ -511,8 +507,7 @@ class CandidateEducation extends Model
         return $query->whereHas('degreeLevel', function ($q) {
             $q->where('name', 'LIKE', '%diploma%')
                 ->orWhere('name', 'LIKE', '%certificate%')
-                ->orWhere('name', 'LIKE', '%associate%')
-            ;
+                ->orWhere('name', 'LIKE', '%associate%');
         });
     }
 
@@ -524,8 +519,7 @@ class CandidateEducation extends Model
         return $query->where(function ($q) {
             $q->where('field_of_study', 'LIKE', '%engineering%')
                 ->orWhere('field_of_study', 'LIKE', '%technical%')
-                ->orWhere('degree_title', 'LIKE', '%engineering%')
-            ;
+                ->orWhere('degree_title', 'LIKE', '%engineering%');
         });
     }
 
@@ -538,8 +532,7 @@ class CandidateEducation extends Model
             $q->where('field_of_study', 'LIKE', '%medical%')
                 ->orWhere('field_of_study', 'LIKE', '%medicine%')
                 ->orWhere('field_of_study', 'LIKE', '%health%')
-                ->orWhere('degree_title', 'LIKE', '%medical%')
-            ;
+                ->orWhere('degree_title', 'LIKE', '%medical%');
         });
     }
 
@@ -552,8 +545,7 @@ class CandidateEducation extends Model
             $q->where('field_of_study', 'LIKE', '%business%')
                 ->orWhere('field_of_study', 'LIKE', '%management%')
                 ->orWhere('field_of_study', 'LIKE', '%mba%')
-                ->orWhere('degree_title', 'LIKE', '%business%')
-            ;
+                ->orWhere('degree_title', 'LIKE', '%business%');
         });
     }
 
@@ -567,8 +559,7 @@ class CandidateEducation extends Model
                 ->orWhere('field_of_study', 'LIKE', '%technology%')
                 ->orWhere('field_of_study', 'LIKE', '%software%')
                 ->orWhere('field_of_study', 'LIKE', '%it%')
-                ->orWhere('degree_title', 'LIKE', '%computer%')
-            ;
+                ->orWhere('degree_title', 'LIKE', '%computer%');
         });
     }
 
@@ -582,8 +573,7 @@ class CandidateEducation extends Model
                 ->orWhere('field_of_study', 'LIKE', '%physics%')
                 ->orWhere('field_of_study', 'LIKE', '%chemistry%')
                 ->orWhere('field_of_study', 'LIKE', '%biology%')
-                ->orWhere('degree_title', 'LIKE', '%science%')
-            ;
+                ->orWhere('degree_title', 'LIKE', '%science%');
         });
     }
 
@@ -623,8 +613,7 @@ class CandidateEducation extends Model
                 ->orWhere('result', 'LIKE', "%{$term}%")
                 ->orWhereHas('degreeLevel', function ($subQuery) use ($term) {
                     $subQuery->where('name', 'LIKE', "%{$term}%");
-                })
-            ;
+                });
         });
     }
 
@@ -697,8 +686,7 @@ class CandidateEducation extends Model
     /**
      * Scope a query to only include active records.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeActive($query)
@@ -709,8 +697,7 @@ class CandidateEducation extends Model
     /**
      * Scope a query to only include inactive records.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeInactive($query)

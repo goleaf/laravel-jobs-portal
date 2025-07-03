@@ -3,14 +3,11 @@
 namespace App\Views;
 
 use App\Models\Job;
-use App\Models\Company;
-use App\Models\JobCategory;
-use App\Models\JobType;
 use Carbon\Carbon;
 
 /**
  * Job Template Model
- * 
+ *
  * Based on Habr article patterns for model-oriented templating
  * Provides typed properties and methods for job-related templates
  */
@@ -34,7 +31,7 @@ class JobTemplateModel extends BaseTemplateModel
     public int $experienceYears = 0;
     public string $employmentType = 'full-time';
     public string $workType = 'onsite'; // remote, onsite, hybrid
-    
+
     // Related models (initialized as empty objects/arrays)
     public ?CompanyTemplateModel $company = null;
     public ?JobCategoryTemplateModel $category = null;
@@ -42,13 +39,13 @@ class JobTemplateModel extends BaseTemplateModel
     public array $skills = [];
     public array $applications = [];
     public int $applicationsCount = 0;
-    
+
     // SEO and metadata
     public string $slug = '';
     public string $metaTitle = '';
     public string $metaDescription = '';
     public array $metaKeywords = [];
-    
+
     // Display helpers (initialized with defaults)
     public string $statusLabel = '';
     public string $urgencyLevel = 'normal';
@@ -62,7 +59,7 @@ class JobTemplateModel extends BaseTemplateModel
         $this->deadline = Carbon::now()->addMonth();
         $this->createdAt = Carbon::now();
         $this->updatedAt = Carbon::now();
-        
+
         // Initialize computed properties
         $this->updateComputedProperties();
     }
@@ -84,8 +81,8 @@ class JobTemplateModel extends BaseTemplateModel
      */
     public static function fromJob(Job $job): self
     {
-        $model = new self();
-        
+        $model = new self;
+
         // Basic properties
         $model->title = $job->title ?? '';
         $model->description = $job->description ?? '';
@@ -99,26 +96,26 @@ class JobTemplateModel extends BaseTemplateModel
         $model->deadline = $job->deadline ? Carbon::parse($job->deadline) : Carbon::now()->addMonth();
         $model->createdAt = Carbon::parse($job->created_at ?? now());
         $model->updatedAt = Carbon::parse($job->updated_at ?? now());
-        $model->isFeatured = (bool)$job->is_featured;
-        $model->isActive = (bool)$job->is_active;
+        $model->isFeatured = (bool) $job->is_featured;
+        $model->isActive = (bool) $job->is_active;
         $model->status = $job->status ?? 'active';
         $model->experienceYears = $job->experience_years ?? 0;
         $model->employmentType = $job->employment_type ?? 'full-time';
         $model->workType = $job->work_type ?? 'onsite';
-        
+
         // Related models
         if ($job->company) {
             $model->company = CompanyTemplateModel::fromCompany($job->company);
         }
-        
+
         if ($job->category) {
             $model->category = JobCategoryTemplateModel::fromJobCategory($job->category);
         }
-        
+
         if ($job->jobType) {
             $model->jobType = JobTypeTemplateModel::fromJobType($job->jobType);
         }
-        
+
         // Skills
         $model->skills = $job->skills ? $job->skills->map(function ($skill) {
             return [
@@ -127,21 +124,21 @@ class JobTemplateModel extends BaseTemplateModel
                 'slug' => $skill->slug ?? '',
             ];
         })->toArray() : [];
-        
+
         // Applications count
         $model->applicationsCount = $job->applications ? $job->applications()->count() : 0;
-        
+
         // SEO
         $model->slug = $job->slug ?? '';
         $model->metaTitle = $job->meta_title ?: $job->title;
         $model->metaDescription = $job->meta_description ?: $model->truncate($job->description ?? '', 160);
-        $model->metaKeywords = !empty($job->meta_keywords) 
-            ? explode(',', $job->meta_keywords) 
+        $model->metaKeywords = ! empty($job->meta_keywords)
+            ? explode(',', $job->meta_keywords)
             : array_column($model->skills, 'name');
-        
+
         // Update computed properties
         $model->updateComputedProperties();
-        
+
         return $model;
     }
 
@@ -150,24 +147,24 @@ class JobTemplateModel extends BaseTemplateModel
      */
     public function salaryRange(): string
     {
-        if (!$this->salaryFrom && !$this->salaryTo) {
+        if (! $this->salaryFrom && ! $this->salaryTo) {
             return 'Salary negotiable';
         }
-        
+
         if ($this->salaryFrom && $this->salaryTo) {
-            return $this->formatCurrency($this->salaryFrom, $this->salaryCurrency) . 
-                   ' - ' . 
-                   $this->formatCurrency($this->salaryTo, $this->salaryCurrency) . 
-                   ' per ' . $this->salaryPeriod;
+            return $this->formatCurrency($this->salaryFrom, $this->salaryCurrency).
+                   ' - '.
+                   $this->formatCurrency($this->salaryTo, $this->salaryCurrency).
+                   ' per '.$this->salaryPeriod;
         }
-        
+
         if ($this->salaryFrom) {
-            return 'From ' . $this->formatCurrency($this->salaryFrom, $this->salaryCurrency) . 
-                   ' per ' . $this->salaryPeriod;
+            return 'From '.$this->formatCurrency($this->salaryFrom, $this->salaryCurrency).
+                   ' per '.$this->salaryPeriod;
         }
-        
-        return 'Up to ' . $this->formatCurrency($this->salaryTo, $this->salaryCurrency) . 
-               ' per ' . $this->salaryPeriod;
+
+        return 'Up to '.$this->formatCurrency($this->salaryTo, $this->salaryCurrency).
+               ' per '.$this->salaryPeriod;
     }
 
     /**
@@ -178,19 +175,19 @@ class JobTemplateModel extends BaseTemplateModel
         if ($this->isExpired) {
             return 'expired';
         }
-        
+
         if ($this->daysUntilDeadline <= 3) {
             return 'critical';
         }
-        
+
         if ($this->daysUntilDeadline <= 7) {
             return 'urgent';
         }
-        
+
         if ($this->daysUntilDeadline <= 14) {
             return 'moderate';
         }
-        
+
         return 'normal';
     }
 
@@ -199,7 +196,7 @@ class JobTemplateModel extends BaseTemplateModel
      */
     public function urgencyBadge(): string
     {
-        return match($this->urgencyLevel) {
+        return match ($this->urgencyLevel) {
             'expired' => 'bg-red-100 text-red-800 border-red-200',
             'critical' => 'bg-red-100 text-red-800 border-red-200',
             'urgent' => 'bg-orange-100 text-orange-800 border-orange-200',
@@ -214,10 +211,10 @@ class JobTemplateModel extends BaseTemplateModel
     public function deadlineFormatted(): string
     {
         if ($this->isExpired) {
-            return 'Expired ' . $this->humanDate($this->deadline);
+            return 'Expired '.$this->humanDate($this->deadline);
         }
-        
-        return 'Deadline: ' . $this->deadline->format('M j, Y') . ' (' . $this->humanDate($this->deadline) . ')';
+
+        return 'Deadline: '.$this->deadline->format('M j, Y').' ('.$this->humanDate($this->deadline).')';
     }
 
     /**
@@ -228,16 +225,16 @@ class JobTemplateModel extends BaseTemplateModel
         if ($this->experienceYears === 0) {
             return 'Entry Level';
         }
-        
+
         if ($this->experienceYears <= 2) {
-            return 'Junior (' . $this->experienceYears . ' years)';
+            return 'Junior ('.$this->experienceYears.' years)';
         }
-        
+
         if ($this->experienceYears <= 5) {
-            return 'Mid-level (' . $this->experienceYears . ' years)';
+            return 'Mid-level ('.$this->experienceYears.' years)';
         }
-        
-        return 'Senior (' . $this->experienceYears . '+ years)';
+
+        return 'Senior ('.$this->experienceYears.'+ years)';
     }
 
     /**
@@ -245,7 +242,7 @@ class JobTemplateModel extends BaseTemplateModel
      */
     public function workTypeIcon(): string
     {
-        return match($this->workType) {
+        return match ($this->workType) {
             'remote' => '🏠',
             'hybrid' => '🔄',
             'onsite' => '🏢',
@@ -258,7 +255,7 @@ class JobTemplateModel extends BaseTemplateModel
      */
     public function employmentTypeBadge(): string
     {
-        return match($this->employmentType) {
+        return match ($this->employmentType) {
             'full-time' => 'bg-blue-100 text-blue-800',
             'part-time' => 'bg-purple-100 text-purple-800',
             'contract' => 'bg-orange-100 text-orange-800',
@@ -297,17 +294,17 @@ class JobTemplateModel extends BaseTemplateModel
      */
     public function canApply(): bool
     {
-        if ($this->isExpired || !$this->isActive) {
+        if ($this->isExpired || ! $this->isActive) {
             return false;
         }
-        
+
         $user = $this->currentUser();
-        if (!$user) {
+        if (! $user) {
             return false;
         }
-        
+
         // Check if user already applied
-        return !in_array($user->id, array_column($this->applications, 'user_id'));
+        return ! in_array($user->id, array_column($this->applications, 'user_id'));
     }
 
     /**
@@ -345,4 +342,4 @@ class JobTemplateModel extends BaseTemplateModel
             ] : null,
         ];
     }
-} 
+}

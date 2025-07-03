@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Arr;
 
 class EnvSetting extends Model
 {
     /** @use HasFactory<\Database\Factories\EnvSettingFactory> */
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     /**
      * The table associated with the model.
@@ -46,32 +47,26 @@ class EnvSetting extends Model
 
     /**
      * Validate required fields using Laravel 12.16 Arr::hasAll()
-     *
-     * @param array $data
-     * @return bool
      */
     public static function validateRequiredFields(array $data): bool
     {
         $requiredFields = ['key', 'value'];
-        
+
         return Arr::hasAll($data, $requiredFields);
     }
 
     /**
      * Enhanced validation for environment settings
-     *
-     * @param array $attributes
-     * @return array
      */
     public static function validateSettingData(array $attributes): array
     {
         // Use Arr::hasAll() to ensure core fields exist
-        if (!self::validateRequiredFields($attributes)) {
+        if (! self::validateRequiredFields($attributes)) {
             throw new \InvalidArgumentException('Missing required fields: key and value are mandatory');
         }
 
         // Validate key format (no spaces, alphanumeric with underscores)
-        if (isset($attributes['key']) && !preg_match('/^[A-Z_][A-Z0-9_]*$/', $attributes['key'])) {
+        if (isset($attributes['key']) && ! preg_match('/^[A-Z_][A-Z0-9_]*$/', $attributes['key'])) {
             throw new \InvalidArgumentException('Environment key must be uppercase with underscores only');
         }
 

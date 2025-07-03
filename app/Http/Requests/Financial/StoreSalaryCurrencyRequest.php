@@ -21,14 +21,14 @@ class StoreSalaryCurrencyRequest extends FormRequest
     public function authorize(): bool
     {
         $user = Auth::user();
-        
-        if (!$user) {
+
+        if (! $user) {
             return false;
         }
 
         // Only admin, financial managers, or users with currency management permissions
-        return $user->hasRole('Admin') || 
-               $user->hasRole('Financial Manager') || 
+        return $user->hasRole('Admin') ||
+               $user->hasRole('Financial Manager') ||
                $user->hasRole('System Administrator') ||
                $user->can('manage-currencies');
     }
@@ -49,7 +49,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
                 'unique:salary_currencies,currency_name',
                 'regex:/^[a-zA-Z\s\(\)\-]+$/', // Only letters, spaces, parentheses, hyphens
             ],
-            
+
             'iso_code' => [
                 'required',
                 'string',
@@ -58,7 +58,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
                 'unique:salary_currencies,iso_code',
                 'regex:/^[A-Z]{3}$/', // ISO 4217 standard
             ],
-            
+
             'numeric_code' => [
                 'nullable',
                 'string',
@@ -74,27 +74,27 @@ class StoreSalaryCurrencyRequest extends FormRequest
                 'min:1',
                 'max:10',
             ],
-            
+
             'symbol_position' => [
                 'required',
                 'string',
                 Rule::in(['before', 'after']),
             ],
-            
+
             'decimal_separator' => [
                 'required',
                 'string',
                 'size:1',
                 Rule::in(['.', ',']),
             ],
-            
+
             'thousands_separator' => [
                 'nullable',
                 'string',
                 'size:1',
                 Rule::in([',', '.', ' ', "'"]),
             ],
-            
+
             'decimal_places' => [
                 'required',
                 'integer',
@@ -110,13 +110,13 @@ class StoreSalaryCurrencyRequest extends FormRequest
                 'max:999999999',
                 'regex:/^\d+(\.\d{1,8})?$/', // Up to 8 decimal places
             ],
-            
+
             'last_updated_rate' => [
                 'nullable',
                 'date',
                 'before_or_equal:now',
             ],
-            
+
             'rate_source' => [
                 'nullable',
                 'string',
@@ -131,7 +131,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
                 'size:2',
                 'exists:countries,iso_code_2',
             ],
-            
+
             'countries' => [
                 'nullable',
                 'array',
@@ -143,7 +143,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
                 'exists:countries,iso_code_2',
                 'distinct',
             ],
-            
+
             'usage_type' => [
                 'required',
                 'string',
@@ -156,17 +156,17 @@ class StoreSalaryCurrencyRequest extends FormRequest
                 'string',
                 Rule::in(['fiat', 'cryptocurrency', 'commodity', 'points', 'voucher']),
             ],
-            
+
             'is_major_currency' => [
                 'nullable',
                 'boolean',
             ],
-            
+
             'is_crypto' => [
                 'nullable',
                 'boolean',
             ],
-            
+
             'is_stable_coin' => [
                 'nullable',
                 'boolean',
@@ -179,12 +179,12 @@ class StoreSalaryCurrencyRequest extends FormRequest
                 'min:0',
                 'max:9999',
             ],
-            
+
             'is_featured' => [
                 'nullable',
                 'boolean',
             ],
-            
+
             'color_code' => [
                 'nullable',
                 'string',
@@ -196,17 +196,17 @@ class StoreSalaryCurrencyRequest extends FormRequest
                 'nullable',
                 'boolean',
             ],
-            
+
             'is_visible' => [
                 'nullable',
                 'boolean',
             ],
-            
+
             'is_tradeable' => [
                 'nullable',
                 'boolean',
             ],
-            
+
             'is_deprecated' => [
                 'nullable',
                 'boolean',
@@ -218,13 +218,13 @@ class StoreSalaryCurrencyRequest extends FormRequest
                 'string',
                 'max:200',
             ],
-            
+
             'subunit_name' => [
                 'nullable',
                 'string',
                 'max:50',
             ],
-            
+
             'subunit_ratio' => [
                 'nullable',
                 'integer',
@@ -239,7 +239,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
                 'max:100',
                 'unique:salary_currencies,external_id',
             ],
-            
+
             'api_identifiers' => [
                 'nullable',
                 'array',
@@ -257,13 +257,13 @@ class StoreSalaryCurrencyRequest extends FormRequest
                 'date',
                 'before_or_equal:today',
             ],
-            
+
             'discontinued_date' => [
                 'nullable',
                 'date',
                 'after:introduced_date',
             ],
-            
+
             'inflation_rate' => [
                 'nullable',
                 'numeric',
@@ -275,7 +275,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
                 'nullable',
                 'array',
             ],
-            
+
             'notes' => [
                 'nullable',
                 'string',
@@ -295,7 +295,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
             'currency_name.required' => __('currency.validation.name_required'),
             'currency_name.unique' => __('currency.validation.name_unique'),
             'currency_name.regex' => __('currency.validation.name_format'),
-            
+
             // ISO codes
             'iso_code.required' => __('currency.validation.iso_code_required'),
             'iso_code.size' => __('currency.validation.iso_code_size'),
@@ -304,7 +304,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
             'numeric_code.size' => __('currency.validation.numeric_code_size'),
             'numeric_code.unique' => __('currency.validation.numeric_code_unique'),
             'numeric_code.regex' => __('currency.validation.numeric_code_format'),
-            
+
             // Symbol and display
             'currency_symbol.required' => __('currency.validation.symbol_required'),
             'symbol_position.in' => __('currency.validation.symbol_position_invalid'),
@@ -313,7 +313,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
             'thousands_separator.in' => __('currency.validation.thousands_separator_invalid'),
             'decimal_places.min' => __('currency.validation.decimal_places_min'),
             'decimal_places.max' => __('currency.validation.decimal_places_max'),
-            
+
             // Exchange rate
             'exchange_rate_to_usd.required' => __('currency.validation.exchange_rate_required'),
             'exchange_rate_to_usd.numeric' => __('currency.validation.exchange_rate_numeric'),
@@ -321,22 +321,22 @@ class StoreSalaryCurrencyRequest extends FormRequest
             'exchange_rate_to_usd.regex' => __('currency.validation.exchange_rate_format'),
             'last_updated_rate.before_or_equal' => __('currency.validation.rate_date_future'),
             'rate_source.in' => __('currency.validation.rate_source_invalid'),
-            
+
             // Geographic
             'country_code.exists' => __('currency.validation.country_invalid'),
             'countries.*.exists' => __('currency.validation.country_not_found'),
             'countries.*.distinct' => __('currency.validation.countries_unique'),
             'usage_type.in' => __('currency.validation.usage_type_invalid'),
-            
+
             // Classification
             'currency_type.in' => __('currency.validation.currency_type_invalid'),
             'color_code.regex' => __('currency.validation.color_format'),
-            
+
             // Historical data
             'introduced_date.before_or_equal' => __('currency.validation.introduced_date_future'),
             'discontinued_date.after' => __('currency.validation.discontinued_before_introduced'),
             'inflation_rate.between' => __('currency.validation.inflation_rate_range'),
-            
+
             // External
             'external_id.unique' => __('currency.validation.external_id_unique'),
             'api_identifiers.*.distinct' => __('currency.validation.api_identifiers_unique'),
@@ -389,17 +389,17 @@ class StoreSalaryCurrencyRequest extends FormRequest
             if ($this->hasCurrencyCodeConflicts()) {
                 $validator->errors()->add('iso_code', __('currency.validation.code_conflicts'));
             }
-            
+
             // Validate exchange rate reasonableness
             if ($this->hasUnreasonableExchangeRate()) {
                 $validator->errors()->add('exchange_rate_to_usd', __('currency.validation.unreasonable_rate'));
             }
-            
+
             // Check cryptocurrency specific rules
             if ($this->violatesCryptocurrencyRules()) {
                 $validator->errors()->add('currency_type', __('currency.validation.crypto_rules_violation'));
             }
-            
+
             // Validate historical date consistency
             if ($this->hasInvalidHistoricalDates()) {
                 $validator->errors()->add('discontinued_date', __('currency.validation.invalid_historical_dates'));
@@ -417,7 +417,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
         if ($this->filled('iso_code')) {
             $this->merge(['iso_code' => strtoupper($this->iso_code)]);
         }
-        
+
         // Normalize country code to uppercase
         if ($this->filled('country_code')) {
             $this->merge(['country_code' => strtoupper($this->country_code)]);
@@ -430,7 +430,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
             'subunit_name' => trim($this->subunit_name ?? '') ?: null,
             'notes' => trim($this->notes ?? '') ?: null,
         ]);
-        
+
         // Set defaults
         $this->merge([
             'is_active' => filter_var($this->is_active ?? true, FILTER_VALIDATE_BOOLEAN),
@@ -445,7 +445,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
             'decimal_places' => (int) ($this->decimal_places ?? 2),
             'subunit_ratio' => (int) ($this->subunit_ratio ?? 100),
         ]);
-        
+
         // Clean arrays
         if ($this->filled('countries')) {
             $this->merge([
@@ -458,7 +458,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
                 'api_identifiers' => array_filter(array_unique((array) $this->api_identifiers)),
             ]);
         }
-        
+
         // Auto-detect cryptocurrency
         if ($this->currency_type === 'cryptocurrency') {
             $this->merge(['is_crypto' => true]);
@@ -482,7 +482,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
         ]);
 
         parent::failedValidation($validator);
-        }
+    }
 
     /**
      * Get processed data for currency creation.
@@ -490,15 +490,15 @@ class StoreSalaryCurrencyRequest extends FormRequest
     public function getProcessedData(): array
     {
         $data = $this->validated();
-        
+
         // Add creator information
         $data['created_by'] = Auth::id();
-        
+
         // Set timestamps
         $data['created_at'] = now();
         $data['updated_at'] = now();
         $data['last_updated_rate'] = $data['last_updated_rate'] ?? now();
-        
+
         // Process arrays as JSON
         if (isset($data['countries'])) {
             $data['countries'] = json_encode($data['countries']);
@@ -507,11 +507,11 @@ class StoreSalaryCurrencyRequest extends FormRequest
         if (isset($data['api_identifiers'])) {
             $data['api_identifiers'] = json_encode($data['api_identifiers']);
         }
-        
+
         if (isset($data['metadata'])) {
             $data['metadata'] = json_encode($data['metadata']);
         }
-        
+
         return $data;
     }
 
@@ -522,17 +522,17 @@ class StoreSalaryCurrencyRequest extends FormRequest
     {
         $isoCode = $this->iso_code;
         $numericCode = $this->numeric_code;
-        
-        if (!$isoCode) {
+
+        if (! $isoCode) {
             return false;
         }
-        
+
         // Check if ISO code conflicts with existing major currencies
         $conflictingCurrencies = [
-            'USD', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD', 'CHF', 'CNY', 'SEK', 'NZD'
+            'USD', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD', 'CHF', 'CNY', 'SEK', 'NZD',
         ];
-        
-        return in_array($isoCode, $conflictingCurrencies) && 
+
+        return in_array($isoCode, $conflictingCurrencies) &&
                SalaryCurrency::where('iso_code', $isoCode)->exists();
     }
 
@@ -542,16 +542,16 @@ class StoreSalaryCurrencyRequest extends FormRequest
     private function hasUnreasonableExchangeRate(): bool
     {
         $rate = $this->exchange_rate_to_usd;
-        
-        if (!$rate) {
+
+        if (! $rate) {
             return false;
-    }
+        }
 
         // Check for extremely high or low rates that might be errors
         if ($rate > 1000000 || $rate < 0.000001) {
             return true;
         }
-        
+
         // For major currencies, rates should be within reasonable ranges
         $isoCode = $this->iso_code;
         $majorCurrencyRanges = [
@@ -561,12 +561,13 @@ class StoreSalaryCurrencyRequest extends FormRequest
             'AUD' => ['min' => 0.6, 'max' => 0.9],
             'CAD' => ['min' => 0.7, 'max' => 0.9],
         ];
-        
+
         if (isset($majorCurrencyRanges[$isoCode])) {
             $range = $majorCurrencyRanges[$isoCode];
+
             return $rate < $range['min'] || $rate > $range['max'];
         }
-        
+
         return false;
     }
 
@@ -578,12 +579,12 @@ class StoreSalaryCurrencyRequest extends FormRequest
         if ($this->currency_type !== 'cryptocurrency') {
             return false;
         }
-        
+
         // Cryptocurrencies should not have country codes
         if ($this->filled('country_code')) {
             return true;
         }
-        
+
         // Stable coins should have stable exchange rates
         if ($this->is_stable_coin && $this->exchange_rate_to_usd) {
             $rate = $this->exchange_rate_to_usd;
@@ -592,7 +593,7 @@ class StoreSalaryCurrencyRequest extends FormRequest
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -603,11 +604,11 @@ class StoreSalaryCurrencyRequest extends FormRequest
     {
         $introduced = $this->introduced_date;
         $discontinued = $this->discontinued_date;
-        
-        if (!$introduced || !$discontinued) {
+
+        if (! $introduced || ! $discontinued) {
             return false;
         }
-        
+
         // Discontinued date should be after introduced date
         return \Carbon\Carbon::parse($discontinued)->lte(\Carbon\Carbon::parse($introduced));
     }

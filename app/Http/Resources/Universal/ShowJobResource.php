@@ -61,7 +61,7 @@ class ShowJobResource extends JsonResource
 
                 'status' => [
                     'current' => $this->status ?? 'draft',
-                    'is_active' => 'active' === $this->status,
+                    'is_active' => $this->status === 'active',
                     'is_featured' => $this->is_featured ?? false,
                     'is_urgent' => $this->is_urgent ?? false,
                     'featured_until' => $this->featured_until?->toISOString(),
@@ -181,7 +181,7 @@ class ShowJobResource extends JsonResource
     /**
      * Customize the response for the resource.
      *
-     * @param mixed $response
+     * @param  mixed  $response
      */
     public function withResponse(Request $request, $response): void
     {
@@ -197,16 +197,16 @@ class ShowJobResource extends JsonResource
     /**
      * Check if user can apply to this job.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function canUserApply($user): bool
     {
-        if (!$user || 'active' !== $this->status) {
+        if (! $user || $this->status !== 'active') {
             return false;
         }
 
         // Check if user is a candidate
-        if (!$user->hasRole('candidate')) {
+        if (! $user->hasRole('candidate')) {
             return false;
         }
 
@@ -226,11 +226,11 @@ class ShowJobResource extends JsonResource
     /**
      * Check if user can edit this job.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function canUserEdit($user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
@@ -241,11 +241,11 @@ class ShowJobResource extends JsonResource
     /**
      * Check if user can delete this job.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function canUserDelete($user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
@@ -256,11 +256,11 @@ class ShowJobResource extends JsonResource
     /**
      * Check if user can feature this job.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function canUserFeature($user): bool
     {
-        if (!$user || $this->is_featured) {
+        if (! $user || $this->is_featured) {
             return false;
         }
 
@@ -271,7 +271,7 @@ class ShowJobResource extends JsonResource
     /**
      * Track job view.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function trackJobView($user): void
     {
@@ -292,11 +292,11 @@ class ShowJobResource extends JsonResource
     /**
      * Format salary range.
      *
-     * @param mixed $job
+     * @param  mixed  $job
      */
     private function formatSalaryRange($job): ?string
     {
-        if (!$job->salary_from && !$job->salary_to) {
+        if (! $job->salary_from && ! $job->salary_to) {
             return null;
         }
 

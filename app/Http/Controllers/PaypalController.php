@@ -54,7 +54,7 @@ class PaypalController extends Controller
 
             return redirect()->route('manage-subscription.index');
         }
-        if (null != $plan->salaryCurrency && !in_array(
+        if ($plan->salaryCurrency != null && ! in_array(
             $plan->salaryCurrency->currency_code,
             getPayPalSupportedCurrencies()
         )) {
@@ -63,8 +63,8 @@ class PaypalController extends Controller
             return redirect()->route('manage-subscription.index');
         }
         //        $currency = $plan->with('salaryCurrency')->findOrFail($plan->id);
-        $clientId = !empty(getEnvSetting()['paypal_client_id']) ? getEnvSetting()['paypal_client_id'] : config('paypal.paypal.client_id');
-        $clientSecret = !empty(getEnvSetting()['paypal_secret']) ? getEnvSetting()['paypal_secret'] : config('paypal.paypal.client_secret');
+        $clientId = ! empty(getEnvSetting()['paypal_client_id']) ? getEnvSetting()['paypal_client_id'] : config('paypal.paypal.client_id');
+        $clientSecret = ! empty(getEnvSetting()['paypal_secret']) ? getEnvSetting()['paypal_secret'] : config('paypal.paypal.client_secret');
         $mode = config('paypal.mode');
 
         config([
@@ -74,7 +74,7 @@ class PaypalController extends Controller
             'paypal.live.client_id' => $clientId,
             'paypal.live.client_secret' => $clientSecret,
         ]);
-        $provider = new PayPalClient();
+        $provider = new PayPalClient;
         $provider->getAccessToken();
 
         $data = [
@@ -84,7 +84,7 @@ class PaypalController extends Controller
                     'reference_id' => $plan->id,
                     'amount' => [
                         'value' => (int) $plan->amount,
-                        'currency_code' => null != $plan->salaryCurrency ? $plan->salaryCurrency->currency_code : 'USD',
+                        'currency_code' => $plan->salaryCurrency != null ? $plan->salaryCurrency->currency_code : 'USD',
                     ],
                 ],
             ],
@@ -101,8 +101,8 @@ class PaypalController extends Controller
 
     public function getPaymentStatus(GetPaymentStatusPaypalRequest $request): RedirectResponse
     {
-        $clientId = !empty(getEnvSetting()['paypal_client_id']) ? getEnvSetting()['paypal_client_id'] : config('paypal.paypal.client_id');
-        $clientSecret = !empty(getEnvSetting()['paypal_secret']) ? getEnvSetting()['paypal_secret'] : config('paypal.paypal.client_secret');
+        $clientId = ! empty(getEnvSetting()['paypal_client_id']) ? getEnvSetting()['paypal_client_id'] : config('paypal.paypal.client_id');
+        $clientSecret = ! empty(getEnvSetting()['paypal_secret']) ? getEnvSetting()['paypal_secret'] : config('paypal.paypal.client_secret');
         $mode = config('paypal.mode');
 
         config([
@@ -113,7 +113,7 @@ class PaypalController extends Controller
             'paypal.live.client_secret' => $clientSecret,
         ]);
 
-        $provider = new PayPalClient();
+        $provider = new PayPalClient;
         $provider->getAccessToken();
         $token = $request->get('token');
         $orderInfo = $provider->showOrderDetails($token);
@@ -139,8 +139,7 @@ class PaypalController extends Controller
             $existingSubscription = Subscription::NotOnTrial()
                 ->whereUserId($user->id)
                 ->active()
-                ->first()
-            ;
+                ->first();
 
             // end trial subscription
             Subscription::whereUserId($user->id)->where(function (Builder $query) {
@@ -149,8 +148,7 @@ class PaypalController extends Controller
                 ->update([
                     'ends_at' => Carbon::now(),
                     'trial_ends_at' => Carbon::now(),
-                ])
-            ;
+                ]);
 
             /** @var Subscription $tsSubscription */
             $tsSubscription = Subscription::create([
@@ -163,7 +161,7 @@ class PaypalController extends Controller
                 'paypal_payment_id' => $paymentId,
             ]);
             $adminId = User::role('Admin')->first()->id;
-            1 == NotificationSetting::where('key', 'EMPLOYER_PURCHASE_PLAN')->first()->value
+            NotificationSetting::where('key', 'EMPLOYER_PURCHASE_PLAN')->first()->value == 1
                      ? addNotification([
                          Notification::EMPLOYER_PURCHASE_PLAN,
                          $adminId,
@@ -171,7 +169,7 @@ class PaypalController extends Controller
                          $user->first_name.' '.$user->last_name.' purchase '.$plan->name,
                      ]) : false;
 
-            $transaction = (new Transaction())->fill([
+            $transaction = (new Transaction)->fill([
                 'user_id' => $tsSubscription->user_id,
                 'owner_id' => $tsSubscription->id,
                 'owner_type' => Subscription::class,

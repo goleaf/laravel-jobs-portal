@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Profession;
-use App\Models\ProfessionCategory;
 use App\Http\Requests\StoreProfessionRequest;
 use App\Http\Requests\UpdateProfessionRequest;
-use Illuminate\Http\Request;
+use App\Models\Profession;
+use App\Models\ProfessionCategory;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ProfessionController extends Controller
 {
@@ -45,14 +45,14 @@ class ProfessionController extends Controller
 
         // Filter by ISCO code
         if ($request->has('isco_code')) {
-            $query->where('isco_code', 'LIKE', $request->get('isco_code') . '%');
+            $query->where('isco_code', 'LIKE', $request->get('isco_code').'%');
         }
 
         $professions = $query->paginate($request->get('per_page', 15));
 
         // Transform the data to include localized names
         $locale = $request->get('locale', app()->getLocale());
-        
+
         $professions->getCollection()->transform(function ($profession) use ($locale) {
             return [
                 'id' => $profession->id,
@@ -134,7 +134,7 @@ class ProfessionController extends Controller
     public function show(Request $request, Profession $profession): JsonResponse
     {
         $profession->load(['translations', 'category.translations', 'jobs.translations']);
-        
+
         $locale = $request->get('locale', app()->getLocale());
 
         $data = [
@@ -162,7 +162,7 @@ class ProfessionController extends Controller
             //     'code' => $item->code,
             //     'name' => $item->getName($locale)
             // ], $profession->getFullPath($locale)),
-            'jobs' => $profession->jobs->map(function ($job) use ($locale) {
+            'jobs' => $profession->jobs->map(function ($job) {
                 return [
                     'id' => $job->id,
                     'title' => $job->title, // Assuming job has title
@@ -268,23 +268,23 @@ class ProfessionController extends Controller
 
         // Category filter
         if ($request->has('categories')) {
-            $categories = is_array($request->get('categories')) 
-                ? $request->get('categories') 
+            $categories = is_array($request->get('categories'))
+                ? $request->get('categories')
                 : explode(',', $request->get('categories'));
             $query->whereIn('category_id', $categories);
         }
 
         // Skill level filter
         if ($request->has('skill_levels')) {
-            $skillLevels = is_array($request->get('skill_levels')) 
-                ? $request->get('skill_levels') 
+            $skillLevels = is_array($request->get('skill_levels'))
+                ? $request->get('skill_levels')
                 : explode(',', $request->get('skill_levels'));
             $query->whereIn('skill_level', $skillLevels);
         }
 
         // ISCO code filter
         if ($request->has('isco_code')) {
-            $query->where('isco_code', 'LIKE', $request->get('isco_code') . '%');
+            $query->where('isco_code', 'LIKE', $request->get('isco_code').'%');
         }
 
         // Featured filter
@@ -300,7 +300,7 @@ class ProfessionController extends Controller
             // Sort by translated name
             $query->join('profession_translations as pt', function ($join) use ($locale) {
                 $join->on('professions.id', '=', 'pt.profession_id')
-                     ->where('pt.locale', '=', $locale);
+                    ->where('pt.locale', '=', $locale);
             })->orderBy('pt.name', $sortOrder);
         } else {
             $query->orderBy($sortBy, $sortOrder);
@@ -359,16 +359,16 @@ class ProfessionController extends Controller
             'top_demanded' => Profession::withCount(['jobs' => function ($query) {
                 $query->where('is_active', true);
             }])
-            ->orderBy('jobs_count', 'desc')
-            ->limit(10)
-            ->get()
-            ->map(function ($profession) use ($locale) {
-                return [
-                    'id' => $profession->id,
-                    'name' => $profession->getName($locale),
-                    'jobs_count' => $profession->jobs_count,
-                ];
-            }),
+                ->orderBy('jobs_count', 'desc')
+                ->limit(10)
+                ->get()
+                ->map(function ($profession) use ($locale) {
+                    return [
+                        'id' => $profession->id,
+                        'name' => $profession->getName($locale),
+                        'jobs_count' => $profession->jobs_count,
+                    ];
+                }),
         ];
 
         return response()->json([
@@ -428,4 +428,4 @@ class ProfessionController extends Controller
             'updated_at' => $profession->updated_at,
         ];
     }
-} 
+}

@@ -18,7 +18,7 @@ class SimpleRoutesTest extends TestCase
     /**
      * Test basic routes that don't require authentication or database.
      */
-    public function testPublicRoutesAreAccessible()
+    public function test_public_routes_are_accessible()
     {
         $publicRoutes = [
             '/' => 200,
@@ -36,7 +36,7 @@ class SimpleRoutesTest extends TestCase
     /**
      * Test authentication routes (skipped due to view dependencies).
      */
-    public function testAuthRoutesAreAccessible()
+    public function test_auth_routes_are_accessible()
     {
         // Skip this test due to view dependencies requiring database
         $this->markTestSkipped('Skipping auth routes test due to view dependencies');
@@ -45,7 +45,7 @@ class SimpleRoutesTest extends TestCase
     /**
      * Test protected routes redirect to login.
      */
-    public function testProtectedRoutesRedirectToLogin()
+    public function test_protected_routes_redirect_to_login()
     {
         // Skip this test if database tables don't exist
         $this->markTestSkipped('Skipping database-dependent tests');
@@ -54,7 +54,7 @@ class SimpleRoutesTest extends TestCase
     /**
      * Test API routes.
      */
-    public function testApiRoutes()
+    public function test_api_routes()
     {
         $response = $this->getJson('/test');
         $response->assertStatus(200)
@@ -67,14 +67,13 @@ class SimpleRoutesTest extends TestCase
                 'message',
                 'timestamp',
                 'memory_usage',
-            ])
-        ;
+            ]);
     }
 
     /**
      * Test 404 for non-existent routes.
      */
-    public function testNonExistentRoutesReturn404()
+    public function test_non_existent_routes_return404()
     {
         // Skip this test if database tables don't exist
         $this->markTestSkipped('Skipping database-dependent tests');
@@ -83,7 +82,7 @@ class SimpleRoutesTest extends TestCase
     /**
      * Test routes with parameters.
      */
-    public function testRoutesWithParameters()
+    public function test_routes_with_parameters()
     {
         // Skip this test if database tables don't exist
         $this->markTestSkipped('Skipping database-dependent tests');
@@ -92,7 +91,7 @@ class SimpleRoutesTest extends TestCase
     /**
      * Test POST routes that require CSRF.
      */
-    public function testPostRoutesRequireCsrf()
+    public function test_post_routes_require_csrf()
     {
         $postRoutes = [
             '/login',
@@ -109,12 +108,11 @@ class SimpleRoutesTest extends TestCase
     /**
      * Test route caching compatibility.
      */
-    public function testRouteCachingCompatibility()
+    public function test_route_caching_compatibility()
     {
         // Test that routes can be cached
         $this->artisan('route:cache')
-            ->assertExitCode(0)
-        ;
+            ->assertExitCode(0);
 
         // Test routes still work after caching
         $response = $this->get('/');
@@ -122,14 +120,13 @@ class SimpleRoutesTest extends TestCase
 
         // Clear cache
         $this->artisan('route:clear')
-            ->assertExitCode(0)
-        ;
+            ->assertExitCode(0);
     }
 
     /**
      * Test middleware is properly applied.
      */
-    public function testMiddlewareApplication()
+    public function test_middleware_application()
     {
         // Test that web middleware is applied
         $response = $this->get('/');
@@ -142,7 +139,7 @@ class SimpleRoutesTest extends TestCase
     /**
      * Test route names are correctly defined.
      */
-    public function testRouteNamesAreCorrectlyDefined()
+    public function test_route_names_are_correctly_defined()
     {
         $expectedRoutes = [
             'front.home' => '/',
@@ -160,7 +157,7 @@ class SimpleRoutesTest extends TestCase
     /**
      * Test API routes are accessible.
      */
-    public function testApiRoutesStructure()
+    public function test_api_routes_structure()
     {
         // Test that API routes are properly structured
         $apiRoutes = Route::getRoutes()->getRoutesByMethod()['GET'] ?? [];
@@ -181,7 +178,7 @@ class SimpleRoutesTest extends TestCase
     /**
      * Test admin routes are properly protected.
      */
-    public function testAdminRoutesExist()
+    public function test_admin_routes_exist()
     {
         // Check that admin routes are registered
         $adminRoutes = Route::getRoutes()->getRoutesByName();
@@ -200,7 +197,7 @@ class SimpleRoutesTest extends TestCase
     /**
      * Test that essential routes are registered.
      */
-    public function testEssentialRoutesRegistered()
+    public function test_essential_routes_registered()
     {
         $routes = Route::getRoutes();
         $routeNames = array_keys($routes->getRoutesByName());

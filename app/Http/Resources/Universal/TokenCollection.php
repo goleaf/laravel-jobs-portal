@@ -28,10 +28,10 @@ class TokenCollection extends ResourceCollection
             'summary' => [
                 'total_tokens' => $this->collection->count(),
                 'active_tokens' => $this->collection->filter(function ($token) {
-                    return null !== $token['last_used_at'];
+                    return $token['last_used_at'] !== null;
                 })->count(),
                 'inactive_tokens' => $this->collection->filter(function ($token) {
-                    return null === $token['last_used_at'];
+                    return $token['last_used_at'] === null;
                 })->count(),
             ],
         ];
@@ -62,7 +62,7 @@ class TokenCollection extends ResourceCollection
     /**
      * Customize the response for the resource.
      *
-     * @param mixed $response
+     * @param  mixed  $response
      */
     public function withResponse(Request $request, $response): void
     {
@@ -72,7 +72,7 @@ class TokenCollection extends ResourceCollection
     /**
      * Check if the token is the current token.
      *
-     * @param mixed $tokenId
+     * @param  mixed  $tokenId
      */
     private function isCurrentToken($tokenId): bool
     {

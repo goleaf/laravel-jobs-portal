@@ -30,17 +30,17 @@ class ForgotPasswordRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAuthorizationReturnsTrue()
+    public function test_authorization_returns_true()
     {
-        $request = new ForgotPasswordRequest();
+        $request = new ForgotPasswordRequest;
 
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function testValidationRulesAreDefined()
+    public function test_validation_rules_are_defined()
     {
-        $request = new ForgotPasswordRequest();
+        $request = new ForgotPasswordRequest;
         $rules = $request->rules();
 
         $this->assertIsArray($rules);
@@ -48,9 +48,9 @@ class ForgotPasswordRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationMessagesAreDefined()
+    public function test_validation_messages_are_defined()
     {
-        $request = new ForgotPasswordRequest();
+        $request = new ForgotPasswordRequest;
 
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
@@ -61,9 +61,9 @@ class ForgotPasswordRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationAttributesAreDefined()
+    public function test_validation_attributes_are_defined()
     {
-        $request = new ForgotPasswordRequest();
+        $request = new ForgotPasswordRequest;
 
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
@@ -74,9 +74,9 @@ class ForgotPasswordRequestTest extends TestCase
     }
 
     /** @test */
-    public function testEmailValidation()
+    public function test_email_validation()
     {
-        $request = new ForgotPasswordRequest();
+        $request = new ForgotPasswordRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('email', $rules);
@@ -87,24 +87,24 @@ class ForgotPasswordRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidDataPassesValidation()
+    public function test_valid_data_passes_validation()
     {
         $validData = [
             'email' => 'test@example.com',
         ];
 
-        $request = new ForgotPasswordRequest();
+        $request = new ForgotPasswordRequest;
         $validator = validator($validData, $request->rules());
 
         $this->assertFalse($validator->fails());
     }
 
     /** @test */
-    public function testRequestHandlesEmptyDataCorrectly()
+    public function test_request_handles_empty_data_correctly()
     {
         $emptyData = [];
 
-        $request = new ForgotPasswordRequest();
+        $request = new ForgotPasswordRequest;
         $validator = validator($emptyData, $request->rules());
 
         // Should handle empty data according to rules
@@ -112,7 +112,7 @@ class ForgotPasswordRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSecurityValidationPreventsXss()
+    public function test_security_validation_prevents_xss()
     {
         $maliciousData = [
             'name' => '<script>alert("xss")</script>',
@@ -120,7 +120,7 @@ class ForgotPasswordRequestTest extends TestCase
             'content' => '<img src=x onerror=alert("xss")>',
         ];
 
-        $request = new ForgotPasswordRequest();
+        $request = new ForgotPasswordRequest;
         $validator = validator($maliciousData, $request->rules());
 
         // XSS data should either fail validation or be properly sanitized
@@ -135,7 +135,7 @@ class ForgotPasswordRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSqlInjectionPrevention()
+    public function test_sql_injection_prevention()
     {
         $sqlInjectionData = [
             'name' => "'; DROP TABLE users; --",
@@ -143,7 +143,7 @@ class ForgotPasswordRequestTest extends TestCase
             'filter' => 'UNION SELECT * FROM passwords',
         ];
 
-        $request = new ForgotPasswordRequest();
+        $request = new ForgotPasswordRequest;
         $validator = validator($sqlInjectionData, $request->rules());
 
         // SQL injection patterns should be handled safely

@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
 
 class Profession extends Model
 {
@@ -52,73 +52,78 @@ class Profession extends Model
     /**
      * Get translation for specific locale
      */
-    public function translation(string $locale = null): ?ProfessionTranslation
+    public function translation(?string $locale = null): ?ProfessionTranslation
     {
         $locale = $locale ?? app()->getLocale();
+
         return $this->translations()->where('locale', $locale)->first();
     }
 
     /**
      * Get name in current or specified locale
      */
-    public function getName(string $locale = null): string
+    public function getName(?string $locale = null): string
     {
         $translation = $this->translation($locale);
-        
+
         if ($translation) {
             return $translation->name;
         }
 
         // Fallback to default language
         $fallback = $this->translation(config('app.locale', 'en'));
+
         return $fallback?->name ?? $this->code;
     }
 
     /**
      * Get description in current or specified locale
      */
-    public function getDescription(string $locale = null): ?string
+    public function getDescription(?string $locale = null): ?string
     {
         $translation = $this->translation($locale);
-        
+
         if ($translation) {
             return $translation->description;
         }
 
         // Fallback to default language
         $fallback = $this->translation(config('app.locale', 'en'));
+
         return $fallback?->description;
     }
 
     /**
      * Get skills required in current or specified locale
      */
-    public function getSkillsRequired(string $locale = null): ?array
+    public function getSkillsRequired(?string $locale = null): ?array
     {
         $translation = $this->translation($locale);
-        
+
         if ($translation && $translation->skills_required) {
             return $translation->skills_required;
         }
 
         // Fallback to default language
         $fallback = $this->translation(config('app.locale', 'en'));
+
         return $fallback?->skills_required;
     }
 
     /**
      * Get education requirements in current or specified locale
      */
-    public function getEducationRequirements(string $locale = null): ?array
+    public function getEducationRequirements(?string $locale = null): ?array
     {
         $translation = $this->translation($locale);
-        
+
         if ($translation && $translation->education_requirements) {
             return $translation->education_requirements;
         }
 
         // Fallback to default language
         $fallback = $this->translation(config('app.locale', 'en'));
+
         return $fallback?->education_requirements;
     }
 
@@ -181,10 +186,10 @@ class Profession extends Model
     /**
      * Search professions by name or description in current locale
      */
-    public function scopeSearch(Builder $query, string $term, string $locale = null): Builder
+    public function scopeSearch(Builder $query, string $term, ?string $locale = null): Builder
     {
         $locale = $locale ?? app()->getLocale();
-        
+
         return $query->whereHas('translations', function (Builder $translationQuery) use ($term, $locale) {
             $translationQuery->where('locale', $locale)
                 ->where(function (Builder $textQuery) use ($term) {
@@ -197,10 +202,11 @@ class Profession extends Model
     /**
      * Get full path including category hierarchy
      */
-    public function getFullPath(string $locale = null): array
+    public function getFullPath(?string $locale = null): array
     {
         $path = $this->category->getPath();
         $path[] = $this;
+
         return $path;
     }
 
@@ -254,4 +260,4 @@ class Profession extends Model
     {
         return $this->translations()->pluck('locale')->toArray();
     }
-} 
+}

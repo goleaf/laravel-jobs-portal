@@ -10,7 +10,6 @@ use App\Models\State;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 /**
@@ -37,11 +36,11 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function itHasCorrectFillableAttributes(): void
+    public function it_has_correct_fillable_attributes(): void
     {
         $fillable = [
             'first_name',
-            'last_name', 
+            'last_name',
             'name',
             'email',
             'password',
@@ -76,7 +75,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function itHasCorrectCasts(): void
+    public function it_has_correct_casts(): void
     {
         $expectedCasts = [
             'is_featured' => 'boolean',
@@ -104,7 +103,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function itHidesSensitiveAttributes(): void
+    public function it_hides_sensitive_attributes(): void
     {
         $hidden = ['password', 'remember_token'];
 
@@ -112,7 +111,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function itBelongsToLocationModels(): void
+    public function it_belongs_to_location_models(): void
     {
         $country = Country::factory()->create();
         $state = State::factory()->create(['country_id' => $country->id]);
@@ -134,7 +133,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function itHasOneCompany(): void
+    public function it_has_one_company(): void
     {
         $company = Company::factory()->create(['user_id' => $this->user->id]);
 
@@ -169,7 +168,7 @@ class UserTest extends TestCase
     // }
 
     /** @test */
-    public function activeScopeReturnsOnlyActiveUsers(): void
+    public function active_scope_returns_only_active_users(): void
     {
         User::factory()->create(['is_active' => true]);
         User::factory()->create(['is_active' => false]);
@@ -182,7 +181,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function inactiveScopeReturnsOnlyInactiveUsers(): void
+    public function inactive_scope_returns_only_inactive_users(): void
     {
         User::factory()->create(['is_active' => true]);
         User::factory()->create(['is_active' => false]);
@@ -195,7 +194,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function verifiedScopeReturnsOnlyVerifiedUsers(): void
+    public function verified_scope_returns_only_verified_users(): void
     {
         User::factory()->create(['email_verified_at' => now()]);
         User::factory()->create(['email_verified_at' => null]);
@@ -208,7 +207,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function unverifiedScopeReturnsOnlyUnverifiedUsers(): void
+    public function unverified_scope_returns_only_unverified_users(): void
     {
         User::factory()->create(['email_verified_at' => now()]);
         User::factory()->create(['email_verified_at' => null]);
@@ -221,7 +220,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function candidatesScopeReturnsOnlyCandidates(): void
+    public function candidates_scope_returns_only_candidates(): void
     {
         $candidate = User::factory()->create(['user_type' => User::CANDIDATE]);
         $candidate->assignRole('Candidate');
@@ -236,7 +235,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function employersScopeReturnsOnlyEmployers(): void
+    public function employers_scope_returns_only_employers(): void
     {
         $candidate = User::factory()->create(['user_type' => User::CANDIDATE]);
         $candidate->assignRole('Candidate');
@@ -251,7 +250,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function byRoleScopeFiltersByRole(): void
+    public function by_role_scope_filters_by_role(): void
     {
         $admin = User::factory()->create();
         $admin->assignRole('Admin');
@@ -266,7 +265,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function byLocationScopeFiltersByLocation(): void
+    public function by_location_scope_filters_by_location(): void
     {
         $country = Country::factory()->create();
         $state = State::factory()->create(['country_id' => $country->id]);
@@ -288,7 +287,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function searchScopeSearchesInNameAndEmail(): void
+    public function search_scope_searches_in_name_and_email(): void
     {
         User::factory()->create(['first_name' => 'John', 'last_name' => 'Doe', 'email' => 'john@example.com']);
         User::factory()->create(['first_name' => 'Jane', 'last_name' => 'Smith', 'email' => 'jane@example.com']);
@@ -300,7 +299,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function recentScopeReturnsUsersFromLast30Days(): void
+    public function recent_scope_returns_users_from_last30_days(): void
     {
         User::factory()->create(['created_at' => now()->subDays(10)]);
         User::factory()->create(['created_at' => now()->subDays(40)]);
@@ -313,7 +312,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function withExperienceScopeFiltersByExperienceLevel(): void
+    public function with_experience_scope_filters_by_experience_level(): void
     {
         User::factory()->create(['experience_level' => 3]);
         User::factory()->create(['experience_level' => 7]);
@@ -326,7 +325,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function availableScopeReturnsAvailableUsers(): void
+    public function available_scope_returns_available_users(): void
     {
         User::factory()->create(['availability_status' => 'available']);
         User::factory()->create(['availability_status' => 'not_available']);
@@ -339,7 +338,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function willingToRelocateScopeReturnsUsersWillingToRelocate(): void
+    public function willing_to_relocate_scope_returns_users_willing_to_relocate(): void
     {
         User::factory()->create(['willing_to_relocate' => true]);
         User::factory()->create(['willing_to_relocate' => false]);
@@ -352,7 +351,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetFullName(): void
+    public function it_can_get_full_name(): void
     {
         $user = User::factory()->create([
             'first_name' => 'John',
@@ -363,7 +362,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetInitials(): void
+    public function it_can_get_initials(): void
     {
         $user = User::factory()->create([
             'first_name' => 'John',
@@ -374,7 +373,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetAge(): void
+    public function it_can_get_age(): void
     {
         $user = User::factory()->create([
             'date_of_birth' => now()->subYears(25)->format('Y-m-d'),
@@ -384,7 +383,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function itReturnsNullAgeForUsersWithoutBirthDate(): void
+    public function it_returns_null_age_for_users_without_birth_date(): void
     {
         $user = User::factory()->create(['date_of_birth' => null]);
 
@@ -392,7 +391,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function itCanCheckIfUserIsCandidate(): void
+    public function it_can_check_if_user_is_candidate(): void
     {
         $candidate = User::factory()->create();
         $candidate->assignRole('Candidate');
@@ -405,7 +404,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function itCanCheckIfUserIsEmployer(): void
+    public function it_can_check_if_user_is_employer(): void
     {
         $candidate = User::factory()->create();
         $candidate->assignRole('Candidate');
@@ -418,7 +417,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function itCanCheckIfUserIsAdmin(): void
+    public function it_can_check_if_user_is_admin(): void
     {
         $admin = User::factory()->create();
         $admin->assignRole('Admin');
@@ -431,7 +430,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetAvatarUrl(): void
+    public function it_can_get_avatar_url(): void
     {
         $user = User::factory()->create(['avatar' => 'avatars/user.jpg']);
 
@@ -439,7 +438,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function itReturnsDefaultAvatarWhenNoAvatarSet(): void
+    public function it_returns_default_avatar_when_no_avatar_set(): void
     {
         $user = User::factory()->create(['avatar' => null]);
 
@@ -447,7 +446,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetFullLocation(): void
+    public function it_can_get_full_location(): void
     {
         $country = Country::factory()->create(['name' => 'United States']);
         $state = State::factory()->create(['name' => 'California', 'country_id' => $country->id]);
@@ -467,7 +466,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetExperienceLevelText(): void
+    public function it_can_get_experience_level_text(): void
     {
         $user = User::factory()->create(['experience_level' => 3]);
 
@@ -475,7 +474,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function itCanCheckIfProfileIsComplete(): void
+    public function it_can_check_if_profile_is_complete(): void
     {
         $incompleteUser = User::factory()->create([
             'first_name' => 'John',
@@ -496,7 +495,7 @@ class UserTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetProfileCompletionPercentage(): void
+    public function it_can_get_profile_completion_percentage(): void
     {
         $user = User::factory()->create([
             'first_name' => 'John',

@@ -6,16 +6,16 @@ use App\Http\Requests\BusinessLogic\BusinessLogicRequest;
 
 /**
  * Store Admin Request - Validation for creating new admin users
- * 
+ *
  * Validates admin creation with comprehensive rules:
  * - Personal information validation
  * - Security requirements (password strength)
  * - Role-based access validation
  * - Email uniqueness checking
  * - Business logic constraints
- * 
- * @package App\Http\Requests\Admin
+ *
  * @version 2.0.0
+ *
  * @since 2024-12-28
  */
 class StoreAdminRequest extends BusinessLogicRequest
@@ -36,16 +36,16 @@ class StoreAdminRequest extends BusinessLogicRequest
             'last_name' => ['sometimes', 'nullable', 'string', 'max:100', 'min:2', 'regex:/^[a-zA-Z\s]+$/'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email:rfc,dns', 'max:255', 'unique:users,email'],
-            
+
             // Security Requirements
             'password' => ['required', 'string', 'min:12', 'max:255', 'confirmed', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/'],
             'password_confirmation' => ['required', 'same:password'],
-            
+
             // Admin-Specific Fields
             'role' => ['required', 'string', 'in:admin,super_admin'],
             'is_active' => ['sometimes', 'boolean'],
             'phone' => ['sometimes', 'nullable', 'string', 'max:20', 'regex:/^[\+]?[0-9\s\-\(\)]{7,20}$/'],
-            
+
             // Optional Administrative Fields
             'department' => ['sometimes', 'nullable', 'string', 'max:100'],
             'position' => ['sometimes', 'nullable', 'string', 'max:100'],
@@ -65,12 +65,12 @@ class StoreAdminRequest extends BusinessLogicRequest
             'first_name.min' => __('validation.admin.first_name_min'),
             'last_name.regex' => __('validation.admin.last_name_format'),
             'name.required' => __('validation.admin.name_required'),
-            
+
             // Email Messages
             'email.required' => __('validation.admin.email_required'),
             'email.email' => __('validation.admin.email_format'),
             'email.unique' => __('validation.admin.email_unique'),
-            
+
             // Password Messages
             'password.required' => __('validation.admin.password_required'),
             'password.min' => __('validation.admin.password_min'),
@@ -78,14 +78,14 @@ class StoreAdminRequest extends BusinessLogicRequest
             'password.confirmed' => __('validation.admin.password_confirmation'),
             'password_confirmation.required' => __('validation.admin.password_confirmation_required'),
             'password_confirmation.same' => __('validation.admin.password_match'),
-            
+
             // Role Messages
             'role.required' => __('validation.admin.role_required'),
             'role.in' => __('validation.admin.role_invalid'),
-            
+
             // Phone Messages
             'phone.regex' => __('validation.admin.phone_format'),
-            
+
             // General Messages
             'is_active.boolean' => __('validation.admin.status_boolean'),
         ];
@@ -118,13 +118,13 @@ class StoreAdminRequest extends BusinessLogicRequest
     protected function performCustomValidation($validator): void
     {
         parent::performCustomValidation($validator);
-        
+
         // Validate admin creation business rules
         $this->validateAdminCreationRules($validator);
-        
+
         // Validate role permissions
         $this->validateRolePermissions($validator);
-        
+
         // Validate security constraints
         $this->validateSecurityConstraints($validator);
     }
@@ -137,11 +137,11 @@ class StoreAdminRequest extends BusinessLogicRequest
         // Ensure full name is provided if first_name and last_name are separate
         if ($this->filled('first_name') && $this->filled('last_name')) {
             $this->merge([
-                'name' => trim($this->first_name . ' ' . $this->last_name)
+                'name' => trim($this->first_name.' '.$this->last_name),
             ]);
-        } elseif ($this->filled('first_name') && !$this->filled('name')) {
+        } elseif ($this->filled('first_name') && ! $this->filled('name')) {
             $this->merge([
-                'name' => $this->first_name
+                'name' => $this->first_name,
             ]);
         }
 
@@ -161,9 +161,9 @@ class StoreAdminRequest extends BusinessLogicRequest
     {
         // Note: Since authentication is being removed, this validation is minimal
         // In a real scenario, you'd check if current user can create admins with specified role
-        
+
         $allowedRoles = ['admin', 'super_admin'];
-        if (!in_array($this->role, $allowedRoles)) {
+        if (! in_array($this->role, $allowedRoles)) {
             $validator->errors()->add('role', __('validation.admin.role_not_allowed'));
         }
     }
@@ -176,20 +176,20 @@ class StoreAdminRequest extends BusinessLogicRequest
         // Validate email domain restrictions (if applicable)
         $email = $this->email;
         $allowedDomains = config('admin.allowed_email_domains', []);
-        
-        if (!empty($allowedDomains)) {
+
+        if (! empty($allowedDomains)) {
             $emailDomain = substr(strrchr($email, '@'), 1);
-            if (!in_array($emailDomain, $allowedDomains)) {
+            if (! in_array($emailDomain, $allowedDomains)) {
                 $validator->errors()->add('email', __('validation.admin.email_domain_not_allowed'));
             }
         }
 
         // Validate password against common passwords list
         $commonPasswords = [
-            'password123', 'admin123', 'administrator', 'password1', 
-            '123456789', 'qwerty123', 'admin1234'
+            'password123', 'admin123', 'administrator', 'password1',
+            '123456789', 'qwerty123', 'admin1234',
         ];
-        
+
         if (in_array(strtolower($this->password), $commonPasswords)) {
             $validator->errors()->add('password', __('validation.admin.password_too_common'));
         }
@@ -206,7 +206,7 @@ class StoreAdminRequest extends BusinessLogicRequest
         if (isset($sanitized['first_name'])) {
             $sanitized['first_name'] = ucwords(strtolower(trim($sanitized['first_name'])));
         }
-        
+
         if (isset($sanitized['last_name'])) {
             $sanitized['last_name'] = ucwords(strtolower(trim($sanitized['last_name'])));
         }
@@ -235,21 +235,21 @@ class StoreAdminRequest extends BusinessLogicRequest
     protected function prepareForValidation(): void
     {
         // Auto-generate name if not provided
-        if (!$this->filled('name') && ($this->filled('first_name'))) {
+        if (! $this->filled('name') && ($this->filled('first_name'))) {
             $name = trim($this->first_name);
             if ($this->filled('last_name')) {
-                $name .= ' ' . trim($this->last_name);
+                $name .= ' '.trim($this->last_name);
             }
             $this->merge(['name' => $name]);
         }
 
         // Set default role if not provided
-        if (!$this->filled('role')) {
+        if (! $this->filled('role')) {
             $this->merge(['role' => 'admin']);
         }
 
         // Set default active status
-        if (!$this->has('is_active')) {
+        if (! $this->has('is_active')) {
             $this->merge(['is_active' => true]);
         }
     }

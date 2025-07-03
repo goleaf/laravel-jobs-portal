@@ -17,7 +17,7 @@ class FunctionalAreaFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->unique()->company() . ' ' . $this->faker->jobTitle(),
+            'name' => $this->faker->unique()->company().' '.$this->faker->jobTitle(),
             'is_default' => $this->faker->boolean(30), // 30% chance of being default
         ];
     }

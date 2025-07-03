@@ -136,7 +136,7 @@ class CompanyShowResource extends JsonResource
     /**
      * Customize the outgoing response for the resource.
      *
-     * @param mixed $response
+     * @param  mixed  $response
      */
     public function withResponse(Request $request, $response): void
     {
@@ -176,7 +176,7 @@ class CompanyShowResource extends JsonResource
      */
     private function getFormattedRevenue(): ?string
     {
-        if (!$this->revenue || !$this->revenueCurrency) {
+        if (! $this->revenue || ! $this->revenueCurrency) {
             return null;
         }
 
@@ -196,7 +196,7 @@ class CompanyShowResource extends JsonResource
             $this->postal_code,
         ]);
 
-        return !empty($parts) ? implode(', ', $parts) : null;
+        return ! empty($parts) ? implode(', ', $parts) : null;
     }
 
     /**
@@ -212,16 +212,16 @@ class CompanyShowResource extends JsonResource
 
         $completedFields = 0;
         foreach ($fields as $field) {
-            if (!empty($this->{$field})) {
-                ++$completedFields;
+            if (! empty($this->{$field})) {
+                $completedFields++;
             }
         }
 
         // Bonus points for social links and benefits
-        if (!empty($this->social_linkedin)) {
+        if (! empty($this->social_linkedin)) {
             $completedFields += 0.5;
         }
-        if (!empty($this->benefits)) {
+        if (! empty($this->benefits)) {
             $completedFields += 0.5;
         }
 
@@ -250,7 +250,7 @@ class CompanyShowResource extends JsonResource
     private function getRatingBreakdown(): array
     {
         $breakdown = [];
-        for ($i = 1; $i <= 5; ++$i) {
+        for ($i = 1; $i <= 5; $i++) {
             $breakdown[$i] = $this->reviews()->where('rating', $i)->count();
         }
 

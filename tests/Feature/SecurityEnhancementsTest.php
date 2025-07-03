@@ -47,7 +47,7 @@ class SecurityEnhancementsTest extends TestCase
     }
 
     /** @test */
-    public function testSecurityHeadersArePresent()
+    public function test_security_headers_are_present()
     {
         $response = $this->get('/');
 
@@ -58,7 +58,7 @@ class SecurityEnhancementsTest extends TestCase
     }
 
     /** @test */
-    public function testLoginRateLimitingWorks()
+    public function test_login_rate_limiting_works()
     {
         $user = User::factory()->create([
             'email' => 'test@example.com',
@@ -66,7 +66,7 @@ class SecurityEnhancementsTest extends TestCase
         ]);
 
         // Make 3 failed login attempts
-        for ($i = 0; $i < 3; ++$i) {
+        for ($i = 0; $i < 3; $i++) {
             $response = $this->post('/login', [
                 'email' => 'test@example.com',
                 'password' => 'wrongpassword',
@@ -78,7 +78,7 @@ class SecurityEnhancementsTest extends TestCase
     }
 
     /** @test */
-    public function testApiRateLimitingWorks()
+    public function test_api_rate_limiting_works()
     {
         $user = User::factory()->create();
 
@@ -93,7 +93,7 @@ class SecurityEnhancementsTest extends TestCase
     }
 
     /** @test */
-    public function testCspHeaderIsPresent()
+    public function test_csp_header_is_present()
     {
         $response = $this->get('/');
 
@@ -102,11 +102,11 @@ class SecurityEnhancementsTest extends TestCase
     }
 
     /** @test */
-    public function testHstsHeaderIsPresent()
+    public function test_hsts_header_is_present()
     {
         $response = $this->get('/');
 
-        if ('production' === config('app.env')) {
+        if (config('app.env') === 'production') {
             $response->assertHeader('Strict-Transport-Security');
         } else {
             // In development, this might not be set
@@ -115,7 +115,7 @@ class SecurityEnhancementsTest extends TestCase
     }
 
     /** @test */
-    public function testPasswordValidationEnforcesComplexity()
+    public function test_password_validation_enforces_complexity()
     {
         // Test the password validation rules directly using Laravel's validator
         $validator = Validator::make([
@@ -131,7 +131,7 @@ class SecurityEnhancementsTest extends TestCase
     }
 
     /** @test */
-    public function testStrongPasswordIsAccepted()
+    public function test_strong_password_is_accepted()
     {
         $response = $this->post('/register', [
             'first_name' => 'Test',
@@ -146,7 +146,7 @@ class SecurityEnhancementsTest extends TestCase
     }
 
     /** @test */
-    public function testXssPreventionInForms()
+    public function test_xss_prevention_in_forms()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -163,7 +163,7 @@ class SecurityEnhancementsTest extends TestCase
     }
 
     /** @test */
-    public function testFileUploadRestrictions()
+    public function test_file_upload_restrictions()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -178,7 +178,7 @@ class SecurityEnhancementsTest extends TestCase
     }
 
     /** @test */
-    public function testAdminRoutesRequireAdminRole()
+    public function test_admin_routes_require_admin_role()
     {
         $regularUser = User::factory()->create();
         $this->actingAs($regularUser);
@@ -190,14 +190,14 @@ class SecurityEnhancementsTest extends TestCase
     }
 
     /** @test */
-    public function testAdminUserCanAccessAdminRoutes()
+    public function test_admin_user_can_access_admin_routes()
     {
         // Skip this test if we can't properly test admin access in this environment
         $this->markTestSkipped('Admin role access testing requires proper test environment setup');
     }
 
     /** @test */
-    public function testCsrfProtectionIsActive()
+    public function test_csrf_protection_is_active()
     {
         // Create session first
         $this->startSession();
@@ -212,7 +212,7 @@ class SecurityEnhancementsTest extends TestCase
     }
 
     /** @test */
-    public function testSqlInjectionPrevention()
+    public function test_sql_injection_prevention()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
@@ -227,7 +227,7 @@ class SecurityEnhancementsTest extends TestCase
     }
 
     /** @test */
-    public function testSessionSecurityValidation()
+    public function test_session_security_validation()
     {
         $user = User::factory()->create();
 
@@ -243,12 +243,12 @@ class SecurityEnhancementsTest extends TestCase
     }
 
     /** @test */
-    public function testPasswordResetRateLimiting()
+    public function test_password_reset_rate_limiting()
     {
         $user = User::factory()->create(['email' => 'test@example.com']);
 
         // Attempt multiple password resets
-        for ($i = 0; $i < 4; ++$i) {
+        for ($i = 0; $i < 4; $i++) {
             $response = $this->post('/password/email', [
                 'email' => 'test@example.com',
             ]);
@@ -259,7 +259,7 @@ class SecurityEnhancementsTest extends TestCase
     }
 
     /** @test */
-    public function testAuthenticationLogging()
+    public function test_authentication_logging()
     {
         // This would test that security events are logged
         // Would require checking log files or using a test log driver
@@ -267,7 +267,7 @@ class SecurityEnhancementsTest extends TestCase
     }
 
     /** @test */
-    public function testAuthorizationPolicies()
+    public function test_authorization_policies()
     {
         $user1 = User::factory()->create();
         $user2 = User::factory()->create();
@@ -282,7 +282,7 @@ class SecurityEnhancementsTest extends TestCase
     }
 
     /** @test */
-    public function testApiAuthenticationRequired()
+    public function test_api_authentication_required()
     {
         // Test basic API functionality
         $response = $this->getJson('/api/jobs');
@@ -295,7 +295,7 @@ class SecurityEnhancementsTest extends TestCase
     }
 
     /** @test */
-    public function testSecurityConfigurationIsLoaded()
+    public function test_security_configuration_is_loaded()
     {
         $this->assertTrue(config('security.authentication.max_failed_attempts') > 0);
         $this->assertTrue(config('security.rate_limiting.api.authenticated') > 0);

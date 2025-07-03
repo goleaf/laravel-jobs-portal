@@ -27,7 +27,7 @@ class RedisCacheService extends CacheService
      */
     public function multiRemember(array $keys, callable $callback, int $ttl = 3600): array
     {
-        if (!$this->redis) {
+        if (! $this->redis) {
             return parent::multiGet($keys, $callback, $ttl);
         }
 
@@ -38,7 +38,7 @@ class RedisCacheService extends CacheService
         $this->redis->pipeline(function ($pipe) use ($keys, &$results, &$missingKeys) {
             foreach ($keys as $key) {
                 $value = $pipe->get($key);
-                if (null === $value) {
+                if ($value === null) {
                     $missingKeys[] = $key;
                 } else {
                     $results[$key] = unserialize($value);
@@ -47,7 +47,7 @@ class RedisCacheService extends CacheService
         });
 
         // Get missing values and cache them
-        if (!empty($missingKeys)) {
+        if (! empty($missingKeys)) {
             $missingValues = $callback($missingKeys);
 
             $this->redis->pipeline(function ($pipe) use ($missingValues, $ttl) {
@@ -67,7 +67,7 @@ class RedisCacheService extends CacheService
      */
     public function warmCache(array $data): void
     {
-        if (!$this->redis) {
+        if (! $this->redis) {
             return;
         }
 
@@ -83,7 +83,7 @@ class RedisCacheService extends CacheService
      */
     public function getRedisStats(): array
     {
-        if (!$this->redis) {
+        if (! $this->redis) {
             return ['status' => 'disconnected'];
         }
 
@@ -109,7 +109,7 @@ class RedisCacheService extends CacheService
         $misses = $info['keyspace_misses'] ?? 0;
         $total = $hits + $misses;
 
-        if (0 === $total) {
+        if ($total === 0) {
             return '0%';
         }
 

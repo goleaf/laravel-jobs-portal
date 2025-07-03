@@ -18,7 +18,7 @@ class CompanySizeTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function itCanBeCreated()
+    public function it_can_be_created()
     {
         $model = CompanySize::factory()->create();
 
@@ -29,9 +29,9 @@ class CompanySizeTest extends TestCase
     }
 
     /** @test */
-    public function itHasFillableAttributes()
+    public function it_has_fillable_attributes()
     {
-        $model = new CompanySize();
+        $model = new CompanySize;
         $fillable = $model->getFillable();
 
         $expectedFillable = ['size', 'is_default', 'is_active'];
@@ -44,9 +44,9 @@ class CompanySizeTest extends TestCase
     }
 
     /** @test */
-    public function itHasProperCasts()
+    public function it_has_proper_casts()
     {
-        $model = new CompanySize();
+        $model = new CompanySize;
         $casts = $model->getCasts();
 
         $this->assertIsArray($casts);
@@ -65,7 +65,7 @@ class CompanySizeTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeUpdated()
+    public function it_can_be_updated()
     {
         $model = CompanySize::factory()->create();
 
@@ -79,7 +79,7 @@ class CompanySizeTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeDeleted()
+    public function it_can_be_deleted()
     {
         $model = CompanySize::factory()->create();
         $modelId = $model->id;
@@ -92,7 +92,7 @@ class CompanySizeTest extends TestCase
     }
 
     /** @test */
-    public function itHasCompaniesRelationship()
+    public function it_has_companies_relationship()
     {
         $companySize = CompanySize::factory()->create();
         $companies = Company::factory()->count(3)->create(['company_size_id' => $companySize->id]);
@@ -103,7 +103,7 @@ class CompanySizeTest extends TestCase
     }
 
     /** @test */
-    public function scopeActiveReturnsActiveCompanySizes()
+    public function scope_active_returns_active_company_sizes()
     {
         // Get initial count of active company sizes
         $initialActiveCount = CompanySize::active()->count();
@@ -121,7 +121,7 @@ class CompanySizeTest extends TestCase
     }
 
     /** @test */
-    public function scopeInactiveReturnsInactiveCompanySizes()
+    public function scope_inactive_returns_inactive_company_sizes()
     {
         CompanySize::factory()->count(3)->create(['is_active' => true]);
         CompanySize::factory()->count(2)->create(['is_active' => false]);
@@ -135,7 +135,7 @@ class CompanySizeTest extends TestCase
     }
 
     /** @test */
-    public function scopeDefaultReturnsDefaultCompanySizes()
+    public function scope_default_returns_default_company_sizes()
     {
         // Get initial count of default company sizes
         $initialDefaultCount = CompanySize::default()->count();
@@ -153,7 +153,7 @@ class CompanySizeTest extends TestCase
     }
 
     /** @test */
-    public function scopeCustomReturnsCustomCompanySizes()
+    public function scope_custom_returns_custom_company_sizes()
     {
         CompanySize::factory()->count(2)->create(['is_default' => false]);
         CompanySize::factory()->count(1)->create(['is_default' => true]);
@@ -167,7 +167,7 @@ class CompanySizeTest extends TestCase
     }
 
     /** @test */
-    public function scopeSearchFindsCompanySizesBySizeName()
+    public function scope_search_finds_company_sizes_by_size_name()
     {
         CompanySize::factory()->create(['size' => 'Small Company']);
         CompanySize::factory()->create(['size' => 'Large Corporation']);
@@ -180,7 +180,7 @@ class CompanySizeTest extends TestCase
     }
 
     /** @test */
-    public function scopeRecentReturnsRecentlyCreatedCompanySizes()
+    public function scope_recent_returns_recently_created_company_sizes()
     {
         // Get initial count of recent company sizes
         $initialRecentCount = CompanySize::recent(30)->count();
@@ -198,7 +198,7 @@ class CompanySizeTest extends TestCase
     }
 
     /** @test */
-    public function scopeOldReturnsOldCompanySizes()
+    public function scope_old_returns_old_company_sizes()
     {
         // Create old company sizes
         CompanySize::factory()->count(2)->create(['created_at' => now()->subDays(400)]);
@@ -212,7 +212,7 @@ class CompanySizeTest extends TestCase
     }
 
     /** @test */
-    public function scopeWithCompaniesReturnsCompanySizesThatHaveCompanies()
+    public function scope_with_companies_returns_company_sizes_that_have_companies()
     {
         // Get initial count of company sizes with companies
         $initialWithCompaniesCount = CompanySize::withCompanies()->count();
@@ -230,7 +230,7 @@ class CompanySizeTest extends TestCase
     }
 
     /** @test */
-    public function scopeAlphabeticalOrdersCompanySizesBySizeName()
+    public function scope_alphabetical_orders_company_sizes_by_size_name()
     {
         $testCompanySize1 = CompanySize::factory()->create(['size' => 'Zebra Company']);
         $testCompanySize2 = CompanySize::factory()->create(['size' => 'Alpha Corporation']);
@@ -257,7 +257,7 @@ class CompanySizeTest extends TestCase
     }
 
     /** @test */
-    public function scopePopularReturnsMostUsedCompanySizes()
+    public function scope_popular_returns_most_used_company_sizes()
     {
         $popularCompanySize = CompanySize::factory()->create();
         $lessPopularCompanySize = CompanySize::factory()->create();
@@ -273,7 +273,7 @@ class CompanySizeTest extends TestCase
     }
 
     /** @test */
-    public function scopeSmallReturnsSmallCompanySizes()
+    public function scope_small_returns_small_company_sizes()
     {
         CompanySize::factory()->create(['size' => 'Small Business']);
         CompanySize::factory()->create(['size' => 'Startup']);
@@ -285,7 +285,7 @@ class CompanySizeTest extends TestCase
     }
 
     /** @test */
-    public function scopeMediumReturnsMediumCompanySizes()
+    public function scope_medium_returns_medium_company_sizes()
     {
         CompanySize::factory()->create(['size' => 'Medium Business']);
         CompanySize::factory()->create(['size' => 'Mid-size Company']);
@@ -297,7 +297,7 @@ class CompanySizeTest extends TestCase
     }
 
     /** @test */
-    public function scopeLargeReturnsLargeCompanySizes()
+    public function scope_large_returns_large_company_sizes()
     {
         CompanySize::factory()->create(['size' => 'Large Corporation']);
         CompanySize::factory()->create(['size' => 'Enterprise']);

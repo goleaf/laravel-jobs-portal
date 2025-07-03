@@ -64,7 +64,7 @@ class StoreSkillRequest extends FormRequest
             'is_default' => [
                 'boolean',
                 function ($attribute, $value, $fail) {
-                    if ($value && !auth()->user()->hasRole('Admin')) {
+                    if ($value && ! auth()->user()->hasRole('Admin')) {
                         $fail(__('validation.admin_only_field'));
                     }
                 },
@@ -238,8 +238,7 @@ class StoreSkillRequest extends FormRequest
             $normalizedName = strtolower(str_replace(' ', '', $this->name));
 
             return Skill::whereRaw('LOWER(REPLACE(name, " ", "")) = ?', [$normalizedName])
-                ->exists()
-            ;
+                ->exists();
         }
 
         return false;
@@ -258,7 +257,7 @@ class StoreSkillRequest extends FormRequest
         $content = strtolower($this->name.' '.$this->description.' '.$this->tags);
 
         foreach ($suspiciousPatterns as $pattern) {
-            if (false !== strpos($content, $pattern)) {
+            if (strpos($content, $pattern) !== false) {
                 return true;
             }
         }
@@ -271,7 +270,7 @@ class StoreSkillRequest extends FormRequest
      */
     private function hasInvalidRelatedSkills(): bool
     {
-        if (!$this->related_skills || !is_array($this->related_skills)) {
+        if (! $this->related_skills || ! is_array($this->related_skills)) {
             return false;
         }
 
@@ -298,7 +297,7 @@ class StoreSkillRequest extends FormRequest
      */
     private function hasInvalidSkillFormat(): bool
     {
-        if (!$this->name) {
+        if (! $this->name) {
             return false;
         }
 
@@ -331,7 +330,7 @@ class StoreSkillRequest extends FormRequest
      */
     private function hasExcessiveKeywords(): bool
     {
-        if (!$this->keywords) {
+        if (! $this->keywords) {
             return false;
         }
 

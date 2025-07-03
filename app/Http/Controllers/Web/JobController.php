@@ -35,7 +35,7 @@ class JobController extends AppBaseController
     public function index(Request $request): View
     {
         // Check if this is an admin request (based on route or user role)
-        if ('admin' === $request->route()->getPrefix() || (auth()->check() && auth()->user()->hasRole('Admin'))) {
+        if ($request->route()->getPrefix() === 'admin' || (auth()->check() && auth()->user()->hasRole('Admin'))) {
             // Use enhanced model scopes for admin job listing
             $jobs = Job::with(['company', 'jobCategory', 'currency', 'jobType'])
                 ->when($request->get('status'), function ($query, $status) {
@@ -51,8 +51,7 @@ class JobController extends AppBaseController
                     return $query->keywordSearch($search);
                 })
                 ->recent()
-                ->paginate(15)
-            ;
+                ->paginate(15);
 
             return view('admin.jobs.index', compact('jobs'));
         }
@@ -84,13 +83,12 @@ class JobController extends AppBaseController
     /**
      * Display the specified job (admin).
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function show($id): View
     {
         $job = Job::with(['company', 'jobCategory', 'currency', 'jobType', 'jobsSkill', 'jobsTag'])
-            ->findOrFail($id)
-        ;
+            ->findOrFail($id);
 
         return view('admin.jobs.show', compact('job'));
     }
@@ -98,13 +96,12 @@ class JobController extends AppBaseController
     /**
      * Show the form for editing the specified job (admin).
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function edit($id): View
     {
         $job = Job::with(['company', 'jobCategory', 'currency', 'jobType'])
-            ->findOrFail($id)
-        ;
+            ->findOrFail($id);
 
         return view('admin.jobs.edit', compact('job'));
     }
@@ -112,7 +109,7 @@ class JobController extends AppBaseController
     /**
      * Update the specified job (admin).
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function update(UpdateJobRequest $request, $id)
     {
@@ -123,7 +120,7 @@ class JobController extends AppBaseController
     /**
      * Remove the specified job (admin).
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function destroy($id)
     {
@@ -154,8 +151,7 @@ class JobController extends AppBaseController
             },
         ])
             ->where('job_id', $uniqueJobId)
-            ->first()
-        ;
+            ->first();
 
         if (empty($job)) {
             Flash::error('Job not found');
@@ -164,7 +160,7 @@ class JobController extends AppBaseController
         }
 
         // Check job access permissions
-        if (Job::STATUS_DRAFT == $job->status && \Auth::user()?->hasRole('Candidate')) {
+        if ($job->status == Job::STATUS_DRAFT && \Auth::user()?->hasRole('Candidate')) {
             abort(404);
         }
 
@@ -182,8 +178,7 @@ class JobController extends AppBaseController
         // Enhanced job count using scopes
         $data['jobsCount'] = Job::active()
             ->byCompany($job->company_id)
-            ->count()
-        ;
+            ->count();
 
         // Check job status using model method
         $data['isActive'] = $job->isActive();
@@ -195,8 +190,7 @@ class JobController extends AppBaseController
             ->where('id', '!=', $job->id)
             ->recent()
             ->limit(6)
-            ->get()
-        ;
+            ->get();
 
         // Social sharing URLs
         $url = [

@@ -22,7 +22,7 @@ class CreateCompanyRequest extends FormRequest
     {
         $user = auth()->user();
 
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
@@ -140,13 +140,13 @@ class CreateCompanyRequest extends FormRequest
                 'exists:users,id',
                 function ($attribute, $value, $fail) {
                     $user = User::find($value);
-                    if (!$user) {
+                    if (! $user) {
                         $fail('The selected user is invalid.');
 
                         return;
                     }
 
-                    if (!$user->hasRole(['Employer', 'Admin', 'Super Admin'])) {
+                    if (! $user->hasRole(['Employer', 'Admin', 'Super Admin'])) {
                         $fail('The selected user must be an employer or admin.');
 
                         return;
@@ -300,7 +300,7 @@ class CreateCompanyRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     public function withValidator($validator): void
     {
@@ -311,7 +311,7 @@ class CreateCompanyRequest extends FormRequest
                 $companySlug = Str::slug($this->name);
 
                 // This is just a warning, not a hard validation
-                if ($domain && !str_contains($domain, $companySlug)) {
+                if ($domain && ! str_contains($domain, $companySlug)) {
                     // Could add a warning here if needed
                 }
             }
@@ -377,7 +377,7 @@ class CreateCompanyRequest extends FormRequest
     {
         $user = auth()->user();
 
-        if (!$user) {
+        if (! $user) {
             throw new AuthenticationException('You must be logged in to create a company.');
         }
 
@@ -385,7 +385,7 @@ class CreateCompanyRequest extends FormRequest
             throw new AuthorizationException('You already have a company. Each employer can only have one company.');
         }
 
-        if (!$user->hasRole(['Admin', 'Super Admin', 'Employer'])) {
+        if (! $user->hasRole(['Admin', 'Super Admin', 'Employer'])) {
             throw new AuthorizationException('Only employers and administrators can create companies.');
         }
 
@@ -412,31 +412,31 @@ class CreateCompanyRequest extends FormRequest
         }
 
         // Clean up website URL
-        if ($this->website && !str_starts_with($this->website, 'http')) {
+        if ($this->website && ! str_starts_with($this->website, 'http')) {
             $this->merge([
                 'website' => 'https://'.$this->website,
             ]);
         }
 
         // Clean up social media URLs
-        if ($this->facebook_url && !str_starts_with($this->facebook_url, 'http')) {
+        if ($this->facebook_url && ! str_starts_with($this->facebook_url, 'http')) {
             $this->merge(['facebook_url' => 'https://'.$this->facebook_url]);
         }
 
-        if ($this->twitter_url && !str_starts_with($this->twitter_url, 'http')) {
+        if ($this->twitter_url && ! str_starts_with($this->twitter_url, 'http')) {
             $this->merge(['twitter_url' => 'https://'.$this->twitter_url]);
         }
 
-        if ($this->linkedin_url && !str_starts_with($this->linkedin_url, 'http')) {
+        if ($this->linkedin_url && ! str_starts_with($this->linkedin_url, 'http')) {
             $this->merge(['linkedin_url' => 'https://'.$this->linkedin_url]);
         }
 
-        if ($this->pinterest_url && !str_starts_with($this->pinterest_url, 'http')) {
+        if ($this->pinterest_url && ! str_starts_with($this->pinterest_url, 'http')) {
             $this->merge(['pinterest_url' => 'https://'.$this->pinterest_url]);
         }
 
         // Set user_id to authenticated user if not provided and user is employer
-        if (!$this->user_id && auth()->user()?->hasRole('Employer')) {
+        if (! $this->user_id && auth()->user()?->hasRole('Employer')) {
             $this->merge(['user_id' => auth()->id()]);
         }
 

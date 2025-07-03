@@ -83,26 +83,26 @@ class CompanyResource extends JsonResource
     /**
      * Apply field filtering using Collection forget() based on user permissions.
      *
-     * @param mixed $data
+     * @param  mixed  $data
      */
     protected function applyFieldFiltering($data, Request $request)
     {
         $user = $request->user();
 
         // Remove admin-only fields for non-admin users
-        if (!$user || !$user->hasRole('admin')) {
+        if (! $user || ! $user->hasRole('admin')) {
             $adminOnlyFields = ['admin_notes', 'internal_rating', 'moderation_status', 'system_flags'];
             $data->forget($adminOnlyFields);
         }
 
         // Remove premium fields for users without subscription
-        if (!$user || !$user->hasActiveSubscription()) {
+        if (! $user || ! $user->hasActiveSubscription()) {
             $premiumFields = ['premium_badge', 'featured_until', 'advanced_analytics', 'priority_score'];
             $data->forget($premiumFields);
         }
 
         // Remove sensitive fields for non-owners
-        if (!$user || ($user->id !== $this->user_id && !$user->hasRole('admin'))) {
+        if (! $user || ($user->id !== $this->user_id && ! $user->hasRole('admin'))) {
             $sensitiveFields = ['private_contact_info', 'internal_id', 'audit_trail'];
             $data->forget($sensitiveFields);
         }
@@ -112,7 +112,7 @@ class CompanyResource extends JsonResource
         $data->forget($deprecatedFields);
 
         // Guest user restrictions
-        if (!$user) {
+        if (! $user) {
             $guestRestrictedFields = ['email', 'private_contact_info'];
             $data->forget($guestRestrictedFields);
         }
@@ -143,15 +143,15 @@ class CompanyResource extends JsonResource
         $user = $request->user();
         $filteredCount = 0;
 
-        if (!$user || !$user->hasRole('admin')) {
+        if (! $user || ! $user->hasRole('admin')) {
             $filteredCount += 4; // admin-only fields
         }
 
-        if (!$user || !$user->hasActiveSubscription()) {
+        if (! $user || ! $user->hasActiveSubscription()) {
             $filteredCount += 4; // premium fields
         }
 
-        if (!$user || ($user->id !== $this->user_id && !$user->hasRole('admin'))) {
+        if (! $user || ($user->id !== $this->user_id && ! $user->hasRole('admin'))) {
             $filteredCount += 3; // sensitive fields
         }
 

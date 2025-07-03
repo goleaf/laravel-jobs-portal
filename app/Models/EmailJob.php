@@ -15,31 +15,31 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * EmailJob Model - Enhanced with Enhanced patterns.
  *
- * @property int         $id
- * @property int         $user_id
- * @property int         $job_id
- * @property string      $job_url
- * @property string      $friend_name
- * @property string      $friend_email
- * @property bool        $is_sent
- * @property bool        $is_active
+ * @property int $id
+ * @property int $user_id
+ * @property int $job_id
+ * @property string $job_url
+ * @property string $friend_name
+ * @property string $friend_email
+ * @property bool $is_sent
+ * @property bool $is_active
  * @property null|string $message
  * @property null|string $status
  * @property null|Carbon $sent_at
  * @property null|Carbon $opened_at
  * @property null|Carbon $clicked_at
- * @property null|int    $open_count
- * @property null|int    $click_count
+ * @property null|int $open_count
+ * @property null|int $click_count
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|Carbon $deleted_at
- * @property User        $user
- * @property Job         $job
- * @property bool        $is_recent
- * @property bool        $is_opened
- * @property bool        $is_clicked
- * @property string      $status_label
- * @property string      $friend_domain
+ * @property User $user
+ * @property Job $job
+ * @property bool $is_recent
+ * @property bool $is_opened
+ * @property bool $is_clicked
+ * @property string $status_label
+ * @property string $friend_domain
  *
  * Enhanced Enhanced Scopes:
  *
@@ -70,8 +70,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class EmailJob extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     /**
      * Status constants.
@@ -122,7 +122,7 @@ class EmailJob extends Model
         'is_sent',
         'status',
         'open_count',
-        'click_count'
+        'click_count',
     ];
 
     /**
@@ -141,8 +141,7 @@ class EmailJob extends Model
             ->logOnly(['user_id', 'job_id', 'friend_name', 'friend_email', 'is_sent', 'status'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn (string $eventName) => "Email job has been {$eventName}")
-        ;
+            ->setDescriptionForEvent(fn (string $eventName) => "Email job has been {$eventName}");
     }
 
     // =============================================
@@ -259,8 +258,7 @@ class EmailJob extends Model
     public function scopeThisMonth(Builder $query): Builder
     {
         return $query->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
-        ;
+            ->whereYear('created_at', now()->year);
     }
 
     // =============================================
@@ -319,8 +317,7 @@ class EmailJob extends Model
         return $query->select('job_id')
             ->selectRaw('COUNT(*) as shares_count')
             ->groupBy('job_id')
-            ->orderByDesc('shares_count')
-        ;
+            ->orderByDesc('shares_count');
     }
 
     /**
@@ -330,8 +327,7 @@ class EmailJob extends Model
     {
         return $query->where(function ($q) {
             $q->whereNotNull('opened_at')
-                ->orWhereNotNull('clicked_at')
-            ;
+                ->orWhereNotNull('clicked_at');
         });
     }
 
@@ -353,10 +349,8 @@ class EmailJob extends Model
             ->orWhereHas('user', function ($userQuery) use ($term) {
                 $userQuery->where('first_name', 'like', '%'.$term.'%')
                     ->orWhere('last_name', 'like', '%'.$term.'%')
-                    ->orWhere('email', 'like', '%'.$term.'%')
-                ;
-            })
-        ;
+                    ->orWhere('email', 'like', '%'.$term.'%');
+            });
     }
 
     /**
@@ -392,7 +386,7 @@ class EmailJob extends Model
      */
     public function getIsOpenedAttribute(): bool
     {
-        return !is_null($this->opened_at);
+        return ! is_null($this->opened_at);
     }
 
     /**
@@ -400,7 +394,7 @@ class EmailJob extends Model
      */
     public function getIsClickedAttribute(): bool
     {
-        return !is_null($this->clicked_at);
+        return ! is_null($this->clicked_at);
     }
 
     /**
@@ -527,7 +521,7 @@ class EmailJob extends Model
     {
         return Cache::remember("user.{$userId}.engagement_rate", 3600, function () use ($userId) {
             $total = self::where('user_id', $userId)->sent()->count();
-            if (0 === $total) {
+            if ($total === 0) {
                 return 0.0;
             }
 

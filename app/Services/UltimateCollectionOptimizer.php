@@ -149,7 +149,7 @@ class UltimateCollectionOptimizer
         // Test 1: Ultra-large dataset
         echo 'Test 1: Processing 250,000 records...'.PHP_EOL;
         $ultraLargeData = [];
-        for ($i = 0; $i < 250000; ++$i) {
+        for ($i = 0; $i < 250000; $i++) {
             $ultraLargeData[] = [
                 'id' => $i,
                 'name' => 'Record '.$i,

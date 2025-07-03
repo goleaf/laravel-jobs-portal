@@ -24,8 +24,7 @@ trait HasTaxonomy
             ->with('taxonomy')
             ->get()
             ->pluck('taxonomy')
-            ->unique('id')
-        ;
+            ->unique('id');
     }
 
     /**
@@ -37,8 +36,7 @@ trait HasTaxonomy
             ->withPivot(['taxonomy_id', 'sort_order', 'meta'])
             ->withTimestamps()
             ->orderBy('pivot_sort_order')
-            ->orderBy('name')
-        ;
+            ->orderBy('name');
     }
 
     /**
@@ -53,8 +51,7 @@ trait HasTaxonomy
                 $query->where('type', $taxonomyType);
             })
             ->orderBy('pivot_sort_order')
-            ->orderBy('name')
-        ;
+            ->orderBy('name');
     }
 
     /**
@@ -80,7 +77,7 @@ trait HasTaxonomy
     /**
      * Add a single term to this model.
      *
-     * @param mixed $term
+     * @param  mixed  $term
      */
     public function addTerm($term, ?string $taxonomyType = null, int $sortOrder = 0, array $meta = []): void
     {
@@ -108,7 +105,7 @@ trait HasTaxonomy
     {
         $taxonomy = Taxonomy::where('type', $taxonomyType)->first();
 
-        if (!$taxonomy) {
+        if (! $taxonomy) {
             return;
         }
 
@@ -116,8 +113,7 @@ trait HasTaxonomy
         $currentTermIds = $this->terms()
             ->where('taxonomy_id', $taxonomy->id)
             ->pluck('terms.id')
-            ->toArray()
-        ;
+            ->toArray();
 
         // Resolve new terms
         $newTermIds = [];
@@ -151,7 +147,7 @@ trait HasTaxonomy
     /**
      * Remove a term from this model.
      *
-     * @param mixed $term
+     * @param  mixed  $term
      */
     public function removeTerm($term, ?string $taxonomyType = null): void
     {
@@ -190,8 +186,7 @@ trait HasTaxonomy
         if ($taxonomy) {
             $this->terms()
                 ->wherePivot('taxonomy_id', $taxonomy->id)
-                ->detach()
-            ;
+                ->detach();
         }
     }
 
@@ -226,13 +221,13 @@ trait HasTaxonomy
     /**
      * Check if model has a specific term.
      *
-     * @param mixed $term
+     * @param  mixed  $term
      */
     public function hasTerm($term, ?string $taxonomyType = null): bool
     {
         $termModel = $this->resolveTerm($term, $taxonomyType);
 
-        if (!$termModel) {
+        if (! $termModel) {
             return false;
         }
 
@@ -270,7 +265,7 @@ trait HasTaxonomy
     /**
      * Scope models with specific terms.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithTerms($query, array $terms, ?string $taxonomyType = null)
     {
@@ -298,8 +293,8 @@ trait HasTaxonomy
     /**
      * Scope models with a specific term.
      *
-     * @param mixed $query
-     * @param mixed $term
+     * @param  mixed  $query
+     * @param  mixed  $term
      */
     public function scopeWithTerm($query, $term, ?string $taxonomyType = null)
     {
@@ -323,7 +318,7 @@ trait HasTaxonomy
     /**
      * Scope models without specific terms.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithoutTerms($query, array $terms, ?string $taxonomyType = null)
     {
@@ -341,7 +336,7 @@ trait HasTaxonomy
     /**
      * Scope models by taxonomy type.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByTaxonomy($query, string $taxonomyType)
     {
@@ -441,7 +436,7 @@ trait HasTaxonomy
     /**
      * Resolve term from various input types.
      *
-     * @param mixed $term
+     * @param  mixed  $term
      */
     protected function resolveTerm($term, ?string $taxonomyType = null): ?Term
     {

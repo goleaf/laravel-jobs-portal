@@ -70,7 +70,7 @@ class CompanyApiControllerTest extends TestCase
     }
 
     /** @test */
-    public function itCanListCompaniesWithPagination()
+    public function it_can_list_companies_with_pagination()
     {
         // Create additional companies
         Company::factory()->count(5)->create();
@@ -101,12 +101,11 @@ class CompanyApiControllerTest extends TestCase
                         'last_page',
                     ],
                 ],
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function itCanSearchCompaniesByName()
+    public function it_can_search_companies_by_name()
     {
         $searchCompany = Company::factory()->create([
             'name' => 'TechCorp Solutions',
@@ -115,12 +114,11 @@ class CompanyApiControllerTest extends TestCase
         $response = $this->getJson($this->baseUrl.'?search=TechCorp');
 
         $response->assertStatus(200)
-            ->assertJsonPath('data.companies.0.basic_info.name', 'TechCorp Solutions')
-        ;
+            ->assertJsonPath('data.companies.0.basic_info.name', 'TechCorp Solutions');
     }
 
     /** @test */
-    public function itCanFilterCompaniesByIndustry()
+    public function it_can_filter_companies_by_industry()
     {
         $industry = Industry::factory()->create(['name' => 'Technology']);
         Company::factory()->create([
@@ -130,12 +128,11 @@ class CompanyApiControllerTest extends TestCase
         $response = $this->getJson($this->baseUrl.'?filter_industry=Technology');
 
         $response->assertStatus(200)
-            ->assertJsonCount(1, 'data.companies')
-        ;
+            ->assertJsonCount(1, 'data.companies');
     }
 
     /** @test */
-    public function itCanFilterCompaniesBySize()
+    public function it_can_filter_companies_by_size()
     {
         $response = $this->getJson($this->baseUrl.'?filter_size=medium');
 
@@ -143,7 +140,7 @@ class CompanyApiControllerTest extends TestCase
     }
 
     /** @test */
-    public function itCanShowSpecificCompany()
+    public function it_can_show_specific_company()
     {
         $response = $this->getJson($this->baseUrl.'/'.$this->company->id);
 
@@ -194,12 +191,11 @@ class CompanyApiControllerTest extends TestCase
                     ],
                 ],
             ])
-            ->assertJsonPath('data.company.id', $this->company->id)
-        ;
+            ->assertJsonPath('data.company.id', $this->company->id);
     }
 
     /** @test */
-    public function itCanShowCompanyWithRelationships()
+    public function it_can_show_company_with_relationships()
     {
         $response = $this->getJson($this->baseUrl.'/'.$this->company->id.'?include=user,jobs,reviews');
 
@@ -212,12 +208,11 @@ class CompanyApiControllerTest extends TestCase
                         'reviews',
                     ],
                 ],
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function itRequiresAuthenticationToCreateCompany()
+    public function it_requires_authentication_to_create_company()
     {
         $companyData = [
             'name' => 'New Company',
@@ -230,7 +225,7 @@ class CompanyApiControllerTest extends TestCase
     }
 
     /** @test */
-    public function authenticatedUserCanCreateCompany()
+    public function authenticated_user_can_create_company()
     {
         Sanctum::actingAs($this->user);
 
@@ -261,8 +256,7 @@ class CompanyApiControllerTest extends TestCase
                         'business_details',
                     ],
                 ],
-            ])
-        ;
+            ]);
 
         $this->assertDatabaseHas('companies', [
             'name' => 'Innovative Startup',
@@ -272,19 +266,18 @@ class CompanyApiControllerTest extends TestCase
     }
 
     /** @test */
-    public function itValidatesRequiredFieldsWhenCreatingCompany()
+    public function it_validates_required_fields_when_creating_company()
     {
         Sanctum::actingAs($this->user);
 
         $response = $this->postJson($this->baseUrl, []);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name', 'email'])
-        ;
+            ->assertJsonValidationErrors(['name', 'email']);
     }
 
     /** @test */
-    public function itValidatesUniqueCompanyName()
+    public function it_validates_unique_company_name()
     {
         Sanctum::actingAs($this->user);
 
@@ -296,12 +289,11 @@ class CompanyApiControllerTest extends TestCase
         $response = $this->postJson($this->baseUrl, $companyData);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function userCanUpdateTheirOwnCompany()
+    public function user_can_update_their_own_company()
     {
         Sanctum::actingAs($this->user);
 
@@ -314,8 +306,7 @@ class CompanyApiControllerTest extends TestCase
         $response = $this->putJson($this->baseUrl.'/'.$this->company->id, $updateData);
 
         $response->assertStatus(200)
-            ->assertJsonPath('data.company.basic_info.name', 'Updated Company Name')
-        ;
+            ->assertJsonPath('data.company.basic_info.name', 'Updated Company Name');
 
         $this->assertDatabaseHas('companies', [
             'id' => $this->company->id,
@@ -324,7 +315,7 @@ class CompanyApiControllerTest extends TestCase
     }
 
     /** @test */
-    public function userCannotUpdateOtherUsersCompany()
+    public function user_cannot_update_other_users_company()
     {
         $otherUser = User::factory()->create(['user_type' => 'employer']);
         Sanctum::actingAs($otherUser);
@@ -339,7 +330,7 @@ class CompanyApiControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanUpdateAnyCompany()
+    public function admin_can_update_any_company()
     {
         Sanctum::actingAs($this->adminUser);
 
@@ -351,12 +342,11 @@ class CompanyApiControllerTest extends TestCase
         $response = $this->putJson($this->baseUrl.'/'.$this->company->id, $updateData);
 
         $response->assertStatus(200)
-            ->assertJsonPath('data.company.basic_info.name', 'Admin Updated Company')
-        ;
+            ->assertJsonPath('data.company.basic_info.name', 'Admin Updated Company');
     }
 
     /** @test */
-    public function userCanDeleteTheirOwnCompany()
+    public function user_can_delete_their_own_company()
     {
         Sanctum::actingAs($this->user);
 
@@ -376,14 +366,13 @@ class CompanyApiControllerTest extends TestCase
                         'audit_trail',
                     ],
                 ],
-            ])
-        ;
+            ]);
 
         $this->assertSoftDeleted('companies', ['id' => $this->company->id]);
     }
 
     /** @test */
-    public function deletionRequiresConfirmation()
+    public function deletion_requires_confirmation()
     {
         Sanctum::actingAs($this->user);
 
@@ -392,12 +381,11 @@ class CompanyApiControllerTest extends TestCase
         ]);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['confirmation'])
-        ;
+            ->assertJsonValidationErrors(['confirmation']);
     }
 
     /** @test */
-    public function itValidatesWebsiteUrlFormat()
+    public function it_validates_website_url_format()
     {
         Sanctum::actingAs($this->user);
 
@@ -410,12 +398,11 @@ class CompanyApiControllerTest extends TestCase
         $response = $this->postJson($this->baseUrl, $invalidData);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['website'])
-        ;
+            ->assertJsonValidationErrors(['website']);
     }
 
     /** @test */
-    public function itValidatesEmailFormat()
+    public function it_validates_email_format()
     {
         Sanctum::actingAs($this->user);
 
@@ -427,12 +414,11 @@ class CompanyApiControllerTest extends TestCase
         $response = $this->postJson($this->baseUrl, $invalidData);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['email'])
-        ;
+            ->assertJsonValidationErrors(['email']);
     }
 
     /** @test */
-    public function itHandlesLogoUpload()
+    public function it_handles_logo_upload()
     {
         Sanctum::actingAs($this->user);
 
@@ -447,7 +433,7 @@ class CompanyApiControllerTest extends TestCase
     }
 
     /** @test */
-    public function itIncludesStatisticsWhenRequested()
+    public function it_includes_statistics_when_requested()
     {
         Sanctum::actingAs($this->user);
 
@@ -466,12 +452,11 @@ class CompanyApiControllerTest extends TestCase
                         ],
                     ],
                 ],
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function itValidatesFoundedYearRange()
+    public function it_validates_founded_year_range()
     {
         Sanctum::actingAs($this->user);
 
@@ -484,12 +469,11 @@ class CompanyApiControllerTest extends TestCase
         $response = $this->postJson($this->baseUrl, $invalidData);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['founded_year'])
-        ;
+            ->assertJsonValidationErrors(['founded_year']);
     }
 
     /** @test */
-    public function itHandlesRateLimitingOnCreation()
+    public function it_handles_rate_limiting_on_creation()
     {
         Sanctum::actingAs($this->user);
 
@@ -499,19 +483,19 @@ class CompanyApiControllerTest extends TestCase
         ];
 
         // Make multiple rapid requests
-        for ($i = 0; $i < 10; ++$i) {
+        for ($i = 0; $i < 10; $i++) {
             $response = $this->postJson($this->baseUrl, array_merge($companyData, ['name' => "Company {$i}"]));
-            if (429 === $response->status()) {
+            if ($response->status() === 429) {
                 break;
             }
         }
 
         // Should eventually hit rate limit
-        $this->assertTrue(201 === $response->status() || 429 === $response->status());
+        $this->assertTrue($response->status() === 201 || $response->status() === 429);
     }
 
     /** @test */
-    public function itReturnsProperErrorForNonexistentCompany()
+    public function it_returns_proper_error_for_nonexistent_company()
     {
         $response = $this->getJson($this->baseUrl.'/99999');
 
@@ -519,12 +503,11 @@ class CompanyApiControllerTest extends TestCase
             ->assertJson([
                 'success' => false,
                 'message' => 'Company not found',
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function itCanFilterByVerificationStatus()
+    public function it_can_filter_by_verification_status()
     {
         Company::factory()->create(['is_verified' => true]);
         Company::factory()->create(['is_verified' => false]);
@@ -535,7 +518,7 @@ class CompanyApiControllerTest extends TestCase
     }
 
     /** @test */
-    public function itValidatesEmployeeCountRange()
+    public function it_validates_employee_count_range()
     {
         Sanctum::actingAs($this->user);
 

@@ -17,7 +17,7 @@ class AuthenticationTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function usersCanLoginWithValidCredentials()
+    public function users_can_login_with_valid_credentials()
     {
         $user = User::factory()->create([
             'email' => 'test@example.com',
@@ -33,7 +33,7 @@ class AuthenticationTest extends TestCase
     }
 
     /** @test */
-    public function usersCannotLoginWithInvalidCredentials()
+    public function users_cannot_login_with_invalid_credentials()
     {
         $user = User::factory()->create([
             'email' => 'test@example.com',
@@ -49,7 +49,7 @@ class AuthenticationTest extends TestCase
     }
 
     /** @test */
-    public function usersCanRegisterWithValidData()
+    public function users_can_register_with_valid_data()
     {
         $response = $this->post('/register', [
             'name' => 'Test User',
@@ -64,7 +64,7 @@ class AuthenticationTest extends TestCase
     }
 
     /** @test */
-    public function authenticatedUsersCanLogout()
+    public function authenticated_users_can_logout()
     {
         $user = User::factory()->create();
         $this->actingAs($user);

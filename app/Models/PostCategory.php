@@ -15,27 +15,27 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * PostCategory Model - Enhanced with Enhanced patterns.
  *
- * @property int               $id
- * @property string            $name
- * @property null|string       $description
- * @property bool              $is_default
- * @property bool              $is_active
- * @property bool              $is_featured
- * @property null|int          $sort_order
- * @property null|string       $color
- * @property null|string       $icon
- * @property null|Carbon       $created_at
- * @property null|Carbon       $updated_at
- * @property null|Carbon       $deleted_at
+ * @property int $id
+ * @property string $name
+ * @property null|string $description
+ * @property bool $is_default
+ * @property bool $is_active
+ * @property bool $is_featured
+ * @property null|int $sort_order
+ * @property null|string $color
+ * @property null|string $icon
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
  * @property Collection|Post[] $posts
  * @property Collection|Post[] $activePosts
- * @property string            $display_name
- * @property string            $slug
- * @property string            $badge_html
- * @property null|string       $icon_html
- * @property int               $posts_count
- * @property int               $active_posts_count
- * @property array             $stats
+ * @property string $display_name
+ * @property string $slug
+ * @property string $badge_html
+ * @property null|string $icon_html
+ * @property int $posts_count
+ * @property int $active_posts_count
+ * @property array $stats
  *
  * Enhanced Enhanced Scopes:
  *
@@ -67,8 +67,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class PostCategory extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     public static array $rules = [
         'name' => 'required|string|max:255|unique:post_categories,name',
@@ -101,8 +101,7 @@ class PostCategory extends Model
         return LogOptions::defaults()
             ->logOnly(['name', 'description', 'is_default', 'is_active', 'is_featured'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     // ==============================================
@@ -167,8 +166,7 @@ class PostCategory extends Model
     {
         return $query->where(function ($q) use ($term) {
             $q->where('name', 'like', '%'.$term.'%')
-                ->orWhere('description', 'like', '%'.$term.'%')
-            ;
+                ->orWhere('description', 'like', '%'.$term.'%');
         });
     }
 
@@ -311,7 +309,7 @@ class PostCategory extends Model
 
     public function isCustom(): bool
     {
-        return !$this->is_default;
+        return ! $this->is_default;
     }
 
     public function isActive(): bool
@@ -331,7 +329,7 @@ class PostCategory extends Model
     public function getDisplayNameAttribute(): string
     {
         $name = $this->name;
-        if (null !== $this->posts_count) {
+        if ($this->posts_count !== null) {
             $name .= " ({$this->posts_count})";
         }
 
@@ -393,12 +391,12 @@ class PostCategory extends Model
 
     public function hasIcon(): bool
     {
-        return !empty($this->icon);
+        return ! empty($this->icon);
     }
 
     public function hasColor(): bool
     {
-        return !empty($this->color);
+        return ! empty($this->color);
     }
 
     public function getStatsAttribute(): array

@@ -15,28 +15,28 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * ReportedJob Model - Enhanced with Enhanced patterns.
  *
- * @property int         $id
- * @property int         $user_id
- * @property int         $job_id
- * @property string      $note
+ * @property int $id
+ * @property int $user_id
+ * @property int $job_id
+ * @property string $note
  * @property null|string $reason
  * @property null|string $status
- * @property bool        $is_active
- * @property bool        $is_resolved
- * @property null|int    $priority
+ * @property bool $is_active
+ * @property bool $is_resolved
+ * @property null|int $priority
  * @property null|Carbon $resolved_at
- * @property null|int    $resolved_by
+ * @property null|int $resolved_by
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|Carbon $deleted_at
- * @property User        $user
- * @property Job         $job
- * @property null|User   $resolver
- * @property bool        $is_recent
- * @property bool        $is_pending
- * @property bool        $is_high_priority
- * @property string      $status_label
- * @property string      $priority_label
+ * @property User $user
+ * @property Job $job
+ * @property null|User $resolver
+ * @property bool $is_recent
+ * @property bool $is_pending
+ * @property bool $is_high_priority
+ * @property string $status_label
+ * @property string $priority_label
  *
  * Enhanced Enhanced Scopes:
  *
@@ -69,8 +69,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class ReportedJob extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     /**
      * Status constants.
@@ -151,8 +151,7 @@ class ReportedJob extends Model
             ->logOnly(['user_id', 'job_id', 'note', 'reason', 'status', 'is_resolved', 'priority'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn (string $eventName) => "Reported job has been {$eventName}")
-        ;
+            ->setDescriptionForEvent(fn (string $eventName) => "Reported job has been {$eventName}");
     }
 
     // =============================================
@@ -380,10 +379,8 @@ class ReportedJob extends Model
             ->orWhereHas('user', function ($userQuery) use ($term) {
                 $userQuery->where('first_name', 'like', '%'.$term.'%')
                     ->orWhere('last_name', 'like', '%'.$term.'%')
-                    ->orWhere('email', 'like', '%'.$term.'%')
-                ;
-            })
-        ;
+                    ->orWhere('email', 'like', '%'.$term.'%');
+            });
     }
 
     /**
@@ -419,7 +416,7 @@ class ReportedJob extends Model
      */
     public function getIsPendingAttribute(): bool
     {
-        return self::STATUS_PENDING === $this->status;
+        return $this->status === self::STATUS_PENDING;
     }
 
     /**
@@ -483,7 +480,7 @@ class ReportedJob extends Model
      */
     public function isPending(): bool
     {
-        return self::STATUS_PENDING === $this->status;
+        return $this->status === self::STATUS_PENDING;
     }
 
     /**

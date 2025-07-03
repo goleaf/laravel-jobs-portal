@@ -15,25 +15,25 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * SocialAccount Model - Enhanced with Enhanced patterns.
  *
- * @property int         $id
- * @property int         $user_id
- * @property string      $provider
- * @property string      $provider_id
+ * @property int $id
+ * @property int $user_id
+ * @property string $provider
+ * @property string $provider_id
  * @property null|string $name
  * @property null|string $email
  * @property null|string $avatar
- * @property null|array  $provider_data
- * @property bool        $is_active
+ * @property null|array $provider_data
+ * @property bool $is_active
  * @property null|Carbon $last_used_at
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|Carbon $deleted_at
- * @property User        $user
- * @property string      $provider_label
- * @property string      $provider_icon
- * @property bool        $is_recent
- * @property bool        $has_avatar
- * @property bool        $is_verified
+ * @property User $user
+ * @property string $provider_label
+ * @property string $provider_icon
+ * @property bool $is_recent
+ * @property bool $has_avatar
+ * @property bool $is_verified
  *
  * Enhanced Enhanced Scopes:
  *
@@ -62,8 +62,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class SocialAccount extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     /**
      * Provider constants.
@@ -137,8 +137,7 @@ class SocialAccount extends Model
             ->logOnly(['provider', 'is_active', 'last_used_at'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn (string $eventName) => "Social account has been {$eventName}")
-        ;
+            ->setDescriptionForEvent(fn (string $eventName) => "Social account has been {$eventName}");
     }
 
     // =============================================
@@ -309,10 +308,8 @@ class SocialAccount extends Model
                 ->orWhereHas('user', function ($userQuery) use ($term) {
                     $userQuery->where('first_name', 'like', '%'.$term.'%')
                         ->orWhere('last_name', 'like', '%'.$term.'%')
-                        ->orWhere('email', 'like', '%'.$term.'%')
-                    ;
-                })
-            ;
+                        ->orWhere('email', 'like', '%'.$term.'%');
+                });
         });
     }
 
@@ -344,8 +341,7 @@ class SocialAccount extends Model
         return $query->select('provider')
             ->selectRaw('COUNT(*) as count')
             ->groupBy('provider')
-            ->orderByDesc('count')
-        ;
+            ->orderByDesc('count');
     }
 
     // =============================================
@@ -395,7 +391,7 @@ class SocialAccount extends Model
      */
     public function getHasAvatarAttribute(): bool
     {
-        return !empty($this->avatar);
+        return ! empty($this->avatar);
     }
 
     /**
@@ -403,7 +399,7 @@ class SocialAccount extends Model
      */
     public function getIsVerifiedAttribute(): bool
     {
-        return !empty($this->email);
+        return ! empty($this->email);
     }
 
     // =============================================
@@ -463,8 +459,7 @@ class SocialAccount extends Model
             return self::selectRaw('provider, COUNT(*) as count')
                 ->groupBy('provider')
                 ->pluck('count', 'provider')
-                ->toArray()
-            ;
+                ->toArray();
         });
     }
 

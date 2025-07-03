@@ -11,7 +11,7 @@ use Illuminate\Validation\Rule;
 
 /**
  * Universal Unique Value API Controller
- * 
+ *
  * Provides REST API endpoints for generating unique values
  * using the Laravel Unique Values package integration.
  */
@@ -200,7 +200,7 @@ class UniversalUniqueValueController extends Controller
             $title = $request->input('title');
             $scope = $request->input('scope', 'general-slug');
             $subjectId = $request->input('subject_id');
-            
+
             $slug = $this->uniqueValueService->generateUniqueSlug($title, $scope, $subjectId);
 
             return response()->json([
@@ -229,8 +229,8 @@ class UniversalUniqueValueController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'type' => ['required', 'string', Rule::in([
-                'job-reference', 'application-code', 'candidate-code', 
-                'company-code', 'invoice-number', 'order-reference'
+                'job-reference', 'application-code', 'candidate-code',
+                'company-code', 'invoice-number', 'order-reference',
             ])],
             'subject_ids' => 'required|array|min:1|max:50',
             'subject_ids.*' => 'integer|min:1',
@@ -247,7 +247,7 @@ class UniversalUniqueValueController extends Controller
         try {
             $type = $request->input('type');
             $subjectIds = $request->input('subject_ids');
-            
+
             $results = $this->uniqueValueService->generateBatch($type, $subjectIds);
 
             return response()->json([
@@ -257,7 +257,7 @@ class UniversalUniqueValueController extends Controller
                     'results' => $results,
                     'total_requested' => count($subjectIds),
                     'total_generated' => count(array_filter($results)),
-                    'failed_generations' => array_keys(array_filter($results, fn($v) => $v === null)),
+                    'failed_generations' => array_keys(array_filter($results, fn ($v) => $v === null)),
                 ],
                 'message' => 'Batch generation completed',
             ]);
@@ -317,7 +317,7 @@ class UniversalUniqueValueController extends Controller
             $pattern = $request->input('pattern');
             $subjectId = $request->input('subject_id');
             $maxAttempts = $request->input('max_attempts', 3);
-            
+
             $generator = function (int $attempt) use ($pattern): string {
                 return str_replace(['{attempt}', '{counter}'], $attempt, $pattern);
             };
@@ -348,4 +348,4 @@ class UniversalUniqueValueController extends Controller
             ], 500);
         }
     }
-} 
+}

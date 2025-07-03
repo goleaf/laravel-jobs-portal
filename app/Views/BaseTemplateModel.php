@@ -2,12 +2,12 @@
 
 namespace App\Views;
 
-use Illuminate\Support\Collection;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 
 /**
  * Enhanced Base Template Model for Laravel Job Portal
- * 
+ *
  * Based on Habr article patterns for model-oriented templating
  * Since we're using a simplified approach without full Prosopo Views integration,
  * we'll create our own base class with similar functionality
@@ -22,11 +22,11 @@ abstract class BaseTemplateModel
         if ($date instanceof Carbon) {
             return $date->format($format);
         }
-        
+
         if (is_string($date)) {
             return Carbon::parse($date)->format($format);
         }
-        
+
         return '';
     }
 
@@ -38,11 +38,11 @@ abstract class BaseTemplateModel
         if ($date instanceof Carbon) {
             return $date->diffForHumans();
         }
-        
+
         if (is_string($date)) {
             return Carbon::parse($date)->diffForHumans();
         }
-        
+
         return '';
     }
 
@@ -51,7 +51,7 @@ abstract class BaseTemplateModel
      */
     public function formatCurrency($amount, string $currency = 'USD'): string
     {
-        return number_format((float)$amount, 2) . ' ' . $currency;
+        return number_format((float) $amount, 2).' '.$currency;
     }
 
     /**
@@ -59,8 +59,8 @@ abstract class BaseTemplateModel
      */
     public function truncate(string $text, int $length = 100): string
     {
-        return strlen($text) > $length 
-            ? substr($text, 0, $length) . '...' 
+        return strlen($text) > $length
+            ? substr($text, 0, $length).'...'
             : $text;
     }
 
@@ -72,7 +72,7 @@ abstract class BaseTemplateModel
         if ($collection instanceof Collection) {
             return $collection->toArray();
         }
-        
+
         return is_array($collection) ? $collection : [];
     }
 
@@ -141,7 +141,7 @@ abstract class BaseTemplateModel
         return [
             'title' => $title ?: $this->setting('site_title', 'Laravel Job Portal'),
             'description' => $description ?: $this->setting('site_description', 'Professional job portal'),
-            'keywords' => !empty($keywords) ? implode(', ', $keywords) : $this->setting('meta_keywords', ''),
+            'keywords' => ! empty($keywords) ? implode(', ', $keywords) : $this->setting('meta_keywords', ''),
         ];
     }
 
@@ -151,9 +151,9 @@ abstract class BaseTemplateModel
     public function breadcrumb(array $items = []): array
     {
         $breadcrumb = [
-            ['title' => 'Home', 'url' => route('home')]
+            ['title' => 'Home', 'url' => route('home')],
         ];
-        
+
         return array_merge($breadcrumb, $items);
     }
 
@@ -162,7 +162,7 @@ abstract class BaseTemplateModel
      */
     public function formatNumber($number, int $decimals = 0): string
     {
-        return number_format((float)$number, $decimals);
+        return number_format((float) $number, $decimals);
     }
 
     /**
@@ -178,7 +178,7 @@ abstract class BaseTemplateModel
             'rejected' => 'bg-red-100 text-red-800',
             'draft' => 'bg-purple-100 text-purple-800',
         ];
-        
+
         return $badges[strtolower($status)] ?? $badges['inactive'];
     }
 
@@ -197,13 +197,13 @@ abstract class BaseTemplateModel
     {
         $reflection = new \ReflectionClass($this);
         $properties = $reflection->getProperties(\ReflectionProperty::IS_PUBLIC);
-        
+
         $data = [];
         foreach ($properties as $property) {
             $name = $property->getName();
             $data[$name] = $this->$name ?? null;
         }
-        
+
         return $data;
     }
-} 
+}

@@ -41,9 +41,9 @@ return new class extends Migration
     {
         Schema::table('header_sliders', function (Blueprint $table) {
             $table->dropColumn([
-                'title', 'sub_title', 'description', 'button_text', 'button_url', 
-                'image_url', 'is_featured', 'sort_order', 'target', 'css_class', 
-                'metadata', 'published_at', 'expires_at'
+                'title', 'sub_title', 'description', 'button_text', 'button_url',
+                'image_url', 'is_featured', 'sort_order', 'target', 'css_class',
+                'metadata', 'published_at', 'expires_at',
             ]);
         });
 
@@ -51,4 +51,4 @@ return new class extends Migration
             $table->dropSoftDeletes();
         });
     }
-}; 
+};

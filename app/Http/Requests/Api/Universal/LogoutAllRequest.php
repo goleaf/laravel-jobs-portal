@@ -14,7 +14,7 @@ class LogoutAllRequest extends FormRequest
     public function authorize(): bool
     {
         // User must be authenticated to revoke all their tokens
-        return null !== $this->user();
+        return $this->user() !== null;
     }
 
     /**

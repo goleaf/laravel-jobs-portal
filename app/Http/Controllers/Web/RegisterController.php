@@ -45,7 +45,7 @@ class RegisterController extends AppBaseController
     {
         $input = $request->all();
         $this->webRegisterRepository->store($input);
-        $userType = (1 == $input['type']) ? __('messages.notification_settings.candidate') : __('messages.company.employer');
+        $userType = ($input['type'] == 1) ? __('messages.notification_settings.candidate') : __('messages.company.employer');
         \Flash::success(__('messages.flash.register_success_mail_active'));
 
         return $this->sendSuccess("{$userType} ".__('messages.flash.registration_done'));

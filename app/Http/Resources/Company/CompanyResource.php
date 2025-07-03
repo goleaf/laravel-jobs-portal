@@ -119,7 +119,7 @@ class CompanyResource extends JsonResource
             // User Context
             'user_context' => [
                 'can_edit' => $isOwner || $isAdmin,
-                'can_follow' => $user && !$isOwner,
+                'can_follow' => $user && ! $isOwner,
                 'is_following' => $user ? $this->isFollowedBy($user) : false,
                 'can_contact' => $this->is_active && $this->email,
             ],

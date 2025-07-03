@@ -71,7 +71,7 @@ class CreateCompanyRequest extends FormRequest
                 function ($attribute, $value, $fail) {
                     if ($value && $this->country_id) {
                         $state = State::find($value);
-                        if (!$state || $state->country_id != $this->country_id) {
+                        if (! $state || $state->country_id != $this->country_id) {
                             $fail(__('companies.validation.state_country_mismatch'));
                         }
                     }
@@ -84,7 +84,7 @@ class CreateCompanyRequest extends FormRequest
                 function ($attribute, $value, $fail) {
                     if ($value && $this->state_id) {
                         $city = City::find($value);
-                        if (!$city || $city->state_id != $this->state_id) {
+                        if (! $city || $city->state_id != $this->state_id) {
                             $fail(__('companies.validation.city_state_mismatch'));
                         }
                     }
@@ -396,7 +396,7 @@ class CreateCompanyRequest extends FormRequest
         $content = strtolower(($this->name ?? '').' '.($this->details ?? '').' '.($this->website ?? ''));
 
         foreach ($suspiciousPatterns as $pattern) {
-            if (false !== strpos($content, $pattern)) {
+            if (strpos($content, $pattern) !== false) {
                 return true;
             }
         }

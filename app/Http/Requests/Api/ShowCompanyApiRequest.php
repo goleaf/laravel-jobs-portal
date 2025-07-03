@@ -18,7 +18,7 @@ class ShowCompanyApiRequest extends FormRequest
     public function authorize(): bool
     {
         // Enhanced Pattern: Enhanced authorization with null checks
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
 
@@ -151,7 +151,7 @@ class ShowCompanyApiRequest extends FormRequest
         $content = strtolower(($this->name ?? '').' '.($this->description ?? ''));
 
         foreach ($suspiciousPatterns as $pattern) {
-            if (false !== strpos($content, $pattern)) {
+            if (strpos($content, $pattern) !== false) {
                 return true;
             }
         }

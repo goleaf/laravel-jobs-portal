@@ -6,18 +6,19 @@ use App\Data\SettingsManagement\ModelSettingsData;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use LumoSolutions\Actionable\Traits\IsRunnable;
 use LumoSolutions\Actionable\Traits\IsDispatchable;
+use LumoSolutions\Actionable\Traits\IsRunnable;
 
 /**
  * Get Model Settings Action
- * 
+ *
  * Comprehensive action for retrieving model settings with intelligent caching,
  * performance optimization, and flexible retrieval options.
  */
 class GetModelSettings
 {
-    use IsRunnable, IsDispatchable;
+    use IsDispatchable;
+    use IsRunnable;
 
     /**
      * Execute the settings retrieval action
@@ -40,6 +41,7 @@ class GetModelSettings
                 $cachedResult = Cache::get($cacheKey);
                 if ($cachedResult) {
                     $this->logCacheHit($settingsData, $cacheKey);
+
                     return $this->enhanceResult($cachedResult, $settingsData, true);
                 }
             }
@@ -79,7 +81,7 @@ class GetModelSettings
             throw new \InvalidArgumentException('Model type is required');
         }
 
-        if (!class_exists($settingsData->modelType)) {
+        if (! class_exists($settingsData->modelType)) {
             throw new \InvalidArgumentException("Model class {$settingsData->modelType} does not exist");
         }
 
@@ -95,13 +97,13 @@ class GetModelSettings
     {
         $model = $modelType::find($modelId);
 
-        if (!$model) {
+        if (! $model) {
             throw new \Illuminate\Database\Eloquent\ModelNotFoundException(
                 "Model {$modelType} with ID {$modelId} not found"
             );
         }
 
-        if (!method_exists($model, 'settings')) {
+        if (! method_exists($model, 'settings')) {
             throw new \InvalidArgumentException("Model {$modelType} does not have settings capability");
         }
 
@@ -117,7 +119,7 @@ class GetModelSettings
             'model_settings',
             class_basename($settingsData->modelType),
             $settingsData->modelId,
-            'get'
+            'get',
         ];
 
         // Add specific keys to cache key if only requesting certain settings
@@ -175,7 +177,7 @@ class GetModelSettings
         // Add default settings if requested
         if (property_exists($model, 'defaultSettings')) {
             $result['default_settings'] = $model->defaultSettings;
-            $result['has_custom_settings'] = !empty($settings);
+            $result['has_custom_settings'] = ! empty($settings);
         }
 
         // Add settings metadata
@@ -241,7 +243,7 @@ class GetModelSettings
      */
     protected function checkSettingsCompleteness(Model $model, array $settings): bool
     {
-        if (!property_exists($model, 'defaultSettings')) {
+        if (! property_exists($model, 'defaultSettings')) {
             return true; // No defaults to compare against
         }
 
@@ -249,7 +251,7 @@ class GetModelSettings
         $currentFlat = $this->flattenArray($settings);
 
         foreach ($defaultFlat as $key => $defaultValue) {
-            if (!array_key_exists($key, $currentFlat)) {
+            if (! array_key_exists($key, $currentFlat)) {
                 return false; // Missing a default setting
             }
         }
@@ -339,7 +341,7 @@ class GetModelSettings
         $enhanced['performance'] = [
             'cache_hit' => $fromCache,
             'retrieval_method' => $fromCache ? 'cache' : 'database',
-            'specific_keys_requested' => !empty($settingsData->settingsKeys),
+            'specific_keys_requested' => ! empty($settingsData->settingsKeys),
             'keys_count' => count($settingsData->settingsKeys ?? []),
         ];
 
@@ -388,17 +390,17 @@ class GetModelSettings
 
     protected function hasNotificationPreferences(array $settings): bool
     {
-        return isset($settings['notifications']) && !empty($settings['notifications']);
+        return isset($settings['notifications']) && ! empty($settings['notifications']);
     }
 
     protected function hasBrandingConfiguration(array $settings): bool
     {
-        return isset($settings['branding']) && !empty($settings['branding']);
+        return isset($settings['branding']) && ! empty($settings['branding']);
     }
 
     protected function hasRecruitmentPreferences(array $settings): bool
     {
-        return isset($settings['recruitment']) && !empty($settings['recruitment']);
+        return isset($settings['recruitment']) && ! empty($settings['recruitment']);
     }
 
     protected function countFeatureFlags(array $settings): int
@@ -408,12 +410,12 @@ class GetModelSettings
 
     protected function isSeoOptimized(array $settings): bool
     {
-        return isset($settings['seo']) && !empty($settings['seo']);
+        return isset($settings['seo']) && ! empty($settings['seo']);
     }
 
     protected function hasWorkflowConfiguration(array $settings): bool
     {
-        return isset($settings['workflow']) && !empty($settings['workflow']);
+        return isset($settings['workflow']) && ! empty($settings['workflow']);
     }
 
     protected function hasAnalyticsEnabled(array $settings): bool
@@ -423,12 +425,12 @@ class GetModelSettings
 
     protected function hasJobPreferences(array $settings): bool
     {
-        return isset($settings['job_preferences']) && !empty($settings['job_preferences']);
+        return isset($settings['job_preferences']) && ! empty($settings['job_preferences']);
     }
 
     protected function hasPrivacySettings(array $settings): bool
     {
-        return isset($settings['privacy']) && !empty($settings['privacy']);
+        return isset($settings['privacy']) && ! empty($settings['privacy']);
     }
 
     protected function getProfileVisibility(array $settings): string
@@ -444,9 +446,9 @@ class GetModelSettings
         $flattened = [];
 
         foreach ($array as $key => $value) {
-            $newKey = $prefix === '' ? $key : $prefix . '.' . $key;
+            $newKey = $prefix === '' ? $key : $prefix.'.'.$key;
 
-            if (is_array($value) && !empty($value)) {
+            if (is_array($value) && ! empty($value)) {
                 $flattened = array_merge($flattened, $this->flattenArray($value, $newKey));
             } else {
                 $flattened[$newKey] = $value;
@@ -465,7 +467,7 @@ class GetModelSettings
         $current = &$array;
 
         foreach ($keys as $keyPart) {
-            if (!isset($current[$keyPart]) || !is_array($current[$keyPart])) {
+            if (! isset($current[$keyPart]) || ! is_array($current[$keyPart])) {
                 $current[$keyPart] = [];
             }
             $current = &$current[$keyPart];
@@ -473,4 +475,4 @@ class GetModelSettings
 
         $current = $value;
     }
-} 
+}

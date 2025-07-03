@@ -32,7 +32,7 @@ class SubscriptionRepository
             DB::beginTransaction();
 
             /** @var Subscription $userSubscription */
-            $userSubscription = new Subscription();
+            $userSubscription = new Subscription;
             $userSubscription->fill([
                 'user_id' => $user->id,
                 'name' => $plan->name,
@@ -70,7 +70,7 @@ class SubscriptionRepository
 
         $subscriptionId = $sessionData->subscription;
         $envSetting = getEnvSetting();
-        if (!empty($envSetting['stripe_secret'])) {
+        if (! empty($envSetting['stripe_secret'])) {
             $stripe = new StripeClient(
                 $envSetting['stripe_secret']
             );
@@ -111,8 +111,7 @@ class SubscriptionRepository
         $existingSubscription = Subscription::NotOnTrial()
             ->whereUserId($user->id)
             ->active()
-            ->first()
-        ;
+            ->first();
 
         // end trial subscription
         Subscription::whereUserId($user->id)->where(function (Builder $query) {
@@ -121,8 +120,7 @@ class SubscriptionRepository
             ->update([
                 'ends_at' => Carbon::now(),
                 'trial_ends_at' => Carbon::now(),
-            ])
-        ;
+            ]);
 
         /** @var Subscription $tsSubscription */
         $tsSubscription = Subscription::create([
@@ -137,7 +135,7 @@ class SubscriptionRepository
         ]);
 
         $adminId = User::role('Admin')->first()->id;
-        1 == NotificationSetting::where('key', 'EMPLOYER_PURCHASE_PLAN')->first()->value
+        NotificationSetting::where('key', 'EMPLOYER_PURCHASE_PLAN')->first()->value == 1
                  ? addNotification([
                      Notification::EMPLOYER_PURCHASE_PLAN,
                      $adminId,
@@ -147,7 +145,7 @@ class SubscriptionRepository
 
         $price = $subscription->items->data[0]->price;
         $invoiceId = $subscription->latest_invoice;
-        $transaction = (new Transaction())->fill([
+        $transaction = (new Transaction)->fill([
             'user_id' => $tsSubscription->user_id,
             'owner_id' => $tsSubscription->id,
             'owner_type' => Subscription::class,
@@ -167,7 +165,7 @@ class SubscriptionRepository
         // if another account subscription already running than cancel it
         if ($existingSubscription && $existingSubscription->user_id === $user->id) {
             // immediately cancel old subscription from strip
-            if ((!$existingSubscription->paypal_payment_id) && !empty($existingSubscription->stripe_id)) {
+            if ((! $existingSubscription->paypal_payment_id) && ! empty($existingSubscription->stripe_id)) {
                 $subscription = \Stripe\Subscription::retrieve(
                     $existingSubscription->stripe_id
                 );
@@ -221,10 +219,9 @@ class SubscriptionRepository
         $subscription = Subscription::whereUserId($userId)
             ->active()
             ->latest()
-            ->first()
-        ;
+            ->first();
 
-        if (!$subscription) {
+        if (! $subscription) {
             return false;
         }
 
@@ -264,7 +261,7 @@ class SubscriptionRepository
 
                 $price = $input['data']['object']['items']['data'][0]['price'];
                 $invoiceId = $input['data']['object']['latest_invoice'];
-                $transaction = (new Transaction())->fill([
+                $transaction = (new Transaction)->fill([
                     'user_id' => $subscription->user_id,
                     'subscription_id' => $subscription->id,
                     'amount' => intval($price['unit_amount'] / 100),

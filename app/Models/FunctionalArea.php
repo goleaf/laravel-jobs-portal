@@ -16,19 +16,19 @@ use Spatie\Activitylog\Traits\LogsActivity;
  *
  * @version July 4, 2020, 7:26 am UTC
  *
- * @property int                    $id
- * @property string                 $name
- * @property null|string            $description
- * @property bool                   $is_default
- * @property bool                   $is_active
- * @property null|Carbon            $created_at
- * @property null|Carbon            $updated_at
- * @property Collection|Job[]       $jobs
- * @property null|int               $jobs_count
+ * @property int $id
+ * @property string $name
+ * @property null|string $description
+ * @property bool $is_default
+ * @property bool $is_active
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property Collection|Job[] $jobs
+ * @property null|int $jobs_count
  * @property Candidate[]|Collection $candidates
- * @property null|int               $candidates_count
- * @property mixed                  $usage_count
- * @property mixed                  $formatted_usage_stats
+ * @property null|int $candidates_count
+ * @property mixed $usage_count
+ * @property mixed $formatted_usage_stats
  *
  * @method static Builder|FunctionalArea newModelQuery()
  * @method static Builder|FunctionalArea newQuery()
@@ -112,8 +112,7 @@ class FunctionalArea extends Model
         return LogOptions::defaults()
             ->logOnly(['name', 'description', 'is_active', 'is_default'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -213,8 +212,7 @@ class FunctionalArea extends Model
     public function scopeSearch(Builder $query, string $term): Builder
     {
         return $query->where('name', 'like', "%{$term}%")
-            ->orWhere('description', 'like', "%{$term}%")
-        ;
+            ->orWhere('description', 'like', "%{$term}%");
     }
 
     /**
@@ -240,8 +238,7 @@ class FunctionalArea extends Model
     {
         return $query->withCount('jobs')
             ->orderBy('jobs_count', 'desc')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     /**
@@ -267,8 +264,7 @@ class FunctionalArea extends Model
     {
         return $query->where('name', 'like', '%technology%')
             ->orWhere('name', 'like', '%IT%')
-            ->orWhere('name', 'like', '%software%')
-        ;
+            ->orWhere('name', 'like', '%software%');
     }
 
     /**
@@ -278,8 +274,7 @@ class FunctionalArea extends Model
     {
         return $query->where('name', 'like', '%business%')
             ->orWhere('name', 'like', '%management%')
-            ->orWhere('name', 'like', '%admin%')
-        ;
+            ->orWhere('name', 'like', '%admin%');
     }
 
     /**
@@ -296,8 +291,7 @@ class FunctionalArea extends Model
             },
         ])
             ->orderByDesc('jobs_count')
-            ->orderByDesc('candidates_count')
-        ;
+            ->orderByDesc('candidates_count');
     }
 
     /**
@@ -306,8 +300,7 @@ class FunctionalArea extends Model
     public function scopeMinUsage(Builder $query, int $count = 1): Builder
     {
         return $query->withCount(['jobs', 'candidates'])
-            ->havingRaw('(jobs_count + candidates_count) >= ?', [$count])
-        ;
+            ->havingRaw('(jobs_count + candidates_count) >= ?', [$count]);
     }
 
     /**
@@ -317,8 +310,7 @@ class FunctionalArea extends Model
     {
         return $query->withCount('jobs')
             ->having('jobs_count', '>=', $minJobs)
-            ->orderByDesc('jobs_count')
-        ;
+            ->orderByDesc('jobs_count');
     }
 
     /**
@@ -340,8 +332,7 @@ class FunctionalArea extends Model
                 ->withCount('jobs')
                 ->orderByDesc('jobs_count')
                 ->limit($limit)
-                ->get()
-            ;
+                ->get();
         });
     }
 

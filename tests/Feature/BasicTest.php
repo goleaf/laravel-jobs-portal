@@ -18,7 +18,7 @@ class BasicTest extends TestCase
     use WithFaker;
 
     /** @test */
-    public function publicCanViewHomepage()
+    public function public_can_view_homepage()
     {
         $response = $this->get('/');
 
@@ -26,7 +26,7 @@ class BasicTest extends TestCase
     }
 
     /** @test */
-    public function publicCanViewLoginPage()
+    public function public_can_view_login_page()
     {
         $response = $this->get('/login');
 
@@ -34,7 +34,7 @@ class BasicTest extends TestCase
     }
 
     /** @test */
-    public function userCanLoginWithValidCredentials()
+    public function user_can_login_with_valid_credentials()
     {
         $user = User::factory()->create([
             'email' => 'test@example.com',

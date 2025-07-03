@@ -65,11 +65,10 @@ class RealTimeTrackingTest extends TestCase
     }
 
     /** @test */
-    public function authenticatedUserCanAccessRealtimeDashboard()
+    public function authenticated_user_can_access_realtime_dashboard()
     {
         $response = $this->actingAs($this->candidate)
-            ->get('/realtime/dashboard')
-        ;
+            ->get('/realtime/dashboard');
 
         $response->assertStatus(200);
         $response->assertJsonStructure([
@@ -81,18 +80,17 @@ class RealTimeTrackingTest extends TestCase
     }
 
     /** @test */
-    public function unauthenticatedUserCannotAccessRealtimeDashboard()
+    public function unauthenticated_user_cannot_access_realtime_dashboard()
     {
         $response = $this->get('/realtime/dashboard');
         $response->assertStatus(302); // Redirect to login
     }
 
     /** @test */
-    public function candidateCanGetTheirStats()
+    public function candidate_can_get_their_stats()
     {
         $response = $this->actingAs($this->candidate)
-            ->get('/realtime/dashboard')
-        ;
+            ->get('/realtime/dashboard');
 
         $response->assertStatus(200);
 
@@ -104,11 +102,10 @@ class RealTimeTrackingTest extends TestCase
     }
 
     /** @test */
-    public function employerCanGetTheirStats()
+    public function employer_can_get_their_stats()
     {
         $response = $this->actingAs($this->employer)
-            ->get('/realtime/dashboard')
-        ;
+            ->get('/realtime/dashboard');
 
         $response->assertStatus(200);
 
@@ -120,7 +117,7 @@ class RealTimeTrackingTest extends TestCase
     }
 
     /** @test */
-    public function employerCanUpdateApplicationStatus()
+    public function employer_can_update_application_status()
     {
         Event::fake();
 
@@ -128,8 +125,7 @@ class RealTimeTrackingTest extends TestCase
             ->postJson("/realtime/applications/{$this->application->id}/status", [
                 'status' => 'reviewed',
                 'notes' => 'Application has been reviewed',
-            ])
-        ;
+            ]);
 
         $response->assertStatus(200);
         $response->assertJson([
@@ -145,19 +141,18 @@ class RealTimeTrackingTest extends TestCase
         // Verify the event was dispatched
         Event::assertDispatched(JobApplicationStatusChanged::class, function ($event) {
             return $event->jobApplication->id === $this->application->id
-                && 'pending' === $event->oldStatus
-                && 'reviewed' === $event->newStatus;
+                && $event->oldStatus === 'pending'
+                && $event->newStatus === 'reviewed';
         });
     }
 
     /** @test */
-    public function candidateCanOnlyWithdrawTheirOwnApplication()
+    public function candidate_can_only_withdraw_their_own_application()
     {
         $response = $this->actingAs($this->candidate)
             ->postJson("/realtime/applications/{$this->application->id}/status", [
                 'status' => 'withdrawn',
-            ])
-        ;
+            ]);
 
         $response->assertStatus(200);
 
@@ -166,20 +161,19 @@ class RealTimeTrackingTest extends TestCase
     }
 
     /** @test */
-    public function candidateCannotUpdateApplicationToOtherStatuses()
+    public function candidate_cannot_update_application_to_other_statuses()
     {
         $response = $this->actingAs($this->candidate)
             ->postJson("/realtime/applications/{$this->application->id}/status", [
                 'status' => 'hired',
-            ])
-        ;
+            ]);
 
         $response->assertStatus(403);
         $response->assertJson(['error' => 'Unauthorized to update this status']);
     }
 
     /** @test */
-    public function unauthorizedUserCannotUpdateApplicationStatus()
+    public function unauthorized_user_cannot_update_application_status()
     {
         $otherUser = User::create([
             'first_name' => 'Other',
@@ -192,18 +186,16 @@ class RealTimeTrackingTest extends TestCase
         $response = $this->actingAs($otherUser)
             ->postJson("/realtime/applications/{$this->application->id}/status", [
                 'status' => 'reviewed',
-            ])
-        ;
+            ]);
 
         $response->assertStatus(403);
     }
 
     /** @test */
-    public function websocketAuthReturnsCorrectChannelsForCandidate()
+    public function websocket_auth_returns_correct_channels_for_candidate()
     {
         $response = $this->actingAs($this->candidate)
-            ->get('/realtime/websocket-auth')
-        ;
+            ->get('/realtime/websocket-auth');
 
         $response->assertStatus(200);
 
@@ -213,11 +205,10 @@ class RealTimeTrackingTest extends TestCase
     }
 
     /** @test */
-    public function websocketAuthReturnsCorrectChannelsForEmployer()
+    public function websocket_auth_returns_correct_channels_for_employer()
     {
         $response = $this->actingAs($this->employer)
-            ->get('/realtime/websocket-auth')
-        ;
+            ->get('/realtime/websocket-auth');
 
         $response->assertStatus(200);
 
@@ -227,11 +218,10 @@ class RealTimeTrackingTest extends TestCase
     }
 
     /** @test */
-    public function activityFeedReturnsCandidateApplications()
+    public function activity_feed_returns_candidate_applications()
     {
         $response = $this->actingAs($this->candidate)
-            ->get('/realtime/activity')
-        ;
+            ->get('/realtime/activity');
 
         $response->assertStatus(200);
 
@@ -247,11 +237,10 @@ class RealTimeTrackingTest extends TestCase
     }
 
     /** @test */
-    public function activityFeedReturnsEmployerApplications()
+    public function activity_feed_returns_employer_applications()
     {
         $response = $this->actingAs($this->employer)
-            ->get('/realtime/activity')
-        ;
+            ->get('/realtime/activity');
 
         $response->assertStatus(200);
 
@@ -261,11 +250,10 @@ class RealTimeTrackingTest extends TestCase
     }
 
     /** @test */
-    public function realTimeStatsReturnsCurrentMetrics()
+    public function real_time_stats_returns_current_metrics()
     {
         $response = $this->actingAs($this->candidate)
-            ->get('/realtime/stats')
-        ;
+            ->get('/realtime/stats');
 
         $response->assertStatus(200);
 
@@ -280,7 +268,7 @@ class RealTimeTrackingTest extends TestCase
     }
 
     /** @test */
-    public function jobApplicationStatusChangedEventHasCorrectData()
+    public function job_application_status_changed_event_has_correct_data()
     {
         $event = new JobApplicationStatusChanged($this->application, 'pending', 'reviewed');
 
@@ -291,7 +279,7 @@ class RealTimeTrackingTest extends TestCase
     }
 
     /** @test */
-    public function eventBroadcastDataContainsRequiredFields()
+    public function event_broadcast_data_contains_required_fields()
     {
         $event = new JobApplicationStatusChanged($this->application, 'pending', 'shortlisted');
         $broadcastData = $event->broadcastWith();
@@ -314,7 +302,7 @@ class RealTimeTrackingTest extends TestCase
     }
 
     /** @test */
-    public function eventBroadcastsOnCorrectChannels()
+    public function event_broadcasts_on_correct_channels()
     {
         $event = new JobApplicationStatusChanged($this->application, 'pending', 'reviewed');
         $channels = $event->broadcastOn();
@@ -330,35 +318,32 @@ class RealTimeTrackingTest extends TestCase
     }
 
     /** @test */
-    public function statusValidationRejectsInvalidStatuses()
+    public function status_validation_rejects_invalid_statuses()
     {
         $response = $this->actingAs($this->employer)
             ->postJson("/realtime/applications/{$this->application->id}/status", [
                 'status' => 'invalid_status',
-            ])
-        ;
+            ]);
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors(['status']);
     }
 
     /** @test */
-    public function dashboardPageLoadsSuccessfully()
+    public function dashboard_page_loads_successfully()
     {
         $response = $this->actingAs($this->candidate)
-            ->get('/dashboard/realtime')
-        ;
+            ->get('/dashboard/realtime');
 
         $response->assertStatus(200);
         $response->assertViewIs('dashboard.realtime');
     }
 
     /** @test */
-    public function systemHealthEndpointReturnsStatus()
+    public function system_health_endpoint_returns_status()
     {
         $response = $this->actingAs($this->candidate)
-            ->get('/realtime/dashboard')
-        ;
+            ->get('/realtime/dashboard');
 
         $response->assertStatus(200);
 

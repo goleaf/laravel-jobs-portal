@@ -10,7 +10,7 @@ class AuthenticateMiddleware
 {
     public function handle(Request $request, \Closure $next, string ...$guards): Response
     {
-        if (!Auth::guard($guards[0] ?? null)->check()) {
+        if (! Auth::guard($guards[0] ?? null)->check()) {
             if ($request->expectsJson()) {
                 return response()->json([
                     'error' => 'Unauthenticated',

@@ -43,8 +43,8 @@ class StoreCityRequest extends FormRequest
                 'regex:/^[\p{L}\p{N}\s\-\'\.]+$/u',
                 Rule::unique('cities', 'name')->where(function ($query) {
                     return $query->where('state_id', $this->state_id)
-                                 ->where('country_id', $this->country_id)
-                                 ->whereNull('deleted_at');
+                        ->where('country_id', $this->country_id)
+                        ->whereNull('deleted_at');
                 }),
             ],
 
@@ -55,7 +55,7 @@ class StoreCityRequest extends FormRequest
                 'min:1',
                 'exists:states,id',
                 function ($attribute, $value, $fail) {
-                    if (!$this->validateStateActive($value)) {
+                    if (! $this->validateStateActive($value)) {
                         $fail(__('validation.state_not_active'));
                     }
                 },
@@ -68,7 +68,7 @@ class StoreCityRequest extends FormRequest
                 'min:1',
                 'exists:countries,id',
                 function ($attribute, $value, $fail) {
-                    if (!$this->validateCountryStateMatch($value, $this->state_id)) {
+                    if (! $this->validateCountryStateMatch($value, $this->state_id)) {
                         $fail(__('validation.country_state_mismatch'));
                     }
                 },
@@ -90,7 +90,7 @@ class StoreCityRequest extends FormRequest
                 'numeric',
                 'between:-90,90',
                 function ($attribute, $value, $fail) {
-                    if ($value && $this->has('longitude') && !$this->validateCoordinates($value, $this->longitude)) {
+                    if ($value && $this->has('longitude') && ! $this->validateCoordinates($value, $this->longitude)) {
                         $fail(__('validation.invalid_coordinates'));
                     }
                 },
@@ -132,7 +132,7 @@ class StoreCityRequest extends FormRequest
                 'string',
                 'max:50',
                 function ($attribute, $value, $fail) {
-                    if ($value && !$this->validateTimezone($value)) {
+                    if ($value && ! $this->validateTimezone($value)) {
                         $fail(__('validation.invalid_timezone'));
                     }
                 },
@@ -179,7 +179,7 @@ class StoreCityRequest extends FormRequest
                 'sometimes',
                 'integer',
                 'min:1',
-                'max:' . date('Y'),
+                'max:'.date('Y'),
             ],
 
             // Status and settings
@@ -269,41 +269,41 @@ class StoreCityRequest extends FormRequest
             'name.required' => __('validation.required_field', ['field' => __('validation.attributes.city_name')]),
             'name.unique' => __('validation.city_name_unique'),
             'name.regex' => __('validation.city_name_format'),
-            
+
             'state_id.required' => __('validation.required_field', ['field' => __('validation.attributes.state')]),
             'state_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.state')]),
-            
+
             'country_id.required' => __('validation.required_field', ['field' => __('validation.attributes.country')]),
             'country_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.country')]),
-            
+
             'code.unique' => __('validation.unique_field', ['field' => __('validation.attributes.city_code')]),
             'code.regex' => __('validation.city_code_format'),
-            
+
             'latitude.between' => __('validation.latitude_range'),
             'longitude.between' => __('validation.longitude_range'),
             'longitude.required_with' => __('validation.longitude_required_with_latitude'),
-            
+
             'elevation.between' => __('validation.elevation_range'),
-            
+
             'population.min' => __('validation.min_value', ['attribute' => __('validation.attributes.population'), 'min' => 0]),
             'population.max' => __('validation.population_too_large'),
-            
+
             'area_km2.min' => __('validation.min_value', ['attribute' => __('validation.attributes.area'), 'min' => 0]),
-            
+
             'postal_code_pattern.regex' => __('validation.postal_code_pattern_format'),
             'area_code.regex' => __('validation.area_code_format'),
-            
+
             'economic_level.in' => __('validation.invalid_economic_level'),
             'municipality_type.in' => __('validation.invalid_municipality_type'),
-            
+
             'founded_year.min' => __('validation.min_value', ['attribute' => __('validation.attributes.founded_year'), 'min' => 1]),
             'founded_year.max' => __('validation.founded_year_future'),
-            
+
             'local_language.exists' => __('validation.exists', ['attribute' => __('validation.attributes.language')]),
             'currency_code.exists' => __('validation.exists', ['attribute' => __('validation.attributes.currency')]),
-            
+
             'image_url.url' => __('validation.valid_url', ['attribute' => __('validation.attributes.image_url')]),
-            
+
             'slug.unique' => __('validation.unique_field', ['field' => __('validation.attributes.slug')]),
             'slug.regex' => __('validation.slug_format'),
         ];
@@ -382,7 +382,7 @@ class StoreCityRequest extends FormRequest
         }
 
         // Generate slug if not provided
-        if (!$this->has('slug') && $this->has('name')) {
+        if (! $this->has('slug') && $this->has('name')) {
             $this->merge([
                 'slug' => \Str::slug($this->name),
             ]);
@@ -446,7 +446,7 @@ class StoreCityRequest extends FormRequest
      */
     private function validateCountryStateMatch($countryId, $stateId): bool
     {
-        if (!$stateId) {
+        if (! $stateId) {
             return true;
         }
 
@@ -480,7 +480,7 @@ class StoreCityRequest extends FormRequest
      */
     private function hasStateCapital(): bool
     {
-        if (!$this->has('state_id')) {
+        if (! $this->has('state_id')) {
             return false;
         }
 

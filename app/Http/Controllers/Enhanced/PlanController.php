@@ -169,7 +169,7 @@ class PlanController extends AppBaseController
     {
         try {
             // Handle default currency assignment
-            if (0 == $plan->salary_currency_id) {
+            if ($plan->salary_currency_id == 0) {
                 $defaultCurrency = SalaryCurrency::whereCurrencyName('USD US Dollar')->first();
                 if ($defaultCurrency) {
                     $plan->salary_currency_id = $defaultCurrency->id;
@@ -208,7 +208,7 @@ class PlanController extends AppBaseController
 
             $updatePlan = $this->planRepository->updatePlan($input, $plan);
 
-            if (!$updatePlan) {
+            if (! $updatePlan) {
                 DB::rollBack();
 
                 return $this->sendError(__('messages.flash.plan_cant_update'));
@@ -256,7 +256,7 @@ class PlanController extends AppBaseController
             }
 
             // Check if this is the only trial plan
-            if ($plan->is_trial_plan && 1 === Plan::trial()->count()) {
+            if ($plan->is_trial_plan && Plan::trial()->count() === 1) {
                 return $this->sendError('Cannot delete the only trial plan. Please create another trial plan first.');
             }
 
@@ -310,7 +310,7 @@ class PlanController extends AppBaseController
             DB::beginTransaction();
 
             // Ensure the plan is active
-            if (!$plan->is_active) {
+            if (! $plan->is_active) {
                 return $this->sendError('Cannot set inactive plan as trial plan');
             }
 
@@ -361,8 +361,7 @@ class PlanController extends AppBaseController
 
             $plans = Cache::remember($cacheKey, self::CACHE_TTL, function () use ($request) {
                 $query = Plan::select('id', 'name', 'price', 'salary_currency_id')
-                    ->with('currency:id,currency_name,currency_icon')
-                ;
+                    ->with('currency:id,currency_name,currency_icon');
 
                 if ($request->filled('search')) {
                     $query->search($request->get('search'));
@@ -428,10 +427,9 @@ class PlanController extends AppBaseController
                     $plansWithSubscriptions = Plan::whereIn('id', $planIds)
                         ->whereHas('activeSubscriptions')
                         ->pluck('name')
-                        ->toArray()
-                    ;
+                        ->toArray();
 
-                    if (!empty($plansWithSubscriptions)) {
+                    if (! empty($plansWithSubscriptions)) {
                         return $this->sendError('Cannot delete plans with active subscriptions: '.implode(', ', $plansWithSubscriptions));
                     }
 
@@ -500,7 +498,7 @@ class PlanController extends AppBaseController
 
             if ($request->filled('price_range')) {
                 $range = explode('-', $request->get('price_range'));
-                if (2 === count($range)) {
+                if (count($range) === 2) {
                     $query->priceRange($range[0], $range[1]);
                 }
             }
@@ -543,8 +541,7 @@ class PlanController extends AppBaseController
                 })
                 ->active()
                 ->alphabetical()
-                ->paginate(20)
-            ;
+                ->paginate(20);
 
             // Get plan statistics
             $statistics = $this->getPlanStatistics();
@@ -590,7 +587,7 @@ class PlanController extends AppBaseController
         $totalViews = $plan->views ?? 0; // Assuming you track plan views
         $totalSubscriptions = $plan->subscriptions()->count();
 
-        if (0 === $totalViews) {
+        if ($totalViews === 0) {
             return 0.0;
         }
 

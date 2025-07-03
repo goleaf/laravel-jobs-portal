@@ -3,31 +3,31 @@
 namespace App\Http\Requests\Communication;
 
 use App\Http\Requests\Foundation\AbstractBaseRequest;
-use App\Http\Requests\Foundation\Traits\SecurityValidationTrait;
+use App\Http\Requests\Foundation\Traits\AuditLoggingTrait;
 use App\Http\Requests\Foundation\Traits\MultilingualValidationTrait;
 use App\Http\Requests\Foundation\Traits\PerformanceOptimizationTrait;
-use App\Http\Requests\Foundation\Traits\AuditLoggingTrait;
+use App\Http\Requests\Foundation\Traits\SecurityValidationTrait;
 
 /**
  * Communication Request - Base class for communication validation
- * 
+ *
  * Handles validation for:
  * - Messaging and chat systems
  * - Email and notification management
  * - Content creation and publishing
  * - Communication workflow validation
  * - Multi-channel communication
- * 
- * @package App\Http\Requests\Communication
+ *
  * @version 1.0.0
+ *
  * @since 2024-12-28
  */
 abstract class CommunicationRequest extends AbstractBaseRequest
 {
-    use SecurityValidationTrait,
-        MultilingualValidationTrait,
-        PerformanceOptimizationTrait,
-        AuditLoggingTrait;
+    use AuditLoggingTrait;
+    use MultilingualValidationTrait;
+    use PerformanceOptimizationTrait;
+    use SecurityValidationTrait;
 
     /**
      * Security level for communication operations
@@ -51,7 +51,7 @@ abstract class CommunicationRequest extends AbstractBaseRequest
         'content_validation',
         'spam_detection',
         'message_security',
-        'notification_rules'
+        'notification_rules',
     ];
 
     /**
@@ -183,13 +183,13 @@ abstract class CommunicationRequest extends AbstractBaseRequest
 
         // Validate content for spam
         $this->validateSpamDetection($validator);
-        
+
         // Validate content formatting
         $this->validateContentFormatting($validator);
-        
+
         // Validate recipient accessibility
         $this->validateRecipientAccessibility($validator);
-        
+
         // Validate communication limits
         $this->validateCommunicationLimits($validator);
     }
@@ -203,14 +203,14 @@ abstract class CommunicationRequest extends AbstractBaseRequest
         $subject = $this->input('subject');
 
         if ($content || $subject) {
-            $text = ($subject ? $subject . ' ' : '') . ($content ? $content : '');
-            
+            $text = ($subject ? $subject.' ' : '').($content ? $content : '');
+
             if ($this->containsSpamPatterns($text)) {
                 $this->logSecurityEvent('spam_content_detected', [
                     'content_length' => strlen($text),
                     'spam_indicators' => $this->getSpamIndicators($text),
                 ]);
-                
+
                 $validator->errors()->add('content', __('validation.communication.spam_detected'));
             }
         }
@@ -222,13 +222,13 @@ abstract class CommunicationRequest extends AbstractBaseRequest
     protected function validateContentFormatting($validator): void
     {
         $content = $this->input('content');
-        
+
         if ($content) {
             // Check for excessive HTML tags
             if ($this->hasExcessiveHtml($content)) {
                 $validator->errors()->add('content', __('validation.communication.excessive_html'));
             }
-            
+
             // Check for malicious scripts
             if ($this->containsMaliciousScript($content)) {
                 $validator->errors()->add('content', __('validation.communication.malicious_script_detected'));
@@ -250,7 +250,7 @@ abstract class CommunicationRequest extends AbstractBaseRequest
     protected function validateCommunicationLimits($validator): void
     {
         $messageType = $this->input('message_type');
-        
+
         if ($messageType) {
             $limits = $this->getCommunicationLimits($messageType);
             $this->validateRateLimits($validator, $limits);
@@ -285,19 +285,19 @@ abstract class CommunicationRequest extends AbstractBaseRequest
     protected function getSpamIndicators(string $text): array
     {
         $indicators = [];
-        
+
         if (preg_match('/\b(free|win|winner)\b/i', $text)) {
             $indicators[] = 'promotional_keywords';
         }
-        
+
         if (preg_match('/[!]{3,}/', $text)) {
             $indicators[] = 'excessive_punctuation';
         }
-        
+
         if (preg_match('/\b[A-Z]{5,}/', $text)) {
             $indicators[] = 'excessive_capitals';
         }
-        
+
         return $indicators;
     }
 
@@ -308,7 +308,7 @@ abstract class CommunicationRequest extends AbstractBaseRequest
     {
         $htmlTagCount = preg_match_all('/<[^>]+>/', $content);
         $contentLength = strlen(strip_tags($content));
-        
+
         // If more than 30% of content is HTML tags
         return $htmlTagCount > 0 && ($htmlTagCount / strlen($content)) > 0.3;
     }
@@ -339,7 +339,7 @@ abstract class CommunicationRequest extends AbstractBaseRequest
      */
     protected function getCommunicationLimits(string $messageType): array
     {
-        return match($messageType) {
+        return match ($messageType) {
             'email' => ['daily' => 100, 'hourly' => 20],
             'sms' => ['daily' => 50, 'hourly' => 10],
             'push' => ['daily' => 200, 'hourly' => 50],
@@ -382,7 +382,7 @@ abstract class CommunicationRequest extends AbstractBaseRequest
     {
         // Allow safe HTML tags
         $allowedTags = '<p><br><strong><em><u><a><ul><ol><li><h1><h2><h3><h4><h5><h6>';
-        
+
         return strip_tags($content, $allowedTags);
     }
-} 
+}

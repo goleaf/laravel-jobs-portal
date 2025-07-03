@@ -43,4 +43,4 @@ class IndexJobCategoryRequest extends FormRequest
             'featured.boolean' => __('validation.boolean', ['attribute' => 'featured']),
         ];
     }
-} 
+}

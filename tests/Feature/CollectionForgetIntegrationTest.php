@@ -22,7 +22,7 @@ class CollectionForgetIntegrationTest extends BaseTestCase
     use RefreshDatabase;
 
     /** @test */
-    public function testCollectionForgetUtilitySanitizesUserInput()
+    public function test_collection_forget_utility_sanitizes_user_input()
     {
         $input = [
             'name' => 'Test Company',
@@ -51,7 +51,7 @@ class CollectionForgetIntegrationTest extends BaseTestCase
     }
 
     /** @test */
-    public function testJobSearchServiceProcessesFilters()
+    public function test_job_search_service_processes_filters()
     {
         $request = Request::create('/search', 'GET', [
             'keyword' => 'developer',
@@ -64,7 +64,7 @@ class CollectionForgetIntegrationTest extends BaseTestCase
             '' => '', // empty value
         ]);
 
-        $searchService = new JobSearchService();
+        $searchService = new JobSearchService;
         $filters = $searchService->processAdvancedFilters($request);
 
         // Should remove meta fields
@@ -81,7 +81,7 @@ class CollectionForgetIntegrationTest extends BaseTestCase
     }
 
     /** @test */
-    public function testCompanyRepositoryUpdateWithForget()
+    public function test_company_repository_update_with_forget()
     {
         $user = User::factory()->create();
         $company = Company::factory()->create(['user_id' => $user->id]);
@@ -100,7 +100,7 @@ class CollectionForgetIntegrationTest extends BaseTestCase
         $this->actingAs($user);
 
         // Simulate the update method
-        $companyRepository = new CompanyRepository();
+        $companyRepository = new CompanyRepository;
         $updatedCompany = $companyRepository->updateCompany($input, $company);
 
         // Verify user fields were not updated in company
@@ -113,7 +113,7 @@ class CollectionForgetIntegrationTest extends BaseTestCase
     }
 
     /** @test */
-    public function testBaseTestCaseHelperMethods()
+    public function test_base_test_case_helper_methods()
     {
         $testData = [
             'name' => 'Test User',
@@ -140,7 +140,7 @@ class CollectionForgetIntegrationTest extends BaseTestCase
     }
 
     /** @test */
-    public function testAdvancedCleanupFunctionality()
+    public function test_advanced_cleanup_functionality()
     {
         $data = [
             'name' => 'Test',
@@ -168,7 +168,7 @@ class CollectionForgetIntegrationTest extends BaseTestCase
     }
 
     /** @test */
-    public function testTwoFactorAuthServiceBackupCodeRemoval()
+    public function test_two_factor_auth_service_backup_code_removal()
     {
         $user = User::factory()->create([
             'two_factor_enabled' => true,
@@ -179,7 +179,7 @@ class CollectionForgetIntegrationTest extends BaseTestCase
             ])),
         ]);
 
-        $twoFactorService = new TwoFactorAuthService();
+        $twoFactorService = new TwoFactorAuthService;
 
         // The backup code verification should use forget() internally
         $remainingBefore = $twoFactorService->getRemainingBackupCodesCount($user);

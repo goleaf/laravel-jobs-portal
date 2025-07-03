@@ -3,13 +3,13 @@
 namespace App\Services;
 
 use App\Models\Setting;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Collection;
 
 /**
  * Settings Manager Service
- * 
+ *
  * Based on Habr community best practices for Laravel settings management
  * Provides a clean interface for managing application settings
  */
@@ -37,8 +37,9 @@ class SettingsManager
         }
 
         // Fallback to cache/database
-        return Cache::remember(self::CACHE_PREFIX . $key, self::CACHE_TTL, function () use ($key, $default) {
+        return Cache::remember(self::CACHE_PREFIX.$key, self::CACHE_TTL, function () use ($key, $default) {
             $setting = Setting::where('key', $key)->first();
+
             return $setting ? $setting->value : $default;
         });
     }
@@ -49,21 +50,21 @@ class SettingsManager
     public function set(string $key, $value, array $options = []): bool
     {
         $result = Setting::set($key, $value, $options);
-        
+
         if ($result) {
             // Update config
             Config::set("settings.{$key}", $value);
-            
+
             // Clear cache
-            Cache::forget(self::CACHE_PREFIX . $key);
+            Cache::forget(self::CACHE_PREFIX.$key);
             Cache::forget('laravel_settings');
-            
+
             // Clear group cache if group is specified
             if (isset($options['group'])) {
                 Cache::forget("settings_group_{$options['group']}");
             }
         }
-        
+
         return $result;
     }
 
@@ -101,13 +102,13 @@ class SettingsManager
     public function remove(string $key): bool
     {
         $result = Setting::remove($key);
-        
+
         if ($result) {
-            Cache::forget(self::CACHE_PREFIX . $key);
+            Cache::forget(self::CACHE_PREFIX.$key);
             Cache::forget('laravel_settings');
             Config::forget("settings.{$key}");
         }
-        
+
         return $result;
     }
 
@@ -127,16 +128,16 @@ class SettingsManager
     public function setBulk(array $settings): int
     {
         $updated = 0;
-        
+
         foreach ($settings as $key => $value) {
             if ($this->set($key, $value)) {
                 $updated++;
             }
         }
-        
+
         // Clear all cache after bulk update
         $this->clearCache();
-        
+
         return $updated;
     }
 
@@ -155,6 +156,7 @@ class SettingsManager
     {
         $result = Setting::import($settings);
         $this->clearCache();
+
         return $result;
     }
 
@@ -173,17 +175,17 @@ class SettingsManager
     {
         Cache::forget('laravel_settings');
         Cache::forget('settings_public');
-        
+
         // Clear group caches
         $groups = Setting::distinct('group')->pluck('group')->filter();
         foreach ($groups as $group) {
             Cache::forget("settings_group_{$group}");
         }
-        
+
         // Clear individual setting caches (this is expensive, consider if needed)
         $keys = Setting::pluck('key');
         foreach ($keys as $key) {
-            Cache::forget(self::CACHE_PREFIX . $key);
+            Cache::forget(self::CACHE_PREFIX.$key);
         }
     }
 
@@ -203,6 +205,7 @@ class SettingsManager
     public function validate(string $key, $value): bool
     {
         $setting = Setting::where('key', $key)->first();
+
         return $setting ? $setting->validateValue($value) : true;
     }
 
@@ -213,11 +216,12 @@ class SettingsManager
     {
         $setting = Setting::where('key', $key)->first();
         if ($setting && $setting->resetToDefault()) {
-            Cache::forget(self::CACHE_PREFIX . $key);
+            Cache::forget(self::CACHE_PREFIX.$key);
             Config::set("settings.{$key}", $setting->getDefaultValue());
+
             return true;
         }
-        
+
         return false;
     }
 
@@ -227,11 +231,11 @@ class SettingsManager
     public function getWithMetadata(string $key): ?array
     {
         $setting = Setting::where('key', $key)->first();
-        
-        if (!$setting) {
+
+        if (! $setting) {
             return null;
         }
-        
+
         return [
             'key' => $setting->key,
             'value' => $setting->value,
@@ -266,4 +270,4 @@ class SettingsManager
             ->orWhereNull('validation_rules')
             ->get();
     }
-} 
+}

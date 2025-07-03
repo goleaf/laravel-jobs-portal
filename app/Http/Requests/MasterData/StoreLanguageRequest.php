@@ -23,7 +23,7 @@ class StoreLanguageRequest extends FormRequest
     {
         // Check if user has admin or manager permissions
         return Auth::check() && (
-            Auth::user()->hasRole('admin') || 
+            Auth::user()->hasRole('admin') ||
             Auth::user()->hasRole('manager') ||
             Auth::user()->can('create-master-data')
         );
@@ -47,7 +47,7 @@ class StoreLanguageRequest extends FormRequest
                 'regex:/^[a-zA-Z\s\-\'\.]+$/',
                 Rule::unique('languages', 'name')->whereNull('deleted_at'),
                 function ($attribute, $value, $fail) {
-                    if (!$this->validateLanguageName($value)) {
+                    if (! $this->validateLanguageName($value)) {
                         $fail(__('validation.invalid_language_name'));
                     }
                 },
@@ -63,7 +63,7 @@ class StoreLanguageRequest extends FormRequest
                 'lowercase',
                 Rule::unique('languages', 'code')->whereNull('deleted_at'),
                 function ($attribute, $value, $fail) {
-                    if (!$this->validateLanguageCode($value)) {
+                    if (! $this->validateLanguageCode($value)) {
                         $fail(__('validation.invalid_language_code'));
                     }
                 },
@@ -166,21 +166,21 @@ class StoreLanguageRequest extends FormRequest
             'name.required' => __('validation.required_field', ['field' => __('validation.attributes.language_name')]),
             'name.unique' => __('validation.unique_field', ['field' => __('validation.attributes.language_name')]),
             'name.regex' => __('validation.language_name_format'),
-            
+
             'code.required' => __('validation.required_field', ['field' => __('validation.attributes.language_code')]),
             'code.unique' => __('validation.unique_field', ['field' => __('validation.attributes.language_code')]),
             'code.alpha' => __('validation.alpha_only', ['attribute' => __('validation.attributes.language_code')]),
             'code.lowercase' => __('validation.lowercase_only', ['attribute' => __('validation.attributes.language_code')]),
-            
+
             'native_name.regex' => __('validation.native_name_format'),
             'direction.in' => __('validation.in_list', ['attribute' => __('validation.attributes.direction'), 'values' => 'ltr, rtl']),
-            
+
             'iso_639_3.size' => __('validation.exact_length', ['attribute' => __('validation.attributes.iso_639_3'), 'length' => 3]),
             'iso_639_3.unique' => __('validation.unique_field', ['field' => __('validation.attributes.iso_639_3')]),
-            
+
             'locale.regex' => __('validation.locale_format'),
             'locale.unique' => __('validation.unique_field', ['field' => __('validation.attributes.locale')]),
-            
+
             'flag_icon.url' => __('validation.valid_url', ['attribute' => __('validation.attributes.flag_icon')]),
         ];
     }
@@ -303,8 +303,8 @@ class StoreLanguageRequest extends FormRequest
             'Bengali', 'Turkish', 'Dutch', 'Swedish', 'Norwegian', 'Danish',
             // Add more as needed
         ];
-        
-        return in_array($name, $validLanguages) || 
+
+        return in_array($name, $validLanguages) ||
                strlen($name) >= 2; // Basic fallback
     }
 
@@ -320,8 +320,8 @@ class StoreLanguageRequest extends FormRequest
             'cs', 'sk', 'hu', 'ro', 'bg', 'hr', 'sr', 'sl', 'et', 'lv',
             'lt', 'mt', 'ga', 'eu', 'ca', 'gl', 'cy', 'br', 'gd', 'kw',
         ];
-        
-        return in_array($code, $validCodes) || 
+
+        return in_array($code, $validCodes) ||
                (strlen($code) >= 2 && strlen($code) <= 3);
     }
 

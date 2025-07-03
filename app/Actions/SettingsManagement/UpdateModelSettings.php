@@ -9,19 +9,19 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use LumoSolutions\Actionable\Traits\IsRunnable;
 use LumoSolutions\Actionable\Traits\IsDispatchable;
-use App\Actions\SettingsManagement\CreateSettingsVersion;
+use LumoSolutions\Actionable\Traits\IsRunnable;
 
 /**
  * Update Model Settings Action
- * 
+ *
  * Comprehensive action for updating any model's settings using Laravel Model Settings
  * with validation, caching, audit trails, and change tracking.
  */
 class UpdateModelSettings
 {
-    use IsRunnable, IsDispatchable;
+    use IsDispatchable;
+    use IsRunnable;
 
     /**
      * Execute the settings update action
@@ -100,10 +100,10 @@ class UpdateModelSettings
         ]);
 
         if ($validator->fails()) {
-            throw new \InvalidArgumentException('Invalid update data: ' . $validator->errors()->first());
+            throw new \InvalidArgumentException('Invalid update data: '.$validator->errors()->first());
         }
 
-        if (!class_exists($updateData->modelType)) {
+        if (! class_exists($updateData->modelType)) {
             throw new \InvalidArgumentException("Model class {$updateData->modelType} does not exist");
         }
     }
@@ -115,11 +115,11 @@ class UpdateModelSettings
     {
         $model = $modelType::find($modelId);
 
-        if (!$model) {
+        if (! $model) {
             throw new \Illuminate\Database\Eloquent\ModelNotFoundException("Model {$modelType} with ID {$modelId} not found");
         }
 
-        if (!method_exists($model, 'settings')) {
+        if (! method_exists($model, 'settings')) {
             throw new \InvalidArgumentException("Model {$modelType} does not have settings capability");
         }
 
@@ -132,7 +132,7 @@ class UpdateModelSettings
     protected function backupCurrentSettings(Model $model, SettingsUpdateData $updateData): array
     {
         $currentSettings = $model->settings()->all();
-        
+
         $backup = [
             'id' => uniqid('backup_'),
             'model_type' => get_class($model),
@@ -157,7 +157,7 @@ class UpdateModelSettings
         // Check if model has validation rules
         if (property_exists($model, 'settingsRules')) {
             $rules = $model->settingsRules;
-            
+
             // Apply context-specific rules if provided
             if ($context && isset($context['additional_rules'])) {
                 $rules = array_merge($rules, $context['additional_rules']);
@@ -191,6 +191,7 @@ class UpdateModelSettings
             };
 
             DB::commit();
+
             return $result;
 
         } catch (\Exception $e) {
@@ -228,9 +229,9 @@ class UpdateModelSettings
         }
 
         return [
-            'strategy' => 'replace', 
+            'strategy' => 'replace',
             'updated_keys' => array_keys($updateData->newSettings),
-            'action' => 'full_replacement'
+            'action' => 'full_replacement',
         ];
     }
 
@@ -243,7 +244,7 @@ class UpdateModelSettings
 
         foreach ($updateData->newSettings as $key => $value) {
             $currentValue = $model->settings()->get($key, []);
-            
+
             if (is_array($currentValue) && is_array($value)) {
                 $newValue = array_merge($currentValue, $value);
                 $model->settings()->set($key, $newValue);
@@ -280,8 +281,8 @@ class UpdateModelSettings
     protected function clearSettingsCache(Model $model, SettingsUpdateData $updateData): void
     {
         $cacheKeys = [
-            "model_settings:" . get_class($model) . ":" . $model->getKey(),
-            "settings_cache:" . get_class($model) . ":" . $model->getKey(),
+            'model_settings:'.get_class($model).':'.$model->getKey(),
+            'settings_cache:'.get_class($model).':'.$model->getKey(),
         ];
 
         foreach ($cacheKeys as $key) {
@@ -292,8 +293,8 @@ class UpdateModelSettings
         if (method_exists(Cache::class, 'tags')) {
             Cache::tags([
                 'model_settings',
-                'model_' . $model->getKey(),
-                class_basename($model) . '_settings'
+                'model_'.$model->getKey(),
+                class_basename($model).'_settings',
             ])->flush();
         }
     }
@@ -367,7 +368,7 @@ class UpdateModelSettings
     {
         // Add user-specific validation logic
         if (isset($settings['privacy']['public_profile']) && $settings['privacy']['public_profile']) {
-            if (!isset($settings['profile']['completed']) || !$settings['profile']['completed']) {
+            if (! isset($settings['profile']['completed']) || ! $settings['profile']['completed']) {
                 throw new \InvalidArgumentException('Public profile requires completed profile information');
             }
         }
@@ -395,7 +396,7 @@ class UpdateModelSettings
     protected function affectsSearchability(SettingsUpdateData $updateData): bool
     {
         $searchablePatterns = ['display.', 'seo.', 'visibility', 'public'];
-        
+
         foreach ($updateData->changedKeys ?? [] as $key) {
             foreach ($searchablePatterns as $pattern) {
                 if (str_contains($key, $pattern)) {
@@ -440,7 +441,7 @@ class UpdateModelSettings
         $result = [];
         foreach ($array as $key => $value) {
             $newKey = $prefix ? "{$prefix}.{$key}" : $key;
-            if (is_array($value) && !empty($value)) {
+            if (is_array($value) && ! empty($value)) {
                 $result = array_merge($result, $this->flattenArray($value, $newKey));
             } else {
                 $result[$newKey] = $value;
@@ -481,13 +482,13 @@ class UpdateModelSettings
         $changeAnalysis = [
             'added' => [],
             'modified' => [],
-            'removed' => []
+            'removed' => [],
         ];
 
         // Analyze changes for 'merge' and 'replace' strategies
         if ($strategy === 'merge' || $strategy === 'replace') {
             foreach ($newSettings as $key => $value) {
-                if (!array_key_exists($key, $currentSettings)) {
+                if (! array_key_exists($key, $currentSettings)) {
                     $changedKeys[] = $key;
                     $changeSummary[] = "Added setting '{$key}' with value '{$value}'.";
                     $changeAnalysis['added'][] = ['key' => $key, 'value' => $value];
@@ -502,14 +503,14 @@ class UpdateModelSettings
         // For 'replace' strategy, detect removed keys
         if ($strategy === 'replace') {
             foreach ($currentSettings as $key => $value) {
-                if (!array_key_exists($key, $newSettings)) {
+                if (! array_key_exists($key, $newSettings)) {
                     $changedKeys[] = $key;
                     $changeSummary[] = "Removed setting '{$key}'.";
                     $changeAnalysis['removed'][] = ['key' => $key, 'value' => $value];
                 }
             }
         }
-        
+
         $updateData = new SettingsUpdateData(
             modelType: get_class($model),
             modelId: $model->getKey(),
@@ -517,14 +518,14 @@ class UpdateModelSettings
             updateStrategy: $strategy,
             userId: $userId,
             auditReason: $auditReason,
-            validationEnabled: !$skipValidation,
+            validationEnabled: ! $skipValidation,
             backupEnabled: $createBackup,
             updatedAt: now(),
             changedKeys: $changedKeys,
             changeSummary: implode("\n", $changeSummary),
             changeAnalysis: $changeAnalysis
         );
-        
+
         // Create a version of the settings before updating
         if ($createVersion) {
             CreateSettingsVersion::run($model, $updateData);
@@ -550,7 +551,7 @@ class UpdateModelSettings
         ?int $userId = null,
         ?string $auditReason = null
     ): SettingsUpdateData {
-        return (new self())->execute(
+        return (new self)->execute(
             $model,
             $newSettings,
             $strategy,
@@ -568,6 +569,6 @@ class UpdateModelSettings
      */
     public static function run(SettingsUpdateData $updateData): array
     {
-        return (new static())->executeUpdate($updateData);
+        return (new static)->executeUpdate($updateData);
     }
 }

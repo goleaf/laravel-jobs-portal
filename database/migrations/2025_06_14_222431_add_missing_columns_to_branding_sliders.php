@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -12,25 +13,25 @@ return new class extends Migration {
     {
         Schema::table('branding_sliders', function (Blueprint $table) {
             // Add missing columns that the model expects
-            if (!Schema::hasColumn('branding_sliders', 'description')) {
+            if (! Schema::hasColumn('branding_sliders', 'description')) {
                 $table->text('description')->nullable();
             }
-            if (!Schema::hasColumn('branding_sliders', 'link_url')) {
+            if (! Schema::hasColumn('branding_sliders', 'link_url')) {
                 $table->string('link_url', 500)->nullable();
             }
-            if (!Schema::hasColumn('branding_sliders', 'button_text')) {
+            if (! Schema::hasColumn('branding_sliders', 'button_text')) {
                 $table->string('button_text', 100)->nullable();
             }
-            if (!Schema::hasColumn('branding_sliders', 'is_featured')) {
+            if (! Schema::hasColumn('branding_sliders', 'is_featured')) {
                 $table->boolean('is_featured')->default(false);
             }
-            if (!Schema::hasColumn('branding_sliders', 'start_date')) {
+            if (! Schema::hasColumn('branding_sliders', 'start_date')) {
                 $table->datetime('start_date')->nullable();
             }
-            if (!Schema::hasColumn('branding_sliders', 'end_date')) {
+            if (! Schema::hasColumn('branding_sliders', 'end_date')) {
                 $table->datetime('end_date')->nullable();
             }
-            if (!Schema::hasColumn('branding_sliders', 'meta')) {
+            if (! Schema::hasColumn('branding_sliders', 'meta')) {
                 $table->json('meta')->nullable();
             }
         });

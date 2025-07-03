@@ -46,14 +46,14 @@ class JobApplicationApiController extends UniversalBaseController
     /**
      * Universal Pattern: Display the specified resource with caching.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function show($id): JsonResponse
     {
         try {
             $jobapplication = $this->findCached(JobApplication::class, $id, ['user']);
 
-            if (!$jobapplication) {
+            if (! $jobapplication) {
                 return $this->errorResponse(ucfirst('jobapplication').' not found', 404);
             }
 
@@ -100,7 +100,7 @@ class JobApplicationApiController extends UniversalBaseController
     /**
      * Universal Pattern: Update the specified resource with optimistic locking.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function update(UpdateRequest $request, $id): JsonResponse
     {
@@ -134,7 +134,7 @@ class JobApplicationApiController extends UniversalBaseController
     /**
      * Universal Pattern: Remove the specified resource with soft delete.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function destroy($id): JsonResponse
     {

@@ -7,18 +7,19 @@ use App\Models\User;
 use App\Services\SettingsManager;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use Laravel\Sanctum\Sanctum;
 use Illuminate\Support\Facades\Cache;
+use Laravel\Sanctum\Sanctum;
+use Tests\TestCase;
 
 /**
  * Habr-Based Settings API Test Suite
- * 
+ *
  * Tests the comprehensive settings management system based on Habr community best practices
  */
 class HabrSettingsApiTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     protected User $admin;
     protected SettingsManager $settingsManager;
@@ -26,16 +27,16 @@ class HabrSettingsApiTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create admin user
         $this->admin = User::factory()->create([
             'email' => 'admin@test.com',
             'name' => 'Test Admin',
         ]);
-        
+
         // Initialize settings manager
         $this->settingsManager = app(SettingsManager::class);
-        
+
         // Seed some test settings
         $this->seedTestSettings();
     }
@@ -103,7 +104,7 @@ class HabrSettingsApiTest extends TestCase
                     'settings',
                     'count',
                 ],
-                'message'
+                'message',
             ])
             ->assertJson([
                 'success' => true,
@@ -111,13 +112,13 @@ class HabrSettingsApiTest extends TestCase
                     'settings' => [
                         'test_public_setting' => 'public_value',
                         'test_boolean_setting' => true, // Should be cast to boolean
-                    ]
-                ]
+                    ],
+                ],
             ]);
 
         // Should not include private settings
         $response->assertJsonMissing([
-            'test_private_setting' => 'private_value'
+            'test_private_setting' => 'private_value',
         ]);
     }
 
@@ -134,7 +135,7 @@ class HabrSettingsApiTest extends TestCase
                     'settings',
                     'count',
                 ],
-                'message'
+                'message',
             ])
             ->assertJson([
                 'success' => true,
@@ -143,8 +144,8 @@ class HabrSettingsApiTest extends TestCase
                     'settings' => [
                         'test_public_setting' => 'public_value',
                         'test_boolean_setting' => true,
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
 
@@ -175,7 +176,7 @@ class HabrSettingsApiTest extends TestCase
                     'settings',
                     'schema',
                 ],
-                'message'
+                'message',
             ]);
 
         // Should include both public and private settings
@@ -194,7 +195,7 @@ class HabrSettingsApiTest extends TestCase
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         $this->assertTrue($responseData['success']);
         $this->assertArrayHasKey('settings', $responseData['data']);
     }
@@ -208,7 +209,7 @@ class HabrSettingsApiTest extends TestCase
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         $this->assertTrue($responseData['success']);
         $this->assertArrayHasKey('settings', $responseData['data']);
     }
@@ -234,9 +235,9 @@ class HabrSettingsApiTest extends TestCase
                         'default_value',
                         'created_at',
                         'updated_at',
-                    ]
+                    ],
                 ],
-                'message'
+                'message',
             ])
             ->assertJson([
                 'success' => true,
@@ -249,8 +250,8 @@ class HabrSettingsApiTest extends TestCase
                         'description' => 'A public test setting',
                         'is_public' => true,
                         'default_value' => 'default_public',
-                    ]
-                ]
+                    ],
+                ],
             ]);
     }
 
@@ -265,7 +266,7 @@ class HabrSettingsApiTest extends TestCase
             ->assertJson([
                 'success' => false,
                 'message' => 'Setting not found',
-                'error' => 'SETTING_NOT_FOUND'
+                'error' => 'SETTING_NOT_FOUND',
             ]);
     }
 
@@ -283,13 +284,13 @@ class HabrSettingsApiTest extends TestCase
             ->assertJsonStructure([
                 'success',
                 'data' => [
-                    'setting'
+                    'setting',
                 ],
-                'message'
+                'message',
             ])
             ->assertJson([
                 'success' => true,
-                'message' => 'Setting updated successfully'
+                'message' => 'Setting updated successfully',
             ]);
 
         // Verify the setting was actually updated
@@ -316,7 +317,7 @@ class HabrSettingsApiTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'message' => 'Setting updated successfully'
+                'message' => 'Setting updated successfully',
             ]);
 
         // Verify the setting was created
@@ -356,7 +357,7 @@ class HabrSettingsApiTest extends TestCase
                 'test_public_setting' => 'bulk_updated_public',
                 'test_private_setting' => 'bulk_updated_private',
                 'test_boolean_setting' => false,
-            ]
+            ],
         ]);
 
         $response->assertStatus(200)
@@ -366,14 +367,14 @@ class HabrSettingsApiTest extends TestCase
                     'updated_count',
                     'total_count',
                 ],
-                'message'
+                'message',
             ])
             ->assertJson([
                 'success' => true,
                 'data' => [
                     'updated_count' => 3,
                     'total_count' => 3,
-                ]
+                ],
             ]);
 
         // Verify settings were updated
@@ -392,7 +393,7 @@ class HabrSettingsApiTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'message' => 'Setting deleted successfully'
+                'message' => 'Setting deleted successfully',
             ]);
 
         // Verify setting was deleted
@@ -415,7 +416,7 @@ class HabrSettingsApiTest extends TestCase
                     'count',
                     'exported_at',
                 ],
-                'message'
+                'message',
             ]);
 
         $responseData = $response->json();
@@ -433,7 +434,7 @@ class HabrSettingsApiTest extends TestCase
 
         $response->assertStatus(200);
         $responseData = $response->json();
-        
+
         $this->assertTrue($responseData['success']);
         $this->assertEquals('test', $responseData['data']['group']);
         $this->assertIsArray($responseData['data']['settings']);
@@ -463,8 +464,8 @@ class HabrSettingsApiTest extends TestCase
                     'description' => 'Second imported setting',
                     'is_public' => false,
                     'default_value' => 'default_2',
-                ]
-            ]
+                ],
+            ],
         ];
 
         $response = $this->postJson('/api/settings/import', $importData);
@@ -476,14 +477,14 @@ class HabrSettingsApiTest extends TestCase
                     'imported_count',
                     'total_count',
                 ],
-                'message'
+                'message',
             ])
             ->assertJson([
                 'success' => true,
                 'data' => [
                     'imported_count' => 2,
                     'total_count' => 2,
-                ]
+                ],
             ]);
 
         // Verify settings were imported
@@ -498,7 +499,7 @@ class HabrSettingsApiTest extends TestCase
 
         // First update the setting to a different value
         $this->putJson('/api/settings/test_public_setting', [
-            'value' => 'changed_value'
+            'value' => 'changed_value',
         ]);
 
         // Reset to default
@@ -507,7 +508,7 @@ class HabrSettingsApiTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'message' => 'Setting reset to default value successfully'
+                'message' => 'Setting reset to default value successfully',
             ]);
 
         // Verify setting was reset
@@ -529,7 +530,7 @@ class HabrSettingsApiTest extends TestCase
         $response->assertStatus(200)
             ->assertJson([
                 'success' => true,
-                'message' => 'Settings cache cleared successfully'
+                'message' => 'Settings cache cleared successfully',
             ]);
     }
 

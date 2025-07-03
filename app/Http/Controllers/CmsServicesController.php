@@ -37,11 +37,11 @@ class CmsServicesController extends AppBaseController
         foreach ($inputArr as $key => $value) {
             /** @var CmsServices $cmsServices */
             $cmsServices = CmsServices::where('key', $key)->first();
-            if (!$cmsServices) {
+            if (! $cmsServices) {
                 continue;
             }
 
-            if (in_array($key, ['home_banner']) && !empty($value)) {
+            if (in_array($key, ['home_banner']) && ! empty($value)) {
                 $this->fileUpload($cmsServices, $value);
 
                 continue;
@@ -62,21 +62,21 @@ class CmsServicesController extends AppBaseController
         foreach ($inputArr as $key => $value) {
             /** @var CmsServices $cmsServices */
             $cmsServices = CmsServices::where('key', $key)->first();
-            if (!$cmsServices) {
+            if (! $cmsServices) {
                 continue;
             }
 
-            if (in_array($key, ['about_image_one']) && !empty($value)) {
+            if (in_array($key, ['about_image_one']) && ! empty($value)) {
                 $this->fileUpload($cmsServices, $value);
 
                 continue;
             }
-            if (in_array($key, ['about_image_two']) && !empty($value)) {
+            if (in_array($key, ['about_image_two']) && ! empty($value)) {
                 $this->fileUpload($cmsServices, $value);
 
                 continue;
             }
-            if (in_array($key, ['about_image_three']) && !empty($value)) {
+            if (in_array($key, ['about_image_three']) && ! empty($value)) {
                 $this->fileUpload($cmsServices, $value);
 
                 continue;

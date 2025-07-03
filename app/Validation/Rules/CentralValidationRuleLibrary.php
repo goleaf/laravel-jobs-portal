@@ -4,12 +4,12 @@ namespace App\Validation\Rules;
 
 /**
  * Central Validation Rule Library
- * 
+ *
  * Provides centralized repository of reusable validation rules
  * across all business domains and request types
- * 
- * @package App\Validation\Rules
+ *
  * @version 1.0.0
+ *
  * @since 2024-12-28
  */
 class CentralValidationRuleLibrary
@@ -22,8 +22,8 @@ class CentralValidationRuleLibrary
         return [
             'required',
             'string',
-            'max:' . $maxLength,
-            'regex:/^[\p{L}\p{N}\s\p{P}]*$/u' // Unicode letters, numbers, spaces, punctuation
+            'max:'.$maxLength,
+            'regex:/^[\p{L}\p{N}\s\p{P}]*$/u', // Unicode letters, numbers, spaces, punctuation
         ];
     }
 
@@ -36,7 +36,7 @@ class CentralValidationRuleLibrary
             'required',
             'string',
             'email:rfc,dns',
-            'max:255'
+            'max:255',
         ];
     }
 
@@ -48,7 +48,7 @@ class CentralValidationRuleLibrary
         return [
             'required',
             'string',
-            'regex:/^\+?[1-9]\d{1,14}$/' // International format
+            'regex:/^\+?[1-9]\d{1,14}$/', // International format
         ];
     }
 
@@ -60,7 +60,7 @@ class CentralValidationRuleLibrary
         return [
             'required',
             'url',
-            'max:2000'
+            'max:2000',
         ];
     }
 
@@ -72,23 +72,23 @@ class CentralValidationRuleLibrary
         return [
             'required',
             'date',
-            'date_format:Y-m-d'
+            'date_format:Y-m-d',
         ];
     }
 
     /**
      * Integer validation rules
      */
-    public static function getIntegerRules(int $min = 0, int $max = null): array
+    public static function getIntegerRules(int $min = 0, ?int $max = null): array
     {
         $rules = [
             'required',
             'integer',
-            'min:' . $min
+            'min:'.$min,
         ];
 
         if ($max !== null) {
-            $rules[] = 'max:' . $max;
+            $rules[] = 'max:'.$max;
         }
 
         return $rules;
@@ -97,16 +97,16 @@ class CentralValidationRuleLibrary
     /**
      * Numeric validation rules
      */
-    public static function getNumericRules(float $min = 0, float $max = null): array
+    public static function getNumericRules(float $min = 0, ?float $max = null): array
     {
         $rules = [
             'required',
             'numeric',
-            'min:' . $min
+            'min:'.$min,
         ];
 
         if ($max !== null) {
-            $rules[] = 'max:' . $max;
+            $rules[] = 'max:'.$max;
         }
 
         return $rules;
@@ -119,7 +119,7 @@ class CentralValidationRuleLibrary
     {
         return [
             'required',
-            'boolean'
+            'boolean',
         ];
     }
 
@@ -131,23 +131,23 @@ class CentralValidationRuleLibrary
         return [
             'required',
             'string',
-            'in:active,inactive'
+            'in:active,inactive',
         ];
     }
 
     /**
      * ID validation rules (for foreign keys)
      */
-    public static function getIdRules(string $table = null): array
+    public static function getIdRules(?string $table = null): array
     {
         $rules = [
             'required',
             'integer',
-            'min:1'
+            'min:1',
         ];
 
         if ($table) {
-            $rules[] = 'exists:' . $table . ',id';
+            $rules[] = 'exists:'.$table.',id';
         }
 
         return $rules;
@@ -156,17 +156,17 @@ class CentralValidationRuleLibrary
     /**
      * Optional ID validation rules
      */
-    public static function getOptionalIdRules(string $table = null): array
+    public static function getOptionalIdRules(?string $table = null): array
     {
         $rules = [
             'sometimes',
             'nullable',
             'integer',
-            'min:1'
+            'min:1',
         ];
 
         if ($table) {
-            $rules[] = 'exists:' . $table . ',id';
+            $rules[] = 'exists:'.$table.',id';
         }
 
         return $rules;
@@ -182,7 +182,7 @@ class CentralValidationRuleLibrary
             'string',
             'min:3',
             'max:100',
-            'regex:/^[a-zA-Z0-9\s\-\/\+\&\(\)\.]+$/' // Job title characters
+            'regex:/^[a-zA-Z0-9\s\-\/\+\&\(\)\.]+$/', // Job title characters
         ];
     }
 
@@ -192,7 +192,7 @@ class CentralValidationRuleLibrary
             'required',
             'numeric',
             'min:0',
-            'max:9999999.99'
+            'max:9999999.99',
         ];
     }
 
@@ -202,7 +202,7 @@ class CentralValidationRuleLibrary
             'required',
             'integer',
             'min:0',
-            'max:50'
+            'max:50',
         ];
     }
 
@@ -212,7 +212,7 @@ class CentralValidationRuleLibrary
             'required',
             'string',
             'min:10',
-            'max:' . $maxLength
+            'max:'.$maxLength,
         ];
     }
 
@@ -225,7 +225,7 @@ class CentralValidationRuleLibrary
             'required',
             'image',
             'mimes:jpeg,png,jpg,gif,svg',
-            'max:2048' // 2MB max
+            'max:2048', // 2MB max
         ];
     }
 
@@ -235,7 +235,7 @@ class CentralValidationRuleLibrary
             'required',
             'file',
             'mimes:pdf,doc,docx,txt',
-            'max:5120' // 5MB max
+            'max:5120', // 5MB max
         ];
     }
 
@@ -249,7 +249,7 @@ class CentralValidationRuleLibrary
             'string',
             'min:12',
             'max:255',
-            'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/'
+            'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/',
         ];
     }
 
@@ -258,23 +258,23 @@ class CentralValidationRuleLibrary
         return [
             'required',
             'string',
-            'same:password'
+            'same:password',
         ];
     }
 
     /**
      * Array validation rules
      */
-    public static function getArrayRules(int $min = 1, int $max = null): array
+    public static function getArrayRules(int $min = 1, ?int $max = null): array
     {
         $rules = [
             'required',
             'array',
-            'min:' . $min
+            'min:'.$min,
         ];
 
         if ($max !== null) {
-            $rules[] = 'max:' . $max;
+            $rules[] = 'max:'.$max;
         }
 
         return $rules;
@@ -283,15 +283,15 @@ class CentralValidationRuleLibrary
     /**
      * Optional array validation rules
      */
-    public static function getOptionalArrayRules(int $max = null): array
+    public static function getOptionalArrayRules(?int $max = null): array
     {
         $rules = [
             'sometimes',
-            'array'
+            'array',
         ];
 
         if ($max !== null) {
-            $rules[] = 'max:' . $max;
+            $rules[] = 'max:'.$max;
         }
 
         return $rules;
@@ -303,9 +303,9 @@ class CentralValidationRuleLibrary
     public static function getMultilingualRules(string $field, array $locales = ['en', 'lt']): array
     {
         $rules = [];
-        
+
         foreach ($locales as $locale) {
-            $fieldKey = $field . '_' . $locale;
+            $fieldKey = $field.'_'.$locale;
             $rules[$fieldKey] = self::getStringRules();
         }
 
@@ -317,7 +317,7 @@ class CentralValidationRuleLibrary
      */
     public static function getRule(string $ruleName, ...$params): array
     {
-        return match($ruleName) {
+        return match ($ruleName) {
             'string' => self::getStringRules($params[0] ?? 255),
             'email' => self::getEmailRules(),
             'phone' => self::getPhoneRules(),
@@ -342,4 +342,4 @@ class CentralValidationRuleLibrary
             default => []
         };
     }
-} 
+}

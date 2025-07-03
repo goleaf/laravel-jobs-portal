@@ -11,8 +11,8 @@ use Illuminate\Support\Carbon;
  *
  * @version June 22, 2020, 9:47 am UTC
  *
- * @property int         $id
- * @property string      $name
+ * @property int $id
+ * @property string $name
  * @property null|string $description
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
@@ -62,7 +62,7 @@ class OwnerShipType extends Model
     /**
      * Scope for active ownership types.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -72,7 +72,7 @@ class OwnerShipType extends Model
     /**
      * Scope for inactive ownership types.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -82,7 +82,7 @@ class OwnerShipType extends Model
     /**
      * Scope for default ownership types.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeDefault($query)
     {
@@ -92,7 +92,7 @@ class OwnerShipType extends Model
     /**
      * Scope for custom ownership types.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeCustom($query)
     {
@@ -102,7 +102,7 @@ class OwnerShipType extends Model
     /**
      * Scope for featured ownership types.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFeatured($query)
     {
@@ -112,19 +112,18 @@ class OwnerShipType extends Model
     /**
      * Scope for searching by name or description.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where('name', 'like', "%{$term}%")
-            ->orWhere('description', 'like', "%{$term}%")
-        ;
+            ->orWhere('description', 'like', "%{$term}%");
     }
 
     /**
      * Scope for alphabetical ordering.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
@@ -134,7 +133,7 @@ class OwnerShipType extends Model
     /**
      * Scope for recent ownership types.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -144,7 +143,7 @@ class OwnerShipType extends Model
     /**
      * Scope for old ownership types.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -154,7 +153,7 @@ class OwnerShipType extends Model
     /**
      * Scope for ownership types with companies.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithCompanies($query)
     {
@@ -164,7 +163,7 @@ class OwnerShipType extends Model
     /**
      * Scope for ownership types with active companies.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithActiveCompanies($query)
     {
@@ -176,40 +175,37 @@ class OwnerShipType extends Model
     /**
      * Scope for popular ownership types (most used by companies).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopular($query, int $limit = 10)
     {
         return $query->withCount('companies')
             ->orderByDesc('companies_count')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     /**
      * Scope for private ownership types.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePrivate($query)
     {
         return $query->where('name', 'like', '%private%')
             ->orWhere('name', 'like', '%ltd%')
-            ->orWhere('name', 'like', '%llc%')
-        ;
+            ->orWhere('name', 'like', '%llc%');
     }
 
     /**
      * Scope for public ownership types.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePublic($query)
     {
         return $query->where('name', 'like', '%public%')
             ->orWhere('name', 'like', '%plc%')
-            ->orWhere('name', 'like', '%corp%')
-        ;
+            ->orWhere('name', 'like', '%corp%');
     }
 
     /**

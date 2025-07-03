@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BulkActionPlanRequest;
+use App\Http\Requests\GetPlansForSelectRequest;
 use App\Http\Requests\Plan\ChangeTrialPlanRequest;
 use App\Http\Requests\Plan\CreatePlanRequest;
 use App\Http\Requests\Plan\DestroyPlanRequest;
@@ -9,8 +11,6 @@ use App\Http\Requests\Plan\EditPlanRequest;
 use App\Http\Requests\Plan\IndexPlanRequest;
 use App\Http\Requests\Plan\ShowPlanRequest;
 use App\Http\Requests\Plan\UpdatePlanUpdatePlanRequest;
-use App\Http\Requests\GetPlansForSelectRequest;
-use App\Http\Requests\BulkActionPlanRequest;
 use App\Models\Plan;
 use App\Models\SalaryCurrency;
 use App\Repositories\PlanRepository;
@@ -170,7 +170,7 @@ class PlanController extends AppBaseController
     {
         try {
             // Handle default currency assignment
-            if (0 == $plan->salary_currency_id) {
+            if ($plan->salary_currency_id == 0) {
                 $defaultCurrency = SalaryCurrency::whereCurrencyName('USD US Dollar')->first();
                 if ($defaultCurrency) {
                     $plan->salary_currency_id = $defaultCurrency->id;
@@ -209,7 +209,7 @@ class PlanController extends AppBaseController
 
             $updatePlan = $this->planRepository->updatePlan($input, $plan);
 
-            if (!$updatePlan) {
+            if (! $updatePlan) {
                 DB::rollBack();
 
                 return $this->sendError(__('messages.flash.plan_cant_update'));
@@ -257,7 +257,7 @@ class PlanController extends AppBaseController
             }
 
             // Check if this is the only trial plan
-            if ($plan->is_trial_plan && 1 === Plan::trial()->count()) {
+            if ($plan->is_trial_plan && Plan::trial()->count() === 1) {
                 return $this->sendError('Cannot delete the only trial plan. Please create another trial plan first.');
             }
 
@@ -311,7 +311,7 @@ class PlanController extends AppBaseController
             DB::beginTransaction();
 
             // Ensure the plan is active
-            if (!$plan->is_active) {
+            if (! $plan->is_active) {
                 return $this->sendError('Cannot set inactive plan as trial plan');
             }
 
@@ -397,7 +397,7 @@ class PlanController extends AppBaseController
                 case 'delete':
                     // Check for dependencies before deletion
                     $dependencies = $this->planRepository->checkBulkDependencies($planIds);
-                    if (!empty($dependencies)) {
+                    if (! empty($dependencies)) {
                         return $this->sendError(
                             __('messages.flash.plans_cant_delete_bulk'),
                             $dependencies,
@@ -470,7 +470,7 @@ class PlanController extends AppBaseController
 
             if ($request->filled('price_range')) {
                 $range = explode('-', $request->get('price_range'));
-                if (2 === count($range)) {
+                if (count($range) === 2) {
                     $query->priceRange($range[0], $range[1]);
                 }
             }
@@ -513,8 +513,7 @@ class PlanController extends AppBaseController
                 })
                 ->active()
                 ->alphabetical()
-                ->paginate(20)
-            ;
+                ->paginate(20);
 
             // Get plan statistics
             $statistics = $this->getPlanStatistics();
@@ -560,7 +559,7 @@ class PlanController extends AppBaseController
         $totalViews = $plan->views ?? 0; // Assuming you track plan views
         $totalSubscriptions = $plan->subscriptions()->count();
 
-        if (0 === $totalViews) {
+        if ($totalViews === 0) {
             return 0.0;
         }
 

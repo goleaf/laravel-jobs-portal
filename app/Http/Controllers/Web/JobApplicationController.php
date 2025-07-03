@@ -53,7 +53,7 @@ class JobApplicationController extends AppBaseController
         $job = Job::with(['company.user', 'appliedJobs'])->findOrFail($input['job_id']);
         $employerId = $job->company->user->id;
 
-        'draft' != $input['application_type'] ? 1 == NotificationSetting::where('key', 'JOB_APPLICATION_SUBMITTED')->first()->value
+        $input['application_type'] != 'draft' ? NotificationSetting::where('key', 'JOB_APPLICATION_SUBMITTED')->first()->value == 1
             ? addNotification([
                 Notification::JOB_APPLICATION_SUBMITTED,
                 $employerId,
@@ -75,7 +75,7 @@ class JobApplicationController extends AppBaseController
 
         Mail::to($job->company->user->email)->send(new EmailToEmployer($data));
 
-        return 'draft' == $input['application_type']
+        return $input['application_type'] == 'draft'
             ? $this->sendResponse($job->job_id, __('messages.flash.job_application_draft'))
             : $this->sendResponse($job->job_id, __('messages.flash.job_applied'));
     }

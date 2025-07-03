@@ -7,7 +7,6 @@ use App\Http\Requests\Job\ChangeJobApplicationStatusRequest;
 use App\Http\Requests\Job\ChangeJobStageJobApplicationRequest;
 use App\Http\Requests\Job\DeleteJobApplicationRequest;
 use App\Http\Requests\Job\DownloadMediaJobApplicationRequest;
-use App\Http\Requests\Job\StoreJobApplicationRequest;
 use App\Http\Requests\JobApplication\IndexJobApplicationRequest;
 use App\Models\Job;
 use App\Models\JobApplication;
@@ -59,7 +58,7 @@ class JobApplicationController extends AppBaseController
     {
         try {
             // Verify job ownership with enhanced security
-            if (!$this->verifyJobOwnership($jobId)) {
+            if (! $this->verifyJobOwnership($jobId)) {
                 if ($this->isApiRequest($request)) {
                     return $this->sendError('Unauthorized access to job applications', 403);
                 }
@@ -101,7 +100,7 @@ class JobApplicationController extends AppBaseController
             $jobId = $request->get('jobId');
 
             // Enhanced security validation
-            if (!$this->verifyJobApplicationOwnership($jobApplication, $jobId)) {
+            if (! $this->verifyJobApplicationOwnership($jobApplication, $jobId)) {
                 return $this->sendError(__('messages.common.seems_message'), 403);
             }
 
@@ -152,8 +151,8 @@ class JobApplicationController extends AppBaseController
     /**
      * Change job application status with enhanced workflow management.
      *
-     * @param mixed $id
-     * @param mixed $status
+     * @param  mixed  $id
+     * @param  mixed  $status
      */
     public function changeJobApplicationStatus($id, $status, ChangeJobApplicationStatusRequest $request): JsonResponse
     {
@@ -161,7 +160,7 @@ class JobApplicationController extends AppBaseController
             $jobId = $request->get('jobId');
 
             // Enhanced security validation
-            if (!$this->verifyJobApplicationOwnership($id, $jobId)) {
+            if (! $this->verifyJobApplicationOwnership($id, $jobId)) {
                 return $this->sendError(__('messages.common.seems_message'), 403);
             }
 
@@ -170,7 +169,7 @@ class JobApplicationController extends AppBaseController
             $jobApplication = JobApplication::with(['candidate.user', 'job'])->findOrFail($id);
 
             // Enhanced status validation
-            if (!$this->canChangeStatus($jobApplication->status, $status)) {
+            if (! $this->canChangeStatus($jobApplication->status, $status)) {
                 return $this->sendError(
                     JobApplication::STATUS[$jobApplication->status].' job cannot be '.JobApplication::STATUS[$status]
                 );
@@ -227,10 +226,9 @@ class JobApplicationController extends AppBaseController
                 ->whereHas('job', function ($q) {
                     $q->where('company_id', getLoggedInUser()->company->id);
                 })
-                ->first()
-            ;
+                ->first();
 
-            if (!$jobApplication) {
+            if (! $jobApplication) {
                 if ($this->isApiRequest($request)) {
                     return $this->sendError('Job application not found', 404);
                 }
@@ -334,8 +332,7 @@ class JobApplicationController extends AppBaseController
                     $q->where('company_id', getLoggedInUser()->company->id);
                 })
                 ->pluck('id')
-                ->toArray()
-            ;
+                ->toArray();
 
             if (count($validApplications) !== count($applicationIds)) {
                 return $this->sendError('Some applications do not belong to your company');
@@ -348,8 +345,7 @@ class JobApplicationController extends AppBaseController
                             'status' => JobApplication::SHORT_LIST,
                             'status_changed_by' => auth()->id(),
                             'status_changed_at' => now(),
-                        ])
-                    ;
+                        ]);
 
                     break;
 
@@ -359,8 +355,7 @@ class JobApplicationController extends AppBaseController
                             'status' => JobApplication::REJECTED,
                             'status_changed_by' => auth()->id(),
                             'status_changed_at' => now(),
-                        ])
-                    ;
+                        ]);
 
                     break;
 
@@ -370,8 +365,7 @@ class JobApplicationController extends AppBaseController
                             'status' => JobApplication::COMPLETE,
                             'status_changed_by' => auth()->id(),
                             'status_changed_at' => now(),
-                        ])
-                    ;
+                        ]);
 
                     break;
 
@@ -381,8 +375,7 @@ class JobApplicationController extends AppBaseController
                             'job_stage_id' => $request->get('stage_id'),
                             'stage_changed_by' => auth()->id(),
                             'stage_changed_at' => now(),
-                        ])
-                    ;
+                        ]);
 
                     break;
 
@@ -429,8 +422,7 @@ class JobApplicationController extends AppBaseController
 
         $data = Cache::remember($cacheKey, self::CACHE_TTL, function () use ($jobId, $request) {
             $query = JobApplication::where('job_id', $jobId)
-                ->with(['candidate.user', 'job', 'jobStage'])
-            ;
+                ->with(['candidate.user', 'job', 'jobStage']);
 
             // Apply Enhanced scopes for filtering
             if ($request->filled('status')) {
@@ -488,8 +480,7 @@ class JobApplicationController extends AppBaseController
             $jobStage = JobStage::whereCompanyId(getLoggedInUser()->owner_id)
                 ->active()
                 ->orderBy('sort_order')
-                ->pluck('name', 'id')
-            ;
+                ->pluck('name', 'id');
 
             // Get status array
             $statusArray = JobApplication::STATUS;
@@ -504,8 +495,7 @@ class JobApplicationController extends AppBaseController
                     $query->byStage($request->get('stage_id'));
                 })
                 ->latest()
-                ->paginate(20)
-            ;
+                ->paginate(20);
 
             // Get application statistics
             $statistics = $this->getJobApplicationStatistics($jobId);
@@ -557,7 +547,7 @@ class JobApplicationController extends AppBaseController
     /**
      * Verify job application ownership.
      *
-     * @param mixed $jobApplicationId
+     * @param  mixed  $jobApplicationId
      */
     private function verifyJobApplicationOwnership($jobApplicationId, int $jobId): bool
     {
@@ -593,7 +583,7 @@ class JobApplicationController extends AppBaseController
 
         switch ($status) {
             case JobApplication::REJECTED:
-                if (1 == NotificationSetting::where('key', 'CANDIDATE_REJECTED_FOR_JOB')->first()?->value) {
+                if (NotificationSetting::where('key', 'CANDIDATE_REJECTED_FOR_JOB')->first()?->value == 1) {
                     addNotification([
                         Notification::CANDIDATE_REJECTED_FOR_JOB,
                         $candidateUserId,
@@ -605,7 +595,7 @@ class JobApplicationController extends AppBaseController
                 break;
 
             case JobApplication::COMPLETE:
-                if (1 == NotificationSetting::where('key', 'CANDIDATE_SELECTED_FOR_JOB')->first()?->value) {
+                if (NotificationSetting::where('key', 'CANDIDATE_SELECTED_FOR_JOB')->first()?->value == 1) {
                     addNotification([
                         Notification::CANDIDATE_SELECTED_FOR_JOB,
                         $candidateUserId,
@@ -617,7 +607,7 @@ class JobApplicationController extends AppBaseController
                 break;
 
             case JobApplication::SHORT_LIST:
-                if (1 == NotificationSetting::where('key', 'CANDIDATE_SHORTLISTED_FOR_JOB')->first()?->value) {
+                if (NotificationSetting::where('key', 'CANDIDATE_SHORTLISTED_FOR_JOB')->first()?->value == 1) {
                     addNotification([
                         Notification::CANDIDATE_SHORTLISTED_FOR_JOB,
                         $candidateUserId,
@@ -638,10 +628,9 @@ class JobApplicationController extends AppBaseController
         $totalApplications = JobApplication::where('job_id', $jobId)->count();
         $selectedApplications = JobApplication::where('job_id', $jobId)
             ->where('status', JobApplication::COMPLETE)
-            ->count()
-        ;
+            ->count();
 
-        if (0 === $totalApplications) {
+        if ($totalApplications === 0) {
             return 0.0;
         }
 

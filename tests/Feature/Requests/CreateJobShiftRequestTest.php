@@ -21,9 +21,9 @@ class CreateJobShiftRequestTest extends TestCase
     /**
      * Test that the request has proper validation rules.
      */
-    public function testValidationRulesAreDefined()
+    public function test_validation_rules_are_defined()
     {
-        $request = new CreateJobShiftRequest();
+        $request = new CreateJobShiftRequest;
         $rules = $request->rules();
 
         $this->assertIsArray($rules);
@@ -33,16 +33,16 @@ class CreateJobShiftRequestTest extends TestCase
     /**
      * Test authorization allows all users.
      */
-    public function testAllUsersAreAuthorized()
+    public function test_all_users_are_authorized()
     {
-        $request = new CreateJobShiftRequest();
+        $request = new CreateJobShiftRequest;
         $this->assertTrue($request->authorize());
     }
 
     /**
      * Test validation with valid data.
      */
-    public function testValidationPassesWithValidData()
+    public function test_validation_passes_with_valid_data()
     {
         $data = $this->getValidData();
 
@@ -53,7 +53,7 @@ class CreateJobShiftRequestTest extends TestCase
     /**
      * Test validation fails with invalid data.
      */
-    public function testValidationFailsWithInvalidData()
+    public function test_validation_fails_with_invalid_data()
     {
         $data = $this->getInvalidData();
 
@@ -64,9 +64,9 @@ class CreateJobShiftRequestTest extends TestCase
     /**
      * Test custom error messages are defined.
      */
-    public function testCustomErrorMessagesAreDefined()
+    public function test_custom_error_messages_are_defined()
     {
-        $request = new CreateJobShiftRequest();
+        $request = new CreateJobShiftRequest;
 
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
@@ -79,9 +79,9 @@ class CreateJobShiftRequestTest extends TestCase
     /**
      * Test custom attributes are defined.
      */
-    public function testCustomAttributesAreDefined()
+    public function test_custom_attributes_are_defined()
     {
-        $request = new CreateJobShiftRequest();
+        $request = new CreateJobShiftRequest;
 
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
@@ -94,7 +94,7 @@ class CreateJobShiftRequestTest extends TestCase
     /**
      * Create a test user with specific role.
      *
-     * @param mixed $role
+     * @param  mixed  $role
      */
     protected function createUserWithRole($role = 'user')
     {

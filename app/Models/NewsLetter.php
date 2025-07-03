@@ -14,29 +14,29 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * NewsLetter Model - Enhanced with Enhanced patterns.
  *
- * @property int         $id
- * @property string      $email
+ * @property int $id
+ * @property string $email
  * @property null|string $name
- * @property bool        $is_active
- * @property bool        $is_verified
+ * @property bool $is_active
+ * @property bool $is_verified
  * @property null|string $verification_token
  * @property null|string $unsubscribe_token
  * @property null|Carbon $subscribed_at
  * @property null|Carbon $unsubscribed_at
  * @property null|Carbon $verified_at
  * @property null|Carbon $last_email_sent_at
- * @property null|int    $emails_sent_count
- * @property null|array  $preferences
+ * @property null|int $emails_sent_count
+ * @property null|array $preferences
  * @property null|string $source
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|Carbon $deleted_at
- * @property bool        $is_subscribed
- * @property bool        $is_unsubscribed
- * @property bool        $is_recent
- * @property string      $status
- * @property string      $domain
- * @property int         $days_since_subscription
+ * @property bool $is_subscribed
+ * @property bool $is_unsubscribed
+ * @property bool $is_recent
+ * @property string $status
+ * @property string $domain
+ * @property int $days_since_subscription
  *
  * Enhanced Enhanced Scopes:
  *
@@ -67,8 +67,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class NewsLetter extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     /**
      * Source constants.
@@ -150,8 +150,7 @@ class NewsLetter extends Model
             ->logOnly(['email', 'name', 'is_active', 'is_verified', 'source'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn (string $eventName) => "Newsletter subscription has been {$eventName}")
-        ;
+            ->setDescriptionForEvent(fn (string $eventName) => "Newsletter subscription has been {$eventName}");
     }
 
     // =============================================
@@ -240,8 +239,7 @@ class NewsLetter extends Model
     public function scopeThisMonth(Builder $query): Builder
     {
         return $query->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
-        ;
+            ->whereYear('created_at', now()->year);
     }
 
     /**
@@ -290,8 +288,7 @@ class NewsLetter extends Model
     public function scopeEngaged(Builder $query): Builder
     {
         return $query->where('last_email_sent_at', '>=', now()->subDays(30))
-            ->where('emails_sent_count', '>', 0)
-        ;
+            ->where('emails_sent_count', '>', 0);
     }
 
     /**
@@ -301,8 +298,7 @@ class NewsLetter extends Model
     {
         return $query->where(function ($q) use ($days) {
             $q->whereNull('last_email_sent_at')
-                ->orWhere('last_email_sent_at', '<', now()->subDays($days))
-            ;
+                ->orWhere('last_email_sent_at', '<', now()->subDays($days));
         });
     }
 
@@ -316,8 +312,7 @@ class NewsLetter extends Model
     public function scopeSearch(Builder $query, string $term): Builder
     {
         return $query->where('email', 'like', "%{$term}%")
-            ->orWhere('name', 'like', "%{$term}%")
-        ;
+            ->orWhere('name', 'like', "%{$term}%");
     }
 
     /**
@@ -361,7 +356,7 @@ class NewsLetter extends Model
      */
     public function getIsSubscribedAttribute(): bool
     {
-        return !is_null($this->subscribed_at) && is_null($this->unsubscribed_at);
+        return ! is_null($this->subscribed_at) && is_null($this->unsubscribed_at);
     }
 
     /**
@@ -369,7 +364,7 @@ class NewsLetter extends Model
      */
     public function getIsUnsubscribedAttribute(): bool
     {
-        return !is_null($this->unsubscribed_at);
+        return ! is_null($this->unsubscribed_at);
     }
 
     /**
@@ -409,7 +404,7 @@ class NewsLetter extends Model
      */
     public function getDaysSinceSubscriptionAttribute(): int
     {
-        if (!$this->subscribed_at) {
+        if (! $this->subscribed_at) {
             return 0;
         }
 
@@ -552,8 +547,7 @@ class NewsLetter extends Model
                 ->orderByDesc('count')
                 ->limit(10)
                 ->pluck('count', 'domain')
-                ->toArray()
-            ;
+                ->toArray();
         });
     }
 

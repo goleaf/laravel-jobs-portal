@@ -2,30 +2,30 @@
 
 namespace Tests\Feature;
 
-use App\Views\JobTemplateModel;
-use App\Views\CompanyTemplateModel;
-use App\Views\JobListTemplateModel;
-use App\Services\HabrViewsService;
-use App\Models\Job;
 use App\Models\Company;
-use App\Models\User;
+use App\Models\Job;
 use App\Models\JobCategory;
 use App\Models\JobType;
+use App\Models\User;
+use App\Services\HabrViewsService;
+use App\Views\CompanyTemplateModel;
+use App\Views\JobListTemplateModel;
+use App\Views\JobTemplateModel;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Support\Collection;
 use Tests\TestCase;
-use Carbon\Carbon;
 
 /**
  * Habr Views Integration Test Suite
- * 
+ *
  * Tests the complete integration of PHP Views package with Laravel Job Portal
  * Based on Habr article patterns for model-oriented templating
  */
 class HabrViewsIntegrationTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     protected HabrViewsService $habrViews;
     protected User $user;
@@ -37,10 +37,10 @@ class HabrViewsIntegrationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Initialize Habr Views Service
-        $this->habrViews = new HabrViewsService();
-        
+        $this->habrViews = new HabrViewsService;
+
         // Create test data
         $this->createTestData();
     }
@@ -249,7 +249,7 @@ class HabrViewsIntegrationTest extends TestCase
     public function habr_views_service_provides_performance_benchmarking()
     {
         $performanceStats = $this->habrViews->getPerformanceStats();
-        
+
         $this->assertArrayHasKey('job_rendering', $performanceStats);
         $this->assertArrayHasKey('cache_info', $performanceStats);
         $this->assertArrayHasKey('performance_summary', $performanceStats);
@@ -264,7 +264,7 @@ class HabrViewsIntegrationTest extends TestCase
         $this->assertArrayHasKey('average_render_time_ms', $performanceSummary);
         $this->assertArrayHasKey('renders_per_second', $performanceSummary);
         $this->assertArrayHasKey('cache_status', $performanceSummary);
-        
+
         // Verify performance is reasonable (faster than 100ms per render)
         $this->assertLessThan(100, $performanceSummary['average_render_time_ms']);
     }
@@ -281,7 +281,7 @@ class HabrViewsIntegrationTest extends TestCase
 
         $allJobs = collect([$this->job])->merge($jobs);
 
-        $listModel = new JobListTemplateModel();
+        $listModel = new JobListTemplateModel;
         $listModel->title = 'Test Jobs';
         $listModel->description = 'A list of test jobs';
         $listModel->jobs = $allJobs->map(function ($job) {
@@ -311,7 +311,7 @@ class HabrViewsIntegrationTest extends TestCase
 
         // Test view type class
         $this->assertStringContains('space-y-4', $listModel->viewTypeClass());
-        
+
         $listModel->viewType = 'grid';
         $this->assertStringContains('grid', $listModel->viewTypeClass());
     }
@@ -427,12 +427,12 @@ class HabrViewsIntegrationTest extends TestCase
 
         // Test memory efficiency
         $startMemory = memory_get_usage();
-        
+
         for ($i = 0; $i < 50; $i++) {
             $jobModel = JobTemplateModel::fromJob($this->job);
             unset($jobModel);
         }
-        
+
         $endMemory = memory_get_usage();
         $memoryPerModel = ($endMemory - $startMemory) / 50;
 
@@ -443,32 +443,32 @@ class HabrViewsIntegrationTest extends TestCase
     public function habr_views_provides_comprehensive_feature_set()
     {
         // Test all major features mentioned in Habr article
-        
+
         // 1. Model-oriented approach
         $jobModel = JobTemplateModel::fromJob($this->job);
         $this->assertInstanceOf(JobTemplateModel::class, $jobModel);
-        
+
         // 2. Typed properties
         $this->assertIsString($jobModel->title);
         $this->assertIsBool($jobModel->isFeatured);
         $this->assertIsInt($jobModel->experienceYears);
-        
+
         // 3. Encapsulated logic in methods
         $this->assertIsString($jobModel->salaryRange());
         $this->assertIsString($jobModel->experienceLevel());
         $this->assertIsArray($jobModel->structuredData());
-        
+
         // 4. Namespace support (covered by service initialization)
         $this->assertStringContains('App\\Views', get_class($jobModel));
-        
+
         // 5. Performance optimization (covered by benchmark test)
         $performanceStats = $this->habrViews->getPerformanceStats();
         $this->assertArrayHasKey('performance_summary', $performanceStats);
-        
+
         // 6. Flexibility (demonstrated by different model types)
         $companyModel = CompanyTemplateModel::fromCompany($this->company);
         $this->assertInstanceOf(CompanyTemplateModel::class, $companyModel);
-        
+
         $this->addToAssertionCount(1); // Comprehensive feature test passed
     }
-} 
+}

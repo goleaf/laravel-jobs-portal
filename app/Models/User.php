@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Traits\HasDeepJobPortalRelationships;
 use App\Traits\HasFiles;
+use Glorand\Model\Settings\Traits\HasSettingsField;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,67 +20,64 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
-use Tymon\JWTAuth\Contracts\JWTSubject;
-use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
-use App\Traits\HasDeepJobPortalRelationships;
-use Glorand\Model\Settings\Traits\HasSettingsField;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
  * App\Models\User.
  *
- * @property int                               $id
- * @property string                            $first_name
- * @property null|string                       $last_name
- * @property string                            $email
- * @property null|string                       $phone
- * @property null|Carbon                       $email_verified_at
- * @property string                            $password
- * @property null|string                       $dob
- * @property null|int                          $gender
- * @property null|string                       $country
- * @property null|string                       $state
- * @property null|string                       $city
- * @property int                               $is_active
- * @property int                               $is_verified
- * @property null|int                          $owner_id
- * @property null|string                       $owner_type
- * @property null|string                       $remember_token
- * @property null|Carbon                       $created_at
- * @property null|Carbon                       $updated_at
- * @property null|array                        $settings
- * @property null|Candidate                    $candidate
- * @property Collection|Skill[]                $candidateSkill
- * @property null|int                          $candidate_skill_count
- * @property mixed                             $avatar
- * @property string                            $full_name
+ * @property int $id
+ * @property string $first_name
+ * @property null|string $last_name
+ * @property string $email
+ * @property null|string $phone
+ * @property null|Carbon $email_verified_at
+ * @property string $password
+ * @property null|string $dob
+ * @property null|int $gender
+ * @property null|string $country
+ * @property null|string $state
+ * @property null|string $city
+ * @property int $is_active
+ * @property int $is_verified
+ * @property null|int $owner_id
+ * @property null|string $owner_type
+ * @property null|string $remember_token
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|array $settings
+ * @property null|Candidate $candidate
+ * @property Collection|Skill[] $candidateSkill
+ * @property null|int $candidate_skill_count
+ * @property mixed $avatar
+ * @property string $full_name
  * @property Collection|DatabaseNotification[] $notifications
- * @property null|int                          $notifications_count
- * @property Collection|Permission[]           $permissions
- * @property null|int                          $permissions_count
- * @property Collection|Role[]                 $roles
- * @property null|int                          $roles_count
- * 
+ * @property null|int $notifications_count
+ * @property Collection|Permission[] $permissions
+ * @property null|int $permissions_count
+ * @property Collection|Role[] $roles
+ * @property null|int $roles_count
+ *
  * // Deep Relationships Added
- * @property Collection|Job[]                  $locationJobs   Jobs in user's location (country->state->city->jobs)
- * @property Collection|JobApplication[]       $companyApplications Applications to user's company jobs
- * @property Collection|User[]                 $regionCandidates Other candidates in same region
- * @property Collection|Job[]                  $industryJobs   Jobs in user's company industry
+ * @property Collection|Job[] $locationJobs Jobs in user's location (country->state->city->jobs)
+ * @property Collection|JobApplication[] $companyApplications Applications to user's company jobs
+ * @property Collection|User[] $regionCandidates Other candidates in same region
+ * @property Collection|Job[] $industryJobs Jobs in user's company industry
  */
 class User extends Authenticatable implements HasMedia, JWTSubject
 {
-    use HasApiTokens;
     use Billable;
+    use HasApiTokens;
+    use HasDeepJobPortalRelationships;
     use HasFactory;
     use HasFiles;
+    use HasRelationships;
     use HasRoles;
+    use HasSettingsField;
     use InteractsWithMedia;
     use Notifiable;
     use SoftDeletes;
     use \Staudenmeir\EloquentHasManyDeep\HasRelationships;
-    use HasRelationships;
-    use HasDeepJobPortalRelationships;
-    use HasSettingsField;
 
     public const DARK_MODE = 1;
     public const LIGHT_MODE = 0;
@@ -166,8 +165,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include active users.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeActive($query)
@@ -178,8 +176,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include inactive users.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeInactive($query)
@@ -190,8 +187,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include admin users.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeAdmin($query)
@@ -202,9 +198,8 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include users with a specific role.
      *
-     * @param Builder $query
-     * @param string  $role
-     *
+     * @param  Builder  $query
+     * @param  string  $role
      * @return Builder
      */
     public function scopeWithRole($query, $role)
@@ -215,8 +210,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include users verified by email.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeVerified($query)
@@ -227,8 +221,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include unverified users.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeUnverified($query)
@@ -239,9 +232,8 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include users who logged in recently.
      *
-     * @param Builder        $query
-     * @param \Carbon\Carbon $date
-     *
+     * @param  Builder  $query
+     * @param  \Carbon\Carbon  $date
      * @return Builder
      */
     public function scopeRecentlyActive($query, $date)
@@ -252,9 +244,8 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to search users by name or email.
      *
-     * @param Builder $query
-     * @param string  $search
-     *
+     * @param  Builder  $query
+     * @param  string  $search
      * @return Builder
      */
     public function scopeSearch($query, $search)
@@ -262,16 +253,14 @@ class User extends Authenticatable implements HasMedia, JWTSubject
         return $query->where('name', 'like', '%'.$search.'%')
             ->orWhere('email', 'like', '%'.$search.'%')
             ->orWhere('first_name', 'like', '%'.$search.'%')
-            ->orWhere('last_name', 'like', '%'.$search.'%')
-        ;
+            ->orWhere('last_name', 'like', '%'.$search.'%');
     }
 
     /**
      * Scope a query to order users by creation date.
      *
-     * @param Builder $query
-     * @param string  $direction
-     *
+     * @param  Builder  $query
+     * @param  string  $direction
      * @return Builder
      */
     public function scopeOrderByCreated($query, $direction = 'desc')
@@ -282,9 +271,8 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to order users by last login.
      *
-     * @param Builder $query
-     * @param string  $direction
-     *
+     * @param  Builder  $query
+     * @param  string  $direction
      * @return Builder
      */
     public function scopeOrderByLastLogin($query, $direction = 'desc')
@@ -295,10 +283,9 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include users created within a date range.
      *
-     * @param Builder        $query
-     * @param \Carbon\Carbon $start
-     * @param \Carbon\Carbon $end
-     *
+     * @param  Builder  $query
+     * @param  \Carbon\Carbon  $start
+     * @param  \Carbon\Carbon  $end
      * @return Builder
      */
     public function scopeCreatedBetween($query, $start, $end)
@@ -309,9 +296,8 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include users with a specific status.
      *
-     * @param Builder $query
-     * @param string  $status
-     *
+     * @param  Builder  $query
+     * @param  string  $status
      * @return Builder
      */
     public function scopeWithStatus($query, $status)
@@ -322,8 +308,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include featured users.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeFeatured($query)
@@ -336,8 +321,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include non-featured users.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeNotFeatured($query)
@@ -350,8 +334,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include users by role.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeByRole($query, string $role)
@@ -362,8 +345,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include admin users.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeAdmins($query)
@@ -374,8 +356,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include candidate users.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeCandidates($query)
@@ -386,8 +367,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include employer users.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeEmployers($query)
@@ -398,8 +378,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include recent users.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeRecent($query, int $days = 30)
@@ -410,8 +389,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
     /**
      * Scope a query to only include old users.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeOld($query, int $days = 365)
@@ -534,23 +512,23 @@ class User extends Authenticatable implements HasMedia, JWTSubject
 
     /**
      * DEEP RELATIONSHIPS USING ELOQUENT HAS MANY DEEP
-     * 
+     *
      * Package: staudenmeir/eloquent-has-many-deep v1.21
      * Source: https://github.com/staudenmeir/eloquent-has-many-deep
      * Reference: https://madewithlaravel.com/eloquent-has-many-deep
-     * 
+     *
      * These methods provide complex multi-level relationships
      * for advanced querying in the job portal system.
      */
 
     /**
      * Get all jobs in the user's location (Country->State->City->Jobs).
-     * 
+     *
      * This allows finding all jobs available in a user's location
      * without complex joins or multiple queries.
-     * 
+     *
      * Usage: $user->locationJobs()->where('is_active', true)->get()
-     * 
+     *
      * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
      */
     public function locationJobs()
@@ -560,27 +538,27 @@ class User extends Authenticatable implements HasMedia, JWTSubject
             [\App\Models\Country::class, \App\Models\State::class, \App\Models\City::class],
             [
                 'id',        // User.country_id = Country.id
-                'country_id', // Country.id = State.country_id  
+                'country_id', // Country.id = State.country_id
                 'state_id',  // State.id = City.state_id
-                'city_id'    // City.id = Job.city_id
+                'city_id',    // City.id = Job.city_id
             ],
             [
                 'country_id', // User.country_id
                 'id',        // Country.id
-                'id',        // State.id  
-                'id'         // City.id
+                'id',        // State.id
+                'id',         // City.id
             ]
         );
     }
 
     /**
      * Get all job applications for jobs in user's company.
-     * 
+     *
      * Path: User -> Company -> Jobs -> JobApplications
      * Perfect for employers to see all applications across all their jobs.
-     * 
+     *
      * Usage: $employer->companyJobApplications()->with('candidate')->get()
-     * 
+     *
      * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
      */
     public function companyJobApplications()
@@ -591,24 +569,24 @@ class User extends Authenticatable implements HasMedia, JWTSubject
             [
                 'id',         // User.id = Company.user_id
                 'company_id', // Company.id = Job.company_id
-                'job_id'      // Job.id = JobApplication.job_id
+                'job_id',      // Job.id = JobApplication.job_id
             ],
             [
                 'id',         // User.id
-                'user_id',    // Company.user_id  
-                'id'          // Job.id
+                'user_id',    // Company.user_id
+                'id',          // Job.id
             ]
         );
     }
 
     /**
      * Get all candidates in the same region.
-     * 
+     *
      * Path: User -> Country -> State -> City -> Users (Candidates)
      * Useful for finding local talent or networking.
-     * 
+     *
      * Usage: $user->regionCandidates()->active()->get()
-     * 
+     *
      * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
      */
     public function regionCandidates()
@@ -619,27 +597,27 @@ class User extends Authenticatable implements HasMedia, JWTSubject
             [
                 'id',        // User.country_id = Country.id
                 'country_id', // Country.id = State.country_id
-                'state_id',  // State.id = City.state_id  
-                'city_id'    // City.id = User.city_id
+                'state_id',  // State.id = City.state_id
+                'city_id',    // City.id = User.city_id
             ],
             [
                 'country_id', // User.country_id
                 'id',        // Country.id
                 'id',        // State.id
-                'id'         // City.id
+                'id',         // City.id
             ]
         )->where('users.id', '!=', $this->id)
-         ->whereHas('candidate'); // Only candidates
+            ->whereHas('candidate'); // Only candidates
     }
 
     /**
      * Get all skills through job applications.
-     * 
+     *
      * Path: User -> JobApplications -> Jobs -> JobSkills -> Skills
      * Shows all skills required for jobs a candidate has applied to.
-     * 
+     *
      * Usage: $candidate->appliedJobSkills()->distinct()->get()
-     * 
+     *
      * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
      */
     public function appliedJobSkills()
@@ -651,25 +629,25 @@ class User extends Authenticatable implements HasMedia, JWTSubject
                 'id',      // User.id = JobApplication.candidate_id
                 'job_id',  // JobApplication.job_id = Job.id
                 'job_id',  // Job.id = job_skill.job_id
-                'skill_id' // job_skill.skill_id = Skill.id
+                'skill_id', // job_skill.skill_id = Skill.id
             ],
             [
-                'id',          // User.id  
+                'id',          // User.id
                 'candidate_id', // JobApplication.candidate_id
                 'id',          // Job.id
-                'id'           // Skill.id
+                'id',           // Skill.id
             ]
         );
     }
 
     /**
      * Get similar candidates who applied to same jobs.
-     * 
+     *
      * Path: User -> JobApplications -> Jobs -> JobApplications -> Users
      * Great for networking with candidates who have similar interests.
-     * 
+     *
      * Usage: $candidate->similarCandidates()->limit(10)->get()
-     * 
+     *
      * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
      */
     public function similarCandidates()
@@ -681,24 +659,24 @@ class User extends Authenticatable implements HasMedia, JWTSubject
                 'id',          // User.id = JobApplication.candidate_id
                 'job_id',      // JobApplication.job_id = Job.id
                 'id',          // Job.id = JobApplication.job_id
-                'candidate_id' // JobApplication.candidate_id = User.id
+                'candidate_id', // JobApplication.candidate_id = User.id
             ],
             [
                 'id',          // User.id
                 'candidate_id', // JobApplication.candidate_id
                 'id',          // Job.id
-                'job_id'       // JobApplication.job_id
+                'job_id',       // JobApplication.job_id
             ]
         )->where('users.id', '!=', $this->id) // Exclude self
-         ->distinct(); // Avoid duplicates
+            ->distinct(); // Avoid duplicates
     }
 
     /**
      * Default settings for User model.
-     * 
+     *
      * These settings provide user preferences and configuration options
      * that can be customized per user without database schema changes.
-     * 
+     *
      * @return array
      */
     public $defaultSettings = [
@@ -720,7 +698,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
             'salary_range' => [
                 'min' => 0,
                 'max' => 999999,
-                'currency' => 'USD'
+                'currency' => 'USD',
             ],
             'remote_work' => false,
             'travel_willingness' => 0, // 0-100%
@@ -740,15 +718,15 @@ class User extends Authenticatable implements HasMedia, JWTSubject
             ],
             'layout' => 'grid',
             'items_per_page' => 10,
-        ]
+        ],
     ];
 
     /**
      * Validation rules for settings data.
-     * 
+     *
      * These rules ensure data integrity when updating user settings
      * and provide clear validation messages for the frontend.
-     * 
+     *
      * @return array
      */
     public $settingsRules = [
@@ -762,7 +740,7 @@ class User extends Authenticatable implements HasMedia, JWTSubject
         'profile.profile_visibility' => 'string|in:public,private,contacts',
         'profile.show_email' => 'boolean',
         'profile.show_phone' => 'boolean',
-        
+
         'job_preferences' => 'array',
         'job_preferences.job_alerts' => 'boolean',
         'job_preferences.preferred_job_types' => 'array',
@@ -773,13 +751,13 @@ class User extends Authenticatable implements HasMedia, JWTSubject
         'job_preferences.salary_range.currency' => 'string|size:3',
         'job_preferences.remote_work' => 'boolean',
         'job_preferences.travel_willingness' => 'integer|min:0|max:100',
-        
+
         'privacy' => 'array',
         'privacy.profile_searchable' => 'boolean',
         'privacy.allow_recruiter_contact' => 'boolean',
         'privacy.show_activity_status' => 'boolean',
         'privacy.data_sharing_consent' => 'boolean',
-        
+
         'dashboard' => 'array',
         'dashboard.widgets' => 'array',
         'dashboard.layout' => 'string|in:grid,list',

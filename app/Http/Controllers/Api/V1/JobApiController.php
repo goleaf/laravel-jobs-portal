@@ -25,23 +25,22 @@ class JobApiController extends Controller
             $query = Job::with(['company:id,name', 'jobCategory:id,name', 'jobType:id,name']);
 
             // Apply search filter
-            if ($request->has('search') && !empty($request->search)) {
+            if ($request->has('search') && ! empty($request->search)) {
                 $search = $request->search;
                 $query->where(function ($q) use ($search) {
                     $q->where('title', 'like', "%{$search}%")
                         ->orWhere('description', 'like', "%{$search}%")
                         ->orWhereHas('company', function ($company) use ($search) {
                             $company->where('name', 'like', "%{$search}%");
-                        })
-                    ;
+                        });
                 });
             }
 
             // Apply status filter
-            if ($request->has('status') && '' !== $request->status) {
-                if ('active' === $request->status) {
+            if ($request->has('status') && $request->status !== '') {
+                if ($request->status === 'active') {
                     $query->where('is_active', true);
-                } elseif ('inactive' === $request->status) {
+                } elseif ($request->status === 'inactive') {
                     $query->where('is_active', false);
                 }
             }
@@ -157,14 +156,13 @@ class JobApiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function show($id): JsonResponse
     {
         try {
             $job = Job::with(['company:id,name', 'jobCategory:id,name', 'jobType:id,name'])
-                ->findOrFail($id)
-            ;
+                ->findOrFail($id);
 
             return response()->json([
                 'success' => true,
@@ -207,7 +205,7 @@ class JobApiController extends Controller
     /**
      * Update the specified resource.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function update(UpdateRequest $request, $id): JsonResponse
     {
@@ -258,7 +256,7 @@ class JobApiController extends Controller
     /**
      * Remove the specified resource.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function destroy($id): JsonResponse
     {

@@ -3,31 +3,31 @@
 namespace App\Http\Requests\Api;
 
 use App\Http\Requests\Foundation\AbstractBaseRequest;
-use App\Http\Requests\Foundation\Traits\SecurityValidationTrait;
+use App\Http\Requests\Foundation\Traits\AuditLoggingTrait;
 use App\Http\Requests\Foundation\Traits\MultilingualValidationTrait;
 use App\Http\Requests\Foundation\Traits\PerformanceOptimizationTrait;
-use App\Http\Requests\Foundation\Traits\AuditLoggingTrait;
+use App\Http\Requests\Foundation\Traits\SecurityValidationTrait;
 
 /**
  * API Request - Base class for API validation
- * 
+ *
  * Handles validation for:
  * - REST API endpoints
  * - Authentication and authorization
  * - Rate limiting and throttling
  * - API versioning support
  * - Structured API responses
- * 
- * @package App\Http\Requests\Api
+ *
  * @version 1.0.0
+ *
  * @since 2024-12-28
  */
 abstract class ApiRequest extends AbstractBaseRequest
 {
-    use SecurityValidationTrait,
-        MultilingualValidationTrait,
-        PerformanceOptimizationTrait,
-        AuditLoggingTrait;
+    use AuditLoggingTrait;
+    use MultilingualValidationTrait;
+    use PerformanceOptimizationTrait;
+    use SecurityValidationTrait;
 
     /**
      * Security level for API operations
@@ -51,7 +51,7 @@ abstract class ApiRequest extends AbstractBaseRequest
         'api_authentication',
         'rate_limiting',
         'api_versioning',
-        'structured_response'
+        'structured_response',
     ];
 
     /**
@@ -124,8 +124,8 @@ abstract class ApiRequest extends AbstractBaseRequest
             'order' => ['sometimes', 'string', 'in:asc,desc'],
         ];
 
-        if (!empty($allowedFields)) {
-            $rules['sort'][] = 'in:' . implode(',', $allowedFields);
+        if (! empty($allowedFields)) {
+            $rules['sort'][] = 'in:'.implode(',', $allowedFields);
         }
 
         return $rules;
@@ -172,13 +172,13 @@ abstract class ApiRequest extends AbstractBaseRequest
 
         // Validate API rate limits
         $this->validateApiRateLimits($validator);
-        
+
         // Validate API version compatibility
         $this->validateApiVersionCompatibility($validator);
-        
+
         // Validate pagination parameters
         $this->validatePaginationParameters($validator);
-        
+
         // Validate sorting parameters
         $this->validateSortingParameters($validator);
     }
@@ -205,7 +205,7 @@ abstract class ApiRequest extends AbstractBaseRequest
         $apiVersion = $this->input('api_version', 'v1');
         $supportedVersions = $this->getSupportedApiVersions();
 
-        if (!in_array($apiVersion, $supportedVersions)) {
+        if (! in_array($apiVersion, $supportedVersions)) {
             $validator->errors()->add('api_version', __('validation.api.version_not_supported'));
         }
     }
@@ -234,11 +234,11 @@ abstract class ApiRequest extends AbstractBaseRequest
     protected function validateSortingParameters($validator): void
     {
         $sort = $this->input('sort');
-        
+
         if ($sort) {
             $allowedSortFields = $this->getAllowedSortFields();
-            
-            if (!empty($allowedSortFields) && !in_array($sort, $allowedSortFields)) {
+
+            if (! empty($allowedSortFields) && ! in_array($sort, $allowedSortFields)) {
                 $validator->errors()->add('sort', __('validation.api.sort_field_not_allowed'));
             }
         }
@@ -284,7 +284,7 @@ abstract class ApiRequest extends AbstractBaseRequest
                 'api_version' => $this->input('api_version', 'v1'),
                 'request_id' => $this->getRequestId(),
                 'timestamp' => now()->toISOString(),
-            ]
+            ],
         ], 422);
 
         throw new \Illuminate\Http\Exceptions\HttpResponseException($response);
@@ -296,7 +296,7 @@ abstract class ApiRequest extends AbstractBaseRequest
     protected function formatApiValidationErrors($validator): array
     {
         $errors = [];
-        
+
         foreach ($validator->errors()->messages() as $field => $messages) {
             $errors[] = [
                 'field' => $field,
@@ -346,4 +346,4 @@ abstract class ApiRequest extends AbstractBaseRequest
 
         return $sanitized;
     }
-} 
+}

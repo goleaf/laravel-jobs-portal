@@ -10,11 +10,11 @@ class AdminMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param \Closure(Request): (Response) $next
+     * @param  \Closure(Request): (Response)  $next
      */
     public function handle(Request $request, \Closure $next): Response
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return redirect()->route('login');
         }
 
@@ -24,7 +24,7 @@ class AdminMiddleware
         }
 
         // Alternative check if you have a simple is_admin field
-        if (isset(auth()->user()->user_type) && 1 == auth()->user()->user_type) {
+        if (isset(auth()->user()->user_type) && auth()->user()->user_type == 1) {
             return $next($request);
         }
 

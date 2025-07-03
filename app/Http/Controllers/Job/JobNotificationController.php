@@ -49,7 +49,7 @@ class JobNotificationController extends AppBaseController
 
     public function getEmployerJobs($id = null): JsonResponse
     {
-        if (!empty($id)) {
+        if (! empty($id)) {
             $employerJobs = Company::where('id', $id)->with([
                 'user', 'jobs' => function (HasMany $query) {
                     $query->whereDate('job_expiry_date', '>=', Carbon::now()->toDateString())->where('status', '=', '1');

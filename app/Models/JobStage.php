@@ -21,7 +21,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class JobStage extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'job_stages';
 
@@ -69,4 +70,4 @@ class JobStage extends Model
     {
         return $query->orderBy('sort_order', 'asc');
     }
-} 
+}

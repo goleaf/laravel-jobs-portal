@@ -15,26 +15,26 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * EmailTemplate Model - Enhanced with Enhanced patterns.
  *
- * @property int         $id
- * @property string      $template_name
- * @property string      $subject
- * @property string      $body
+ * @property int $id
+ * @property string $template_name
+ * @property string $subject
+ * @property string $body
  * @property null|string $variables
  * @property null|string $description
  * @property null|string $category
- * @property bool        $is_active
- * @property bool        $is_default
- * @property bool        $is_system
- * @property null|array  $placeholders
+ * @property bool $is_active
+ * @property bool $is_default
+ * @property bool $is_system
+ * @property null|array $placeholders
  * @property null|string $preview_text
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|Carbon $deleted_at
- * @property string      $display_name
- * @property array       $available_variables
- * @property string      $category_label
- * @property string      $preview_body
- * @property int         $usage_count
+ * @property string $display_name
+ * @property array $available_variables
+ * @property string $category_label
+ * @property string $preview_body
+ * @property int $usage_count
  *
  * Enhanced Enhanced Scopes:
  *
@@ -67,8 +67,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class EmailTemplate extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     protected $table = 'email_templates';
 
@@ -169,8 +169,7 @@ class EmailTemplate extends Model
                 'preview_text',
             ])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -202,7 +201,7 @@ class EmailTemplate extends Model
     /**
      * Scope a query to only include active templates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -212,7 +211,7 @@ class EmailTemplate extends Model
     /**
      * Scope a query to only include inactive templates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -222,7 +221,7 @@ class EmailTemplate extends Model
     /**
      * Scope a query to only include default templates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeDefault($query)
     {
@@ -232,7 +231,7 @@ class EmailTemplate extends Model
     /**
      * Scope a query to only include custom templates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeCustom($query)
     {
@@ -242,7 +241,7 @@ class EmailTemplate extends Model
     /**
      * Scope a query to only include system templates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSystem($query)
     {
@@ -252,7 +251,7 @@ class EmailTemplate extends Model
     /**
      * Scope a query to only include user-defined templates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeUserDefined($query)
     {
@@ -266,7 +265,7 @@ class EmailTemplate extends Model
     /**
      * Scope for templates by category.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByCategory($query, string $category)
     {
@@ -276,7 +275,7 @@ class EmailTemplate extends Model
     /**
      * Scope for searching templates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
@@ -284,15 +283,14 @@ class EmailTemplate extends Model
             $q->where('template_name', 'like', "%{$term}%")
                 ->orWhere('subject', 'like', "%{$term}%")
                 ->orWhere('body', 'like', "%{$term}%")
-                ->orWhere('description', 'like', "%{$term}%")
-            ;
+                ->orWhere('description', 'like', "%{$term}%");
         });
     }
 
     /**
      * Scope for recent templates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -302,7 +300,7 @@ class EmailTemplate extends Model
     /**
      * Scope for old templates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -312,7 +310,7 @@ class EmailTemplate extends Model
     /**
      * Scope for popular templates (most recently used).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopular($query)
     {
@@ -322,7 +320,7 @@ class EmailTemplate extends Model
     /**
      * Scope for alphabetical ordering.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
@@ -332,7 +330,7 @@ class EmailTemplate extends Model
     /**
      * Scope for ordering by usage.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByUsage($query)
     {
@@ -346,26 +344,24 @@ class EmailTemplate extends Model
     /**
      * Scope for templates with variables.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithVariables($query)
     {
         return $query->whereNotNull('variables')
-            ->where('variables', '!=', '')
-        ;
+            ->where('variables', '!=', '');
     }
 
     /**
      * Scope for templates without variables.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithoutVariables($query)
     {
         return $query->where(function ($q) {
             $q->whereNull('variables')
-                ->orWhere('variables', '')
-            ;
+                ->orWhere('variables', '');
         });
     }
 
@@ -376,7 +372,7 @@ class EmailTemplate extends Model
     /**
      * Scope for notification templates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNotification($query)
     {
@@ -386,7 +382,7 @@ class EmailTemplate extends Model
     /**
      * Scope for transactional templates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeTransactional($query)
     {
@@ -396,7 +392,7 @@ class EmailTemplate extends Model
     /**
      * Scope for marketing templates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeMarketing($query)
     {
@@ -406,74 +402,69 @@ class EmailTemplate extends Model
     /**
      * Scope for welcome templates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWelcome($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'welcome')
-                ->orWhere('template_name', 'like', '%welcome%')
-            ;
+                ->orWhere('template_name', 'like', '%welcome%');
         });
     }
 
     /**
      * Scope for password reset templates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePassword($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'password')
                 ->orWhere('template_name', 'like', '%password%')
-                ->orWhere('template_name', 'like', '%reset%')
-            ;
+                ->orWhere('template_name', 'like', '%reset%');
         });
     }
 
     /**
      * Scope for job-related templates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeJob($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'job')
                 ->orWhere('template_name', 'like', '%job%')
-                ->orWhere('template_name', 'like', '%application%')
-            ;
+                ->orWhere('template_name', 'like', '%application%');
         });
     }
 
     /**
      * Scope for company-related templates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeCompany($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'company')
                 ->orWhere('template_name', 'like', '%company%')
-                ->orWhere('template_name', 'like', '%employer%')
-            ;
+                ->orWhere('template_name', 'like', '%employer%');
         });
     }
 
     /**
      * Scope for candidate-related templates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeCandidate($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'candidate')
                 ->orWhere('template_name', 'like', '%candidate%')
-                ->orWhere('template_name', 'like', '%applicant%')
-            ;
+                ->orWhere('template_name', 'like', '%applicant%');
         });
     }
 
@@ -556,7 +547,7 @@ class EmailTemplate extends Model
      */
     public function getAvailableVariablesAttribute(): array
     {
-        if (!$this->variables) {
+        if (! $this->variables) {
             return [];
         }
 
@@ -630,7 +621,7 @@ class EmailTemplate extends Model
         $requiredVariables = $this->available_variables;
 
         foreach ($requiredVariables as $required) {
-            if (!isset($variables[$required])) {
+            if (! isset($variables[$required])) {
                 return false;
             }
         }
@@ -643,7 +634,7 @@ class EmailTemplate extends Model
      */
     public function isEditable(): bool
     {
-        return !$this->is_system;
+        return ! $this->is_system;
     }
 
     /**
@@ -651,7 +642,7 @@ class EmailTemplate extends Model
      */
     public function isDeletable(): bool
     {
-        return !$this->is_system && !$this->is_default;
+        return ! $this->is_system && ! $this->is_default;
     }
 
     /**

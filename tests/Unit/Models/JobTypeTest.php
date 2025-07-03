@@ -31,14 +31,14 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function itHasCorrectFillableAttributes(): void
+    public function it_has_correct_fillable_attributes(): void
     {
         $fillable = [
             'name', 'description', 'is_default', 'is_active', 'sort_order',
             'icon', 'color', 'is_featured', 'meta_title', 'meta_description', 'slug',
         ];
 
-        $jobType = new JobType();
+        $jobType = new JobType;
 
         foreach ($fillable as $attribute) {
             $this->assertContains($attribute, $jobType->getFillable());
@@ -46,9 +46,9 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function itCastsAttributesCorrectly(): void
+    public function it_casts_attributes_correctly(): void
     {
-        $jobType = new JobType();
+        $jobType = new JobType;
         $casts = $jobType->getCasts();
 
         $this->assertEquals('boolean', $casts['is_active']);
@@ -60,7 +60,7 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function itHasJobsRelationship(): void
+    public function it_has_jobs_relationship(): void
     {
         $jobType = JobType::factory()->create();
 
@@ -68,7 +68,7 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function activeScopeReturnsOnlyActiveJobTypes(): void
+    public function active_scope_returns_only_active_job_types(): void
     {
         // Clear existing data and create fresh test data
         JobType::query()->delete();
@@ -83,7 +83,7 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function inactiveScopeReturnsOnlyInactiveJobTypes(): void
+    public function inactive_scope_returns_only_inactive_job_types(): void
     {
         JobType::factory()->active()->count(3)->create();
         JobType::factory()->inactive()->count(2)->create();
@@ -91,11 +91,11 @@ class JobTypeTest extends TestCase
         $inactiveJobTypes = JobType::inactive()->get();
 
         $this->assertGreaterThanOrEqual(2, $inactiveJobTypes->count());
-        $this->assertTrue($inactiveJobTypes->every(fn ($jobType) => !$jobType->is_active));
+        $this->assertTrue($inactiveJobTypes->every(fn ($jobType) => ! $jobType->is_active));
     }
 
     /** @test */
-    public function defaultScopeReturnsOnlyDefaultJobTypes(): void
+    public function default_scope_returns_only_default_job_types(): void
     {
         JobType::factory()->default()->count(2)->create();
         JobType::factory()->custom()->count(3)->create();
@@ -107,7 +107,7 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function customScopeReturnsOnlyCustomJobTypes(): void
+    public function custom_scope_returns_only_custom_job_types(): void
     {
         JobType::factory()->default()->count(2)->create();
         JobType::factory()->custom()->count(3)->create();
@@ -115,11 +115,11 @@ class JobTypeTest extends TestCase
         $customJobTypes = JobType::custom()->get();
 
         $this->assertGreaterThanOrEqual(3, $customJobTypes->count());
-        $this->assertTrue($customJobTypes->every(fn ($jobType) => !$jobType->is_default));
+        $this->assertTrue($customJobTypes->every(fn ($jobType) => ! $jobType->is_default));
     }
 
     /** @test */
-    public function withJobsScopeReturnsJobTypesWithJobs(): void
+    public function with_jobs_scope_returns_job_types_with_jobs(): void
     {
         $jobTypeWithJobs = JobType::factory()->create();
         $jobTypeWithoutJobs = JobType::factory()->create();
@@ -134,7 +134,7 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function searchScopeFindsJobTypesByNameAndDescription(): void
+    public function search_scope_finds_job_types_by_name_and_description(): void
     {
         $searchableJobType = JobType::factory()->create([
             'name' => 'Full-Time Developer',
@@ -156,7 +156,7 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function recentScopeReturnsRecentlyCreatedJobTypes(): void
+    public function recent_scope_returns_recently_created_job_types(): void
     {
         $recentJobType = JobType::factory()->create(['created_at' => now()->subDays(10)]);
         $oldJobType = JobType::factory()->create(['created_at' => now()->subDays(40)]);
@@ -168,7 +168,7 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function popularScopeReturnsJobTypesOrderedByJobCount(): void
+    public function popular_scope_returns_job_types_ordered_by_job_count(): void
     {
         $popularJobType = JobType::factory()->create();
         $unpopularJobType = JobType::factory()->create();
@@ -183,7 +183,7 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function alphabeticalScopeOrdersByName(): void
+    public function alphabetical_scope_orders_by_name(): void
     {
         JobType::factory()->create(['name' => 'Zebra']);
         JobType::factory()->create(['name' => 'Alpha']);
@@ -196,7 +196,7 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function fullTimeScopeFindsFullTimeJobTypes(): void
+    public function full_time_scope_finds_full_time_job_types(): void
     {
         JobType::factory()->fullTime()->create();
         JobType::factory()->create(['name' => 'Part-Time']);
@@ -205,12 +205,12 @@ class JobTypeTest extends TestCase
 
         $this->assertGreaterThan(0, $fullTimeJobTypes->count());
         $this->assertTrue($fullTimeJobTypes->every(function ($jobType) {
-            return false !== stripos($jobType->name, 'full') && false !== stripos($jobType->name, 'time');
+            return stripos($jobType->name, 'full') !== false && stripos($jobType->name, 'time') !== false;
         }));
     }
 
     /** @test */
-    public function partTimeScopeFindsPartTimeJobTypes(): void
+    public function part_time_scope_finds_part_time_job_types(): void
     {
         JobType::factory()->partTime()->create();
         JobType::factory()->create(['name' => 'Full-Time']);
@@ -219,12 +219,12 @@ class JobTypeTest extends TestCase
 
         $this->assertGreaterThan(0, $partTimeJobTypes->count());
         $this->assertTrue($partTimeJobTypes->every(function ($jobType) {
-            return false !== stripos($jobType->name, 'part') && false !== stripos($jobType->name, 'time');
+            return stripos($jobType->name, 'part') !== false && stripos($jobType->name, 'time') !== false;
         }));
     }
 
     /** @test */
-    public function remoteScopeFindsRemoteJobTypes(): void
+    public function remote_scope_finds_remote_job_types(): void
     {
         JobType::factory()->remote()->create();
         JobType::factory()->create(['name' => 'Work From Home']);
@@ -236,7 +236,7 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function usageCountAttributeReturnsJobCount(): void
+    public function usage_count_attribute_returns_job_count(): void
     {
         $jobType = JobType::factory()->create();
         Job::factory()->count(3)->create(['job_type_id' => $jobType->id]);
@@ -245,7 +245,7 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function formattedUsageStatsAttributeReturnsCorrectData(): void
+    public function formatted_usage_stats_attribute_returns_correct_data(): void
     {
         $jobType = JobType::factory()->create();
         Job::factory()->count(5)->create(['job_type_id' => $jobType->id]);
@@ -262,7 +262,7 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function isHighDemandMethodReturnsCorrectBoolean(): void
+    public function is_high_demand_method_returns_correct_boolean(): void
     {
         $highDemandJobType = JobType::factory()->create();
         $lowDemandJobType = JobType::factory()->create();
@@ -275,7 +275,7 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function isFullTimeMethodReturnsCorrectBoolean(): void
+    public function is_full_time_method_returns_correct_boolean(): void
     {
         $fullTimeJobType = JobType::factory()->create(['name' => 'Full-Time Position']);
         $partTimeJobType = JobType::factory()->create(['name' => 'Part-Time Position']);
@@ -285,7 +285,7 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function isPartTimeMethodReturnsCorrectBoolean(): void
+    public function is_part_time_method_returns_correct_boolean(): void
     {
         $partTimeJobType = JobType::factory()->create(['name' => 'Part-Time Position']);
         $fullTimeJobType = JobType::factory()->create(['name' => 'Full-Time Position']);
@@ -295,7 +295,7 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function isRemoteMethodReturnsCorrectBoolean(): void
+    public function is_remote_method_returns_correct_boolean(): void
     {
         $remoteJobType = JobType::factory()->create(['name' => 'Remote Work']);
         $workFromHomeJobType = JobType::factory()->create(['name' => 'Work From Home']);
@@ -307,7 +307,7 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function getRelatedTypesReturnsRelatedJobTypes(): void
+    public function get_related_types_returns_related_job_types(): void
     {
         $jobType = JobType::factory()->create();
         $relatedJobTypes = JobType::factory()->count(10)->create();
@@ -323,7 +323,7 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function cacheIsClearedWhenJobTypeIsUpdated(): void
+    public function cache_is_cleared_when_job_type_is_updated(): void
     {
         $jobType = JobType::factory()->create();
         $cacheKey = "job_type.{$jobType->id}";
@@ -337,7 +337,7 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function cacheIsClearedWhenJobTypeIsDeleted(): void
+    public function cache_is_cleared_when_job_type_is_deleted(): void
     {
         $jobType = JobType::factory()->create();
         $cacheKey = "job_type.{$jobType->id}";
@@ -351,7 +351,7 @@ class JobTypeTest extends TestCase
     }
 
     /** @test */
-    public function activityLoggingIsConfigured(): void
+    public function activity_logging_is_configured(): void
     {
         $this->assertTrue(in_array(LogsActivity::class, class_uses($this->jobType)));
     }
@@ -359,7 +359,7 @@ class JobTypeTest extends TestCase
     private function createBasicModels(): void
     {
         // Create a basic company without slug first, then add slug
-        $company = new Company();
+        $company = new Company;
         $company->fill([
             'user_id' => User::factory()->create()->id,
             'ceo' => 'Test CEO',

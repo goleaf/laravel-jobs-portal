@@ -78,7 +78,7 @@ class SubscriptionController extends AppBaseController
         /** @var Plan $plan */
         $plan = Plan::with('salaryCurrency')->findOrFail($planId);
 
-        if (!$plan->stripe_plan_id) {
+        if (! $plan->stripe_plan_id) {
             createStripePlan($plan);
         }
 
@@ -148,7 +148,7 @@ class SubscriptionController extends AppBaseController
         /** @var Subscription $subscription */
         $subscription = $user->subscriptions()->active()->first();
 
-        if (!$subscription) {
+        if (! $subscription) {
             return $this->sendError(__('messages.flash.your_are_not_author'));
         }
 
@@ -183,7 +183,7 @@ class SubscriptionController extends AppBaseController
     public function updateSubscription(UpdateSubscriptionSubscriptionRequest $request)
     {
         $envSetting = getEnvSetting();
-        if (!empty($envSetting['stripe_webhook_key'])) {
+        if (! empty($envSetting['stripe_webhook_key'])) {
             $stripeWebHookSecret = $envSetting['stripe_webhook_key'];
         } else {
             $stripeWebHookSecret = config('services.stripe.webhook_secret_key');
@@ -289,7 +289,7 @@ class SubscriptionController extends AppBaseController
         $approve_by = Auth::user()->id;
         $transaction = Transaction::where('id', $input['id'])->first();
         $subscription = Subscription::where('id', $transaction->owner_id)->first();
-        if (Transaction::APPROVED == $input['status']) {
+        if ($input['status'] == Transaction::APPROVED) {
             $transaction->is_approved = Transaction::APPROVED;
             $transaction->approved_id = $approve_by;
             $transaction->save();
@@ -297,8 +297,7 @@ class SubscriptionController extends AppBaseController
             $existingSubscription = Subscription::NotOnTrial()
                 ->whereUserId($transaction->user_id)
                 ->where('stripe_status', '!=', Subscription::PENDING)
-                ->first()
-            ;
+                ->first();
 
             if ($existingSubscription && $existingSubscription->user_id === $transaction->user_id) {
                 $existingSubscription->update(['ends_at' => Carbon::now()]);
@@ -310,8 +309,7 @@ class SubscriptionController extends AppBaseController
             })->whereNotNull('trial_ends_at')
                 ->update([
                     'trial_ends_at' => Carbon::now(),
-                ])
-            ;
+                ]);
 
             $subscription->stripe_status = 'active';
             $subscription->current_period_start = Carbon::now();

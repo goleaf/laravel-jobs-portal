@@ -15,34 +15,34 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * App\Models\CandidateExperience.
  *
- * @property int          $id
- * @property int          $candidate_id
- * @property string       $experience_title
- * @property string       $company
- * @property null|int     $country_id
- * @property null|int     $state_id
- * @property null|int     $city_id
- * @property Carbon       $start_date
- * @property null|Carbon  $end_date
- * @property bool         $currently_working
- * @property null|string  $description
- * @property null|string  $job_level
- * @property null|string  $employment_type
- * @property null|float   $salary
- * @property bool         $is_verified
- * @property null|Carbon  $created_at
- * @property null|Carbon  $updated_at
- * @property Candidate    $candidate
+ * @property int $id
+ * @property int $candidate_id
+ * @property string $experience_title
+ * @property string $company
+ * @property null|int $country_id
+ * @property null|int $state_id
+ * @property null|int $city_id
+ * @property Carbon $start_date
+ * @property null|Carbon $end_date
+ * @property bool $currently_working
+ * @property null|string $description
+ * @property null|string $job_level
+ * @property null|string $employment_type
+ * @property null|float $salary
+ * @property bool $is_verified
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property Candidate $candidate
  * @property null|Country $country
- * @property null|State   $state
- * @property null|City    $city
- * @property string       $full_location
- * @property string       $duration_description
- * @property int          $duration_in_months
- * @property string       $formatted_salary
- * @property bool         $is_current
- * @property bool         $is_recent
- * @property string       $experience_level
+ * @property null|State $state
+ * @property null|City $city
+ * @property string $full_location
+ * @property string $duration_description
+ * @property int $duration_in_months
+ * @property string $formatted_salary
+ * @property bool $is_current
+ * @property bool $is_recent
+ * @property string $experience_level
  *
  * @method static Builder|CandidateExperience newModelQuery()
  * @method static Builder|CandidateExperience newQuery()
@@ -97,8 +97,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class CandidateExperience extends Model
 {
     use HasFactory;
-    use LogsActivity;
     use HasSettingsField;
+    use LogsActivity;
 
     /**
      * Default settings for experience model.
@@ -205,7 +205,7 @@ class CandidateExperience extends Model
         'display.show_duration' => 'boolean',
         'display.highlight_current_role' => 'boolean',
         'display.priority_order' => 'integer|min:0|max:100',
-        
+
         'privacy.public_visibility' => 'boolean',
         'privacy.recruiter_access' => 'boolean',
         'privacy.hide_from_competitors' => 'boolean',
@@ -213,13 +213,13 @@ class CandidateExperience extends Model
         'privacy.anonymous_company' => 'boolean',
         'privacy.salary_visibility' => 'string|in:all,recruiters_only,private',
         'privacy.reference_contact_allowed' => 'boolean',
-        
+
         'verification.verification_required' => 'boolean',
         'verification.employment_verification' => 'string|in:pending,verified,rejected',
         'verification.reference_check_status' => 'string|in:not_requested,pending,completed,declined',
         'verification.hr_verification' => 'boolean',
         'verification.verification_documents' => 'array',
-        
+
         'achievements.key_accomplishments' => 'array',
         'achievements.awards_received' => 'array',
         'achievements.promotions' => 'array',
@@ -228,14 +228,14 @@ class CandidateExperience extends Model
         'achievements.budget_managed' => 'numeric|min:0',
         'achievements.revenue_generated' => 'numeric|min:0',
         'achievements.cost_savings' => 'numeric|min:0',
-        
+
         'skills.technical_skills' => 'array',
         'skills.soft_skills' => 'array',
         'skills.tools_used' => 'array',
         'skills.technologies' => 'array',
         'skills.certifications_earned' => 'array',
         'skills.training_completed' => 'array',
-        
+
         'matching.relevance_score' => 'numeric|min:0|max:100',
         'matching.industry_experience_weight' => 'numeric|min:0|max:5',
         'matching.role_level_progression' => 'string|in:ascending,stable,descending',
@@ -243,26 +243,26 @@ class CandidateExperience extends Model
         'matching.remote_work_experience' => 'boolean',
         'matching.startup_experience' => 'boolean',
         'matching.enterprise_experience' => 'boolean',
-        
+
         'analytics.profile_views_experience' => 'integer|min:0',
         'analytics.recruiter_interest_score' => 'numeric|min:0|max:100',
         'analytics.company_reputation_score' => 'numeric|min:0|max:100',
         'analytics.role_market_demand' => 'numeric|min:0|max:100',
         'analytics.career_progression_score' => 'numeric|min:0|max:100',
         'analytics.skill_relevance_score' => 'numeric|min:0|max:100',
-        
+
         'formatting.date_format' => 'string|in:month_year,year_only,full_date',
         'formatting.description_length' => 'integer|min:100|max:2000',
         'formatting.company_display' => 'string|in:full_name,abbreviation,anonymous',
         'formatting.location_format' => 'string|in:city_country,full,city_only',
         'formatting.duration_format' => 'string|in:years_months,months_only,custom',
-        
+
         'references.reference_available' => 'boolean',
         'references.reference_contacts' => 'array',
         'references.reference_permission' => 'string|in:always_allow,ask_first,never',
         'references.reference_notes' => 'string|max:500',
         'references.hr_contact_info' => 'array',
-        
+
         'notifications.verification_updates' => 'boolean',
         'notifications.reference_requests' => 'boolean',
         'notifications.industry_updates' => 'boolean',
@@ -326,8 +326,7 @@ class CandidateExperience extends Model
         return LogOptions::defaults()
             ->logOnly(['experience_title', 'company', 'start_date', 'end_date', 'currently_working', 'is_verified'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     // ==============================================
@@ -384,11 +383,11 @@ class CandidateExperience extends Model
         $years = floor($months / 12);
         $remainingMonths = $months % 12;
 
-        if (0 === $years) {
-            return 1 === $months ? __('experience.one_month') : __('experience.months', ['count' => $months]);
+        if ($years === 0) {
+            return $months === 1 ? __('experience.one_month') : __('experience.months', ['count' => $months]);
         }
-        if (0 === $remainingMonths) {
-            return 1 === $years ? __('experience.one_year') : __('experience.years', ['count' => $years]);
+        if ($remainingMonths === 0) {
+            return $years === 1 ? __('experience.one_year') : __('experience.years', ['count' => $years]);
         }
 
         return __('experience.years_months', ['years' => $years, 'months' => $remainingMonths]);
@@ -404,7 +403,7 @@ class CandidateExperience extends Model
 
     public function getFormattedSalaryAttribute(): string
     {
-        if (!$this->salary) {
+        if (! $this->salary) {
             return __('common.not_specified');
         }
 
@@ -550,8 +549,7 @@ class CandidateExperience extends Model
         return $query->whereRaw('DATEDIFF(COALESCE(end_date, NOW()), start_date) / 30 >= ?', [$minMonths])
             ->when($maxMonths, function ($q) use ($maxMonths) {
                 return $q->whereRaw('DATEDIFF(COALESCE(end_date, NOW()), start_date) / 30 <= ?', [$maxMonths]);
-            })
-        ;
+            });
     }
 
     /**
@@ -579,8 +577,7 @@ class CandidateExperience extends Model
             $q->where('job_level', 'LIKE', '%senior%')
                 ->orWhere('job_level', 'LIKE', '%lead%')
                 ->orWhere('experience_title', 'LIKE', '%senior%')
-                ->orWhere('experience_title', 'LIKE', '%lead%')
-            ;
+                ->orWhere('experience_title', 'LIKE', '%lead%');
         });
     }
 
@@ -594,8 +591,7 @@ class CandidateExperience extends Model
                 ->orWhere('job_level', 'LIKE', '%director%')
                 ->orWhere('job_level', 'LIKE', '%head%')
                 ->orWhere('experience_title', 'LIKE', '%manager%')
-                ->orWhere('experience_title', 'LIKE', '%director%')
-            ;
+                ->orWhere('experience_title', 'LIKE', '%director%');
         });
     }
 
@@ -608,8 +604,7 @@ class CandidateExperience extends Model
             $q->where('job_level', 'LIKE', '%junior%')
                 ->orWhere('job_level', 'LIKE', '%entry%')
                 ->orWhere('experience_title', 'LIKE', '%junior%')
-                ->orWhere('experience_title', 'LIKE', '%entry%')
-            ;
+                ->orWhere('experience_title', 'LIKE', '%entry%');
         });
     }
 
@@ -679,8 +674,7 @@ class CandidateExperience extends Model
                 ->orWhere('company', 'LIKE', "%{$term}%")
                 ->orWhere('job_level', 'LIKE', "%{$term}%")
                 ->orWhere('employment_type', 'LIKE', "%{$term}%")
-                ->orWhere('description', 'LIKE', "%{$term}%")
-            ;
+                ->orWhere('description', 'LIKE', "%{$term}%");
         });
     }
 
@@ -761,8 +755,7 @@ class CandidateExperience extends Model
     /**
      * Scope a query to only include active records.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeActive($query)
@@ -773,8 +766,7 @@ class CandidateExperience extends Model
     /**
      * Scope a query to only include inactive records.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeInactive($query)

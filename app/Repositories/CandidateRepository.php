@@ -15,7 +15,6 @@ class CandidateRepository extends BaseRepository implements CandidateRepositoryI
     /**
      * Get candidates by status.
      *
-     * @param string $status
      * @return mixed
      */
     public function getByStatus(string $status)
@@ -26,7 +25,6 @@ class CandidateRepository extends BaseRepository implements CandidateRepositoryI
     /**
      * Get candidates by availability.
      *
-     * @param bool $isAvailable
      * @return mixed
      */
     public function getByAvailability(bool $isAvailable)
@@ -37,7 +35,6 @@ class CandidateRepository extends BaseRepository implements CandidateRepositoryI
     /**
      * Search candidates by name or email.
      *
-     * @param string $query
      * @return mixed
      */
     public function search(string $query)
@@ -47,4 +44,4 @@ class CandidateRepository extends BaseRepository implements CandidateRepositoryI
             ->orWhere('email', 'like', "%$query%")
             ->get();
     }
-} 
+}

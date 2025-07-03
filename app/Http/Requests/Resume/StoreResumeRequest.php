@@ -746,43 +746,43 @@ class StoreResumeRequest extends FormRequest
             'title.required' => __('validation.required_field', ['field' => __('validation.attributes.resume_title')]),
             'title.min' => __('validation.min_chars', ['attribute' => __('validation.attributes.resume_title'), 'min' => 5]),
             'title.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.resume_title'), 'max' => 255]),
-            
+
             'description.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.description'), 'max' => 2000]),
-            
+
             'file.required' => __('validation.required_field', ['field' => __('validation.attributes.resume_file')]),
             'file.file' => __('validation.file', ['attribute' => __('validation.attributes.resume_file')]),
             'file.mimes' => __('validation.mimes', ['attribute' => __('validation.attributes.resume_file'), 'values' => 'PDF, DOC, DOCX']),
             'file.max' => __('validation.max_file_size', ['attribute' => __('validation.attributes.resume_file'), 'max' => '10MB']),
-            
+
             'professional_summary.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.professional_summary'), 'max' => 1000]),
             'objective.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.objective'), 'max' => 500]),
-            
+
             'career_level.in' => __('validation.invalid_career_level'),
             'years_of_experience.min' => __('validation.min_value', ['attribute' => __('validation.attributes.years_of_experience'), 'min' => 0]),
             'years_of_experience.max' => __('validation.max_value', ['attribute' => __('validation.attributes.years_of_experience'), 'max' => 50]),
-            
+
             'industry_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.industry')]),
             'functional_area_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.functional_area')]),
-            
+
             'skills.array' => __('validation.array', ['attribute' => __('validation.attributes.skills')]),
             'skills.max' => __('validation.max_items', ['attribute' => __('validation.attributes.skills'), 'max' => 50]),
             'skills.*.exists' => __('validation.exists', ['attribute' => __('validation.attributes.skill')]),
-            
+
             'technical_skills.array' => __('validation.array', ['attribute' => __('validation.attributes.technical_skills')]),
             'technical_skills.max' => __('validation.max_items', ['attribute' => __('validation.attributes.technical_skills'), 'max' => 30]),
             'technical_skills.*.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.technical_skill'), 'max' => 100]),
-            
+
             'soft_skills.array' => __('validation.array', ['attribute' => __('validation.attributes.soft_skills')]),
             'soft_skills.max' => __('validation.max_items', ['attribute' => __('validation.attributes.soft_skills'), 'max' => 20]),
             'soft_skills.*.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.soft_skill'), 'max' => 100]),
-            
+
             'languages.array' => __('validation.array', ['attribute' => __('validation.attributes.languages')]),
             'languages.max' => __('validation.max_items', ['attribute' => __('validation.attributes.languages'), 'max' => 10]),
             'languages.*.language_id.required_with' => __('validation.language_id_required'),
             'languages.*.language_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.language')]),
             'languages.*.proficiency.required_with' => __('validation.language_proficiency_required'),
             'languages.*.proficiency.in' => __('validation.invalid_language_proficiency'),
-            
+
             'work_experiences.array' => __('validation.array', ['attribute' => __('validation.attributes.work_experiences')]),
             'work_experiences.max' => __('validation.max_items', ['attribute' => __('validation.attributes.work_experiences'), 'max' => 20]),
             'work_experiences.*.company_name.required_with' => __('validation.company_name_required'),
@@ -793,7 +793,7 @@ class StoreResumeRequest extends FormRequest
             'work_experiences.*.end_date.before_or_equal' => __('validation.end_date_future'),
             'work_experiences.*.description.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.work_description'), 'max' => 2000]),
             'work_experiences.*.employment_type.in' => __('validation.invalid_employment_type'),
-            
+
             'educations.array' => __('validation.array', ['attribute' => __('validation.attributes.educations')]),
             'educations.max' => __('validation.max_items', ['attribute' => __('validation.attributes.educations'), 'max' => 10]),
             'educations.*.institution.required_with' => __('validation.institution_required'),
@@ -802,7 +802,7 @@ class StoreResumeRequest extends FormRequest
             'educations.*.end_date.after' => __('validation.end_date_before_start'),
             'educations.*.gpa.min' => __('validation.min_value', ['attribute' => __('validation.attributes.gpa'), 'min' => 0]),
             'educations.*.gpa.max' => __('validation.max_value', ['attribute' => __('validation.attributes.gpa'), 'max' => 4.0]),
-            
+
             'certifications.array' => __('validation.array', ['attribute' => __('validation.attributes.certifications')]),
             'certifications.max' => __('validation.max_items', ['attribute' => __('validation.attributes.certifications'), 'max' => 20]),
             'certifications.*.name.required_with' => __('validation.certification_name_required'),
@@ -810,7 +810,7 @@ class StoreResumeRequest extends FormRequest
             'certifications.*.issue_date.required_with' => __('validation.issue_date_required'),
             'certifications.*.expiry_date.after' => __('validation.expiry_date_before_issue'),
             'certifications.*.credential_url.url' => __('validation.url', ['attribute' => __('validation.attributes.credential_url')]),
-            
+
             'projects.array' => __('validation.array', ['attribute' => __('validation.attributes.projects')]),
             'projects.max' => __('validation.max_items', ['attribute' => __('validation.attributes.projects'), 'max' => 15]),
             'projects.*.name.required_with' => __('validation.project_name_required'),
@@ -820,27 +820,27 @@ class StoreResumeRequest extends FormRequest
             'projects.*.url.url' => __('validation.url', ['attribute' => __('validation.attributes.project_url')]),
             'projects.*.github_url.url' => __('validation.url', ['attribute' => __('validation.attributes.github_url')]),
             'projects.*.github_url.regex' => __('validation.invalid_github_url'),
-            
+
             'awards.array' => __('validation.array', ['attribute' => __('validation.attributes.awards')]),
             'awards.max' => __('validation.max_items', ['attribute' => __('validation.attributes.awards'), 'max' => 10]),
             'awards.*.title.required_with' => __('validation.award_title_required'),
             'awards.*.issuer.required_with' => __('validation.award_issuer_required'),
             'awards.*.date.required_with' => __('validation.award_date_required'),
-            
+
             'publications.array' => __('validation.array', ['attribute' => __('validation.attributes.publications')]),
             'publications.max' => __('validation.max_items', ['attribute' => __('validation.attributes.publications'), 'max' => 10]),
             'publications.*.title.required_with' => __('validation.publication_title_required'),
             'publications.*.publisher.required_with' => __('validation.publisher_required'),
             'publications.*.publication_date.required_with' => __('validation.publication_date_required'),
             'publications.*.url.url' => __('validation.url', ['attribute' => __('validation.attributes.publication_url')]),
-            
+
             'volunteer_experiences.array' => __('validation.array', ['attribute' => __('validation.attributes.volunteer_experiences')]),
             'volunteer_experiences.max' => __('validation.max_items', ['attribute' => __('validation.attributes.volunteer_experiences'), 'max' => 10]),
             'volunteer_experiences.*.organization.required_with' => __('validation.volunteer_organization_required'),
             'volunteer_experiences.*.role.required_with' => __('validation.volunteer_role_required'),
             'volunteer_experiences.*.start_date.required_with' => __('validation.start_date_required'),
             'volunteer_experiences.*.end_date.after' => __('validation.end_date_before_start'),
-            
+
             'references.array' => __('validation.array', ['attribute' => __('validation.attributes.references')]),
             'references.max' => __('validation.max_items', ['attribute' => __('validation.attributes.references'), 'max' => 5]),
             'references.*.name.required_with' => __('validation.reference_name_required'),
@@ -850,41 +850,41 @@ class StoreResumeRequest extends FormRequest
             'references.*.email.email' => __('validation.email', ['attribute' => __('validation.attributes.reference_email')]),
             'references.*.phone.regex' => __('validation.invalid_phone_format'),
             'references.*.relationship.in' => __('validation.invalid_reference_relationship'),
-            
+
             'expected_salary.numeric' => __('validation.numeric', ['attribute' => __('validation.attributes.expected_salary')]),
             'expected_salary.max' => __('validation.max_value', ['attribute' => __('validation.attributes.expected_salary'), 'max' => 10000000]),
             'salary_currency_id.required_with' => __('validation.salary_currency_required'),
             'salary_currency_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.salary_currency')]),
             'salary_period.required_with' => __('validation.salary_period_required'),
             'salary_period.in' => __('validation.invalid_salary_period'),
-            
+
             'job_types.array' => __('validation.array', ['attribute' => __('validation.attributes.job_types')]),
             'job_types.max' => __('validation.max_items', ['attribute' => __('validation.attributes.job_types'), 'max' => 10]),
             'job_types.*.exists' => __('validation.exists', ['attribute' => __('validation.attributes.job_type')]),
-            
+
             'preferred_locations.array' => __('validation.array', ['attribute' => __('validation.attributes.preferred_locations')]),
             'preferred_locations.max' => __('validation.max_items', ['attribute' => __('validation.attributes.preferred_locations'), 'max' => 20]),
             'preferred_locations.*.exists' => __('validation.exists', ['attribute' => __('validation.attributes.location')]),
-            
+
             'remote_work_preference.in' => __('validation.invalid_remote_work_preference'),
             'travel_willingness.in' => __('validation.invalid_travel_willingness'),
             'availability.in' => __('validation.invalid_availability'),
-            
+
             'status.in' => __('validation.invalid_status'),
-            
+
             'tags.array' => __('validation.array', ['attribute' => __('validation.attributes.tags')]),
             'tags.max' => __('validation.max_items', ['attribute' => __('validation.attributes.tags'), 'max' => 20]),
             'tags.*.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.tag'), 'max' => 50]),
             'tags.*.regex' => __('validation.invalid_tag_format'),
-            
+
             'notes.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.notes'), 'max' => 1000]),
-            
+
             'keywords.array' => __('validation.array', ['attribute' => __('validation.attributes.keywords')]),
             'keywords.max' => __('validation.max_items', ['attribute' => __('validation.attributes.keywords'), 'max' => 30]),
             'keywords.*.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.keyword'), 'max' => 100]),
-            
+
             'meta_description.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.meta_description'), 'max' => 160]),
-            
+
             'sync_status.in' => __('validation.invalid_sync_status'),
         ];
     }
@@ -1028,7 +1028,7 @@ class StoreResumeRequest extends FormRequest
 
         // Process JSON arrays
         $jsonFields = ['languages', 'work_experiences', 'educations', 'certifications', 'projects', 'awards', 'publications', 'volunteer_experiences', 'references'];
-        
+
         foreach ($jsonFields as $field) {
             if ($this->has($field) && is_string($this->$field)) {
                 try {
@@ -1062,7 +1062,7 @@ class StoreResumeRequest extends FormRequest
     {
         // Set processing metadata
         $this->merge([
-            'resume_id' => 'RESUME-' . date('Ymd') . '-' . strtoupper(substr(md5($this->title . time()), 0, 8)),
+            'resume_id' => 'RESUME-'.date('Ymd').'-'.strtoupper(substr(md5($this->title.time()), 0, 8)),
             'validated_at' => now(),
             'request_source' => $this->header('X-Request-Source', 'web'),
         ]);
@@ -1081,7 +1081,7 @@ class StoreResumeRequest extends FormRequest
      */
     private function shouldRequireParsing(): bool
     {
-        return $this->hasFile('file') && 
+        return $this->hasFile('file') &&
                in_array($this->file('file')->getClientOriginalExtension(), ['pdf', 'doc', 'docx']);
     }
 
@@ -1090,8 +1090,8 @@ class StoreResumeRequest extends FormRequest
      */
     private function shouldAutoPublish(): bool
     {
-        return $this->is_public && 
-               $this->status === 'active' && 
-               !empty($this->professional_summary);
+        return $this->is_public &&
+               $this->status === 'active' &&
+               ! empty($this->professional_summary);
     }
-} 
+}

@@ -30,17 +30,17 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAuthorizationReturnsTrue()
+    public function test_authorization_returns_true()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
 
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function testValidationRulesAreDefined()
+    public function test_validation_rules_are_defined()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertIsArray($rules);
@@ -48,9 +48,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationMessagesAreDefined()
+    public function test_validation_messages_are_defined()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
 
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
@@ -61,9 +61,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationAttributesAreDefined()
+    public function test_validation_attributes_are_defined()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
 
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
@@ -74,9 +74,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSearchValidation()
+    public function test_search_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('search', $rules);
@@ -87,9 +87,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testNullableValidation()
+    public function test_nullable_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('nullable', $rules);
@@ -100,9 +100,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testStringValidation()
+    public function test_string_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('string', $rules);
@@ -113,9 +113,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testCategoryIdValidation()
+    public function test_category_id_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('category_id', $rules);
@@ -126,9 +126,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testJobTypeIdValidation()
+    public function test_job_type_id_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('job_type_id', $rules);
@@ -139,9 +139,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testCountryIdValidation()
+    public function test_country_id_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('country_id', $rules);
@@ -152,9 +152,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testStateIdValidation()
+    public function test_state_id_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('state_id', $rules);
@@ -165,9 +165,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testCityIdValidation()
+    public function test_city_id_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('city_id', $rules);
@@ -178,9 +178,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testCompanyIdValidation()
+    public function test_company_id_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('company_id', $rules);
@@ -191,9 +191,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testFunctionalAreaIdValidation()
+    public function test_functional_area_id_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('functional_area_id', $rules);
@@ -204,9 +204,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testCareerLevelIdValidation()
+    public function test_career_level_id_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('career_level_id', $rules);
@@ -217,9 +217,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testDegreeLevelIdValidation()
+    public function test_degree_level_id_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('degree_level_id', $rules);
@@ -230,9 +230,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testJobShiftIdValidation()
+    public function test_job_shift_id_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('job_shift_id', $rules);
@@ -243,9 +243,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testCurrencyIdValidation()
+    public function test_currency_id_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('currency_id', $rules);
@@ -256,9 +256,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSalaryPeriodIdValidation()
+    public function test_salary_period_id_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('salary_period_id', $rules);
@@ -269,9 +269,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testMinSalaryValidation()
+    public function test_min_salary_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('min_salary', $rules);
@@ -282,9 +282,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testNumericValidation()
+    public function test_numeric_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('numeric', $rules);
@@ -295,9 +295,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testMaxSalaryValidation()
+    public function test_max_salary_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('max_salary', $rules);
@@ -308,9 +308,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testMinExperienceValidation()
+    public function test_min_experience_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('min_experience', $rules);
@@ -321,9 +321,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testIntegerValidation()
+    public function test_integer_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('integer', $rules);
@@ -334,9 +334,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testMaxExperienceValidation()
+    public function test_max_experience_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('max_experience', $rules);
@@ -347,9 +347,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSkillsValidation()
+    public function test_skills_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('skills', $rules);
@@ -360,9 +360,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testArrayValidation()
+    public function test_array_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('array', $rules);
@@ -373,9 +373,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testTagsValidation()
+    public function test_tags_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('tags', $rules);
@@ -386,9 +386,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testPostedWithinValidation()
+    public function test_posted_within_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('posted_within', $rules);
@@ -399,9 +399,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testIsFeaturedValidation()
+    public function test_is_featured_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('is_featured', $rules);
@@ -412,9 +412,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testBooleanValidation()
+    public function test_boolean_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('boolean', $rules);
@@ -425,9 +425,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testIsFreelanceValidation()
+    public function test_is_freelance_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('is_freelance', $rules);
@@ -438,9 +438,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testHideSalaryValidation()
+    public function test_hide_salary_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('hide_salary', $rules);
@@ -451,9 +451,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSortByValidation()
+    public function test_sort_by_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('sort_by', $rules);
@@ -464,9 +464,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testRelevanceValidation()
+    public function test_relevance_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('relevance', $rules);
@@ -477,9 +477,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testDateDescValidation()
+    public function test_date_desc_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('date_desc', $rules);
@@ -490,9 +490,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testDateAscValidation()
+    public function test_date_asc_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('date_asc', $rules);
@@ -503,9 +503,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSalaryDescValidation()
+    public function test_salary_desc_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('salary_desc', $rules);
@@ -516,9 +516,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSalaryAscValidation()
+    public function test_salary_asc_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('salary_asc', $rules);
@@ -529,9 +529,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testCompanyNameValidation()
+    public function test_company_name_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('company_name', $rules);
@@ -542,9 +542,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testLocationValidation()
+    public function test_location_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('location', $rules);
@@ -555,9 +555,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testPopularityValidation()
+    public function test_popularity_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('popularity', $rules);
@@ -568,9 +568,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testPerPageValidation()
+    public function test_per_page_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('per_page', $rules);
@@ -581,9 +581,9 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testPageValidation()
+    public function test_page_validation()
     {
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('page', $rules);
@@ -594,7 +594,7 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidDataPassesValidation()
+    public function test_valid_data_passes_validation()
     {
         $validData = [
             'search' => 'Test Value',
@@ -639,18 +639,18 @@ class JobFilterRequestTest extends TestCase
             'page' => 'Test Value',
         ];
 
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $validator = validator($validData, $request->rules());
 
         $this->assertFalse($validator->fails());
     }
 
     /** @test */
-    public function testRequestHandlesEmptyDataCorrectly()
+    public function test_request_handles_empty_data_correctly()
     {
         $emptyData = [];
 
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $validator = validator($emptyData, $request->rules());
 
         // Should handle empty data according to rules
@@ -658,7 +658,7 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSecurityValidationPreventsXss()
+    public function test_security_validation_prevents_xss()
     {
         $maliciousData = [
             'name' => '<script>alert("xss")</script>',
@@ -666,7 +666,7 @@ class JobFilterRequestTest extends TestCase
             'content' => '<img src=x onerror=alert("xss")>',
         ];
 
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $validator = validator($maliciousData, $request->rules());
 
         // XSS data should either fail validation or be properly sanitized
@@ -681,7 +681,7 @@ class JobFilterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSqlInjectionPrevention()
+    public function test_sql_injection_prevention()
     {
         $sqlInjectionData = [
             'name' => "'; DROP TABLE users; --",
@@ -689,7 +689,7 @@ class JobFilterRequestTest extends TestCase
             'filter' => 'UNION SELECT * FROM passwords',
         ];
 
-        $request = new JobFilterRequest();
+        $request = new JobFilterRequest;
         $validator = validator($sqlInjectionData, $request->rules());
 
         // SQL injection patterns should be handled safely

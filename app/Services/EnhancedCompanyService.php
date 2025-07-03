@@ -150,7 +150,7 @@ class EnhancedCompanyService
 
         // Apply status filter (default to active)
         if (isset($filters['status'])) {
-            if ('all' !== $filters['status']) {
+            if ($filters['status'] !== 'all') {
                 $query->where('status', $filters['status']);
             }
         } else {
@@ -158,40 +158,39 @@ class EnhancedCompanyService
         }
 
         // Search filter
-        if (!empty($filters['search'])) {
+        if (! empty($filters['search'])) {
             $query->search($filters['search']);
         }
 
         // Industry filter
-        if (!empty($filters['industry_id'])) {
+        if (! empty($filters['industry_id'])) {
             $query->byIndustry($filters['industry_id']);
         }
 
         // Company size filter
-        if (!empty($filters['company_size_id'])) {
+        if (! empty($filters['company_size_id'])) {
             $query->where('company_size_id', $filters['company_size_id']);
         }
 
         // Location filter
-        if (!empty($filters['location'])) {
+        if (! empty($filters['location'])) {
             $query->where(function ($q) use ($filters) {
                 $q->where('location', 'LIKE', "%{$filters['location']}%")
-                    ->orWhere('location2', 'LIKE', "%{$filters['location']}%")
-                ;
+                    ->orWhere('location2', 'LIKE', "%{$filters['location']}%");
             });
         }
 
         // Featured filter
-        if (!empty($filters['featured'])) {
+        if (! empty($filters['featured'])) {
             $query->featured();
         }
 
         // Establishment year range
-        if (!empty($filters['established_from'])) {
+        if (! empty($filters['established_from'])) {
             $query->where('established_in', '>=', $filters['established_from']);
         }
 
-        if (!empty($filters['established_to'])) {
+        if (! empty($filters['established_to'])) {
             $query->where('established_in', '<=', $filters['established_to']);
         }
 
@@ -216,8 +215,7 @@ class EnhancedCompanyService
             ->with(['industry', 'companySize', 'user'])
             ->orderBy('created_at', 'desc')
             ->limit($limit)
-            ->get()
-        ;
+            ->get();
     }
 
     /**
@@ -321,8 +319,7 @@ class EnhancedCompanyService
         if ($user->hasRole(['Admin', 'Super Admin'])) {
             return Company::with(['industry', 'companySize', 'user'])
                 ->orderBy('created_at', 'desc')
-                ->get()
-            ;
+                ->get();
         }
 
         return collect();
@@ -364,22 +361,21 @@ class EnhancedCompanyService
         $query = Company::query();
 
         // Apply same filters as search
-        if (!empty($filters['industry_id'])) {
+        if (! empty($filters['industry_id'])) {
             $query->byIndustry($filters['industry_id']);
         }
 
-        if (!empty($filters['status'])) {
+        if (! empty($filters['status'])) {
             $query->where('status', $filters['status']);
         }
 
-        if (!empty($filters['featured'])) {
+        if (! empty($filters['featured'])) {
             $query->featured();
         }
 
         return $query->with(['industry', 'companySize', 'ownershipType', 'user'])
             ->orderBy('created_at', 'desc')
-            ->get()
-        ;
+            ->get();
     }
 
     /**
@@ -393,8 +389,7 @@ class EnhancedCompanyService
             ->with(['industry', 'companySize'])
             ->orderBy('created_at', 'desc')
             ->limit($limit)
-            ->get()
-        ;
+            ->get();
     }
 
     /**
@@ -443,7 +438,7 @@ class EnhancedCompanyService
 
         while ($query->exists()) {
             $slug = $originalSlug.'-'.$counter;
-            ++$counter;
+            $counter++;
 
             $query = Company::where('slug', $slug);
             if ($excludeId) {

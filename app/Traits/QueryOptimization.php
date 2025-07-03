@@ -9,7 +9,7 @@ trait QueryOptimization
     /**
      * Scope for active records only.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -19,7 +19,7 @@ trait QueryOptimization
     /**
      * Scope for featured records.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFeatured($query)
     {
@@ -29,8 +29,8 @@ trait QueryOptimization
     /**
      * Scope for recent records.
      *
-     * @param mixed $query
-     * @param mixed $days
+     * @param  mixed  $query
+     * @param  mixed  $days
      */
     public function scopeRecent($query, $days = 30)
     {
@@ -40,9 +40,9 @@ trait QueryOptimization
     /**
      * Cache a query result.
      *
-     * @param mixed $key
-     * @param mixed $callback
-     * @param mixed $duration
+     * @param  mixed  $key
+     * @param  mixed  $callback
+     * @param  mixed  $duration
      */
     public function cacheQuery($key, $callback, $duration = 'medium')
     {
@@ -54,7 +54,7 @@ trait QueryOptimization
     /**
      * Get cached model with relationships.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public static function getCachedWithRelations($id, array $relations = [])
     {

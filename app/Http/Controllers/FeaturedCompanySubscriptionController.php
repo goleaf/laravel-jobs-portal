@@ -102,10 +102,10 @@ class FeaturedCompanySubscriptionController extends AppBaseController
             'meta' => $sessionData->toJSON(),
         ];
         FeaturedRecord::create($featuredRecord);
-        1 == NotificationSetting::where('key', 'MARK_COMPANY_FEATURED')->where(
+        NotificationSetting::where('key', 'MARK_COMPANY_FEATURED')->where(
             'type',
             'employer'
-        )->first()->value
+        )->first()->value == 1
             ? addNotification([
                 Notification::MARK_COMPANY_FEATURED,
                 $adminId,

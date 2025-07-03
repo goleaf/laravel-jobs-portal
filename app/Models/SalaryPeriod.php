@@ -14,27 +14,27 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * SalaryPeriod Model - Enhanced with Enhanced patterns.
  *
- * @property int                    $id
- * @property string                 $period
- * @property null|string            $description
- * @property bool                   $is_active
- * @property bool                   $is_default
- * @property bool                   $is_featured
- * @property null|int               $sort_order
- * @property null|float             $multiplier_hours
- * @property null|float             $multiplier_days
- * @property null|float             $multiplier_months
- * @property null|float             $multiplier_years
- * @property null|Carbon            $created_at
- * @property null|Carbon            $updated_at
- * @property Collection|Job[]       $jobs
+ * @property int $id
+ * @property string $period
+ * @property null|string $description
+ * @property bool $is_active
+ * @property bool $is_default
+ * @property bool $is_featured
+ * @property null|int $sort_order
+ * @property null|float $multiplier_hours
+ * @property null|float $multiplier_days
+ * @property null|float $multiplier_months
+ * @property null|float $multiplier_years
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property Collection|Job[] $jobs
  * @property Candidate[]|Collection $candidates
- * @property string                 $display_name
- * @property string                 $period_type
- * @property int                    $jobs_count
- * @property int                    $active_jobs_count
- * @property int                    $candidates_count
- * @property int                    $active_candidates_count
+ * @property string $display_name
+ * @property string $period_type
+ * @property int $jobs_count
+ * @property int $active_jobs_count
+ * @property int $candidates_count
+ * @property int $active_candidates_count
  *
  * Enhanced Enhanced Scopes:
  *
@@ -124,8 +124,7 @@ class SalaryPeriod extends Model
         return LogOptions::defaults()
             ->logOnly(['period', 'description', 'is_active', 'is_default', 'is_featured'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -176,7 +175,7 @@ class SalaryPeriod extends Model
     /**
      * Scope a query to only include active salary periods.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -186,7 +185,7 @@ class SalaryPeriod extends Model
     /**
      * Scope a query to only include inactive salary periods.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -196,7 +195,7 @@ class SalaryPeriod extends Model
     /**
      * Scope a query to only include featured salary periods.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFeatured($query)
     {
@@ -206,7 +205,7 @@ class SalaryPeriod extends Model
     /**
      * Scope a query to only include non-featured salary periods.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNonFeatured($query)
     {
@@ -216,7 +215,7 @@ class SalaryPeriod extends Model
     /**
      * Scope a query to only include default salary periods.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeDefault($query)
     {
@@ -226,7 +225,7 @@ class SalaryPeriod extends Model
     /**
      * Scope a query to only include custom salary periods.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeCustom($query)
     {
@@ -240,72 +239,67 @@ class SalaryPeriod extends Model
     /**
      * Scope a query to get hourly periods.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeHourly($query)
     {
         return $query->where(function ($q) {
             $q->where('period', 'like', '%hour%')
                 ->orWhere('period', 'like', '%hr%')
-                ->orWhere('period', 'like', '%hourly%')
-            ;
+                ->orWhere('period', 'like', '%hourly%');
         });
     }
 
     /**
      * Scope a query to get daily periods.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeDaily($query)
     {
         return $query->where(function ($q) {
             $q->where('period', 'like', '%day%')
-                ->orWhere('period', 'like', '%daily%')
-            ;
+                ->orWhere('period', 'like', '%daily%');
         });
     }
 
     /**
      * Scope a query to get weekly periods.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWeekly($query)
     {
         return $query->where(function ($q) {
             $q->where('period', 'like', '%week%')
-                ->orWhere('period', 'like', '%weekly%')
-            ;
+                ->orWhere('period', 'like', '%weekly%');
         });
     }
 
     /**
      * Scope a query to get monthly periods.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeMonthly($query)
     {
         return $query->where(function ($q) {
             $q->where('period', 'like', '%month%')
-                ->orWhere('period', 'like', '%monthly%')
-            ;
+                ->orWhere('period', 'like', '%monthly%');
         });
     }
 
     /**
      * Scope a query to get yearly periods.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeYearly($query)
     {
         return $query->where(function ($q) {
             $q->where('period', 'like', '%year%')
                 ->orWhere('period', 'like', '%annual%')
-                ->orWhere('period', 'like', '%yearly%')
-            ;
+                ->orWhere('period', 'like', '%yearly%');
         });
     }
 
@@ -316,21 +310,20 @@ class SalaryPeriod extends Model
     /**
      * Scope a query to search salary periods by name or description.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
             $q->where('period', 'like', "%{$term}%")
-                ->orWhere('description', 'like', "%{$term}%")
-            ;
+                ->orWhere('description', 'like', "%{$term}%");
         });
     }
 
     /**
      * Scope a query to get recent salary periods.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -340,7 +333,7 @@ class SalaryPeriod extends Model
     /**
      * Scope a query to get old salary periods.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -350,7 +343,7 @@ class SalaryPeriod extends Model
     /**
      * Scope a query to order salary periods alphabetically.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
@@ -360,13 +353,12 @@ class SalaryPeriod extends Model
     /**
      * Scope a query to order salary periods by sort order.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByOrder($query)
     {
         return $query->orderBy('sort_order', 'asc')
-            ->orderBy('period', 'asc')
-        ;
+            ->orderBy('period', 'asc');
     }
 
     // =============================================
@@ -376,7 +368,7 @@ class SalaryPeriod extends Model
     /**
      * Scope a query to include salary periods with jobs.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithJobs($query)
     {
@@ -386,21 +378,20 @@ class SalaryPeriod extends Model
     /**
      * Scope a query to include salary periods with active jobs.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithActiveJobs($query)
     {
         return $query->whereHas('jobs', function ($q) {
             $q->where('status', 'active')
-                ->where('expire_date', '>', now())
-            ;
+                ->where('expire_date', '>', now());
         });
     }
 
     /**
      * Scope a query to include salary periods with candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithCandidates($query)
     {
@@ -410,7 +401,7 @@ class SalaryPeriod extends Model
     /**
      * Scope a query to include salary periods with active candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithActiveCandidates($query)
     {
@@ -422,7 +413,7 @@ class SalaryPeriod extends Model
     /**
      * Scope a query to get popular salary periods (with most jobs).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopular($query, int $limit = 10)
     {
@@ -430,14 +421,13 @@ class SalaryPeriod extends Model
             $q->where('status', 'active');
         }])
             ->orderBy('jobs_count', 'desc')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     /**
      * Scope a query to get popular salary periods by candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopularByCandidates($query, int $limit = 10)
     {
@@ -445,26 +435,23 @@ class SalaryPeriod extends Model
             $q->where('is_active', true);
         }])
             ->orderBy('candidates_count', 'desc')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     /**
      * Scope a query to get trending salary periods.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeTrending($query, int $days = 30, int $limit = 10)
     {
         return $query->withCount(['jobs' => function ($q) use ($days) {
             $q->where('status', 'active')
-                ->where('created_at', '>=', now()->subDays($days))
-            ;
+                ->where('created_at', '>=', now()->subDays($days));
         }])
             ->having('jobs_count', '>', 0)
             ->orderBy('jobs_count', 'desc')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     // =============================================
@@ -622,7 +609,7 @@ class SalaryPeriod extends Model
      */
     public function isHourly(): bool
     {
-        return 'hourly' === $this->period_type;
+        return $this->period_type === 'hourly';
     }
 
     /**
@@ -630,7 +617,7 @@ class SalaryPeriod extends Model
      */
     public function isDaily(): bool
     {
-        return 'daily' === $this->period_type;
+        return $this->period_type === 'daily';
     }
 
     /**
@@ -638,7 +625,7 @@ class SalaryPeriod extends Model
      */
     public function isWeekly(): bool
     {
-        return 'weekly' === $this->period_type;
+        return $this->period_type === 'weekly';
     }
 
     /**
@@ -646,7 +633,7 @@ class SalaryPeriod extends Model
      */
     public function isMonthly(): bool
     {
-        return 'monthly' === $this->period_type;
+        return $this->period_type === 'monthly';
     }
 
     /**
@@ -654,7 +641,7 @@ class SalaryPeriod extends Model
      */
     public function isYearly(): bool
     {
-        return 'yearly' === $this->period_type;
+        return $this->period_type === 'yearly';
     }
 
     /**

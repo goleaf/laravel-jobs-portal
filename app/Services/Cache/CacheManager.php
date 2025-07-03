@@ -34,17 +34,17 @@ class CacheManager
     /**
      * Remember a value with caching.
      *
-     * @param int $ttl TTL in seconds
+     * @param  int  $ttl  TTL in seconds
      */
     public function remember(string $key, callable $callback, int $ttl = 3600): mixed
     {
         if ($value = $this->get($key)) {
-            ++$this->stats['hits'];
+            $this->stats['hits']++;
 
             return $value;
         }
 
-        ++$this->stats['misses'];
+        $this->stats['misses']++;
         $value = $callback();
         $this->put($key, $value, $ttl);
 
@@ -54,18 +54,18 @@ class CacheManager
     /**
      * Flexible caching with stale-while-revalidate pattern.
      *
-     * @param int $freshTtl Fresh time in seconds
-     * @param int $staleTtl Additional stale time in seconds
+     * @param  int  $freshTtl  Fresh time in seconds
+     * @param  int  $staleTtl  Additional stale time in seconds
      */
     public function flexible(string $key, callable $callback, int $freshTtl = 3600, int $staleTtl = 7200): mixed
     {
         $cacheData = $this->getRaw($key);
 
-        if (!$cacheData) {
+        if (! $cacheData) {
             // Cache miss - generate fresh data
             $value = $callback();
             $this->putWithMetadata($key, $value, $freshTtl, $staleTtl);
-            ++$this->stats['misses'];
+            $this->stats['misses']++;
 
             return $value;
         }
@@ -76,7 +76,7 @@ class CacheManager
 
         if ($isFresh) {
             // Cache hit - fresh data
-            ++$this->stats['hits'];
+            $this->stats['hits']++;
 
             return $cacheData['value'];
         }
@@ -84,7 +84,7 @@ class CacheManager
         if ($isValid) {
             // Return stale data and refresh in background
             $this->refreshInBackground($key, $callback, $freshTtl, $staleTtl);
-            ++$this->stats['hits'];
+            $this->stats['hits']++;
 
             return $cacheData['value'];
         }
@@ -92,7 +92,7 @@ class CacheManager
         // Cache expired - generate fresh data
         $value = $callback();
         $this->putWithMetadata($key, $value, $freshTtl, $staleTtl);
-        ++$this->stats['misses'];
+        $this->stats['misses']++;
 
         return $value;
     }
@@ -113,7 +113,7 @@ class CacheManager
      */
     public function put(string $key, mixed $value, int $ttl = 3600): bool
     {
-        ++$this->stats['writes'];
+        $this->stats['writes']++;
 
         return $this->cache->put($key, $value, $ttl);
     }
@@ -139,7 +139,7 @@ class CacheManager
      */
     public function forget(string $key): bool
     {
-        ++$this->stats['deletes'];
+        $this->stats['deletes']++;
 
         return $this->cache->forget($key);
     }
@@ -176,7 +176,7 @@ class CacheManager
     public function add(string $key, mixed $value, int $ttl = 3600): bool
     {
         if ($this->cache->add($key, $value, $ttl)) {
-            ++$this->stats['writes'];
+            $this->stats['writes']++;
 
             return true;
         }
@@ -205,7 +205,7 @@ class CacheManager
      */
     public function forever(string $key, mixed $value): bool
     {
-        ++$this->stats['writes'];
+        $this->stats['writes']++;
 
         return $this->cache->forever($key, $value);
     }
@@ -274,7 +274,7 @@ class CacheManager
             ],
         ];
 
-        ++$this->stats['writes'];
+        $this->stats['writes']++;
 
         return $this->cache->put($key, $data, $freshTtl + $staleTtl);
     }
@@ -288,7 +288,7 @@ class CacheManager
         // For now, we'll just set a flag to refresh on next request
         $refreshKey = "refresh:{$key}";
 
-        if (!$this->cache->has($refreshKey)) {
+        if (! $this->cache->has($refreshKey)) {
             $this->cache->put($refreshKey, true, 60); // Prevent multiple refreshes
 
             // Dispatch background job or use queues

@@ -67,7 +67,7 @@ class UserLoginRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param Validator $validator
+     * @param  Validator  $validator
      */
     public function withValidator($validator): void
     {
@@ -87,14 +87,14 @@ class UserLoginRequest extends FormRequest
 
             // Verify captcha if required
             if ($this->needsCaptcha() && $this->filled('g-recaptcha-response')) {
-                if (!$this->verifyCaptcha()) {
+                if (! $this->verifyCaptcha()) {
                     $validator->errors()->add('g-recaptcha-response', 'Captcha verification failed.');
                 }
             }
 
             // Attempt authentication if basic validation passes
-            if (!$validator->errors()->any()) {
-                if (!Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+            if (! $validator->errors()->any()) {
+                if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
                     RateLimiter::hit($this->throttleKey());
 
                     $validator->errors()->add('email', 'The provided credentials are incorrect.');
@@ -170,7 +170,7 @@ class UserLoginRequest extends FormRequest
     {
         $recaptchaSecret = config('services.recaptcha.secret_key');
 
-        if (!$recaptchaSecret) {
+        if (! $recaptchaSecret) {
             return true; // Skip if not configured
         }
 
@@ -196,7 +196,7 @@ class UserLoginRequest extends FormRequest
         $result = file_get_contents($url, false, $context);
         $resultJson = json_decode($result, true);
 
-        return isset($resultJson['success']) && true === $resultJson['success'];
+        return isset($resultJson['success']) && $resultJson['success'] === true;
     }
 
     /**

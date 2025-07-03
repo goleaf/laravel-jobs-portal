@@ -91,7 +91,7 @@ class ImageSliderController extends AppBaseController
     public function changeIsActive(ImageSlider $imageSlider)
     {
         $isActive = $imageSlider->is_active;
-        $imageSlider->update(['is_active' => !$isActive]);
+        $imageSlider->update(['is_active' => ! $isActive]);
 
         return $this->sendsuccess(__('messages.flash.status_change'));
     }
@@ -103,7 +103,7 @@ class ImageSliderController extends AppBaseController
     {
         /** @var Setting $setting */
         $setting = Setting::where('key', 'is_full_slider')->first();
-        $setting->update(['value' => !$setting->value]);
+        $setting->update(['value' => ! $setting->value]);
 
         return $this->sendSuccess(__('messages.flash.status_change'));
     }
@@ -115,7 +115,7 @@ class ImageSliderController extends AppBaseController
     {
         /** @var Setting $setting */
         $setting = Setting::where('key', 'is_slider_active')->first();
-        $setting->update(['value' => !$setting->value]);
+        $setting->update(['value' => ! $setting->value]);
 
         return $this->sendSuccess(__('messages.flash.status_change'));
         //        return $this->sendSuccess('This functionality not allowed in demo.');

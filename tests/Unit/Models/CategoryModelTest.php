@@ -16,7 +16,7 @@ class CategoryModelTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function itCanBeCreated()
+    public function it_can_be_created()
     {
         $Category = Category::factory()->create();
 
@@ -25,9 +25,9 @@ class CategoryModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasRequiredFillableFields()
+    public function it_has_required_fillable_fields()
     {
-        $Category = new Category();
+        $Category = new Category;
         $fillable = $Category->getFillable();
 
         $this->assertIsArray($fillable);
@@ -35,7 +35,7 @@ class CategoryModelTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeDeleted()
+    public function it_can_be_deleted()
     {
         $Category = Category::factory()->create();
         $categoryId = $Category->id;

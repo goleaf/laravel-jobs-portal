@@ -17,33 +17,33 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * File Model - Enhanced with Enhanced patterns.
  *
- * @property int         $id
- * @property string      $name
- * @property string      $original_name
- * @property string      $path
+ * @property int $id
+ * @property string $name
+ * @property string $original_name
+ * @property string $path
  * @property null|string $disk
  * @property null|string $mime_type
- * @property null|int    $size
+ * @property null|int $size
  * @property null|string $extension
- * @property bool        $is_active
- * @property bool        $is_public
- * @property bool        $is_temporary
+ * @property bool $is_active
+ * @property bool $is_public
+ * @property bool $is_temporary
  * @property null|string $model_type
- * @property null|int    $model_id
- * @property null|int    $user_id
- * @property null|array  $metadata
+ * @property null|int $model_id
+ * @property null|int $user_id
+ * @property null|array $metadata
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|Carbon $deleted_at
- * @property null|Model  $model
- * @property null|User   $user
- * @property string      $url
- * @property string      $human_readable_size
- * @property bool        $is_image
- * @property bool        $is_document
- * @property bool        $is_video
- * @property bool        $is_audio
- * @property bool        $exists
+ * @property null|Model $model
+ * @property null|User $user
+ * @property string $url
+ * @property string $human_readable_size
+ * @property bool $is_image
+ * @property bool $is_document
+ * @property bool $is_video
+ * @property bool $is_audio
+ * @property bool $exists
  *
  * Enhanced Enhanced Scopes:
  *
@@ -74,8 +74,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class File extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     /**
      * File type constants.
@@ -172,8 +172,7 @@ class File extends Model
             ->logOnly(['name', 'original_name', 'path', 'size', 'is_active', 'is_public'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn (string $eventName) => "File has been {$eventName}")
-        ;
+            ->setDescriptionForEvent(fn (string $eventName) => "File has been {$eventName}");
     }
 
     // =============================================
@@ -286,8 +285,7 @@ class File extends Model
     public function scopeByModel(Builder $query, string $modelType, int $modelId): Builder
     {
         return $query->where('model_type', $modelType)
-            ->where('model_id', $modelId)
-        ;
+            ->where('model_id', $modelId);
     }
 
     /**
@@ -374,8 +372,7 @@ class File extends Model
         return $query->where('name', 'like', '%'.$term.'%')
             ->orWhere('original_name', 'like', '%'.$term.'%')
             ->orWhere('extension', 'like', '%'.$term.'%')
-            ->orWhere('mime_type', 'like', '%'.$term.'%')
-        ;
+            ->orWhere('mime_type', 'like', '%'.$term.'%');
     }
 
     /**
@@ -418,7 +415,7 @@ class File extends Model
         $bytes = $this->size ?? 0;
         $units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB'];
 
-        for ($i = 0; $bytes > 1024 && $i < count($units) - 1; ++$i) {
+        for ($i = 0; $bytes > 1024 && $i < count($units) - 1; $i++) {
             $bytes /= 1024;
         }
 

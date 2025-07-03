@@ -28,7 +28,7 @@ class Category extends Model
     /**
      * Scope a query to only include active categories.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -38,7 +38,7 @@ class Category extends Model
     /**
      * Scope a query to only include inactive categories.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -48,7 +48,7 @@ class Category extends Model
     /**
      * Scope a query to only include default categories.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeDefault($query)
     {
@@ -58,7 +58,7 @@ class Category extends Model
     /**
      * Scope a query to only include featured categories.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFeatured($query)
     {

@@ -18,7 +18,7 @@ class EmailTemplateController extends Controller
     /**
      * Show the form for editing the specified email template.
      *
-     * @param mixed $template
+     * @param  mixed  $template
      */
     public function edit($template): View
     {

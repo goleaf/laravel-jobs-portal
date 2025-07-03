@@ -16,7 +16,7 @@ class FunctionalAreaTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function itCanBeCreated()
+    public function it_can_be_created()
     {
         $model = FunctionalArea::factory()->create();
 
@@ -27,9 +27,9 @@ class FunctionalAreaTest extends TestCase
     }
 
     /** @test */
-    public function itHasFillableAttributes()
+    public function it_has_fillable_attributes()
     {
-        $model = new FunctionalArea();
+        $model = new FunctionalArea;
         $fillable = $model->getFillable();
 
         $this->assertIsArray($fillable);
@@ -37,9 +37,9 @@ class FunctionalAreaTest extends TestCase
     }
 
     /** @test */
-    public function itHasProperCasts()
+    public function it_has_proper_casts()
     {
-        $model = new FunctionalArea();
+        $model = new FunctionalArea;
         $casts = $model->getCasts();
 
         $this->assertIsArray($casts);
@@ -47,7 +47,7 @@ class FunctionalAreaTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeUpdated()
+    public function it_can_be_updated()
     {
         $model = FunctionalArea::factory()->create();
         $originalData = $model->toArray();
@@ -62,7 +62,7 @@ class FunctionalAreaTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeDeleted()
+    public function it_can_be_deleted()
     {
         $model = FunctionalArea::factory()->create();
         $modelId = $model->id;

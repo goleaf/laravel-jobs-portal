@@ -15,17 +15,17 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Class JobShift.
  *
- * @property int                             $id
- * @property string                          $shift
- * @property string                          $description
- * @property bool                            $is_default
- * @property bool                            $is_active
+ * @property int $id
+ * @property string $shift
+ * @property string $description
+ * @property bool $is_default
+ * @property bool $is_active
  * @property null|\Illuminate\Support\Carbon $created_at
  * @property null|\Illuminate\Support\Carbon $updated_at
- * @property Collection|Job[]                $jobs
- * @property null|int                        $jobs_count
- * @property mixed                           $usage_count
- * @property mixed                           $formatted_usage_stats
+ * @property Collection|Job[] $jobs
+ * @property null|int $jobs_count
+ * @property mixed $usage_count
+ * @property mixed $formatted_usage_stats
  *
  * @method static Builder|JobShift newModelQuery()
  * @method static Builder|JobShift newQuery()
@@ -63,8 +63,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class JobShift extends Model
 {
     use HasFactory;
-    use LogsActivity;
     use HasSettingsField;
+    use LogsActivity;
 
     /**
      * Default settings for job shift model.
@@ -180,7 +180,7 @@ class JobShift extends Model
         'schedule.weekend_work' => 'boolean',
         'schedule.holiday_work' => 'boolean',
         'schedule.shift_rotation' => 'boolean',
-        
+
         'compensation.shift_differential' => 'numeric|min:0',
         'compensation.overtime_multiplier' => 'numeric|min:1|max:3',
         'compensation.night_shift_bonus' => 'numeric|min:0',
@@ -188,7 +188,7 @@ class JobShift extends Model
         'compensation.holiday_bonus' => 'numeric|min:0',
         'compensation.hazard_pay' => 'numeric|min:0',
         'compensation.compensation_type' => 'string|in:percentage,fixed',
-        
+
         'requirements.minimum_age' => 'integer|min:16|max:65',
         'requirements.physical_demands' => 'string|in:light,moderate,heavy',
         'requirements.security_clearance' => 'boolean',
@@ -196,7 +196,7 @@ class JobShift extends Model
         'requirements.health_requirements' => 'array',
         'requirements.background_check' => 'boolean',
         'requirements.drug_screening' => 'boolean',
-        
+
         'work_environment.location_type' => 'string|in:office,remote,hybrid,field,factory',
         'work_environment.travel_required' => 'boolean',
         'work_environment.travel_percentage' => 'integer|min:0|max:100',
@@ -205,7 +205,7 @@ class JobShift extends Model
         'work_environment.climate_controlled' => 'boolean',
         'work_environment.noise_level' => 'string|in:low,moderate,high',
         'work_environment.safety_training' => 'boolean',
-        
+
         'flexibility.work_from_home' => 'boolean',
         'flexibility.compressed_workweek' => 'boolean',
         'flexibility.job_sharing' => 'boolean',
@@ -213,7 +213,7 @@ class JobShift extends Model
         'flexibility.seasonal_work' => 'boolean',
         'flexibility.temporary_positions' => 'boolean',
         'flexibility.contract_work' => 'boolean',
-        
+
         'benefits.health_insurance' => 'boolean',
         'benefits.dental_insurance' => 'boolean',
         'benefits.vision_insurance' => 'boolean',
@@ -223,7 +223,7 @@ class JobShift extends Model
         'benefits.maternity_leave' => 'boolean',
         'benefits.professional_development' => 'boolean',
         'benefits.tuition_reimbursement' => 'boolean',
-        
+
         'analytics.popularity_score' => 'numeric|min:0|max:100',
         'analytics.demand_trend' => 'string|in:increasing,stable,decreasing',
         'analytics.average_salary_range' => 'array',
@@ -231,7 +231,7 @@ class JobShift extends Model
         'analytics.satisfaction_score' => 'numeric|min:0|max:10',
         'analytics.retention_rate' => 'numeric|min:0|max:100',
         'analytics.performance_metrics' => 'array',
-        
+
         'display.show_salary_info' => 'boolean',
         'display.show_benefits' => 'boolean',
         'display.show_requirements' => 'boolean',
@@ -240,7 +240,7 @@ class JobShift extends Model
         'display.urgent_hiring' => 'boolean',
         'display.priority_order' => 'integer|min:0|max:100',
         'display.icon_color' => 'string|regex:/^#[0-9A-Fa-f]{6}$/',
-        
+
         'matching.skill_weight' => 'numeric|min:0|max:5',
         'matching.experience_weight' => 'numeric|min:0|max:5',
         'matching.location_weight' => 'numeric|min:0|max:5',
@@ -248,7 +248,7 @@ class JobShift extends Model
         'matching.availability_weight' => 'numeric|min:0|max:5',
         'matching.cultural_fit_weight' => 'numeric|min:0|max:5',
         'matching.auto_match_enabled' => 'boolean',
-        
+
         'notifications.new_job_alerts' => 'boolean',
         'notifications.application_updates' => 'boolean',
         'notifications.shift_changes' => 'boolean',
@@ -304,8 +304,7 @@ class JobShift extends Model
         return LogOptions::defaults()
             ->logOnly(['shift', 'description', 'is_active', 'is_default'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -398,8 +397,7 @@ class JobShift extends Model
     public function scopeSearch(Builder $query, string $term): Builder
     {
         return $query->where('shift', 'like', "%{$term}%")
-            ->orWhere('description', 'like', "%{$term}%")
-        ;
+            ->orWhere('description', 'like', "%{$term}%");
     }
 
     /**
@@ -417,8 +415,7 @@ class JobShift extends Model
     {
         return $query->withCount('jobs')
             ->orderBy('jobs_count', 'desc')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     /**
@@ -439,8 +436,7 @@ class JobShift extends Model
                 $q->where('created_at', '>=', now()->subDays(30));
             },
         ])
-            ->orderByDesc('jobs_count')
-        ;
+            ->orderByDesc('jobs_count');
     }
 
     /**
@@ -449,8 +445,7 @@ class JobShift extends Model
     public function scopeMinUsage(Builder $query, int $count = 1): Builder
     {
         return $query->withCount('jobs')
-            ->having('jobs_count', '>=', $count)
-        ;
+            ->having('jobs_count', '>=', $count);
     }
 
     /**
@@ -460,8 +455,7 @@ class JobShift extends Model
     {
         return $query->withCount('jobs')
             ->having('jobs_count', '>=', $minJobs)
-            ->orderByDesc('jobs_count')
-        ;
+            ->orderByDesc('jobs_count');
     }
 
     /**
@@ -471,8 +465,7 @@ class JobShift extends Model
     {
         return $query->where('shift', 'like', '%day%')
             ->orWhere('shift', 'like', '%morning%')
-            ->orWhere('shift', 'like', '%first%')
-        ;
+            ->orWhere('shift', 'like', '%first%');
     }
 
     /**
@@ -482,8 +475,7 @@ class JobShift extends Model
     {
         return $query->where('shift', 'like', '%night%')
             ->orWhere('shift', 'like', '%third%')
-            ->orWhere('shift', 'like', '%graveyard%')
-        ;
+            ->orWhere('shift', 'like', '%graveyard%');
     }
 
     /**
@@ -492,8 +484,7 @@ class JobShift extends Model
     public function scopeMorningShift(Builder $query): Builder
     {
         return $query->where('shift', 'like', '%morning%')
-            ->orWhere('shift', 'like', '%first%')
-        ;
+            ->orWhere('shift', 'like', '%first%');
     }
 
     /**
@@ -502,8 +493,7 @@ class JobShift extends Model
     public function scopeEveningShift(Builder $query): Builder
     {
         return $query->where('shift', 'like', '%evening%')
-            ->orWhere('shift', 'like', '%second%')
-        ;
+            ->orWhere('shift', 'like', '%second%');
     }
 
     /**
@@ -513,8 +503,7 @@ class JobShift extends Model
     {
         return $query->where('shift', 'like', '%flexible%')
             ->orWhere('shift', 'like', '%flex%')
-            ->orWhere('shift', 'like', '%variable%')
-        ;
+            ->orWhere('shift', 'like', '%variable%');
     }
 
     /**
@@ -524,8 +513,7 @@ class JobShift extends Model
     {
         return $query->where('shift', 'like', '%fixed%')
             ->orWhere('shift', 'like', '%regular%')
-            ->orWhere('shift', 'like', '%standard%')
-        ;
+            ->orWhere('shift', 'like', '%standard%');
     }
 
     /**
@@ -535,8 +523,7 @@ class JobShift extends Model
     {
         return $query->where('shift', 'like', '%rotating%')
             ->orWhere('shift', 'like', '%rotation%')
-            ->orWhere('shift', 'like', '%alternating%')
-        ;
+            ->orWhere('shift', 'like', '%alternating%');
     }
 
     /**
@@ -552,7 +539,7 @@ class JobShift extends Model
      */
     public function isDayShift(): bool
     {
-        return 'day' === $this->getShiftType();
+        return $this->getShiftType() === 'day';
     }
 
     /**
@@ -560,7 +547,7 @@ class JobShift extends Model
      */
     public function isNightShift(): bool
     {
-        return 'night' === $this->getShiftType();
+        return $this->getShiftType() === 'night';
     }
 
     /**
@@ -568,7 +555,7 @@ class JobShift extends Model
      */
     public function isFlexible(): bool
     {
-        return 'flexible' === $this->getShiftType();
+        return $this->getShiftType() === 'flexible';
     }
 
     /**
@@ -576,7 +563,7 @@ class JobShift extends Model
      */
     public function isRotating(): bool
     {
-        return 'rotating' === $this->getShiftType();
+        return $this->getShiftType() === 'rotating';
     }
 
     /**
@@ -590,8 +577,7 @@ class JobShift extends Model
                 ->withCount('jobs')
                 ->orderByDesc('jobs_count')
                 ->limit($limit)
-                ->get()
-            ;
+                ->get();
         });
     }
 

@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Actions\SettingsManagement\CreateSettingsVersion;
 use App\Actions\SettingsManagement\GetModelSettings;
 use App\Actions\SettingsManagement\UpdateModelSettings;
 use App\Data\SettingsManagement\ModelSettingsData;
 use App\Data\SettingsManagement\SettingsUpdateData;
 use App\Http\Controllers\Controller;
+use App\Models\SettingsVersion;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use App\Actions\SettingsManagement\CreateSettingsVersion;
-use App\Models\SettingsVersion;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Settings Management API Controller
- * 
+ *
  * RESTful API controller for managing model settings across all models
  * using Actionable architecture for clean, testable, reusable logic.
  */
@@ -25,11 +25,6 @@ class SettingsManagementController extends Controller
 {
     /**
      * Get settings for a specific model
-     * 
-     * @param Request $request
-     * @param string $modelType
-     * @param int|string $modelId
-     * @return JsonResponse
      */
     public function getSettings(Request $request, string $modelType, int|string $modelId): JsonResponse
     {
@@ -66,18 +61,13 @@ class SettingsManagementController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to retrieve settings: ' . $e->getMessage(),
+                'message' => 'Failed to retrieve settings: '.$e->getMessage(),
             ], 500);
         }
     }
 
     /**
      * Update settings for a specific model
-     * 
-     * @param Request $request
-     * @param string $modelType
-     * @param int|string $modelId
-     * @return JsonResponse
      */
     public function updateSettings(Request $request, string $modelType, int|string $modelId): JsonResponse
     {
@@ -128,17 +118,13 @@ class SettingsManagementController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to update settings: ' . $e->getMessage(),
+                'message' => 'Failed to update settings: '.$e->getMessage(),
             ], 500);
         }
     }
 
     /**
      * Bulk update settings for multiple models
-     * 
-     * @param Request $request
-     * @param string $modelType
-     * @return JsonResponse
      */
     public function bulkUpdateSettings(Request $request, string $modelType): JsonResponse
     {
@@ -210,24 +196,20 @@ class SettingsManagementController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Bulk update failed: ' . $e->getMessage(),
+                'message' => 'Bulk update failed: '.$e->getMessage(),
             ], 500);
         }
     }
 
     /**
      * Get settings schema for a model type
-     * 
-     * @param Request $request
-     * @param string $modelType
-     * @return JsonResponse
      */
     public function getSettingsSchema(Request $request, string $modelType): JsonResponse
     {
         try {
             $modelClass = $this->getModelClass($modelType);
-            
-            if (!class_exists($modelClass)) {
+
+            if (! class_exists($modelClass)) {
                 return response()->json([
                     'success' => false,
                     'message' => "Model class {$modelType} not found",
@@ -235,15 +217,15 @@ class SettingsManagementController extends Controller
             }
 
             // Create a temporary instance to get schema information
-            $tempModel = new $modelClass();
+            $tempModel = new $modelClass;
 
             $schema = [
                 'model_type' => $modelClass,
                 'model_name' => class_basename($modelClass),
                 'supports_settings' => method_exists($tempModel, 'settings'),
-                'default_settings' => property_exists($tempModel, 'defaultSettings') ? 
+                'default_settings' => property_exists($tempModel, 'defaultSettings') ?
                     $tempModel->defaultSettings : null,
-                'validation_rules' => property_exists($tempModel, 'settingsRules') ? 
+                'validation_rules' => property_exists($tempModel, 'settingsRules') ?
                     $tempModel->settingsRules : null,
                 'settings_categories' => $this->getSettingsCategories($tempModel),
                 'settings_documentation' => $this->getSettingsDocumentation($tempModel),
@@ -258,16 +240,13 @@ class SettingsManagementController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to retrieve settings schema: ' . $e->getMessage(),
+                'message' => 'Failed to retrieve settings schema: '.$e->getMessage(),
             ], 500);
         }
     }
 
     /**
      * Get available model types that support settings
-     * 
-     * @param Request $request
-     * @return JsonResponse
      */
     public function getAvailableModels(Request $request): JsonResponse
     {
@@ -290,7 +269,7 @@ class SettingsManagementController extends Controller
 
             foreach ($supportedModels as $alias => $class) {
                 if (class_exists($class)) {
-                    $tempModel = new $class();
+                    $tempModel = new $class;
                     $models[$alias] = [
                         'alias' => $alias,
                         'class' => $class,
@@ -314,7 +293,7 @@ class SettingsManagementController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to retrieve available models: ' . $e->getMessage(),
+                'message' => 'Failed to retrieve available models: '.$e->getMessage(),
             ], 500);
         }
     }
@@ -420,7 +399,7 @@ class SettingsManagementController extends Controller
     protected function getSettingsDocumentation($model): array
     {
         $documentation = [
-            'description' => 'Settings for ' . class_basename($model),
+            'description' => 'Settings for '.class_basename($model),
             'examples' => [],
             'common_patterns' => [
                 'Enable/disable features using boolean values',
@@ -444,11 +423,11 @@ class SettingsManagementController extends Controller
     {
         try {
             // Validate model type
-            if (!array_key_exists($modelType, $this->modelTypes)) {
+            if (! array_key_exists($modelType, $this->modelTypes)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid model type',
-                    'error' => 'MODEL_TYPE_INVALID'
+                    'error' => 'MODEL_TYPE_INVALID',
                 ], 400);
             }
 
@@ -477,20 +456,20 @@ class SettingsManagementController extends Controller
                     }),
                     'total_versions' => $versions->count(),
                 ],
-                'message' => 'Version history retrieved successfully'
+                'message' => 'Version history retrieved successfully',
             ]);
 
         } catch (\Exception $e) {
             Log::error('Failed to get version history', [
                 'model_type' => $modelType,
                 'model_id' => $modelId,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to retrieve version history',
-                'error' => 'VERSION_HISTORY_ERROR'
+                'error' => 'VERSION_HISTORY_ERROR',
             ], 500);
         }
     }
@@ -502,24 +481,24 @@ class SettingsManagementController extends Controller
     {
         try {
             // Validate model type
-            if (!array_key_exists($modelType, $this->modelTypes)) {
+            if (! array_key_exists($modelType, $this->modelTypes)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid model type',
-                    'error' => 'MODEL_TYPE_INVALID'
+                    'error' => 'MODEL_TYPE_INVALID',
                 ], 400);
             }
 
             $version = SettingsVersion::where('version_id', $versionId)
-                                    ->forModel($this->modelTypes[$modelType], $modelId)
-                                    ->active()
-                                    ->first();
+                ->forModel($this->modelTypes[$modelType], $modelId)
+                ->active()
+                ->first();
 
-            if (!$version) {
+            if (! $version) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Version not found',
-                    'error' => 'VERSION_NOT_FOUND'
+                    'error' => 'VERSION_NOT_FOUND',
                 ], 404);
             }
 
@@ -547,21 +526,21 @@ class SettingsManagementController extends Controller
                     'navigation' => [
                         'previous_version' => $version->getPreviousVersion()?->version_id,
                         'next_version' => $version->getNextVersion()?->version_id,
-                    ]
+                    ],
                 ],
-                'message' => 'Version retrieved successfully'
+                'message' => 'Version retrieved successfully',
             ]);
 
         } catch (\Exception $e) {
             Log::error('Failed to get version details', [
                 'version_id' => $versionId,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to retrieve version details',
-                'error' => 'VERSION_DETAILS_ERROR'
+                'error' => 'VERSION_DETAILS_ERROR',
             ], 500);
         }
     }
@@ -573,34 +552,34 @@ class SettingsManagementController extends Controller
     {
         try {
             // Validate model type
-            if (!array_key_exists($modelType, $this->modelTypes)) {
+            if (! array_key_exists($modelType, $this->modelTypes)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid model type',
-                    'error' => 'MODEL_TYPE_INVALID'
+                    'error' => 'MODEL_TYPE_INVALID',
                 ], 400);
             }
 
             // Get the target version
             $targetVersion = SettingsVersion::where('version_id', $versionId)
-                                           ->forModel($this->modelTypes[$modelType], $modelId)
-                                           ->active()
-                                           ->first();
+                ->forModel($this->modelTypes[$modelType], $modelId)
+                ->active()
+                ->first();
 
-            if (!$targetVersion) {
+            if (! $targetVersion) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Target version not found',
-                    'error' => 'VERSION_NOT_FOUND'
+                    'error' => 'VERSION_NOT_FOUND',
                 ], 404);
             }
 
             // Verify checksum before rollback
-            if (!$targetVersion->verifyChecksum()) {
+            if (! $targetVersion->verifyChecksum()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Target version has integrity issues',
-                    'error' => 'VERSION_INTEGRITY_ERROR'
+                    'error' => 'VERSION_INTEGRITY_ERROR',
                 ], 400);
             }
 
@@ -643,7 +622,7 @@ class SettingsManagementController extends Controller
                     ],
                     'applied_settings' => $targetVersion->settings_data,
                 ],
-                'message' => "Successfully rolled back to version {$targetVersion->version_number}"
+                'message' => "Successfully rolled back to version {$targetVersion->version_number}",
             ]);
 
         } catch (\Exception $e) {
@@ -651,13 +630,13 @@ class SettingsManagementController extends Controller
                 'version_id' => $versionId,
                 'model_type' => $modelType,
                 'model_id' => $modelId,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to rollback to version',
-                'error' => 'ROLLBACK_ERROR'
+                'error' => 'ROLLBACK_ERROR',
             ], 500);
         }
     }
@@ -669,11 +648,11 @@ class SettingsManagementController extends Controller
     {
         try {
             // Validate model type
-            if (!array_key_exists($modelType, $this->modelTypes)) {
+            if (! array_key_exists($modelType, $this->modelTypes)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid model type',
-                    'error' => 'MODEL_TYPE_INVALID'
+                    'error' => 'MODEL_TYPE_INVALID',
                 ], 400);
             }
 
@@ -684,20 +663,20 @@ class SettingsManagementController extends Controller
 
             // Get both versions
             $version1 = SettingsVersion::where('version_id', $validated['version_1'])
-                                      ->forModel($this->modelTypes[$modelType], $modelId)
-                                      ->active()
-                                      ->first();
+                ->forModel($this->modelTypes[$modelType], $modelId)
+                ->active()
+                ->first();
 
             $version2 = SettingsVersion::where('version_id', $validated['version_2'])
-                                      ->forModel($this->modelTypes[$modelType], $modelId)
-                                      ->active()
-                                      ->first();
+                ->forModel($this->modelTypes[$modelType], $modelId)
+                ->active()
+                ->first();
 
-            if (!$version1 || !$version2) {
+            if (! $version1 || ! $version2) {
                 return response()->json([
                     'success' => false,
                     'message' => 'One or both versions not found',
-                    'error' => 'VERSION_NOT_FOUND'
+                    'error' => 'VERSION_NOT_FOUND',
                 ], 404);
             }
 
@@ -721,7 +700,7 @@ class SettingsManagementController extends Controller
                         'change_type' => $version2->change_type,
                     ],
                 ],
-                'message' => 'Version comparison completed successfully'
+                'message' => 'Version comparison completed successfully',
             ]);
 
         } catch (\Exception $e) {
@@ -730,14 +709,14 @@ class SettingsManagementController extends Controller
                 'model_id' => $modelId,
                 'version_1' => $validated['version_1'] ?? null,
                 'version_2' => $validated['version_2'] ?? null,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
 
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to compare versions',
-                'error' => 'VERSION_COMPARISON_ERROR'
+                'error' => 'VERSION_COMPARISON_ERROR',
             ], 500);
         }
     }
-} 
+}

@@ -120,7 +120,6 @@ class CompanySizeController extends AppBaseController
                 return $companySize->created_at->format('Y-m-d H:i:s');
             })
             ->rawColumns(['action'])
-            ->make(true)
-        ;
+            ->make(true);
     }
 }

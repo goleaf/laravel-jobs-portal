@@ -4,23 +4,24 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up(): void
     {
         Schema::table('branding_sliders', function (Blueprint $table) {
-            if (!Schema::hasColumn('branding_sliders', 'view_count')) {
+            if (! Schema::hasColumn('branding_sliders', 'view_count')) {
                 $table->unsignedInteger('view_count')->default(0);
             }
-            if (!Schema::hasColumn('branding_sliders', 'click_count')) {
+            if (! Schema::hasColumn('branding_sliders', 'click_count')) {
                 $table->unsignedInteger('click_count')->default(0);
             }
-            if (!Schema::hasColumn('branding_sliders', 'sort_order')) {
+            if (! Schema::hasColumn('branding_sliders', 'sort_order')) {
                 $table->unsignedInteger('sort_order')->default(0);
             }
-            if (!Schema::hasColumn('branding_sliders', 'open_in_new_tab')) {
+            if (! Schema::hasColumn('branding_sliders', 'open_in_new_tab')) {
                 $table->boolean('open_in_new_tab')->default(false);
             }
         });

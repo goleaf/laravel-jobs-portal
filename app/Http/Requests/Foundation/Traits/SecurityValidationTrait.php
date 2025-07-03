@@ -2,22 +2,20 @@
 
 namespace App\Http\Requests\Foundation\Traits;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Str;
 
 /**
  * Security Validation Trait
- * 
+ *
  * Provides security validation patterns across all request types:
  * - Input sanitization and injection prevention
- * - Rate limiting validation  
+ * - Rate limiting validation
  * - Authorization level checking
  * - CSRF protection validation
  * - Security headers validation
- * 
- * @package App\Http\Requests\Foundation\Traits
+ *
  * @version 1.0.0
+ *
  * @since 2024-12-28
  */
 trait SecurityValidationTrait
@@ -29,7 +27,7 @@ trait SecurityValidationTrait
         'low' => ['basic_sanitization'],
         'medium' => ['basic_sanitization', 'rate_limiting'],
         'high' => ['basic_sanitization', 'rate_limiting', 'advanced_validation', 'csrf_protection'],
-        'critical' => ['basic_sanitization', 'rate_limiting', 'advanced_validation', 'csrf_protection', 'enhanced_monitoring']
+        'critical' => ['basic_sanitization', 'rate_limiting', 'advanced_validation', 'csrf_protection', 'enhanced_monitoring'],
     ];
 
     /**
@@ -112,12 +110,12 @@ trait SecurityValidationTrait
                 if ($this->containsSqlInjection($value)) {
                     $fail(__('validation.security.sql_injection_detected'));
                 }
-                
+
                 // XSS patterns
                 if ($this->containsXssPatterns($value)) {
                     $fail(__('validation.security.xss_detected'));
                 }
-                
+
                 // Command injection patterns
                 if ($this->containsCommandInjection($value)) {
                     $fail(__('validation.security.command_injection_detected'));
@@ -156,7 +154,7 @@ trait SecurityValidationTrait
      */
     protected function containsMaliciousContent($value): bool
     {
-        if (!is_string($value)) {
+        if (! is_string($value)) {
             return false;
         }
 
@@ -183,7 +181,7 @@ trait SecurityValidationTrait
      */
     protected function containsSqlInjection($value): bool
     {
-        if (!is_string($value)) {
+        if (! is_string($value)) {
             return false;
         }
 
@@ -209,7 +207,7 @@ trait SecurityValidationTrait
      */
     protected function containsXssPatterns($value): bool
     {
-        if (!is_string($value)) {
+        if (! is_string($value)) {
             return false;
         }
 
@@ -235,7 +233,7 @@ trait SecurityValidationTrait
      */
     protected function containsCommandInjection($value): bool
     {
-        if (!is_string($value)) {
+        if (! is_string($value)) {
             return false;
         }
 
@@ -259,7 +257,7 @@ trait SecurityValidationTrait
      */
     protected function getRateLimitKey(): string
     {
-        return 'request_validation:' . request()->ip() . ':' . static::class;
+        return 'request_validation:'.request()->ip().':'.static::class;
     }
 
     /**
@@ -268,8 +266,8 @@ trait SecurityValidationTrait
     protected function getRateLimitMaxAttempts(): int
     {
         $securityLevel = $this->getSecurityLevel();
-        
-        return match($securityLevel) {
+
+        return match ($securityLevel) {
             'low' => 200,
             'medium' => 100,
             'high' => 50,
@@ -284,8 +282,8 @@ trait SecurityValidationTrait
     protected function getRateLimitDecayMinutes(): int
     {
         $securityLevel = $this->getSecurityLevel();
-        
-        return match($securityLevel) {
+
+        return match ($securityLevel) {
             'low' => 1,
             'medium' => 5,
             'high' => 15,
@@ -317,13 +315,13 @@ trait SecurityValidationTrait
     {
         // Remove potential XSS
         $value = strip_tags($value);
-        
+
         // Encode special characters
         $value = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
-        
+
         // Remove potential SQL injection characters
         $value = str_replace(['--', '/*', '*/', ';'], '', $value);
-        
+
         return trim($value);
     }
-} 
+}

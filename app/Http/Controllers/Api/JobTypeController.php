@@ -44,7 +44,7 @@ class JobTypeController extends Controller
             }
 
             if ($request->filled('status')) {
-                'active' === $request->status
+                $request->status === 'active'
                     ? $query->active()
                     : $query->inactive();
             }
@@ -111,8 +111,7 @@ class JobTypeController extends Controller
         activity()
             ->performedOn($jobType)
             ->causedBy($request->user())
-            ->log('Job type created')
-        ;
+            ->log('Job type created');
 
         return new JobTypeResource($jobType);
     }
@@ -136,7 +135,7 @@ class JobTypeController extends Controller
                 // Related types will be loaded in the resource
             }
 
-            if (!empty($with)) {
+            if (! empty($with)) {
                 $jobType->load($with);
             }
 
@@ -161,8 +160,7 @@ class JobTypeController extends Controller
         activity()
             ->performedOn($jobType)
             ->causedBy($request->user())
-            ->log('Job type updated')
-        ;
+            ->log('Job type updated');
 
         return new JobTypeResource($jobType->fresh());
     }
@@ -186,8 +184,7 @@ class JobTypeController extends Controller
         activity()
             ->performedOn($jobType)
             ->causedBy($request->user())
-            ->log('Job type deleted')
-        ;
+            ->log('Job type deleted');
 
         $jobType->delete();
 
@@ -257,7 +254,7 @@ class JobTypeController extends Controller
                 'unfeature' => $jobType->update(['is_featured' => false]),
                 'delete' => $jobType->jobs()->exists() ?: $jobType->delete(),
             };
-            ++$updatedCount;
+            $updatedCount++;
         }
 
         // Clear caches
@@ -266,8 +263,7 @@ class JobTypeController extends Controller
         // Log bulk activity
         activity()
             ->causedBy($request->user())
-            ->log("Bulk {$request->action} applied to {$updatedCount} job types")
-        ;
+            ->log("Bulk {$request->action} applied to {$updatedCount} job types");
 
         return response()->json([
             'message' => __('job_type.messages.bulk_updated', ['count' => $updatedCount]),
@@ -295,7 +291,7 @@ class JobTypeController extends Controller
 
             // Apply additional filters
             if ($request->has('filters.status')) {
-                'active' === $request->input('filters.status')
+                $request->input('filters.status') === 'active'
                     ? $query->active()
                     : $query->inactive();
             }
@@ -319,8 +315,7 @@ class JobTypeController extends Controller
             return $query
                 ->withCount('jobs')
                 ->orderByDesc('jobs_count')
-                ->paginate($request->get('per_page', 10))
-            ;
+                ->paginate($request->get('per_page', 10));
         });
 
         return JobTypeResource::collection($jobTypes);

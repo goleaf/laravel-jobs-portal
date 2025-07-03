@@ -36,7 +36,7 @@ class HeaderSliderRepository extends BaseRepository
             /** @var HeaderSlider $headerSlider */
             $headerSlider = $this->create($input);
 
-            if (isset($input['header_slider']) && !empty($input['header_slider'])) {
+            if (isset($input['header_slider']) && ! empty($input['header_slider'])) {
                 $headerSlider->addMedia($input['header_slider'])->toMediaCollection(
                     HeaderSlider::PATH,
                     config('app.media_disc')
@@ -55,7 +55,7 @@ class HeaderSliderRepository extends BaseRepository
             /** @var HeaderSlider $headerSlider */
             $headerSlider = $this->update($input, $headerSliderId);
 
-            if (isset($input['image_slider']) && !empty($input['image_slider'])) {
+            if (isset($input['image_slider']) && ! empty($input['image_slider'])) {
                 $headerSlider->clearMediaCollection(HeaderSlider::PATH);
                 $headerSlider->addMedia($input['image_slider'])->toMediaCollection(
                     HeaderSlider::PATH,

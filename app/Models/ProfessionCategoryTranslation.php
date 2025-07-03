@@ -54,6 +54,6 @@ class ProfessionCategoryTranslation extends Model
      */
     public function isComplete(): bool
     {
-        return !empty($this->name) && !empty($this->description);
+        return ! empty($this->name) && ! empty($this->description);
     }
-} 
+}

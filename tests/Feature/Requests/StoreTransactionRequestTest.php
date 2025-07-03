@@ -30,17 +30,17 @@ class StoreTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAuthorizationReturnsTrue()
+    public function test_authorization_returns_true()
     {
-        $request = new StoreTransactionRequest();
+        $request = new StoreTransactionRequest;
 
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function testValidationRulesAreDefined()
+    public function test_validation_rules_are_defined()
     {
-        $request = new StoreTransactionRequest();
+        $request = new StoreTransactionRequest;
         $rules = $request->rules();
 
         $this->assertIsArray($rules);
@@ -48,9 +48,9 @@ class StoreTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationMessagesAreDefined()
+    public function test_validation_messages_are_defined()
     {
-        $request = new StoreTransactionRequest();
+        $request = new StoreTransactionRequest;
 
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
@@ -61,9 +61,9 @@ class StoreTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationAttributesAreDefined()
+    public function test_validation_attributes_are_defined()
     {
-        $request = new StoreTransactionRequest();
+        $request = new StoreTransactionRequest;
 
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
@@ -74,9 +74,9 @@ class StoreTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testUserIdValidation()
+    public function test_user_id_validation()
     {
-        $request = new StoreTransactionRequest();
+        $request = new StoreTransactionRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('user_id', $rules);
@@ -87,9 +87,9 @@ class StoreTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSubscriptionPlanIdValidation()
+    public function test_subscription_plan_id_validation()
     {
-        $request = new StoreTransactionRequest();
+        $request = new StoreTransactionRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('subscription_plan_id', $rules);
@@ -100,9 +100,9 @@ class StoreTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testTransactionIdValidation()
+    public function test_transaction_id_validation()
     {
-        $request = new StoreTransactionRequest();
+        $request = new StoreTransactionRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('transaction_id', $rules);
@@ -113,9 +113,9 @@ class StoreTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAmountValidation()
+    public function test_amount_validation()
     {
-        $request = new StoreTransactionRequest();
+        $request = new StoreTransactionRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('amount', $rules);
@@ -126,9 +126,9 @@ class StoreTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testPaymentTypeValidation()
+    public function test_payment_type_validation()
     {
-        $request = new StoreTransactionRequest();
+        $request = new StoreTransactionRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('payment_type', $rules);
@@ -139,9 +139,9 @@ class StoreTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testStatusValidation()
+    public function test_status_validation()
     {
-        $request = new StoreTransactionRequest();
+        $request = new StoreTransactionRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('status', $rules);
@@ -152,9 +152,9 @@ class StoreTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testMetaValidation()
+    public function test_meta_validation()
     {
-        $request = new StoreTransactionRequest();
+        $request = new StoreTransactionRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('meta', $rules);
@@ -165,7 +165,7 @@ class StoreTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidDataPassesValidation()
+    public function test_valid_data_passes_validation()
     {
         $validData = [
             'user_id' => 1,
@@ -177,18 +177,18 @@ class StoreTransactionRequestTest extends TestCase
             'meta' => 'Test Value',
         ];
 
-        $request = new StoreTransactionRequest();
+        $request = new StoreTransactionRequest;
         $validator = validator($validData, $request->rules());
 
         $this->assertFalse($validator->fails());
     }
 
     /** @test */
-    public function testRequestHandlesEmptyDataCorrectly()
+    public function test_request_handles_empty_data_correctly()
     {
         $emptyData = [];
 
-        $request = new StoreTransactionRequest();
+        $request = new StoreTransactionRequest;
         $validator = validator($emptyData, $request->rules());
 
         // Should handle empty data according to rules
@@ -196,7 +196,7 @@ class StoreTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSecurityValidationPreventsXss()
+    public function test_security_validation_prevents_xss()
     {
         $maliciousData = [
             'name' => '<script>alert("xss")</script>',
@@ -204,7 +204,7 @@ class StoreTransactionRequestTest extends TestCase
             'content' => '<img src=x onerror=alert("xss")>',
         ];
 
-        $request = new StoreTransactionRequest();
+        $request = new StoreTransactionRequest;
         $validator = validator($maliciousData, $request->rules());
 
         // XSS data should either fail validation or be properly sanitized
@@ -219,7 +219,7 @@ class StoreTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSqlInjectionPrevention()
+    public function test_sql_injection_prevention()
     {
         $sqlInjectionData = [
             'name' => "'; DROP TABLE users; --",
@@ -227,7 +227,7 @@ class StoreTransactionRequestTest extends TestCase
             'filter' => 'UNION SELECT * FROM passwords',
         ];
 
-        $request = new StoreTransactionRequest();
+        $request = new StoreTransactionRequest;
         $validator = validator($sqlInjectionData, $request->rules());
 
         // SQL injection patterns should be handled safely

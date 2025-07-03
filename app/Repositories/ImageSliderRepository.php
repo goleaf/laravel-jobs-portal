@@ -36,7 +36,7 @@ class ImageSliderRepository extends BaseRepository
             /** @var ImageSlider $imageSlider */
             $imageSlider = $this->create($input);
 
-            if (isset($input['image_slider']) && !empty($input['image_slider'])) {
+            if (isset($input['image_slider']) && ! empty($input['image_slider'])) {
                 $imageSlider->addMedia($input['image_slider'])->toMediaCollection(ImageSlider::PATH, config('app.media_disc'));
             }
 
@@ -52,7 +52,7 @@ class ImageSliderRepository extends BaseRepository
             /** @var ImageSlider $imageSlider */
             $imageSlider = $this->update($input, $imageSliderId);
 
-            if (isset($input['image_slider']) && !empty($input['image_slider'])) {
+            if (isset($input['image_slider']) && ! empty($input['image_slider'])) {
                 $imageSlider->clearMediaCollection(ImageSlider::PATH);
                 $imageSlider->addMedia($input['image_slider'])->toMediaCollection(ImageSlider::PATH, config('app.media_disc'));
             }

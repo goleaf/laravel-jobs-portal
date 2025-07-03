@@ -157,7 +157,7 @@ class IndexCandidateRequest extends FormRequest
                 'integer',
                 'exists:states,id',
                 function ($attribute, $value, $fail) {
-                    if ($this->input('country_id') && !$this->validateStateCountryRelation($value, $this->input('country_id'))) {
+                    if ($this->input('country_id') && ! $this->validateStateCountryRelation($value, $this->input('country_id'))) {
                         $fail(__('validation.state_country_mismatch'));
                     }
                 },
@@ -168,7 +168,7 @@ class IndexCandidateRequest extends FormRequest
                 'integer',
                 'exists:cities,id',
                 function ($attribute, $value, $fail) {
-                    if ($this->input('state_id') && !$this->validateCityStateRelation($value, $this->input('state_id'))) {
+                    if ($this->input('state_id') && ! $this->validateCityStateRelation($value, $this->input('state_id'))) {
                         $fail(__('validation.city_state_mismatch'));
                     }
                 },
@@ -521,41 +521,41 @@ class IndexCandidateRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Set default values
-        if (!$this->has('per_page')) {
+        if (! $this->has('per_page')) {
             $this->merge(['per_page' => 10]);
         }
 
-        if (!$this->has('sort_by')) {
+        if (! $this->has('sort_by')) {
             $this->merge(['sort_by' => 'created_at']);
         }
 
-        if (!$this->has('sort_direction')) {
+        if (! $this->has('sort_direction')) {
             $this->merge(['sort_direction' => 'desc']);
         }
 
-        if (!$this->has('search_type')) {
+        if (! $this->has('search_type')) {
             $this->merge(['search_type' => 'all']);
         }
 
         // Clean search input
         if ($this->has('search')) {
             $this->merge([
-                'search' => trim($this->input('search'))
+                'search' => trim($this->input('search')),
             ]);
         }
 
         // Convert string booleans to actual booleans
         $booleanFields = [
             'has_resume',
-            'has_cover_letter', 
+            'has_cover_letter',
             'has_portfolio',
-            'include_analytics'
+            'include_analytics',
         ];
 
         foreach ($booleanFields as $field) {
             if ($this->has($field)) {
                 $this->merge([
-                    $field => filter_var($this->input($field), FILTER_VALIDATE_BOOLEAN)
+                    $field => filter_var($this->input($field), FILTER_VALIDATE_BOOLEAN),
                 ]);
             }
         }
@@ -563,9 +563,9 @@ class IndexCandidateRequest extends FormRequest
         // Ensure arrays are properly formatted
         $arrayFields = ['skills', 'job_categories', 'functional_areas', 'degree_fields', 'export_fields', 'selected_candidates'];
         foreach ($arrayFields as $field) {
-            if ($this->has($field) && !is_array($this->input($field))) {
+            if ($this->has($field) && ! is_array($this->input($field))) {
                 $this->merge([
-                    $field => array_filter(explode(',', $this->input($field)))
+                    $field => array_filter(explode(',', $this->input($field))),
                 ]);
             }
         }
@@ -591,7 +591,7 @@ class IndexCandidateRequest extends FormRequest
         Log::info('Admin candidate index request validated', [
             'filters_applied' => count(array_filter($this->only([
                 'status', 'verification_status', 'experience_level', 'country_id',
-                'state_id', 'city_id', 'skills', 'job_categories'
+                'state_id', 'city_id', 'skills', 'job_categories',
             ]))),
             'search_performed' => $this->has('search'),
             'export_requested' => $this->has('export_format'),
@@ -608,11 +608,11 @@ class IndexCandidateRequest extends FormRequest
     {
         $inappropriateWords = [
             'spam', 'scam', 'fraud', 'fake', 'illegal', 'hack', 'virus',
-            'malware', 'phishing', 'adult', 'xxx', 'porn', 'sex'
+            'malware', 'phishing', 'adult', 'xxx', 'porn', 'sex',
         ];
 
         $lowercaseContent = strtolower($content);
-        
+
         foreach ($inappropriateWords as $word) {
             if (strpos($lowercaseContent, $word) !== false) {
                 return true;
@@ -643,4 +643,4 @@ class IndexCandidateRequest extends FormRequest
             ->where('state_id', $stateId)
             ->exists();
     }
-} 
+}

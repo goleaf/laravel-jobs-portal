@@ -40,7 +40,7 @@ class CompressResponse
             if (strlen($content) > 1024) { // Only compress if larger than 1KB
                 $compressed = gzencode($content, 6); // Level 6 compression
 
-                if (false !== $compressed) {
+                if ($compressed !== false) {
                     $response->setContent($compressed);
                     $response->headers->set('Content-Encoding', 'gzip');
                     $response->headers->set('Content-Length', strlen($compressed));

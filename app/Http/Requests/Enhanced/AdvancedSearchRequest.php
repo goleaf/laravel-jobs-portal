@@ -3,9 +3,8 @@
 namespace App\Http\Requests\Enhanced;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Cache;
-use Carbon\Carbon;
+use Illuminate\Validation\Rule;
 
 class AdvancedSearchRequest extends FormRequest
 {
@@ -24,7 +23,7 @@ class AdvancedSearchRequest extends FormRequest
         $rules = array_merge($rules, $this->getPerformanceOptimizationRules());
         $rules = array_merge($rules, $this->getAnalyticsRules());
         $rules = array_merge($rules, $this->getAdvancedFeaturesRules());
-        
+
         return $rules;
     }
 
@@ -43,7 +42,7 @@ class AdvancedSearchRequest extends FormRequest
             'user_location.latitude' => ['numeric', 'min:-90', 'max:90'],
             'user_location.longitude' => ['numeric', 'min:-180', 'max:180'],
             'user_location.radius' => ['integer', 'min:1', 'max:10000'], // km
-            
+
             // Query Processing
             'query_preprocessing' => ['nullable', 'boolean'],
             'spell_correction' => ['nullable', 'boolean'],
@@ -55,7 +54,7 @@ class AdvancedSearchRequest extends FormRequest
             'phrase_detection' => ['nullable', 'boolean'],
             'entity_recognition' => ['nullable', 'boolean'],
             'intent_classification' => ['nullable', 'boolean'],
-            
+
             // Search Filters
             'filters' => ['nullable', 'array'],
             'filters.*.filter_name' => ['string', 'max:100'],
@@ -67,7 +66,7 @@ class AdvancedSearchRequest extends FormRequest
             'dynamic_filters' => ['nullable', 'boolean'],
             'smart_filters' => ['nullable', 'boolean'],
             'predictive_filters' => ['nullable', 'boolean'],
-            
+
             // Result Configuration
             'result_limit' => ['nullable', 'integer', 'min:1', 'max:1000'],
             'result_offset' => ['nullable', 'integer', 'min:0'],
@@ -79,7 +78,7 @@ class AdvancedSearchRequest extends FormRequest
             'result_sorting.order' => ['string', Rule::in(['asc', 'desc'])],
             'include_suggestions' => ['nullable', 'boolean'],
             'include_related_searches' => ['nullable', 'boolean'],
-            
+
             // Search Index Configuration
             'search_indexes' => ['nullable', 'array'],
             'search_indexes.*' => ['string', Rule::in(['jobs', 'candidates', 'companies', 'skills', 'locations', 'all'])],
@@ -90,7 +89,7 @@ class AdvancedSearchRequest extends FormRequest
             'index_weights.skills' => ['numeric', 'min:0', 'max:1'],
             'cross_index_search' => ['nullable', 'boolean'],
             'federated_search' => ['nullable', 'boolean'],
-            
+
             // Language and Localization
             'search_language' => ['nullable', 'string', 'size:2'], // ISO language code
             'multilingual_search' => ['nullable', 'boolean'],
@@ -115,7 +114,7 @@ class AdvancedSearchRequest extends FormRequest
             'concept_extraction' => ['nullable', 'boolean'],
             'topic_modeling' => ['nullable', 'boolean'],
             'knowledge_graph_integration' => ['nullable', 'boolean'],
-            
+
             // Vector Search
             'vector_search_enabled' => ['nullable', 'boolean'],
             'vector_database_type' => ['nullable', 'string', Rule::in(['elasticsearch', 'pinecone', 'weaviate', 'milvus', 'custom'])],
@@ -124,7 +123,7 @@ class AdvancedSearchRequest extends FormRequest
             'approximate_search' => ['nullable', 'boolean'],
             'search_accuracy' => ['nullable', 'numeric', 'min:0.5', 'max:1.0'],
             'vector_cache_enabled' => ['nullable', 'boolean'],
-            
+
             // Natural Language Understanding
             'natural_language_queries' => ['nullable', 'boolean'],
             'question_answering' => ['nullable', 'boolean'],
@@ -134,7 +133,7 @@ class AdvancedSearchRequest extends FormRequest
             'query_refinement' => ['nullable', 'boolean'],
             'dialogue_management' => ['nullable', 'boolean'],
             'multi_turn_conversations' => ['nullable', 'boolean'],
-            
+
             // Semantic Features
             'semantic_autocomplete' => ['nullable', 'boolean'],
             'concept_based_suggestions' => ['nullable', 'boolean'],
@@ -144,7 +143,7 @@ class AdvancedSearchRequest extends FormRequest
             'intelligent_query_completion' => ['nullable', 'boolean'],
             'semantic_spell_correction' => ['nullable', 'boolean'],
             'meaning_disambiguation' => ['nullable', 'boolean'],
-            
+
             // Knowledge Integration
             'ontology_integration' => ['nullable', 'boolean'],
             'domain_knowledge' => ['nullable', 'array'],
@@ -154,7 +153,7 @@ class AdvancedSearchRequest extends FormRequest
             'geographic_knowledge' => ['nullable', 'boolean'],
             'temporal_understanding' => ['nullable', 'boolean'],
             'business_logic_integration' => ['nullable', 'boolean'],
-            
+
             // Advanced NLP
             'named_entity_recognition' => ['nullable', 'boolean'],
             'relationship_extraction' => ['nullable', 'boolean'],
@@ -177,7 +176,7 @@ class AdvancedSearchRequest extends FormRequest
             'training_data_size' => ['nullable', 'integer', 'min:1000'],
             'model_accuracy_threshold' => ['nullable', 'numeric', 'min:0.7', 'max:1.0'],
             'inference_speed_requirement' => ['nullable', 'string', Rule::in(['real_time', 'near_real_time', 'batch'])],
-            
+
             // Intelligent Filtering
             'smart_filters' => ['nullable', 'boolean'],
             'adaptive_filtering' => ['nullable', 'boolean'],
@@ -187,7 +186,7 @@ class AdvancedSearchRequest extends FormRequest
             'content_based_filtering' => ['nullable', 'boolean'],
             'hybrid_filtering' => ['nullable', 'boolean'],
             'multi_criteria_filtering' => ['nullable', 'boolean'],
-            
+
             // Machine Learning Features
             'feature_engineering' => ['nullable', 'boolean'],
             'automatic_feature_selection' => ['nullable', 'boolean'],
@@ -197,7 +196,7 @@ class AdvancedSearchRequest extends FormRequest
             'anomaly_filtering' => ['nullable', 'boolean'],
             'pattern_recognition' => ['nullable', 'boolean'],
             'trend_analysis' => ['nullable', 'boolean'],
-            
+
             // Dynamic Filtering
             'real_time_filter_updates' => ['nullable', 'boolean'],
             'user_behavior_learning' => ['nullable', 'boolean'],
@@ -207,7 +206,7 @@ class AdvancedSearchRequest extends FormRequest
             'filter_recommendation' => ['nullable', 'boolean'],
             'smart_filter_suggestions' => ['nullable', 'boolean'],
             'filter_optimization' => ['nullable', 'boolean'],
-            
+
             // Personalization AI
             'user_profiling' => ['nullable', 'boolean'],
             'behavioral_analysis' => ['nullable', 'boolean'],
@@ -217,7 +216,7 @@ class AdvancedSearchRequest extends FormRequest
             'session_understanding' => ['nullable', 'boolean'],
             'long_term_learning' => ['nullable', 'boolean'],
             'cross_session_consistency' => ['nullable', 'boolean'],
-            
+
             // Bias Mitigation
             'bias_detection' => ['nullable', 'boolean'],
             'fairness_constraints' => ['nullable', 'boolean'],
@@ -227,7 +226,7 @@ class AdvancedSearchRequest extends FormRequest
             'explainable_filtering' => ['nullable', 'boolean'],
             'audit_trail' => ['nullable', 'boolean'],
             'bias_monitoring' => ['nullable', 'boolean'],
-            
+
             // Model Management
             'model_versioning' => ['nullable', 'boolean'],
             'a_b_testing' => ['nullable', 'boolean'],
@@ -254,7 +253,7 @@ class AdvancedSearchRequest extends FormRequest
             'scoring_factors.freshness' => ['numeric', 'min:0', 'max:1'],
             'scoring_factors.authority' => ['numeric', 'min:0', 'max:1'],
             'scoring_factors.user_context' => ['numeric', 'min:0', 'max:1'],
-            
+
             // Advanced Ranking
             'learning_to_rank_enabled' => ['nullable', 'boolean'],
             'neural_ranking_model' => ['nullable', 'string', 'max:100'],
@@ -264,7 +263,7 @@ class AdvancedSearchRequest extends FormRequest
             'novelty_boost' => ['nullable', 'boolean'],
             'coverage_optimization' => ['nullable', 'boolean'],
             'click_through_optimization' => ['nullable', 'boolean'],
-            
+
             // Personalized Ranking
             'personalized_ranking' => ['nullable', 'boolean'],
             'user_history_weight' => ['nullable', 'numeric', 'min:0', 'max:1'],
@@ -275,7 +274,7 @@ class AdvancedSearchRequest extends FormRequest
             'location_bias' => ['nullable', 'boolean'],
             'device_awareness' => ['nullable', 'boolean'],
             'time_of_day_adjustment' => ['nullable', 'boolean'],
-            
+
             // Quality Metrics
             'ranking_quality_metrics' => ['nullable', 'array'],
             'ranking_quality_metrics.*' => ['string', Rule::in(['ndcg', 'map', 'mrr', 'precision_at_k', 'recall_at_k', 'click_through_rate'])],
@@ -284,7 +283,7 @@ class AdvancedSearchRequest extends FormRequest
             'online_evaluation' => ['nullable', 'boolean'],
             'offline_evaluation' => ['nullable', 'boolean'],
             'human_evaluation' => ['nullable', 'boolean'],
-            
+
             // Ranking Features
             'field_boosting' => ['nullable', 'array'],
             'field_boosting.title' => ['numeric', 'min:0', 'max:10'],
@@ -295,7 +294,7 @@ class AdvancedSearchRequest extends FormRequest
             'exact_match_boost' => ['nullable', 'numeric', 'min:1', 'max:10'],
             'proximity_boost' => ['nullable', 'numeric', 'min:1', 'max:5'],
             'recency_boost' => ['nullable', 'numeric', 'min:0.1', 'max:5'],
-            
+
             // Dynamic Ranking
             'adaptive_ranking' => ['nullable', 'boolean'],
             'real_time_ranking_updates' => ['nullable', 'boolean'],
@@ -319,7 +318,7 @@ class AdvancedSearchRequest extends FormRequest
             'user_skills' => ['nullable', 'array'],
             'user_experience_level' => ['nullable', 'string', Rule::in(['entry', 'junior', 'mid', 'senior', 'executive'])],
             'career_stage' => ['nullable', 'string', Rule::in(['student', 'entry_level', 'experienced', 'management', 'executive'])],
-            
+
             // Behavioral Analysis
             'behavioral_tracking' => ['nullable', 'boolean'],
             'click_tracking' => ['nullable', 'boolean'],
@@ -329,7 +328,7 @@ class AdvancedSearchRequest extends FormRequest
             'session_analysis' => ['nullable', 'boolean'],
             'cross_session_learning' => ['nullable', 'boolean'],
             'long_term_behavior_modeling' => ['nullable', 'boolean'],
-            
+
             // Contextual Personalization
             'contextual_awareness' => ['nullable', 'boolean'],
             'device_context' => ['nullable', 'boolean'],
@@ -339,7 +338,7 @@ class AdvancedSearchRequest extends FormRequest
             'seasonal_adjustments' => ['nullable', 'boolean'],
             'situational_awareness' => ['nullable', 'boolean'],
             'mood_detection' => ['nullable', 'boolean'],
-            
+
             // Recommendation Systems
             'personalized_recommendations' => ['nullable', 'boolean'],
             'recommendation_algorithm' => ['nullable', 'string', Rule::in(['collaborative', 'content_based', 'hybrid', 'deep_learning', 'reinforcement'])],
@@ -348,7 +347,7 @@ class AdvancedSearchRequest extends FormRequest
             'recommendation_explanations' => ['nullable', 'boolean'],
             'serendipity_factor' => ['nullable', 'numeric', 'min:0', 'max:1'],
             'cold_start_handling' => ['nullable', 'string', Rule::in(['demographic', 'popular', 'random', 'onboarding'])],
-            
+
             // Privacy and Control
             'privacy_level' => ['nullable', 'string', Rule::in(['minimal', 'balanced', 'enhanced', 'maximum'])],
             'data_retention_period' => ['nullable', 'integer', 'min:1', 'max:3650'], // days
@@ -358,7 +357,7 @@ class AdvancedSearchRequest extends FormRequest
             'consent_management' => ['nullable', 'boolean'],
             'data_portability' => ['nullable', 'boolean'],
             'right_to_explanation' => ['nullable', 'boolean'],
-            
+
             // Adaptive Learning
             'adaptive_personalization' => ['nullable', 'boolean'],
             'feedback_learning' => ['nullable', 'boolean'],
@@ -384,7 +383,7 @@ class AdvancedSearchRequest extends FormRequest
             'personalization_cache_enabled' => ['nullable', 'boolean'],
             'cache_warming' => ['nullable', 'boolean'],
             'cache_invalidation_strategy' => ['nullable', 'string', Rule::in(['time_based', 'event_based', 'hybrid'])],
-            
+
             // Performance Targets
             'response_time_target' => ['nullable', 'integer', 'min:10', 'max:5000'], // milliseconds
             'throughput_target' => ['nullable', 'integer', 'min:1', 'max:10000'], // queries per second
@@ -393,7 +392,7 @@ class AdvancedSearchRequest extends FormRequest
             'performance_monitoring' => ['nullable', 'boolean'],
             'alerting_enabled' => ['nullable', 'boolean'],
             'auto_scaling' => ['nullable', 'boolean'],
-            
+
             // Index Optimization
             'index_optimization' => ['nullable', 'boolean'],
             'index_type' => ['nullable', 'string', Rule::in(['btree', 'hash', 'gin', 'gist', 'inverted'])],
@@ -403,7 +402,7 @@ class AdvancedSearchRequest extends FormRequest
             'index_warming' => ['nullable', 'boolean'],
             'background_indexing' => ['nullable', 'boolean'],
             'incremental_indexing' => ['nullable', 'boolean'],
-            
+
             // Query Optimization
             'query_optimization' => ['nullable', 'boolean'],
             'query_rewriting' => ['nullable', 'boolean'],
@@ -413,7 +412,7 @@ class AdvancedSearchRequest extends FormRequest
             'connection_pooling' => ['nullable', 'boolean'],
             'lazy_loading' => ['nullable', 'boolean'],
             'pagination_optimization' => ['nullable', 'boolean'],
-            
+
             // Resource Management
             'memory_limit' => ['nullable', 'integer', 'min:128', 'max:32768'], // MB
             'cpu_limit' => ['nullable', 'integer', 'min:1', 'max:64'], // cores
@@ -422,7 +421,7 @@ class AdvancedSearchRequest extends FormRequest
             'resource_monitoring' => ['nullable', 'boolean'],
             'resource_alerting' => ['nullable', 'boolean'],
             'resource_optimization' => ['nullable', 'boolean'],
-            
+
             // CDN and Edge
             'cdn_enabled' => ['nullable', 'boolean'],
             'edge_caching' => ['nullable', 'boolean'],
@@ -446,7 +445,7 @@ class AdvancedSearchRequest extends FormRequest
             'business_analytics' => ['nullable', 'boolean'],
             'predictive_analytics' => ['nullable', 'boolean'],
             'real_time_analytics' => ['nullable', 'boolean'],
-            
+
             // Metrics Collection
             'search_volume_tracking' => ['nullable', 'boolean'],
             'query_performance_tracking' => ['nullable', 'boolean'],
@@ -456,7 +455,7 @@ class AdvancedSearchRequest extends FormRequest
             'abandonment_tracking' => ['nullable', 'boolean'],
             'error_tracking' => ['nullable', 'boolean'],
             'trend_tracking' => ['nullable', 'boolean'],
-            
+
             // Reporting
             'automated_reporting' => ['nullable', 'boolean'],
             'dashboard_integration' => ['nullable', 'boolean'],
@@ -466,7 +465,7 @@ class AdvancedSearchRequest extends FormRequest
             'stakeholder_reports' => ['nullable', 'boolean'],
             'executive_summaries' => ['nullable', 'boolean'],
             'technical_reports' => ['nullable', 'boolean'],
-            
+
             // Data Integration
             'external_analytics_integration' => ['nullable', 'boolean'],
             'google_analytics_integration' => ['nullable', 'boolean'],
@@ -475,7 +474,7 @@ class AdvancedSearchRequest extends FormRequest
             'custom_analytics_integration' => ['nullable', 'boolean'],
             'data_warehouse_integration' => ['nullable', 'boolean'],
             'bi_tool_integration' => ['nullable', 'boolean'],
-            
+
             // Privacy Compliance
             'privacy_compliant_analytics' => ['nullable', 'boolean'],
             'gdpr_compliance' => ['nullable', 'boolean'],
@@ -498,7 +497,7 @@ class AdvancedSearchRequest extends FormRequest
             'multilingual_voice_support' => ['nullable', 'boolean'],
             'voice_personalization' => ['nullable', 'boolean'],
             'voice_analytics' => ['nullable', 'boolean'],
-            
+
             // Visual Search
             'visual_search_enabled' => ['nullable', 'boolean'],
             'image_recognition_model' => ['nullable', 'string', 'max:100'],
@@ -507,7 +506,7 @@ class AdvancedSearchRequest extends FormRequest
             'video_content_search' => ['nullable', 'boolean'],
             'visual_query_expansion' => ['nullable', 'boolean'],
             'visual_analytics' => ['nullable', 'boolean'],
-            
+
             // Augmented Reality
             'ar_search_interface' => ['nullable', 'boolean'],
             'ar_result_visualization' => ['nullable', 'boolean'],
@@ -516,7 +515,7 @@ class AdvancedSearchRequest extends FormRequest
             'ar_personalization' => ['nullable', 'boolean'],
             '3d_content_search' => ['nullable', 'boolean'],
             'immersive_search_experience' => ['nullable', 'boolean'],
-            
+
             // Blockchain and Web3
             'blockchain_integration' => ['nullable', 'boolean'],
             'decentralized_search' => ['nullable', 'boolean'],
@@ -525,7 +524,7 @@ class AdvancedSearchRequest extends FormRequest
             'smart_contract_integration' => ['nullable', 'boolean'],
             'token_based_ranking' => ['nullable', 'boolean'],
             'web3_identity_integration' => ['nullable', 'boolean'],
-            
+
             // IoT Integration
             'iot_data_integration' => ['nullable', 'boolean'],
             'sensor_data_search' => ['nullable', 'boolean'],
@@ -534,7 +533,7 @@ class AdvancedSearchRequest extends FormRequest
             'contextual_iot_search' => ['nullable', 'boolean'],
             'predictive_iot_analytics' => ['nullable', 'boolean'],
             'iot_based_personalization' => ['nullable', 'boolean'],
-            
+
             // Future Technologies
             'quantum_search_ready' => ['nullable', 'boolean'],
             'brain_computer_interface' => ['nullable', 'boolean'],
@@ -543,7 +542,7 @@ class AdvancedSearchRequest extends FormRequest
             'emotion_driven_search' => ['nullable', 'boolean'],
             'biometric_personalization' => ['nullable', 'boolean'],
             'holographic_interfaces' => ['nullable', 'boolean'],
-            
+
             // AI Ethics and Safety
             'ethical_ai_guidelines' => ['nullable', 'boolean'],
             'fairness_monitoring' => ['nullable', 'boolean'],
@@ -562,17 +561,17 @@ class AdvancedSearchRequest extends FormRequest
             'search_query.max' => __('validation.advanced_search.query_too_long'),
             'result_limit.max' => __('validation.advanced_search.too_many_results'),
             'embedding_dimension.max' => __('validation.advanced_search.embedding_dimension_too_large'),
-            
+
             // Performance Messages
             'response_time_target.max' => __('validation.advanced_search.response_time_unrealistic'),
             'concurrent_user_limit.max' => __('validation.advanced_search.user_limit_too_high'),
             'memory_limit.max' => __('validation.advanced_search.memory_limit_exceeded'),
-            
+
             // Accuracy Messages
             'search_accuracy.min' => __('validation.advanced_search.accuracy_too_low'),
             'model_accuracy_threshold.min' => __('validation.advanced_search.model_accuracy_insufficient'),
             'quality_threshold.max' => __('validation.advanced_search.quality_threshold_invalid'),
-            
+
             // Analytics Messages
             'data_retention_policy.max' => __('validation.advanced_search.retention_period_too_long'),
             'training_data_size.min' => __('validation.advanced_search.insufficient_training_data'),
@@ -617,7 +616,7 @@ class AdvancedSearchRequest extends FormRequest
         if ($this->has(['user_location.latitude', 'user_location.longitude'])) {
             $lat = $this->user_location['latitude'];
             $lng = $this->user_location['longitude'];
-            
+
             if ($lat < -90 || $lat > 90 || $lng < -180 || $lng > 180) {
                 throw new \InvalidArgumentException(__('validation.advanced_search.invalid_coordinates'));
             }
@@ -629,17 +628,17 @@ class AdvancedSearchRequest extends FormRequest
         // Optimize based on search type
         if ($this->has('search_type')) {
             $optimizations = $this->calculateSearchOptimizations($this->search_type);
-            
+
             $this->merge([
                 'recommended_cache_ttl' => $optimizations['cache_ttl'],
                 'suggested_result_limit' => $optimizations['result_limit'],
-                'optimal_timeout' => $optimizations['timeout']
+                'optimal_timeout' => $optimizations['timeout'],
             ]);
         }
 
         // Cache search configuration
         if ($this->has('search_id')) {
-            Cache::remember("search_config_{$this->search_id}", 1800, function() {
+            Cache::remember("search_config_{$this->search_id}", 1800, function () {
                 return $this->validated();
             });
         }
@@ -652,9 +651,9 @@ class AdvancedSearchRequest extends FormRequest
             'candidate_search' => ['cache_ttl' => 3600, 'result_limit' => 25, 'timeout' => 3000],
             'skill_search' => ['cache_ttl' => 7200, 'result_limit' => 100, 'timeout' => 1000],
             'company_search' => ['cache_ttl' => 3600, 'result_limit' => 30, 'timeout' => 1500],
-            'universal_search' => ['cache_ttl' => 900, 'result_limit' => 20, 'timeout' => 2500]
+            'universal_search' => ['cache_ttl' => 900, 'result_limit' => 20, 'timeout' => 2500],
         ];
-        
+
         return $optimizations[$searchType] ?? $optimizations['universal_search'];
     }
 
@@ -668,20 +667,34 @@ class AdvancedSearchRequest extends FormRequest
             'user_agent' => request()->userAgent(),
             'ip_address' => request()->ip(),
             'timestamp' => now(),
-            'optimizations_applied' => $this->has('recommended_cache_ttl')
+            'optimizations_applied' => $this->has('recommended_cache_ttl'),
         ]);
     }
 
     private function getOperationType(): string
     {
-        if ($this->has('search_query')) return 'query_search';
-        if ($this->has('semantic_search_enabled')) return 'semantic_search';
-        if ($this->has('ai_filtering_enabled')) return 'ai_powered_filtering';
-        if ($this->has('ranking_algorithm')) return 'relevance_ranking';
-        if ($this->has('personalization_enabled')) return 'personalized_search';
-        if ($this->has('voice_search_enabled')) return 'voice_search';
-        if ($this->has('visual_search_enabled')) return 'visual_search';
-        
+        if ($this->has('search_query')) {
+            return 'query_search';
+        }
+        if ($this->has('semantic_search_enabled')) {
+            return 'semantic_search';
+        }
+        if ($this->has('ai_filtering_enabled')) {
+            return 'ai_powered_filtering';
+        }
+        if ($this->has('ranking_algorithm')) {
+            return 'relevance_ranking';
+        }
+        if ($this->has('personalization_enabled')) {
+            return 'personalized_search';
+        }
+        if ($this->has('voice_search_enabled')) {
+            return 'voice_search';
+        }
+        if ($this->has('visual_search_enabled')) {
+            return 'visual_search';
+        }
+
         return 'general_search_operation';
     }
 }

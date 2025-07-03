@@ -20,35 +20,35 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * Individual terms within taxonomies with hierarchical support.
  * Can be attached to any model via polymorphic relationships.
  *
- * @property int               $id
- * @property int               $taxonomy_id
- * @property string            $name
- * @property string            $slug
- * @property null|string       $description
- * @property null|string       $color
- * @property null|string       $icon
- * @property null|string       $image
- * @property bool              $is_active
- * @property bool              $is_featured
- * @property int               $sort_order
- * @property null|array        $meta
- * @property null|int          $parent_id
- * @property int               $level
- * @property null|string       $path
- * @property int               $usage_count
- * @property null|Carbon       $last_used_at
- * @property null|Carbon       $created_at
- * @property null|Carbon       $updated_at
- * @property Taxonomy          $taxonomy
- * @property null|Term         $parent
+ * @property int $id
+ * @property int $taxonomy_id
+ * @property string $name
+ * @property string $slug
+ * @property null|string $description
+ * @property null|string $color
+ * @property null|string $icon
+ * @property null|string $image
+ * @property bool $is_active
+ * @property bool $is_featured
+ * @property int $sort_order
+ * @property null|array $meta
+ * @property null|int $parent_id
+ * @property int $level
+ * @property null|string $path
+ * @property int $usage_count
+ * @property null|Carbon $last_used_at
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property Taxonomy $taxonomy
+ * @property null|Term $parent
  * @property Collection|Term[] $children
  * @property Collection|Term[] $descendants
  * @property Collection|Term[] $ancestors
- * @property string            $display_name
- * @property string            $full_path
- * @property bool              $has_children
- * @property bool              $is_root
- * @property bool              $is_leaf
+ * @property string $display_name
+ * @property string $full_path
+ * @property bool $has_children
+ * @property bool $is_root
+ * @property bool $is_leaf
  *
  * Enhanced Enhanced Scopes:
  *
@@ -151,8 +151,7 @@ class Term extends Model
                 'path',
             ])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -261,7 +260,7 @@ class Term extends Model
     /**
      * Scope a query to only include active terms.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -271,7 +270,7 @@ class Term extends Model
     /**
      * Scope a query to only include inactive terms.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -281,7 +280,7 @@ class Term extends Model
     /**
      * Scope a query to only include featured terms.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFeatured($query)
     {
@@ -291,7 +290,7 @@ class Term extends Model
     /**
      * Scope a query to only include non-featured terms.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNotFeatured($query)
     {
@@ -305,7 +304,7 @@ class Term extends Model
     /**
      * Scope a query to only include root terms.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRoots($query)
     {
@@ -315,7 +314,7 @@ class Term extends Model
     /**
      * Scope a query to only include leaf terms.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeLeaves($query)
     {
@@ -325,7 +324,7 @@ class Term extends Model
     /**
      * Scope a query to filter by taxonomy.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByTaxonomy($query, int $taxonomyId)
     {
@@ -335,7 +334,7 @@ class Term extends Model
     /**
      * Scope a query to filter by parent.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByParent($query, ?int $parentId)
     {
@@ -345,7 +344,7 @@ class Term extends Model
     /**
      * Scope a query to filter by level.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByLevel($query, int $level)
     {
@@ -359,14 +358,13 @@ class Term extends Model
     /**
      * Scope a query to search terms.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
             $q->where('name', 'like', "%{$term}%")
-                ->orWhere('description', 'like', "%{$term}%")
-            ;
+                ->orWhere('description', 'like', "%{$term}%");
         });
     }
 
@@ -377,7 +375,7 @@ class Term extends Model
     /**
      * Scope a query to order alphabetically.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
@@ -387,7 +385,7 @@ class Term extends Model
     /**
      * Scope a query to order by sort order.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOrdered($query)
     {
@@ -397,7 +395,7 @@ class Term extends Model
     /**
      * Scope a query to order by popularity.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopular($query, int $limit = 10)
     {
@@ -407,13 +405,12 @@ class Term extends Model
     /**
      * Scope a query to get recent terms.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query, int $days = 30)
     {
         return $query->where('created_at', '>=', now()->subDays($days))
-            ->orderBy('created_at', 'desc')
-        ;
+            ->orderBy('created_at', 'desc');
     }
 
     // =============================================
@@ -423,7 +420,7 @@ class Term extends Model
     /**
      * Scope a query to include usage statistics.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithUsageStats($query)
     {
@@ -509,7 +506,7 @@ class Term extends Model
      */
     public function getIsLeafAttribute(): bool
     {
-        return !$this->has_children;
+        return ! $this->has_children;
     }
 
     // =============================================
@@ -545,8 +542,7 @@ class Term extends Model
         return self::where('parent_id', $this->parent_id)
             ->where('id', '!=', $this->id)
             ->ordered()
-            ->get()
-        ;
+            ->get();
     }
 
     /**

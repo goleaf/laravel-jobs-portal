@@ -16,7 +16,7 @@ class ContactEmail extends Mailable
     /**
      * Create a new message instance.
      *
-     * @param mixed $data
+     * @param  mixed  $data
      */
     public function __construct($data)
     {
@@ -30,7 +30,6 @@ class ContactEmail extends Mailable
     {
         return $this->from(config('mail.from.address'))
             ->subject($this->data['inquiry']->subject)
-            ->markdown('emails.contact.contact_us')
-        ;
+            ->markdown('emails.contact.contact_us');
     }
 }

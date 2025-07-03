@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -34,21 +35,17 @@ return new class extends Migration {
 
             $table->foreign('user_id')->references('id')->on('users')
                 ->onUpdate('cascade')
-                ->onDelete('cascade')
-            ;
+                ->onDelete('cascade');
 
             $table->foreign('industry_id')->references('id')->on('industries')
                 ->onUpdate('cascade')
-                ->onDelete('cascade')
-            ;
+                ->onDelete('cascade');
             $table->foreign('ownership_type_id')->references('id')->on('ownership_types')
                 ->onUpdate('cascade')
-                ->onDelete('cascade')
-            ;
+                ->onDelete('cascade');
             $table->foreign('company_size_id')->references('id')->on('company_sizes')
                 ->onUpdate('cascade')
-                ->onDelete('cascade')
-            ;
+                ->onDelete('cascade');
         });
     }
 

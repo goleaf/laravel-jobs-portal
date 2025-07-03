@@ -15,11 +15,10 @@ class CandidateExperienceRepository extends BaseRepository implements CandidateE
     /**
      * Get experiences by candidate ID.
      *
-     * @param int $candidateId
      * @return mixed
      */
     public function getByCandidateId(int $candidateId)
     {
         return $this->model->where('candidate_id', $candidateId)->get();
     }
-} 
+}

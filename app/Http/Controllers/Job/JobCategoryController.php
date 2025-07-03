@@ -121,7 +121,7 @@ class JobCategoryController extends AppBaseController
     public function changeStatus(JobCategory $jobCategory)
     {
         $isFeatured = $jobCategory->is_featured;
-        $jobCategory->update(['is_featured' => !$isFeatured]);
+        $jobCategory->update(['is_featured' => ! $isFeatured]);
 
         return $this->sendSuccess(__('messages.flash.status_change'));
     }

@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -12,13 +13,13 @@ return new class extends Migration {
     {
         Schema::table('companies', function (Blueprint $table) {
             // Add only missing columns that TestCase expects
-            if (!Schema::hasColumn('companies', 'name')) {
+            if (! Schema::hasColumn('companies', 'name')) {
                 $table->string('name')->nullable()->after('id')->comment('Company name');
             }
-            if (!Schema::hasColumn('companies', 'email')) {
+            if (! Schema::hasColumn('companies', 'email')) {
                 $table->string('email')->nullable()->after('name')->comment('Company email address');
             }
-            if (!Schema::hasColumn('companies', 'phone')) {
+            if (! Schema::hasColumn('companies', 'phone')) {
                 $table->string('phone')->nullable()->after('email')->comment('Company phone number');
             }
         });
@@ -42,7 +43,7 @@ return new class extends Migration {
                 $columns[] = 'phone';
             }
 
-            if (!empty($columns)) {
+            if (! empty($columns)) {
                 $table->dropColumn($columns);
             }
         });

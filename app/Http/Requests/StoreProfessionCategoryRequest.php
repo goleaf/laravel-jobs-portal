@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class StoreProfessionCategoryRequest extends FormRequest
 {
@@ -61,7 +60,7 @@ class StoreProfessionCategoryRequest extends FormRequest
                 'string',
                 'regex:/^#[0-9a-f]{6}$/i', // Hex color validation
             ],
-            
+
             // Translation validation
             'translations' => [
                 'required',
@@ -101,7 +100,7 @@ class StoreProfessionCategoryRequest extends FormRequest
             'sort_order.required' => 'The sort order is required.',
             'sort_order.min' => 'The sort order must be 0 or greater.',
             'metadata.color.regex' => 'The color must be a valid hex color (e.g., #FF5733).',
-            
+
             'translations.required' => 'At least one translation is required.',
             'translations.min' => 'At least one translation is required.',
             'translations.*.name.required' => 'The category name is required for each language.',
@@ -140,7 +139,7 @@ class StoreProfessionCategoryRequest extends FormRequest
                 if ($parent && $this->level !== ($parent->level + 1)) {
                     $validator->errors()->add(
                         'level',
-                        "The level must be " . ($parent->level + 1) . " for this parent category."
+                        'The level must be '.($parent->level + 1).' for this parent category.'
                     );
                 }
             }
@@ -154,7 +153,7 @@ class StoreProfessionCategoryRequest extends FormRequest
             }
 
             // Validate that non-root categories have parent_id
-            if ($this->level > 1 && !$this->parent_id) {
+            if ($this->level > 1 && ! $this->parent_id) {
                 $validator->errors()->add(
                     'parent_id',
                     'Categories with level > 1 must have a parent.'
@@ -164,9 +163,9 @@ class StoreProfessionCategoryRequest extends FormRequest
             // Validate translation locales
             if ($this->translations) {
                 $supportedLocales = ['en', 'lt', 'ru', 'pl', 'de', 'fr', 'es', 'zh', 'ar', 'pt', 'tr', 'it', 'ja', 'hi'];
-                
+
                 foreach ($this->translations as $locale => $translation) {
-                    if (!in_array($locale, $supportedLocales)) {
+                    if (! in_array($locale, $supportedLocales)) {
                         $validator->errors()->add(
                             "translations.{$locale}",
                             "The locale '{$locale}' is not supported."
@@ -175,7 +174,7 @@ class StoreProfessionCategoryRequest extends FormRequest
                 }
 
                 // Require English translation
-                if (!isset($this->translations['en'])) {
+                if (! isset($this->translations['en'])) {
                     $validator->errors()->add(
                         'translations.en',
                         'English translation is required.'
@@ -198,13 +197,13 @@ class StoreProfessionCategoryRequest extends FormRequest
         ]);
 
         // Set default metadata
-        if (!$this->has('metadata')) {
+        if (! $this->has('metadata')) {
             $this->merge([
                 'metadata' => [
                     'icon' => 'fas fa-briefcase',
-                    'color' => '#' . substr(md5($this->code ?? 'default'), 0, 6),
+                    'color' => '#'.substr(md5($this->code ?? 'default'), 0, 6),
                 ],
             ]);
         }
     }
-} 
+}

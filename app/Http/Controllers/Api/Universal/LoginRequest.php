@@ -79,7 +79,7 @@ class LoginRequest extends FormRequest
             ]);
         }
 
-        if (!$this->has('device_name') || empty($this->device_name)) {
+        if (! $this->has('device_name') || empty($this->device_name)) {
             $this->merge([
                 'device_name' => $this->userAgent() ?: 'Unknown Device',
             ]);

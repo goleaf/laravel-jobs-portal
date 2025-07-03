@@ -58,7 +58,7 @@ class GetDashboardDataRequest extends FormRequest
                 'date',
                 'before_or_equal:end_date',
                 'before_or_equal:today',
-                'after:' . now()->subYear()->format('Y-m-d'),
+                'after:'.now()->subYear()->format('Y-m-d'),
                 'required_if:timeframe,custom',
             ],
 
@@ -75,7 +75,7 @@ class GetDashboardDataRequest extends FormRequest
                 'string',
                 'max:50',
                 function ($attribute, $value, $fail) {
-                    if (!in_array($value, timezone_identifiers_list())) {
+                    if (! in_array($value, timezone_identifiers_list())) {
                         $fail(__('validation.invalid_timezone'));
                     }
                 },
@@ -151,7 +151,7 @@ class GetDashboardDataRequest extends FormRequest
                     'system_load',
                     'error_rate',
                     'uptime',
-                    'cache_hit_ratio'
+                    'cache_hit_ratio',
                 ]),
             ],
 
@@ -178,7 +178,7 @@ class GetDashboardDataRequest extends FormRequest
                     'click',
                     'download',
                     'share',
-                    'export'
+                    'export',
                 ]),
             ],
 
@@ -479,7 +479,7 @@ class GetDashboardDataRequest extends FormRequest
                 Rule::in([
                     'line', 'bar', 'pie', 'donut', 'area', 'scatter', 'bubble',
                     'heatmap', 'radar', 'gauge', 'funnel', 'waterfall', 'treemap',
-                    'histogram', 'box_plot'
+                    'histogram', 'box_plot',
                 ]),
             ],
 
@@ -772,75 +772,75 @@ class GetDashboardDataRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Set intelligent defaults based on context
-        if (!$this->has('scope')) {
+        if (! $this->has('scope')) {
             $this->merge(['scope' => 'overview']);
         }
 
-        if (!$this->has('timeframe')) {
+        if (! $this->has('timeframe')) {
             $this->merge(['timeframe' => '24h']);
         }
 
-        if (!$this->has('dashboard_view')) {
+        if (! $this->has('dashboard_view')) {
             $this->merge(['dashboard_view' => 'default']);
         }
 
-        if (!$this->has('cache_strategy')) {
+        if (! $this->has('cache_strategy')) {
             $this->merge(['cache_strategy' => 'normal']);
         }
 
-        if (!$this->has('locale')) {
+        if (! $this->has('locale')) {
             $this->merge(['locale' => app()->getLocale()]);
         }
 
-        if (!$this->has('currency')) {
+        if (! $this->has('currency')) {
             $this->merge(['currency' => config('app.currency', 'USD')]);
         }
 
-        if (!$this->has('timezone')) {
+        if (! $this->has('timezone')) {
             $this->merge(['timezone' => config('app.timezone')]);
         }
 
-        if (!$this->has('sort_order')) {
+        if (! $this->has('sort_order')) {
             $this->merge(['sort_order' => 'desc']);
         }
 
-        if (!$this->has('format')) {
+        if (! $this->has('format')) {
             $this->merge(['format' => 'json']);
         }
 
-        if (!$this->has('api_version')) {
+        if (! $this->has('api_version')) {
             $this->merge(['api_version' => 'latest']);
         }
 
-        if (!$this->has('privacy_level')) {
+        if (! $this->has('privacy_level')) {
             $this->merge(['privacy_level' => 'internal']);
         }
 
-        if (!$this->has('chart_theme')) {
+        if (! $this->has('chart_theme')) {
             $this->merge(['chart_theme' => 'auto']);
         }
 
-        if (!$this->has('number_format')) {
+        if (! $this->has('number_format')) {
             $this->merge(['number_format' => 'decimal']);
         }
 
-        if (!$this->has('date_format')) {
+        if (! $this->has('date_format')) {
             $this->merge(['date_format' => 'Y-m-d']);
         }
 
-        if (!$this->has('decimal_places')) {
+        if (! $this->has('decimal_places')) {
             $this->merge(['decimal_places' => 2]);
         }
 
-        if (!$this->has('per_page')) {
+        if (! $this->has('per_page')) {
             $this->merge(['per_page' => 25]);
         }
 
-        if (!$this->has('cache_ttl')) {
+        if (! $this->has('cache_ttl')) {
             $this->merge(['cache_ttl' => 300]); // 5 minutes default
         }
 
-        if (!$this->has('polling_interval')) {
+        if (! $this->has('polling_interval')) {
             $this->merge(['polling_interval' => 30]); // 30 seconds default
         }
 
@@ -857,7 +857,7 @@ class GetDashboardDataRequest extends FormRequest
             ];
 
             foreach ($defaultInclusions as $key => $defaultValue) {
-                if (!$this->has($key)) {
+                if (! $this->has($key)) {
                     $this->merge([$key => $defaultValue]);
                 }
             }
@@ -882,13 +882,13 @@ class GetDashboardDataRequest extends FormRequest
             'include_trends', 'enable_ai_insights', 'predictive_analytics', 'anomaly_detection',
             'sentiment_analysis', 'trend_analysis', 'correlation_analysis', 'anonymize_data',
             'data_masking', 'gdpr_compliant', 'audit_logging', 'include_links', 'include_relations',
-            'track_performance'
+            'track_performance',
         ];
 
         foreach ($booleanFields as $field) {
             if ($this->has($field)) {
                 $this->merge([
-                    $field => filter_var($this->input($field), FILTER_VALIDATE_BOOLEAN)
+                    $field => filter_var($this->input($field), FILTER_VALIDATE_BOOLEAN),
                 ]);
             }
         }
@@ -897,13 +897,13 @@ class GetDashboardDataRequest extends FormRequest
         $arrayFields = [
             'metric_types', 'activity_types', 'status_filters', 'priority_levels',
             'countries', 'cities', 'regions', 'industries', 'job_categories', 'company_sizes',
-            'aggregate_functions', 'chart_types', 'chart_colors'
+            'aggregate_functions', 'chart_types', 'chart_colors',
         ];
 
         foreach ($arrayFields as $field) {
-            if ($this->has($field) && !is_array($this->input($field))) {
+            if ($this->has($field) && ! is_array($this->input($field))) {
                 $this->merge([
-                    $field => array_filter(explode(',', $this->input($field)))
+                    $field => array_filter(explode(',', $this->input($field))),
                 ]);
             }
         }
@@ -922,7 +922,7 @@ class GetDashboardDataRequest extends FormRequest
 
         // Optimize performance settings based on data size
         if ($this->input('include_analytics') || $this->input('scope') === 'analytics') {
-            if (!$this->has('cache_ttl')) {
+            if (! $this->has('cache_ttl')) {
                 $this->merge(['cache_ttl' => 600]); // 10 minutes for analytics
             }
         }
@@ -966,11 +966,11 @@ class GetDashboardDataRequest extends FormRequest
                 'analytics' => $this->input('include_analytics', false),
             ],
             'filtering_applied' => [
-                'metric_types' => !empty($this->input('metric_types')),
-                'activity_types' => !empty($this->input('activity_types')),
-                'geographic' => !empty($this->input('countries')) || !empty($this->input('cities')),
-                'industry' => !empty($this->input('industries')),
-                'custom_filters' => !empty($this->input('custom_filters')),
+                'metric_types' => ! empty($this->input('metric_types')),
+                'activity_types' => ! empty($this->input('activity_types')),
+                'geographic' => ! empty($this->input('countries')) || ! empty($this->input('cities')),
+                'industry' => ! empty($this->input('industries')),
+                'custom_filters' => ! empty($this->input('custom_filters')),
             ],
             'performance_settings' => [
                 'cache_enabled' => $this->input('use_cache', true),
@@ -1031,7 +1031,7 @@ class GetDashboardDataRequest extends FormRequest
         $keyParams = [
             'scope', 'timeframe', 'user_type', 'dashboard_view',
             'include_stats', 'include_charts', 'include_activities',
-            'metric_types', 'countries', 'industries'
+            'metric_types', 'countries', 'industries',
         ];
 
         $signature = '';
@@ -1040,7 +1040,7 @@ class GetDashboardDataRequest extends FormRequest
             if (is_array($value)) {
                 $value = implode(',', $value);
             }
-            $signature .= $param . ':' . $value . '|';
+            $signature .= $param.':'.$value.'|';
         }
 
         return md5($signature);

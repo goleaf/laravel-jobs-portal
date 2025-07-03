@@ -15,11 +15,10 @@ class PostCommentRepository extends BaseRepository implements PostCommentReposit
     /**
      * Get comments by post ID.
      *
-     * @param int $postId
      * @return mixed
      */
     public function getByPostId(int $postId)
     {
         return $this->model->where('post_id', $postId)->get();
     }
-} 
+}

@@ -33,12 +33,12 @@ class TranslationServiceProvider extends ServiceProvider
     {
         // Register Translation Service as singleton
         $this->app->singleton(TranslationService::class, function ($app) {
-            return new TranslationService();
+            return new TranslationService;
         });
 
         // Register Language Helper as singleton
         $this->app->singleton(LanguageHelper::class, function ($app) {
-            return new LanguageHelper();
+            return new LanguageHelper;
         });
 
         // Bind aliases for easier access
@@ -182,7 +182,7 @@ class TranslationServiceProvider extends ServiceProvider
     private function registerMacros(): void
     {
         // Add macro to Collection for translation
-        if (!Collection::hasMacro('translate')) {
+        if (! Collection::hasMacro('translate')) {
             Collection::macro('translate', function ($key, $params = []) {
                 return $this->map(function ($item) use ($key, $params) {
                     return app('translation.service')->get($key, array_merge($params, ['item' => $item]));
@@ -191,12 +191,12 @@ class TranslationServiceProvider extends ServiceProvider
         }
 
         // Add macro to Request for locale detection
-        if (!Request::hasMacro('preferredLocale')) {
+        if (! Request::hasMacro('preferredLocale')) {
             Request::macro('preferredLocale', function () {
                 $availableLocales = array_keys(config('app.available_locales', []));
                 $acceptLanguage = $this->header('Accept-Language');
 
-                if (!$acceptLanguage) {
+                if (! $acceptLanguage) {
                     return config('app.locale', 'en');
                 }
 
@@ -270,7 +270,7 @@ class TranslationServiceProvider extends ServiceProvider
      */
     private function preloadCriticalTranslations(): void
     {
-        if (!app()->runningInConsole() && !app()->runningUnitTests()) {
+        if (! app()->runningInConsole() && ! app()->runningUnitTests()) {
             $currentLocale = App::getLocale();
             $criticalNamespaces = ['common', 'messages', 'validation', 'auth'];
 

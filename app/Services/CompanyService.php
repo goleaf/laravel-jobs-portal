@@ -21,8 +21,7 @@ class CompanyService
     {
         return Company::with(['user', 'industry', 'companySize', 'ownerShipType'])
             ->latest()
-            ->paginate($perPage)
-        ;
+            ->paginate($perPage);
     }
 
     /**
@@ -33,8 +32,7 @@ class CompanyService
         return Company::with(['user', 'industry', 'companySize'])
             ->whereHas('user', fn ($q) => $q->where('is_active', true))
             ->latest()
-            ->paginate($perPage)
-        ;
+            ->paginate($perPage);
     }
 
     /**
@@ -100,7 +98,7 @@ class CompanyService
             $userFields = ['first_name', 'last_name', 'email', 'phone', 'country_id', 'state_id', 'city_id'];
             $userData = array_intersect_key($data, array_flip($userFields));
 
-            if (!empty($userData)) {
+            if (! empty($userData)) {
                 $company->user->update($userData);
             }
 
@@ -111,7 +109,7 @@ class CompanyService
             ];
             $companyData = array_intersect_key($data, array_flip($companyFields));
 
-            if (!empty($companyData)) {
+            if (! empty($companyData)) {
                 $company->update($companyData);
             }
 
@@ -162,12 +160,10 @@ class CompanyService
                 ->orWhere('location', 'like', "%{$query}%")
                 ->orWhereHas('user', fn ($u) => $u->where('first_name', 'like', "%{$query}%")
                     ->orWhere('last_name', 'like', "%{$query}%"))
-                ->orWhereHas('industry', fn ($i) => $i->where('name', 'like', "%{$query}%"))
-            ;
+                ->orWhereHas('industry', fn ($i) => $i->where('name', 'like', "%{$query}%"));
         })
             ->with(['user', 'industry', 'companySize'])
-            ->get()
-        ;
+            ->get();
     }
 
     /**
@@ -179,8 +175,7 @@ class CompanyService
             ->whereHas('user', fn ($q) => $q->where('is_active', true))
             ->with(['user', 'industry', 'companySize'])
             ->limit($limit)
-            ->get()
-        ;
+            ->get();
     }
 
     /**
@@ -190,8 +185,7 @@ class CompanyService
     {
         $query = Company::where('industry_id', $industryId)
             ->whereHas('user', fn ($q) => $q->where('is_active', true))
-            ->with(['user', 'industry', 'companySize'])
-        ;
+            ->with(['user', 'industry', 'companySize']);
 
         if ($limit) {
             $query->limit($limit);
@@ -210,8 +204,7 @@ class CompanyService
             ->orderBy('jobs_count', 'desc')
             ->with(['user', 'industry'])
             ->limit($limit)
-            ->get()
-        ;
+            ->get();
     }
 
     /**
@@ -219,7 +212,7 @@ class CompanyService
      */
     public function toggleActiveStatus(Company $company): Company
     {
-        $company->user->update(['is_active' => !$company->user->is_active]);
+        $company->user->update(['is_active' => ! $company->user->is_active]);
 
         return $company->fresh(['user']);
     }
@@ -251,7 +244,7 @@ class CompanyService
 
         while (Company::where('unique_id', $uniqueId)->exists()) {
             $uniqueId = $base.'-'.date('Y').'-'.$counter;
-            ++$counter;
+            $counter++;
         }
 
         return $uniqueId;

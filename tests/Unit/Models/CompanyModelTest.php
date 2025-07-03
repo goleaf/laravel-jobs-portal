@@ -16,7 +16,7 @@ class CompanyModelTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function itCanBeCreated()
+    public function it_can_be_created()
     {
         $Company = Company::factory()->create();
 
@@ -25,9 +25,9 @@ class CompanyModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasRequiredFillableFields()
+    public function it_has_required_fillable_fields()
     {
-        $Company = new Company();
+        $Company = new Company;
         $fillable = $Company->getFillable();
 
         $this->assertIsArray($fillable);
@@ -35,7 +35,7 @@ class CompanyModelTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeSoftDeleted()
+    public function it_can_be_soft_deleted()
     {
         $Company = Company::factory()->create();
         $Company->delete();

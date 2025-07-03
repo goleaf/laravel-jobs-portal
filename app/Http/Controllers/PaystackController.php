@@ -20,9 +20,9 @@ class PaystackController extends Controller
 {
     public function __construct()
     {
-        $publicKey = !empty(getEnvSetting()['paystack_key']) ? getEnvSetting()['paystack_key'] : config('paystack.publicKey');
-        $secrtKey = !empty(getEnvSetting()['paystack_secret']) ? getEnvSetting()['paystack_secret'] : config('paystack.secretKey');
-        $paymentUrl = !empty(getEnvSetting()['paystack_payment_url']) ? getEnvSetting()['paystack_payment_url'] : config('paystack.paymentUrl');
+        $publicKey = ! empty(getEnvSetting()['paystack_key']) ? getEnvSetting()['paystack_key'] : config('paystack.publicKey');
+        $secrtKey = ! empty(getEnvSetting()['paystack_secret']) ? getEnvSetting()['paystack_secret'] : config('paystack.secretKey');
+        $paymentUrl = ! empty(getEnvSetting()['paystack_payment_url']) ? getEnvSetting()['paystack_payment_url'] : config('paystack.paymentUrl');
 
         config([
             'paystack.publicKey' => $publicKey,
@@ -41,7 +41,7 @@ class PaystackController extends Controller
 
             return redirect()->route('manage-subscription.index');
         }
-        if (null != $plan->salaryCurrency && !in_array(
+        if ($plan->salaryCurrency != null && ! in_array(
             $plan->salaryCurrency->currency_code,
             getPaystackSupportedCurrencies()
         )) {
@@ -77,7 +77,7 @@ class PaystackController extends Controller
     {
         $paymentDetails = Paystack::getPaymentData();
 
-        if (!$paymentDetails['status']) {
+        if (! $paymentDetails['status']) {
             Flash::error(__('messages.payment_failed'));
 
             return redirect(route('manage-subscription.index'));
@@ -98,8 +98,7 @@ class PaystackController extends Controller
         $existingSubscription = Subscription::NotOnTrial()
             ->whereUserId($user->id)
             ->active()
-            ->first()
-        ;
+            ->first();
         // end trial subscription
         Subscription::whereUserId($user->id)->where(function (Builder $query) {
             $query->where('stripe_status', '=', 'trialing');
@@ -107,8 +106,7 @@ class PaystackController extends Controller
             ->update([
                 'ends_at' => Carbon::now(),
                 'trial_ends_at' => Carbon::now(),
-            ])
-        ;
+            ]);
 
         /** @var Subscription $tsSubscription */
         $tsSubscription = Subscription::create([
@@ -121,7 +119,7 @@ class PaystackController extends Controller
         ]);
 
         $adminId = User::role('Admin')->first()->id;
-        1 == NotificationSetting::where('key', 'EMPLOYER_PURCHASE_PLAN')->first()->value
+        NotificationSetting::where('key', 'EMPLOYER_PURCHASE_PLAN')->first()->value == 1
                  ? addNotification([
                      Notification::EMPLOYER_PURCHASE_PLAN,
                      $adminId,

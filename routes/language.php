@@ -19,7 +19,7 @@ Route::get('/language/{locale}', function ($locale) {
         app()->setLocale($locale);
 
         // Set RTL direction for Arabic
-        if ('ar' === $locale) {
+        if ($locale === 'ar') {
             session(['direction' => 'rtl']);
         } else {
             session(['direction' => 'ltr']);

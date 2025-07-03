@@ -254,7 +254,7 @@ class ShowCandidateResource extends JsonResource
     /**
      * Customize the outgoing response for the resource.
      *
-     * @param mixed $response
+     * @param  mixed  $response
      */
     public function withResponse(Request $request, $response): void
     {
@@ -272,72 +272,72 @@ class ShowCandidateResource extends JsonResource
 
         // Basic information
         if ($this->first_name) {
-            ++$completedFields;
+            $completedFields++;
         }
         if ($this->last_name) {
-            ++$completedFields;
+            $completedFields++;
         }
         if ($this->phone) {
-            ++$completedFields;
+            $completedFields++;
         }
         if ($this->summary) {
-            ++$completedFields;
+            $completedFields++;
         }
         if ($this->address) {
-            ++$completedFields;
+            $completedFields++;
         }
 
         // Professional information
         if ($this->expected_salary) {
-            ++$completedFields;
+            $completedFields++;
         }
         if ($this->career_level_id) {
-            ++$completedFields;
+            $completedFields++;
         }
         if ($this->industry_id) {
-            ++$completedFields;
+            $completedFields++;
         }
         if ($this->functional_area_id) {
-            ++$completedFields;
+            $completedFields++;
         }
         if ($this->experience) {
-            ++$completedFields;
+            $completedFields++;
         }
 
         // Location
         if ($this->country_id) {
-            ++$completedFields;
+            $completedFields++;
         }
         if ($this->state_id) {
-            ++$completedFields;
+            $completedFields++;
         }
         if ($this->city_id) {
-            ++$completedFields;
+            $completedFields++;
         }
 
         // Profile enhancements
         if ($this->user && $this->user->avatar) {
-            ++$completedFields;
+            $completedFields++;
         }
         if ($this->website) {
-            ++$completedFields;
+            $completedFields++;
         }
         if ($this->linkedin_url) {
-            ++$completedFields;
+            $completedFields++;
         }
 
         // Related data
         if ($this->candidateSkills->count() > 0) {
-            ++$completedFields;
+            $completedFields++;
         }
         if ($this->candidateEducations->count() > 0) {
-            ++$completedFields;
+            $completedFields++;
         }
         if ($this->candidateExperiences->count() > 0) {
-            ++$completedFields;
+            $completedFields++;
         }
         if ($this->resumes->count() > 0) {
-            ++$completedFields;
+            $completedFields++;
         }
 
         return round(($completedFields / $totalFields) * 100);
@@ -349,7 +349,7 @@ class ShowCandidateResource extends JsonResource
     private function calculateResponseRate(): float
     {
         $totalApplications = $this->jobApplications->count();
-        if (0 === $totalApplications) {
+        if ($totalApplications === 0) {
             return 0.0;
         }
 

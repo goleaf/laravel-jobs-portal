@@ -15,30 +15,30 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Inquiry Model - Enhanced with Enhanced patterns.
  *
- * @property int         $id
- * @property string      $name
- * @property string      $email
+ * @property int $id
+ * @property string $name
+ * @property string $email
  * @property null|string $phone_no
- * @property string      $subject
- * @property string      $message
- * @property bool        $is_read
- * @property bool        $is_resolved
- * @property bool        $is_active
- * @property null|int    $priority
+ * @property string $subject
+ * @property string $message
+ * @property bool $is_read
+ * @property bool $is_resolved
+ * @property bool $is_active
+ * @property null|int $priority
  * @property null|string $status
  * @property null|string $category
- * @property null|int    $assigned_to
+ * @property null|int $assigned_to
  * @property null|Carbon $resolved_at
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|Carbon $deleted_at
- * @property null|User   $assignedUser
- * @property bool        $is_recent
- * @property bool        $is_pending
- * @property bool        $is_high_priority
- * @property string      $status_label
- * @property string      $priority_label
- * @property string      $category_label
+ * @property null|User $assignedUser
+ * @property bool $is_recent
+ * @property bool $is_pending
+ * @property bool $is_high_priority
+ * @property string $status_label
+ * @property string $priority_label
+ * @property string $category_label
  *
  * Enhanced Enhanced Scopes:
  *
@@ -74,8 +74,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Inquiry extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     /**
      * Status constants.
@@ -162,8 +162,7 @@ class Inquiry extends Model
             ->logOnly(['name', 'email', 'subject', 'is_read', 'is_resolved', 'priority', 'status'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn (string $eventName) => "Inquiry has been {$eventName}")
-        ;
+            ->setDescriptionForEvent(fn (string $eventName) => "Inquiry has been {$eventName}");
     }
 
     // =============================================
@@ -398,8 +397,7 @@ class Inquiry extends Model
         return $query->where('name', 'like', "%{$term}%")
             ->orWhere('email', 'like', "%{$term}%")
             ->orWhere('subject', 'like', "%{$term}%")
-            ->orWhere('message', 'like', "%{$term}%")
-        ;
+            ->orWhere('message', 'like', "%{$term}%");
     }
 
     /**
@@ -443,7 +441,7 @@ class Inquiry extends Model
      */
     public function getIsPendingAttribute(): bool
     {
-        return self::STATUS_PENDING === $this->status || (!$this->is_read && !$this->is_resolved);
+        return $this->status === self::STATUS_PENDING || (! $this->is_read && ! $this->is_resolved);
     }
 
     /**
@@ -531,7 +529,7 @@ class Inquiry extends Model
      */
     public function isPending(): bool
     {
-        return self::STATUS_PENDING === $this->status || (!$this->is_read && !$this->is_resolved);
+        return $this->status === self::STATUS_PENDING || (! $this->is_read && ! $this->is_resolved);
     }
 
     /**

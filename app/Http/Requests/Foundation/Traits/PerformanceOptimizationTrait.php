@@ -7,16 +7,16 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * Performance Optimization Trait
- * 
+ *
  * Provides performance optimization features for validation:
  * - Validation rule caching
  * - Lazy loading of complex rules
  * - Query optimization
  * - Performance monitoring
  * - Memory usage optimization
- * 
- * @package App\Http\Requests\Foundation\Traits
+ *
  * @version 1.0.0
+ *
  * @since 2024-12-28
  */
 trait PerformanceOptimizationTrait
@@ -51,7 +51,7 @@ trait PerformanceOptimizationTrait
      */
     protected function getCachedValidationRules(): array
     {
-        if (!$this->enablePerformanceMonitoring) {
+        if (! $this->enablePerformanceMonitoring) {
             return $this->generateValidationRules();
         }
 
@@ -59,7 +59,7 @@ trait PerformanceOptimizationTrait
         $startMemory = memory_get_usage();
 
         $cacheKey = $this->getValidationRulesCacheKey();
-        
+
         $rules = Cache::remember($cacheKey, $this->ruleCacheDuration, function () {
             return $this->generateValidationRules();
         });
@@ -137,7 +137,7 @@ trait PerformanceOptimizationTrait
         $this->preloadExistsValidationData($existsFields);
 
         foreach ($existsFields as $field => $table) {
-            $rules[$field] = ['required', 'exists:' . $table . ',id'];
+            $rules[$field] = ['required', 'exists:'.$table.',id'];
         }
 
         return $rules;
@@ -156,7 +156,7 @@ trait PerformanceOptimizationTrait
         }
 
         foreach ($uniqueFields as $field => $table) {
-            $rules[$field] = ['required', 'unique:' . $table . ',' . $field];
+            $rules[$field] = ['required', 'unique:'.$table.','.$field];
         }
 
         return $rules;
@@ -223,7 +223,7 @@ trait PerformanceOptimizationTrait
      */
     protected function trackPerformanceMetrics(string $operation, float $startTime, int $startMemory): void
     {
-        if (!$this->enablePerformanceMonitoring) {
+        if (! $this->enablePerformanceMonitoring) {
             return;
         }
 
@@ -261,7 +261,7 @@ trait PerformanceOptimizationTrait
     {
         $requestClass = static::class;
         $inputHash = md5(serialize($this->all()));
-        
+
         return "validation_rules:{$requestClass}:{$inputHash}";
     }
 
@@ -286,7 +286,7 @@ trait PerformanceOptimizationTrait
             foreach ($fieldRules as $rule) {
                 if (is_string($rule)) {
                     foreach ($databaseFields as $dbField) {
-                        if (str_starts_with($rule, $dbField . ':')) {
+                        if (str_starts_with($rule, $dbField.':')) {
                             return true;
                         }
                     }
@@ -358,6 +358,7 @@ trait PerformanceOptimizationTrait
         foreach ($this->performanceMetrics as $metrics) {
             $total += $metrics['execution_time_ms'] ?? 0;
         }
+
         return $total;
     }
 
@@ -370,6 +371,7 @@ trait PerformanceOptimizationTrait
         foreach ($this->performanceMetrics as $metrics) {
             $total += $metrics['memory_usage_mb'] ?? 0;
         }
+
         return $total;
     }
 
@@ -396,4 +398,4 @@ trait PerformanceOptimizationTrait
     {
         $this->enablePerformanceMonitoring = false;
     }
-} 
+}

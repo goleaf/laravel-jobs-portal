@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\UniqueValues;
 
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use JustBetter\UniqueValues\Support\UniqueValue;
+use Tests\TestCase;
 
 class BasicUniqueValueTest extends TestCase
 {
@@ -16,14 +16,14 @@ class BasicUniqueValueTest extends TestCase
         $value1 = UniqueValue::make()
             ->scope('test-scope')
             ->generator(function (int $attempt): string {
-                return $attempt === 0 ? 'unique-value' : 'unique-value-' . $attempt;
+                return $attempt === 0 ? 'unique-value' : 'unique-value-'.$attempt;
             })
             ->generate();
 
         $value2 = UniqueValue::make()
             ->scope('test-scope')
             ->generator(function (int $attempt): string {
-                return $attempt === 0 ? 'unique-value' : 'unique-value-' . $attempt;
+                return $attempt === 0 ? 'unique-value' : 'unique-value-'.$attempt;
             })
             ->generate();
 
@@ -35,12 +35,12 @@ class BasicUniqueValueTest extends TestCase
     public function it_works_with_subject_persistence()
     {
         $subjectId = 123;
-        
+
         $value1 = UniqueValue::make()
             ->scope('subject-test')
             ->subject($subjectId)
             ->generator(function (int $attempt): string {
-                return 'value-for-subject-' . $attempt;
+                return 'value-for-subject-'.$attempt;
             })
             ->generate();
 
@@ -48,7 +48,7 @@ class BasicUniqueValueTest extends TestCase
             ->scope('subject-test')
             ->subject($subjectId)
             ->generator(function (int $attempt): string {
-                return 'value-for-subject-' . $attempt;
+                return 'value-for-subject-'.$attempt;
             })
             ->generate();
 
@@ -65,6 +65,7 @@ class BasicUniqueValueTest extends TestCase
             ->generator(function (int $attempt): string {
                 $year = date('Y');
                 $baseNumber = str_pad((string) ($attempt + 1), 6, '0', STR_PAD_LEFT);
+
                 return "JOB-{$year}-{$baseNumber}";
             })
             ->generate();
@@ -72,4 +73,4 @@ class BasicUniqueValueTest extends TestCase
         $this->assertStringStartsWith('JOB-', $jobReference);
         $this->assertMatchesRegularExpression('/^JOB-\d{4}-\d{6}$/', $jobReference);
     }
-} 
+}

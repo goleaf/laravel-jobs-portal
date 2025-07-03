@@ -89,7 +89,7 @@ class NoticeboardController extends AppBaseController
     public function changeStatus($id): JsonResponse
     {
         $notice = Noticeboard::findOrFail($id);
-        $status = !$notice->is_active;
+        $status = ! $notice->is_active;
         $notice->update(['is_active' => $status]);
 
         return $this->sendSuccess(__('messages.flash.status_update'));

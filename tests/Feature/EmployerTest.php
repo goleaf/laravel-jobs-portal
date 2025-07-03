@@ -39,11 +39,10 @@ class EmployerTest extends TestCase
     }
 
     /** @test */
-    public function employerCanViewTheirProfile()
+    public function employer_can_view_their_profile()
     {
         $response = $this->actingAs($this->employerUser)
-            ->getJson('/employer/profile')
-        ;
+            ->getJson('/employer/profile');
 
         $response->assertStatus(200);
         $response->assertJson(['success' => true]);
@@ -61,7 +60,7 @@ class EmployerTest extends TestCase
     }
 
     /** @test */
-    public function employerCanUpdateTheirProfile()
+    public function employer_can_update_their_profile()
     {
         $profileData = [
             'first_name' => $this->faker->firstName,
@@ -78,8 +77,7 @@ class EmployerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->employerUser)
-            ->postJson('/employer/profile-update', $profileData)
-        ;
+            ->postJson('/employer/profile-update', $profileData);
 
         $response->assertStatus(200);
         $response->assertJson(['success' => true]);
@@ -90,7 +88,7 @@ class EmployerTest extends TestCase
     }
 
     /** @test */
-    public function employerCanChangePassword()
+    public function employer_can_change_password()
     {
         $passwordData = [
             'password_current' => 'password123',
@@ -99,8 +97,7 @@ class EmployerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->employerUser)
-            ->postJson('/employer/change-password', $passwordData)
-        ;
+            ->postJson('/employer/change-password', $passwordData);
 
         $response->assertStatus(200);
         $response->assertJson(['success' => true]);
@@ -111,7 +108,7 @@ class EmployerTest extends TestCase
     }
 
     /** @test */
-    public function employerCannotChangePasswordWithIncorrectCurrentPassword()
+    public function employer_cannot_change_password_with_incorrect_current_password()
     {
         $passwordData = [
             'password_current' => 'wrongPassword',
@@ -120,8 +117,7 @@ class EmployerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->employerUser)
-            ->postJson('/employer/change-password', $passwordData)
-        ;
+            ->postJson('/employer/change-password', $passwordData);
 
         $response->assertStatus(422);
         $response->assertJson(['success' => false]);
@@ -133,7 +129,7 @@ class EmployerTest extends TestCase
     }
 
     /** @test */
-    public function employerCannotChangePasswordWithNonMatchingConfirmation()
+    public function employer_cannot_change_password_with_non_matching_confirmation()
     {
         $passwordData = [
             'password_current' => 'password123',
@@ -142,8 +138,7 @@ class EmployerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->employerUser)
-            ->postJson('/employer/change-password', $passwordData)
-        ;
+            ->postJson('/employer/change-password', $passwordData);
 
         $response->assertStatus(422);
         $response->assertJsonValidationErrors('password');
@@ -155,13 +150,12 @@ class EmployerTest extends TestCase
     }
 
     /** @test */
-    public function nonEmployerCannotAccessEmployerProfileEndpoints()
+    public function non_employer_cannot_access_employer_profile_endpoints()
     {
         $candidateUser = User::factory()->create(['user_type' => User::CANDIDATE]);
 
         $response = $this->actingAs($candidateUser)
-            ->getJson('/employer/profile')
-        ;
+            ->getJson('/employer/profile');
 
         // Assuming proper middleware restricting access
         $response->assertStatus(403); // Or 401/404 depending on implementation

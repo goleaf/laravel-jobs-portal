@@ -28,14 +28,14 @@ interface RepositoryInterface
     /**
      * Find record by ID.
      *
-     * @param int|string $id
+     * @param  int|string  $id
      */
     public function find($id, array $relations = [], array $columns = ['*']): ?Model;
 
     /**
      * Find record by ID or fail.
      *
-     * @param int|string $id
+     * @param  int|string  $id
      *
      * @throws ModelNotFoundException
      */
@@ -44,14 +44,14 @@ interface RepositoryInterface
     /**
      * Find record by specific field.
      *
-     * @param mixed $value
+     * @param  mixed  $value
      */
     public function findBy(string $field, $value, array $relations = [], array $columns = ['*']): ?Model;
 
     /**
      * Find records by specific field.
      *
-     * @param mixed $value
+     * @param  mixed  $value
      */
     public function findAllBy(string $field, $value, array $relations = [], array $columns = ['*']): Collection;
 
@@ -63,7 +63,7 @@ interface RepositoryInterface
     /**
      * Update record by ID.
      *
-     * @param int|string $id
+     * @param  int|string  $id
      */
     public function update($id, array $data): Model;
 
@@ -75,7 +75,7 @@ interface RepositoryInterface
     /**
      * Delete record by ID.
      *
-     * @param int|string $id
+     * @param  int|string  $id
      */
     public function delete($id): bool;
 
@@ -89,14 +89,14 @@ interface RepositoryInterface
     /**
      * Restore soft deleted record.
      *
-     * @param int|string $id
+     * @param  int|string  $id
      */
     public function restore($id): bool;
 
     /**
      * Force delete record (permanent).
      *
-     * @param int|string $id
+     * @param  int|string  $id
      */
     public function forceDelete($id): bool;
 
@@ -108,7 +108,7 @@ interface RepositoryInterface
     /**
      * Check if record exists.
      *
-     * @param int|string $id
+     * @param  int|string  $id
      */
     public function exists($id): bool;
 
@@ -120,8 +120,7 @@ interface RepositoryInterface
     /**
      * Get records with caching.
      *
-     * @param int $ttl Time to live in seconds
-     *
+     * @param  int  $ttl  Time to live in seconds
      * @return mixed
      */
     public function cache(string $cacheKey, int $ttl, callable $callback);

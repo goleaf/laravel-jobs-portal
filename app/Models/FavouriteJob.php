@@ -15,18 +15,18 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * FavouriteJob Model - Enhanced with Enhanced patterns.
  *
- * @property int         $id
- * @property int         $user_id
- * @property int         $job_id
- * @property bool        $is_active
+ * @property int $id
+ * @property int $user_id
+ * @property int $job_id
+ * @property bool $is_active
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|Carbon $deleted_at
- * @property User        $user
- * @property Job         $job
- * @property bool        $is_recent
- * @property bool        $job_is_active
- * @property bool        $job_is_featured
+ * @property User $user
+ * @property Job $job
+ * @property bool $is_recent
+ * @property bool $job_is_active
+ * @property bool $job_is_featured
  *
  * Enhanced Enhanced Scopes:
  *
@@ -53,8 +53,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class FavouriteJob extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     /**
      * Validation rules.
@@ -95,8 +95,7 @@ class FavouriteJob extends Model
             ->logOnly(['user_id', 'job_id', 'is_active'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn (string $eventName) => "Favourite job has been {$eventName}")
-        ;
+            ->setDescriptionForEvent(fn (string $eventName) => "Favourite job has been {$eventName}");
     }
 
     // =============================================
@@ -173,8 +172,7 @@ class FavouriteJob extends Model
     public function scopeThisMonth(Builder $query): Builder
     {
         return $query->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
-        ;
+            ->whereYear('created_at', now()->year);
     }
 
     // =============================================
@@ -255,13 +253,11 @@ class FavouriteJob extends Model
                 ->orWhere('description', 'like', '%'.$term.'%')
                 ->orWhereHas('company', function ($companyQuery) use ($term) {
                     $companyQuery->where('ceo', 'like', '%'.$term.'%');
-                })
-            ;
+                });
         })->orWhereHas('user', function ($userQuery) use ($term) {
             $userQuery->where('first_name', 'like', '%'.$term.'%')
                 ->orWhere('last_name', 'like', '%'.$term.'%')
-                ->orWhere('email', 'like', '%'.$term.'%')
-            ;
+                ->orWhere('email', 'like', '%'.$term.'%');
         });
     }
 
@@ -293,8 +289,7 @@ class FavouriteJob extends Model
         return $query->select('job_id')
             ->selectRaw('COUNT(*) as favourites_count')
             ->groupBy('job_id')
-            ->orderByDesc('favourites_count')
-        ;
+            ->orderByDesc('favourites_count');
     }
 
     /**
@@ -306,8 +301,7 @@ class FavouriteJob extends Model
             ->select('job_id')
             ->selectRaw('COUNT(*) as recent_favourites_count')
             ->groupBy('job_id')
-            ->orderByDesc('recent_favourites_count')
-        ;
+            ->orderByDesc('recent_favourites_count');
     }
 
     // =============================================
@@ -355,7 +349,7 @@ class FavouriteJob extends Model
      */
     public function isJobAvailable(): bool
     {
-        return $this->job && $this->job->is_active && !$this->job->isExpired();
+        return $this->job && $this->job->is_active && ! $this->job->isExpired();
     }
 
     /**
@@ -395,8 +389,7 @@ class FavouriteJob extends Model
             return self::where('job_id', $jobId)
                 ->where('user_id', $userId)
                 ->active()
-                ->exists()
-            ;
+                ->exists();
         });
     }
 

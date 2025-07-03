@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\HabrViewsService;
-use App\Models\Job;
 use App\Models\Company;
+use App\Models\Job;
 use App\Models\User;
+use App\Services\HabrViewsService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 /**
  * Habr Views Demo Controller
- * 
+ *
  * Demonstrates the integration of PHP Views package with Laravel Job Portal
  * Based on Habr article patterns for model-oriented templating
  */
@@ -39,7 +39,7 @@ class HabrViewsDemoController extends Controller
     {
         try {
             $renderedJob = $this->habrViews->renderJob($job);
-            
+
             return response($renderedJob, 200, [
                 'Content-Type' => 'text/html',
                 'X-Habr-Views' => 'Job Template',
@@ -61,7 +61,7 @@ class HabrViewsDemoController extends Controller
     {
         try {
             $renderedCompany = $this->habrViews->renderCompany($company);
-            
+
             return response($renderedCompany, 200, [
                 'Content-Type' => 'text/html',
                 'X-Habr-Views' => 'Company Template',
@@ -86,22 +86,22 @@ class HabrViewsDemoController extends Controller
             $page = $request->get('page', 1);
             $category = $request->get('category');
             $location = $request->get('location');
-            
+
             $query = Job::with(['company', 'category', 'jobType'])
                 ->where('is_active', true);
-            
+
             if ($category) {
                 $query->whereHas('category', function ($q) use ($category) {
                     $q->where('slug', $category);
                 });
             }
-            
+
             if ($location) {
                 $query->where('location', 'like', "%{$location}%");
             }
-            
+
             $jobs = $query->paginate($perPage, ['*'], 'page', $page);
-            
+
             $options = [
                 'title' => 'Job Listings',
                 'description' => 'Browse our latest job opportunities',
@@ -113,9 +113,9 @@ class HabrViewsDemoController extends Controller
                     'location' => $location,
                 ]),
             ];
-            
+
             $renderedJobList = $this->habrViews->renderJobList($jobs->getCollection(), $options);
-            
+
             return response($renderedJobList, 200, [
                 'Content-Type' => 'text/html',
                 'X-Habr-Views' => 'Job List Template',
@@ -139,22 +139,22 @@ class HabrViewsDemoController extends Controller
         try {
             $perPage = $request->get('per_page', 12);
             $showGrid = $request->get('view', 'grid') === 'grid';
-            
+
             $companies = Company::where('is_active', true)
                 ->with(['jobs'])
                 ->withCount(['jobs as active_jobs_count' => function ($query) {
                     $query->where('is_active', true);
                 }])
                 ->paginate($perPage);
-            
+
             $options = [
                 'title' => 'Company Directory',
                 'description' => 'Discover companies hiring in your field',
                 'show_grid' => $showGrid,
             ];
-            
+
             $renderedCompanyList = $this->habrViews->renderCompanyList($companies->getCollection(), $options);
-            
+
             return response($renderedCompanyList, 200, [
                 'Content-Type' => 'text/html',
                 'X-Habr-Views' => 'Company List Template',
@@ -177,11 +177,11 @@ class HabrViewsDemoController extends Controller
     {
         try {
             $user = $request->user() ?? User::first();
-            
-            if (!$user) {
+
+            if (! $user) {
                 return response()->json(['error' => 'No user found for dashboard'], 404);
             }
-            
+
             // Prepare dashboard data
             $dashboardData = [
                 'stats' => [
@@ -251,9 +251,9 @@ class HabrViewsDemoController extends Controller
                     ],
                 ],
             ];
-            
+
             $renderedDashboard = $this->habrViews->renderDashboard($user, $dashboardData);
-            
+
             return response($renderedDashboard, 200, [
                 'Content-Type' => 'text/html',
                 'X-Habr-Views' => 'Dashboard Template',
@@ -276,7 +276,7 @@ class HabrViewsDemoController extends Controller
     {
         try {
             $stats = $this->habrViews->getPerformanceStats();
-            
+
             return response()->json([
                 'success' => true,
                 'performance_stats' => $stats,
@@ -319,7 +319,7 @@ class HabrViewsDemoController extends Controller
     {
         try {
             $cleared = $this->habrViews->clearCache();
-            
+
             return response()->json([
                 'success' => $cleared,
                 'message' => $cleared ? 'Cache cleared successfully' : 'Failed to clear cache',
@@ -342,14 +342,14 @@ class HabrViewsDemoController extends Controller
         try {
             $iterations = $request->get('iterations', 100);
             $type = $request->get('type', 'job');
-            
-            $benchmarkResult = match($type) {
+
+            $benchmarkResult = match ($type) {
                 'job' => $this->benchmarkJobRendering($iterations),
                 'company' => $this->benchmarkCompanyRendering($iterations),
                 'list' => $this->benchmarkListRendering($iterations),
                 default => throw new \InvalidArgumentException('Invalid benchmark type'),
             };
-            
+
             return response()->json([
                 'success' => true,
                 'benchmark_result' => $benchmarkResult,
@@ -377,11 +377,11 @@ class HabrViewsDemoController extends Controller
     private function benchmarkJobRendering(int $iterations): array
     {
         $job = Job::with(['company', 'category', 'jobType'])->first();
-        
-        if (!$job) {
+
+        if (! $job) {
             throw new \RuntimeException('No jobs found for benchmarking');
         }
-        
+
         return $this->habrViews->benchmark(function () use ($job) {
             return $this->habrViews->renderJob($job);
         }, $iterations);
@@ -393,11 +393,11 @@ class HabrViewsDemoController extends Controller
     private function benchmarkCompanyRendering(int $iterations): array
     {
         $company = Company::first();
-        
-        if (!$company) {
+
+        if (! $company) {
             throw new \RuntimeException('No companies found for benchmarking');
         }
-        
+
         return $this->habrViews->benchmark(function () use ($company) {
             return $this->habrViews->renderCompany($company);
         }, $iterations);
@@ -409,11 +409,11 @@ class HabrViewsDemoController extends Controller
     private function benchmarkListRendering(int $iterations): array
     {
         $jobs = Job::with(['company', 'category', 'jobType'])->take(10)->get();
-        
+
         if ($jobs->isEmpty()) {
             throw new \RuntimeException('No jobs found for list benchmarking');
         }
-        
+
         return $this->habrViews->benchmark(function () use ($jobs) {
             return $this->habrViews->renderJobList($jobs);
         }, $iterations);
@@ -425,12 +425,12 @@ class HabrViewsDemoController extends Controller
     private function formatBytes(int $bytes): string
     {
         $units = ['B', 'KB', 'MB', 'GB'];
-        
+
         for ($i = 0; $bytes > 1024 && $i < count($units) - 1; $i++) {
             $bytes /= 1024;
         }
-        
-        return round($bytes, 2) . ' ' . $units[$i];
+
+        return round($bytes, 2).' '.$units[$i];
     }
 
     /**
@@ -438,7 +438,7 @@ class HabrViewsDemoController extends Controller
      */
     private function getEfficiencyRating(float $averageTime): string
     {
-        return match(true) {
+        return match (true) {
             $averageTime < 0.001 => 'Excellent (< 1ms)',
             $averageTime < 0.005 => 'Very Good (< 5ms)',
             $averageTime < 0.010 => 'Good (< 10ms)',
@@ -446,4 +446,4 @@ class HabrViewsDemoController extends Controller
             default => 'Needs Optimization (> 50ms)',
         };
     }
-} 
+}

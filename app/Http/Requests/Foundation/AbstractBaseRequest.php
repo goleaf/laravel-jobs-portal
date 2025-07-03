@@ -2,13 +2,13 @@
 
 namespace App\Http\Requests\Foundation;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 /**
  * Abstract Base Request - Universal parent class for all request validation files
- * 
+ *
  * Implements enterprise-grade validation patterns with:
  * - Domain-specific validation inheritance
  * - Cross-cutting concerns via traits
@@ -16,14 +16,13 @@ use Illuminate\Http\Exceptions\HttpResponseException;
  * - Multilingual error messages
  * - Security validation patterns
  * - Comprehensive audit logging
- * 
- * @package App\Http\Requests\Foundation
+ *
  * @version 1.0.0
+ *
  * @since 2024-12-28
  */
 abstract class AbstractBaseRequest extends FormRequest
 {
-
     /**
      * Security level for this request type
      * Values: 'low', 'medium', 'high', 'critical'
@@ -61,7 +60,7 @@ abstract class AbstractBaseRequest extends FormRequest
     public function rules(): array
     {
         $startTime = microtime(true);
-        
+
         $rules = array_merge(
             $this->getDomainRules(),
             $this->getSecurityRules(),
@@ -74,7 +73,7 @@ abstract class AbstractBaseRequest extends FormRequest
             \Log::debug('Validation rules generation', [
                 'request_class' => static::class,
                 'execution_time_ms' => $executionTime,
-                'rules_count' => count($rules)
+                'rules_count' => count($rules),
             ]);
         }
 
@@ -131,7 +130,7 @@ abstract class AbstractBaseRequest extends FormRequest
                     'request_id' => $this->getRequestId(),
                     'timestamp' => now()->toISOString(),
                     'locale' => app()->getLocale(),
-                ]
+                ],
             ], 422);
         } else {
             $response = redirect()
@@ -186,6 +185,7 @@ abstract class AbstractBaseRequest extends FormRequest
     protected function getMultilingualMessages(): array
     {
         $locale = app()->getLocale();
+
         return [
             'required' => __('validation.required', [], $locale),
             'string' => __('validation.string', [], $locale),
@@ -252,7 +252,7 @@ abstract class AbstractBaseRequest extends FormRequest
     protected function formatValidationErrors(Validator $validator): array
     {
         $errors = [];
-        
+
         foreach ($validator->errors()->messages() as $field => $messages) {
             $errors[$field] = [
                 'field' => $field,
@@ -329,7 +329,8 @@ abstract class AbstractBaseRequest extends FormRequest
             if (is_string($value)) {
                 return trim(strip_tags($value));
             }
+
             return $value;
         }, $data);
     }
-} 
+}

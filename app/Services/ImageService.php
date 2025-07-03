@@ -65,7 +65,7 @@ class ImageService
     {
         try {
             $image = $this->createImageFromFile(Storage::path($imagePath));
-            if (!$image) {
+            if (! $image) {
                 return null;
             }
 
@@ -90,7 +90,7 @@ class ImageService
     private function createImageFromFile(string $path)
     {
         $info = getimagesize($path);
-        if (!$info) {
+        if (! $info) {
             return null;
         }
 
@@ -118,7 +118,7 @@ class ImageService
             }
 
             $source = $this->createImageFromFile(Storage::path($imagePath));
-            if (!$source) {
+            if (! $source) {
                 return null;
             }
 

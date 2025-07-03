@@ -163,7 +163,7 @@ class RateLimitingService
     {
         $cacheKey = $this->buildCacheKey($key);
 
-        if (!Cache::has($cacheKey)) {
+        if (! Cache::has($cacheKey)) {
             return 0;
         }
 
@@ -243,7 +243,7 @@ class RateLimitingService
 
             foreach ($keys as $key) {
                 $redis->del(str_replace($prefix, '', $key));
-                ++$cleared;
+                $cleared++;
             }
         }
 
@@ -317,7 +317,7 @@ class RateLimitingService
             $value = Cache::get('rate_limit_test');
             Cache::forget('rate_limit_test');
 
-            $results['tests']['cache_connectivity'] = 'test' === $value ? 'ok' : 'failed';
+            $results['tests']['cache_connectivity'] = $value === 'test' ? 'ok' : 'failed';
         } catch (\Exception $e) {
             $results['tests']['cache_connectivity'] = 'failed: '.$e->getMessage();
             $results['status'] = 'error';
@@ -332,7 +332,7 @@ class RateLimitingService
             $allowed2 = $this->isAllowed($testKey, 2);
             $this->clear($testKey);
 
-            $results['tests']['rate_limit_logic'] = ($allowed1 && !$allowed2) ? 'ok' : 'failed';
+            $results['tests']['rate_limit_logic'] = ($allowed1 && ! $allowed2) ? 'ok' : 'failed';
         } catch (\Exception $e) {
             $results['tests']['rate_limit_logic'] = 'failed: '.$e->getMessage();
             $results['status'] = 'error';
@@ -344,13 +344,13 @@ class RateLimitingService
     /**
      * Get rate limit multiplier based on user characteristics.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     protected function getRateLimitMultiplier($user, Request $request): float
     {
         $multiplier = 1.0;
 
-        if (!$user) {
+        if (! $user) {
             return 0.5; // Anonymous users get lower limits
         }
 
@@ -365,7 +365,7 @@ class RateLimitingService
         }
 
         // Premium/paid users get higher limits
-        if (isset($user->subscription_status) && 'active' === $user->subscription_status) {
+        if (isset($user->subscription_status) && $user->subscription_status === 'active') {
             $multiplier *= 2.0;
         }
 

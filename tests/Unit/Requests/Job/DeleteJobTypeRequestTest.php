@@ -46,9 +46,9 @@ class DeleteJobTypeRequestTest extends TestCase
     }
 
     /** @test */
-    public function adminIsAuthorized(): void
+    public function admin_is_authorized(): void
     {
-        $request = new DeleteJobTypeRequest();
+        $request = new DeleteJobTypeRequest;
         $request->setUserResolver(function () {
             return $this->admin;
         });
@@ -57,9 +57,9 @@ class DeleteJobTypeRequestTest extends TestCase
     }
 
     /** @test */
-    public function employerIsAuthorized(): void
+    public function employer_is_authorized(): void
     {
-        $request = new DeleteJobTypeRequest();
+        $request = new DeleteJobTypeRequest;
         $request->setUserResolver(function () {
             return $this->employer;
         });
@@ -68,9 +68,9 @@ class DeleteJobTypeRequestTest extends TestCase
     }
 
     /** @test */
-    public function candidateIsNotAuthorized(): void
+    public function candidate_is_not_authorized(): void
     {
-        $request = new DeleteJobTypeRequest();
+        $request = new DeleteJobTypeRequest;
         $request->setUserResolver(function () {
             return $this->candidate;
         });
@@ -79,9 +79,9 @@ class DeleteJobTypeRequestTest extends TestCase
     }
 
     /** @test */
-    public function validationPassesWithValidData(): void
+    public function validation_passes_with_valid_data(): void
     {
-        $request = new DeleteJobTypeRequest();
+        $request = new DeleteJobTypeRequest;
         $data = [
             'name' => 'Full Time',
             'description' => 'Full-time employment',
@@ -94,9 +94,9 @@ class DeleteJobTypeRequestTest extends TestCase
     }
 
     /** @test */
-    public function validationFailsWithInvalidData(): void
+    public function validation_fails_with_invalid_data(): void
     {
-        $request = new DeleteJobTypeRequest();
+        $request = new DeleteJobTypeRequest;
         $data = [
             'name' => '', // Empty name should fail
         ];
@@ -108,9 +108,9 @@ class DeleteJobTypeRequestTest extends TestCase
     }
 
     /** @test */
-    public function validationSanitizesData(): void
+    public function validation_sanitizes_data(): void
     {
-        $request = new DeleteJobTypeRequest();
+        $request = new DeleteJobTypeRequest;
         $request->merge([
             'name' => '  Test Name  ',
             'is_active' => 'true',
@@ -123,9 +123,9 @@ class DeleteJobTypeRequestTest extends TestCase
     }
 
     /** @test */
-    public function hasProperErrorMessages(): void
+    public function has_proper_error_messages(): void
     {
-        $request = new DeleteJobTypeRequest();
+        $request = new DeleteJobTypeRequest;
         $messages = $request->messages();
 
         $this->assertIsArray($messages);
@@ -133,9 +133,9 @@ class DeleteJobTypeRequestTest extends TestCase
     }
 
     /** @test */
-    public function hasProperFieldAttributes(): void
+    public function has_proper_field_attributes(): void
     {
-        $request = new DeleteJobTypeRequest();
+        $request = new DeleteJobTypeRequest;
         $attributes = $request->attributes();
 
         $this->assertIsArray($attributes);

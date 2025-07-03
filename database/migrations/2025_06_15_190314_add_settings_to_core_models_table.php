@@ -14,7 +14,7 @@ return new class extends Migration
         // Core Job Portal Models
         $tables = [
             'candidates',
-            'job_categories', 
+            'job_categories',
             'job_types',
             'job_applications',
             'job_shifts',
@@ -49,7 +49,7 @@ return new class extends Migration
         ];
 
         foreach ($tables as $table) {
-            if (Schema::hasTable($table) && !Schema::hasColumn($table, 'settings')) {
+            if (Schema::hasTable($table) && ! Schema::hasColumn($table, 'settings')) {
                 Schema::table($table, function (Blueprint $table) {
                     $table->json('settings')->nullable()->after('updated_at');
                 });
@@ -64,7 +64,7 @@ return new class extends Migration
     {
         $tables = [
             'candidates',
-            'job_categories', 
+            'job_categories',
             'job_types',
             'job_applications',
             'job_shifts',

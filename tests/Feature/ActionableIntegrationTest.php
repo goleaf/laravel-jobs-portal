@@ -6,13 +6,13 @@ use App\Actions\CreateJob;
 use App\Actions\ProcessJobApplication;
 use App\Dtos\JobApplicationData;
 use App\Dtos\JobData;
+use App\Models\Candidate;
 use App\Models\Company;
+use App\Models\Country;
 use App\Models\Job;
 use App\Models\JobApplication;
 use App\Models\JobCategory;
 use App\Models\JobType;
-use App\Models\Candidate;
-use App\Models\Country;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
@@ -20,7 +20,7 @@ use Tests\TestCase;
 
 /**
  * Comprehensive test for Actionable package integration
- * 
+ *
  * Tests demonstrate:
  * ✅ Clean action-based architecture
  * ✅ DTO transformations with smart attributes
@@ -43,13 +43,13 @@ class ActionableIntegrationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create test data
         $this->company = Company::factory()->create(['name' => 'Acme Corp']);
         $this->jobCategory = JobCategory::factory()->create(['name' => 'Technology']);
         $this->jobType = JobType::factory()->create(['name' => 'Full-time']);
         $this->country = Country::factory()->create(['name' => 'United States']);
-        
+
         $this->employer = User::factory()->create();
         $this->candidateUser = User::factory()->create();
         $this->candidate = Candidate::factory()->create(['user_id' => $this->candidateUser->id]);
@@ -76,12 +76,12 @@ class ActionableIntegrationTest extends TestCase
             keyResponsibilities: [
                 'Develop and maintain Laravel applications',
                 'Write clean, testable code',
-                'Collaborate with team members'
+                'Collaborate with team members',
             ],
             requirements: [
                 '5+ years of Laravel experience',
                 'Strong PHP knowledge',
-                'Experience with Vue.js'
+                'Experience with Vue.js',
             ],
             skillIds: [],
             tags: ['laravel', 'php', 'vue'],
@@ -97,7 +97,7 @@ class ActionableIntegrationTest extends TestCase
         $this->assertEquals('published', $job->status);
         $this->assertTrue($job->is_featured);
         $this->assertEquals(2, $job->no_of_positions);
-        
+
         // Verify Laravel Model Settings integration
         $this->assertTrue($job->settings('visibility.featured'));
         $this->assertTrue($job->settings('analytics.track_views'));
@@ -105,11 +105,11 @@ class ActionableIntegrationTest extends TestCase
 
         // Verify company statistics updated
         $this->assertEquals(1, $this->company->fresh()->jobs_posted);
-        
+
         // Verify SEO metadata generated
         $this->assertNotNull($job->meta_title);
         $this->assertStringContainsString('Senior Laravel Developer', $job->meta_title);
-        
+
         // Verify slug generation
         $this->assertNotNull($job->slug);
         $this->assertStringContainsString('senior-laravel-developer', $job->slug);
@@ -124,7 +124,7 @@ class ActionableIntegrationTest extends TestCase
             'job_category_id' => $this->jobCategory->id,
             'job_type_id' => $this->jobType->id,
             'status' => 'published',
-            'is_active' => true
+            'is_active' => true,
         ]);
 
         // Set job settings for application processing
@@ -132,11 +132,11 @@ class ActionableIntegrationTest extends TestCase
             'application' => [
                 'max_applications' => 100,
                 'send_confirmation_email' => true,
-                'require_cover_letter' => false
+                'require_cover_letter' => false,
             ],
             'notifications' => [
-                'new_application' => true
-            ]
+                'new_application' => true,
+            ],
         ]);
 
         $applicationData = new JobApplicationData(
@@ -148,7 +148,7 @@ class ActionableIntegrationTest extends TestCase
             availableStartDate: now()->addWeeks(2),
             screeningAnswers: [
                 'years_experience' => '6',
-                'remote_work' => 'yes'
+                'remote_work' => 'yes',
             ],
             notes: 'Available for immediate interview',
             applicationSource: 'website',
@@ -168,26 +168,26 @@ class ActionableIntegrationTest extends TestCase
         $this->assertEquals($job->id, $application->job_id);
         $this->assertEquals($this->candidate->id, $application->candidate_id);
         $this->assertEquals(95000.00, $application->expected_salary);
-        
+
         // Verify privacy settings from DTO
         $this->assertTrue($application->settings('privacy.share_with_employer.contact_details'));
         $this->assertFalse($application->settings('privacy.share_with_employer.expected_salary'));
-        
+
         // Verify job statistics updated
         $this->assertEquals(1, $job->fresh()->application_count);
-        
+
         // Verify candidate statistics updated
         $this->assertEquals(1, $this->candidate->fresh()->applications_count);
-        
+
         // Verify background jobs were dispatched
         Queue::assertPushed(\App\Actions\SendJobApplicationNotification::class, 2); // employer + candidate
         Queue::assertPushed(\App\Actions\AnalyzeJobApplicationMatch::class);
-        
+
         // Verify activity logging
         $this->assertDatabaseHas('activity_log', [
             'subject_type' => JobApplication::class,
             'subject_id' => $application->id,
-            'description' => 'applied_for_job'
+            'description' => 'applied_for_job',
         ]);
     }
 
@@ -198,13 +198,13 @@ class ActionableIntegrationTest extends TestCase
         $job = Job::factory()->create([
             'company_id' => $this->company->id,
             'status' => 'published',
-            'is_active' => true
+            'is_active' => true,
         ]);
 
         JobApplication::factory()->create([
             'job_id' => $job->id,
             'candidate_id' => $this->candidate->id,
-            'status' => 'pending'
+            'status' => 'pending',
         ]);
 
         $applicationData = new JobApplicationData(
@@ -216,7 +216,7 @@ class ActionableIntegrationTest extends TestCase
         // 🚀 Act & Assert: Verify duplicate prevention
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('You have already applied for this job');
-        
+
         ProcessJobApplication::run($applicationData);
     }
 
@@ -227,7 +227,7 @@ class ActionableIntegrationTest extends TestCase
         $job = Job::factory()->create([
             'company_id' => $this->company->id,
             'status' => 'published',
-            'is_active' => true
+            'is_active' => true,
         ]);
 
         $job->settings(['application.max_applications' => 1]);
@@ -244,7 +244,7 @@ class ActionableIntegrationTest extends TestCase
         // 🚀 Act & Assert: Verify application limit enforcement
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('This job has reached its application limit');
-        
+
         ProcessJobApplication::run($applicationData);
     }
 
@@ -259,13 +259,13 @@ class ActionableIntegrationTest extends TestCase
             'applied_at' => now(),
             'screening_answers' => [
                 'question_1' => 'Yes',
-                'question_2' => 'No'
-            ]
+                'question_2' => 'No',
+            ],
         ]);
 
         $application->settings([
             'privacy.share_with_employer.expected_salary' => true,
-            'privacy.share_with_employer.contact_details' => false
+            'privacy.share_with_employer.contact_details' => false,
         ]);
 
         // 🚀 Act: Transform to DTO and back to array
@@ -273,24 +273,24 @@ class ActionableIntegrationTest extends TestCase
         $arrayData = $applicationDto->toArray();
 
         // ✅ Assert: Verify smart attribute transformations
-        
+
         // Field name transformation (#[FieldName])
         $this->assertArrayHasKey('expected_salary', $arrayData);
         $this->assertArrayHasKey('applied_at', $arrayData);
         $this->assertArrayHasKey('screening_answers', $arrayData);
-        
+
         // Date formatting (#[DateFormat])
         $this->assertIsString($arrayData['applied_at']);
         $this->assertMatchesRegularExpression('/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/', $arrayData['applied_at']);
-        
+
         // Array handling (#[ArrayOf])
         $this->assertIsArray($arrayData['screening_answers']);
         $this->assertEquals(['question_1' => 'Yes', 'question_2' => 'No'], $arrayData['screening_answers']);
-        
+
         // Privacy settings from Laravel Model Settings
         $this->assertTrue($arrayData['share_expected_salary']);
         $this->assertFalse($arrayData['share_contact_details']);
-        
+
         // Verify ignored fields are not included (#[Ignore])
         $this->assertArrayNotHasKey('internal_notes', $arrayData);
         $this->assertArrayNotHasKey('system_flags', $arrayData);
@@ -301,10 +301,10 @@ class ActionableIntegrationTest extends TestCase
     {
         // 🎯 Arrange
         Queue::fake();
-        
+
         $job = Job::factory()->create([
             'company_id' => $this->company->id,
-            'status' => 'published'
+            'status' => 'published',
         ]);
 
         // 🚀 Act: Dispatch action to queue instead of running synchronously
@@ -327,22 +327,22 @@ class ActionableIntegrationTest extends TestCase
             'visibility' => [
                 'public' => true,
                 'featured' => true,
-                'searchable' => true
+                'searchable' => true,
             ],
             'application' => [
                 'require_cover_letter' => true,
                 'max_applications' => 50,
-                'auto_accept' => false
+                'auto_accept' => false,
             ],
             'notifications' => [
                 'new_application' => true,
                 'daily_digest' => false,
-                'weekly_summary' => true
+                'weekly_summary' => true,
             ],
             'analytics' => [
                 'track_views' => true,
-                'google_analytics_enabled' => false
-            ]
+                'google_analytics_enabled' => false,
+            ],
         ]);
 
         // ✅ Assert: Verify settings persistence and retrieval
@@ -352,7 +352,7 @@ class ActionableIntegrationTest extends TestCase
         $this->assertEquals(50, $job->settings('application.max_applications'));
         $this->assertFalse($job->settings('notifications.daily_digest'));
         $this->assertTrue($job->settings('analytics.track_views'));
-        
+
         // Test default values
         $this->assertFalse($job->settings('non_existent.setting', false));
         $this->assertEquals('default', $job->settings('another.missing.setting', 'default'));
@@ -362,7 +362,7 @@ class ActionableIntegrationTest extends TestCase
     public function business_logic_is_reusable_across_contexts(): void
     {
         // 🎯 Demonstrate reusability: Same action works in web, API, CLI, tests
-        
+
         $jobData = new JobData(
             jobTitle: 'Test Job',
             description: 'Test Description',
@@ -375,13 +375,13 @@ class ActionableIntegrationTest extends TestCase
 
         // 🚀 Web context
         $webJob = CreateJob::run($jobData, $this->employer->id);
-        
+
         // 🚀 API context (same action!)
         $apiJob = CreateJob::run($jobData, $this->employer->id);
-        
+
         // 🚀 CLI context (same action!)
         $cliJob = CreateJob::run($jobData, $this->employer->id);
-        
+
         // ✅ All contexts produce consistent results
         $this->assertEquals($webJob->job_title, $apiJob->job_title);
         $this->assertEquals($apiJob->job_title, $cliJob->job_title);
@@ -397,7 +397,7 @@ class ActionableIntegrationTest extends TestCase
    - Controllers become thin and focused
    - DTOs handle data transformation elegantly
 
-✅ BACKGROUND PROCESSING CONFIRMED  
+✅ BACKGROUND PROCESSING CONFIRMED
    - Actions work both synchronously and async
    - Queue integration seamless
    - No code changes needed to switch modes
@@ -424,4 +424,4 @@ class ActionableIntegrationTest extends TestCase
    - Graceful failure management
 
 The integration is PRODUCTION-READY! 🚀
-*/ 
+*/

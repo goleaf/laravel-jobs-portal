@@ -156,7 +156,7 @@ class UpdateJobTypeRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Auto-generate slug if name changed but slug not provided
-        if ($this->has('name') && !$this->has('slug')) {
+        if ($this->has('name') && ! $this->has('slug')) {
             $this->merge([
                 'slug' => Str::slug($this->name),
             ]);
@@ -205,7 +205,7 @@ class UpdateJobTypeRequest extends FormRequest
             ]);
         }
 
-        if ($this->has('is_default') && $this->is_default && !$jobType->is_default) {
+        if ($this->has('is_default') && $this->is_default && ! $jobType->is_default) {
             \Log::info('Job type set as default', [
                 'job_type_id' => $jobType->id,
                 'name' => $this->name ?? $jobType->name,

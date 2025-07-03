@@ -59,7 +59,7 @@ class PerformanceAnalyticsService
 
         // Remove memory spikes caused by garbage collection
         $gcSpikes = $data->filter(function ($record) {
-            return isset($record['gc_triggered']) && true === $record['gc_triggered'];
+            return isset($record['gc_triggered']) && $record['gc_triggered'] === true;
         })->keys();
         $data->forget($gcSpikes->toArray());
 
@@ -323,7 +323,7 @@ class PerformanceAnalyticsService
 
         // Penalize for missing required fields
         $missingFields = $data->filter(function ($record) {
-            return !isset($record['timestamp']) || !isset($record['response_time']);
+            return ! isset($record['timestamp']) || ! isset($record['response_time']);
         })->count();
 
         $score -= ($missingFields / $totalRecords) * 30;
@@ -351,7 +351,7 @@ class PerformanceAnalyticsService
         $rapidFire = [];
         $interactions = $interactions->sortBy('timestamp');
 
-        for ($i = 1; $i < $interactions->count(); ++$i) {
+        for ($i = 1; $i < $interactions->count(); $i++) {
             $current = $interactions->values()[$i];
             $previous = $interactions->values()[$i - 1];
 

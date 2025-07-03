@@ -129,7 +129,7 @@ class IndexRequest extends FormRequest
                 $allowedIncludes = ['company', 'skills', 'tags', 'applications', 'user', 'location', 'category', 'type'];
                 $includes = explode(',', $this->include);
                 foreach ($includes as $include) {
-                    if (!in_array(trim($include), $allowedIncludes)) {
+                    if (! in_array(trim($include), $allowedIncludes)) {
                         $validator->errors()->add('include', "Invalid include parameter: {$include}");
                     }
                 }

@@ -82,13 +82,12 @@ class DashboardController extends Controller
                         'company' => 'N/A', // Simplified for now
                         'category' => 'N/A', // Simplified for now
                         'type' => 'Full-time', // Simplified for now
-                        'is_active' => 1 == $job->status,
-                        'status' => 1 == $job->status ? 'Active' : 'Inactive',
+                        'is_active' => $job->status == 1,
+                        'status' => $job->status == 1 ? 'Active' : 'Inactive',
                         'created_at' => $job->created_at?->toISOString(),
                         'created_ago' => $job->created_at?->diffForHumans(),
                     ];
-                })
-            ;
+                });
 
             return response()->json([
                 'success' => true,
@@ -137,8 +136,7 @@ class DashboardController extends Controller
                         'created_at' => $application->created_at?->toISOString(),
                         'created_ago' => $application->created_at?->diffForHumans(),
                     ];
-                })
-            ;
+                });
 
             return response()->json([
                 'success' => true,
@@ -166,8 +164,7 @@ class DashboardController extends Controller
                 ->get()
                 ->mapWithKeys(function ($item) {
                     return [ucfirst($item->status ?? 'pending') => $item->count];
-                })
-            ;
+                });
 
             // Ensure all statuses are present
             $statuses = ['Pending', 'Approved', 'Rejected', 'Withdrawn'];
@@ -217,8 +214,7 @@ class DashboardController extends Controller
                         'month_name' => Carbon::createFromFormat('Y-m', $item->month)->format('M Y'),
                         'count' => $item->count,
                     ];
-                })
-            ;
+                });
 
             return response()->json([
                 'success' => true,
@@ -256,8 +252,7 @@ class DashboardController extends Controller
                         'is_active' => $company->is_active,
                         'logo' => $company->logo,
                     ];
-                })
-            ;
+                });
 
             return response()->json([
                 'success' => true,

@@ -96,7 +96,7 @@ class JobStoreRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        if (!$this->slug && $this->title) {
+        if (! $this->slug && $this->title) {
             $this->merge(['slug' => \Str::slug($this->title)]);
         }
 

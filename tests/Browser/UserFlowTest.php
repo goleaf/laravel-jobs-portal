@@ -17,17 +17,16 @@ class UserFlowTest extends DuskTestCase
     use DatabaseMigrations;
 
     /** @test */
-    public function userCanVisitHomepage()
+    public function user_can_visit_homepage()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
-                ->assertSee('Job Portal')
-            ;
+                ->assertSee('Job Portal');
         });
     }
 
     /** @test */
-    public function userCanCompleteLoginFlow()
+    public function user_can_complete_login_flow()
     {
         $user = User::factory()->create([
             'email' => 'test@example.com',
@@ -39,8 +38,7 @@ class UserFlowTest extends DuskTestCase
                 ->type('email', 'test@example.com')
                 ->type('password', 'password123')
                 ->press('Sign In')
-                ->assertPathIs('/dashboard')
-            ;
+                ->assertPathIs('/dashboard');
         });
     }
 }

@@ -84,7 +84,7 @@ class BrandingSliderController extends AppBaseController
     public function changeIsActive(BrandingSliders $brandingSlider)
     {
         $isActive = $brandingSlider->is_active;
-        $brandingSlider->update(['is_active' => !$isActive]);
+        $brandingSlider->update(['is_active' => ! $isActive]);
 
         return $this->sendsuccess(__('messages.flash.status_change'));
     }

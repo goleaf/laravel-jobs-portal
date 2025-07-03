@@ -53,9 +53,9 @@ class RequiredDegreeLevelController extends AppBaseController
             $sortBy = $request->input('sort_by', 'name');
             $sortDirection = $request->input('sort_direction', 'asc');
 
-            if ('alphabetical' === $sortBy) {
+            if ($sortBy === 'alphabetical') {
                 $query->alphabetical();
-            } elseif ('popular' === $sortBy) {
+            } elseif ($sortBy === 'popular') {
                 $query->popular();
             } else {
                 $query->orderBy($sortBy, $sortDirection);
@@ -127,7 +127,7 @@ class RequiredDegreeLevelController extends AppBaseController
                 $allowedIncludes = ['jobs', 'candidates'];
                 $validIncludes = array_intersect($includes, $allowedIncludes);
 
-                if (!empty($validIncludes)) {
+                if (! empty($validIncludes)) {
                     $requiredDegreeLevel->load($validIncludes);
                 }
             }
@@ -234,8 +234,7 @@ class RequiredDegreeLevelController extends AppBaseController
             $requiredDegreeLevels = RequiredDegreeLevel::active()
                 ->alphabetical()
                 ->select('id', 'name')
-                ->get()
-            ;
+                ->get();
 
             return response()->json([
                 'success' => true,

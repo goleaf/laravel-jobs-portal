@@ -47,7 +47,7 @@ class RedisMonitor extends Command
 
         $stats = $this->cacheService->getRedisStats();
 
-        if ('connected' === $stats['status']) {
+        if ($stats['status'] === 'connected') {
             $this->table(
                 ['Metric', 'Value'],
                 [

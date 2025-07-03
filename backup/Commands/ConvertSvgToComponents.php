@@ -51,7 +51,7 @@ class ConvertSvgToComponents extends Command
 
         $this->info("Searching for SVG elements in path: {$path}");
 
-        if (!File::isDirectory($path)) {
+        if (! File::isDirectory($path)) {
             $this->error('The specified path does not exist or is not a directory.');
 
             return 1;
@@ -86,7 +86,7 @@ class ConvertSvgToComponents extends Command
             // Save the file if changes were made
             if ($content !== $originalContent) {
                 File::put($file, $content);
-                ++$modifiedFiles;
+                $modifiedFiles++;
                 $totalReplaced += $replacementCount;
                 $this->line("Modified file: {$file} (Replaced {$replacementCount} SVG elements)");
             }
@@ -100,8 +100,7 @@ class ConvertSvgToComponents extends Command
     /**
      * Find all Blade files in the specified directory and its subdirectories.
      *
-     * @param string $path
-     *
+     * @param  string  $path
      * @return array
      */
     protected function findBladeFiles($path)
@@ -112,10 +111,9 @@ class ConvertSvgToComponents extends Command
     /**
      * Replace SVG elements with component calls.
      *
-     * @param string $content
-     * @param string $svgPattern
-     * @param string $componentName
-     *
+     * @param  string  $content
+     * @param  string  $svgPattern
+     * @param  string  $componentName
      * @return string
      */
     protected function replaceSvgWithComponent($content, $svgPattern, $componentName)

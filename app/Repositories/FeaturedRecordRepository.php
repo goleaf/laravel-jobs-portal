@@ -15,11 +15,10 @@ class FeaturedRecordRepository extends BaseRepository implements FeaturedRecordR
     /**
      * Get featured records by type.
      *
-     * @param string $type
      * @return mixed
      */
     public function getByType(string $type)
     {
         return $this->model->where('type', $type)->get();
     }
-} 
+}

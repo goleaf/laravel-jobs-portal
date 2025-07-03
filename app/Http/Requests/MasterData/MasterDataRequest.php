@@ -6,16 +6,16 @@ use App\Http\Requests\Foundation\AbstractBaseRequest;
 
 /**
  * Master Data Request - Base class for master data validation
- * 
+ *
  * Handles validation for:
  * - Location data (countries, states, cities)
  * - Company classifications (size, industry, ownership)
  * - Job classifications (types, career levels, salary ranges)
  * - Skills and tags
  * - Reference data management
- * 
- * @package App\Http\Requests\MasterData
+ *
  * @version 1.0.0
+ *
  * @since 2024-12-28
  */
 abstract class MasterDataRequest extends AbstractBaseRequest
@@ -129,10 +129,10 @@ abstract class MasterDataRequest extends AbstractBaseRequest
     {
         // Check for duplicate names within the same category
         $this->validateUniqueName($validator);
-        
+
         // Validate hierarchical relationships
         $this->validateHierarchicalRelationships($validator);
-        
+
         // Validate business logic constraints
         $this->validateBusinessConstraints($validator);
     }
@@ -189,4 +189,4 @@ abstract class MasterDataRequest extends AbstractBaseRequest
 
         return $sanitized;
     }
-} 
+}

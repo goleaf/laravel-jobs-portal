@@ -42,7 +42,7 @@ class FunctionalAreaControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanCreateFunctionalarea(): void
+    public function admin_can_create_functionalarea(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -57,8 +57,7 @@ class FunctionalAreaControllerTest extends TestCase
         $response->assertStatus(201)
             ->assertJsonStructure([
                 'data' => ['name', 'description', 'is_active', 'id', 'created_at', 'updated_at'],
-            ])
-        ;
+            ]);
 
         $this->assertDatabaseHas('functional_areas', [
             'name' => $data['name'] ?? $data[array_key_first($data)],
@@ -66,7 +65,7 @@ class FunctionalAreaControllerTest extends TestCase
     }
 
     /** @test */
-    public function employerCanCreateFunctionalarea(): void
+    public function employer_can_create_functionalarea(): void
     {
         Sanctum::actingAs($this->employer);
 
@@ -82,7 +81,7 @@ class FunctionalAreaControllerTest extends TestCase
     }
 
     /** @test */
-    public function candidateCannotCreateFunctionalarea(): void
+    public function candidate_cannot_create_functionalarea(): void
     {
         Sanctum::actingAs($this->candidate);
 
@@ -98,7 +97,7 @@ class FunctionalAreaControllerTest extends TestCase
     }
 
     /** @test */
-    public function unauthenticatedUserCannotCreateFunctionalarea(): void
+    public function unauthenticated_user_cannot_create_functionalarea(): void
     {
         $data = [
             'name' => 'Software Development',
@@ -112,7 +111,7 @@ class FunctionalAreaControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanUpdateFunctionalarea(): void
+    public function admin_can_update_functionalarea(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -134,7 +133,7 @@ class FunctionalAreaControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanDeleteFunctionalarea(): void
+    public function admin_can_delete_functionalarea(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -150,7 +149,7 @@ class FunctionalAreaControllerTest extends TestCase
     }
 
     /** @test */
-    public function validationFailsWithInvalidData(): void
+    public function validation_fails_with_invalid_data(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -161,12 +160,11 @@ class FunctionalAreaControllerTest extends TestCase
         $response = $this->postJson('/api/functionalarea', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function validationFailsWithDuplicateName(): void
+    public function validation_fails_with_duplicate_name(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -182,12 +180,11 @@ class FunctionalAreaControllerTest extends TestCase
         $response = $this->postJson('/api/functionalarea', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function canListFunctionalareas(): void
+    public function can_list_functionalareas(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -200,12 +197,11 @@ class FunctionalAreaControllerTest extends TestCase
                 'data' => [
                     '*' => ['name', 'description', 'is_active', 'id', 'created_at', 'updated_at'],
                 ],
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function canShowSingleFunctionalarea(): void
+    public function can_show_single_functionalarea(): void
     {
         Sanctum::actingAs($this->admin);
 

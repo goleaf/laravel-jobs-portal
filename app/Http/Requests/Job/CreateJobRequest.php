@@ -3,11 +3,10 @@
 namespace App\Http\Requests\Job;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 /**
  * Create Job Request
- * 
+ *
  * Handles validation for creating new jobs with Context7 patterns
  * Includes multilingual support and comprehensive validation
  */
@@ -160,7 +159,7 @@ class CreateJobRequest extends FormRequest
         if ($this->has('salary_from')) {
             $this->merge(['salary_from' => str_replace(',', '', $this->input('salary_from'))]);
         }
-        
+
         if ($this->has('salary_to')) {
             $this->merge(['salary_to' => str_replace(',', '', $this->input('salary_to'))]);
         }

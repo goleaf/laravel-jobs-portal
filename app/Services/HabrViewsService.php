@@ -2,19 +2,18 @@
 
 namespace App\Services;
 
-use Prosopo\Views\ViewsManager;
-use Prosopo\Views\View\ViewNamespaceConfig;
-use Prosopo\Views\Interfaces\View\ViewNamespaceManagerInterface;
 use Prosopo\Views\Interfaces\Model\ModelFactoryInterface;
 use Prosopo\Views\Interfaces\Model\ModelRendererInterface;
+use Prosopo\Views\Interfaces\View\ViewNamespaceManagerInterface;
+use Prosopo\Views\ViewsManager;
 
 /**
  * Habr Views Service
- * 
+ *
  * Based on Habr article patterns for model-oriented templating
  * Provides ViewsManager configuration and integration with Laravel
  */
-class HabrViewsService implements ViewNamespaceManagerInterface, ModelFactoryInterface, ModelRendererInterface
+class HabrViewsService implements ModelFactoryInterface, ModelRendererInterface, ViewNamespaceManagerInterface
 {
     private ViewsManager $viewsManager;
     private string $templatesPath;
@@ -24,7 +23,7 @@ class HabrViewsService implements ViewNamespaceManagerInterface, ModelFactoryInt
     {
         $this->templatesPath = resource_path('views/habr-templates');
         $this->cacheDirectory = storage_path('framework/views/habr-cache');
-        
+
         $this->initializeViewsManager();
     }
 
@@ -34,17 +33,17 @@ class HabrViewsService implements ViewNamespaceManagerInterface, ModelFactoryInt
     private function initializeViewsManager(): void
     {
         // Create cache directory if it doesn't exist
-        if (!is_dir($this->cacheDirectory)) {
+        if (! is_dir($this->cacheDirectory)) {
             mkdir($this->cacheDirectory, 0755, true);
         }
 
         // Note: For this demo, we'll use a simple implementation
         // The original Habr article uses BladeTemplateRenderer which may not be directly available
         // We'll adapt this to work with what's available in the package
-        
+
         // Create Views Manager with default configuration
-        $this->viewsManager = new ViewsManager();
-        
+        $this->viewsManager = new ViewsManager;
+
         // We'll register namespaces when needed since we need to check what template renderers are available
     }
 
@@ -82,7 +81,7 @@ class HabrViewsService implements ViewNamespaceManagerInterface, ModelFactoryInt
     public function renderJob(\App\Models\Job $job): string
     {
         $jobModel = \App\Views\JobTemplateModel::fromJob($job);
-        
+
         // For demo purposes, we'll return a simple string representation
         // In a real implementation, this would use the template system
         return $this->renderJobAsString($jobModel);
@@ -94,7 +93,7 @@ class HabrViewsService implements ViewNamespaceManagerInterface, ModelFactoryInt
     public function renderCompany(\App\Models\Company $company): string
     {
         $companyModel = \App\Views\CompanyTemplateModel::fromCompany($company);
-        
+
         // For demo purposes, we'll return a simple string representation
         return $this->renderCompanyAsString($companyModel);
     }
@@ -104,18 +103,18 @@ class HabrViewsService implements ViewNamespaceManagerInterface, ModelFactoryInt
      */
     public function renderJobList(\Illuminate\Support\Collection $jobs, array $options = []): string
     {
-        $listModel = new \App\Views\JobListTemplateModel();
+        $listModel = new \App\Views\JobListTemplateModel;
         $listModel->jobs = $jobs->map(function ($job) {
             return \App\Views\JobTemplateModel::fromJob($job);
         })->toArray();
-        
+
         $listModel->title = $options['title'] ?? 'Jobs';
         $listModel->description = $options['description'] ?? '';
         $listModel->totalCount = $jobs->count();
         $listModel->showPagination = $options['show_pagination'] ?? false;
         $listModel->currentPage = $options['current_page'] ?? 1;
         $listModel->perPage = $options['per_page'] ?? 20;
-        
+
         return $this->renderJobListAsString($listModel);
     }
 
@@ -124,16 +123,16 @@ class HabrViewsService implements ViewNamespaceManagerInterface, ModelFactoryInt
      */
     public function renderCompanyList(\Illuminate\Support\Collection $companies, array $options = []): string
     {
-        $listModel = new \App\Views\CompanyListTemplateModel();
+        $listModel = new \App\Views\CompanyListTemplateModel;
         $listModel->companies = $companies->map(function ($company) {
             return \App\Views\CompanyTemplateModel::fromCompany($company);
         })->toArray();
-        
+
         $listModel->title = $options['title'] ?? 'Companies';
         $listModel->description = $options['description'] ?? '';
         $listModel->totalCount = $companies->count();
         $listModel->showGrid = $options['show_grid'] ?? true;
-        
+
         return $this->renderCompanyListAsString($listModel);
     }
 
@@ -142,14 +141,14 @@ class HabrViewsService implements ViewNamespaceManagerInterface, ModelFactoryInt
      */
     public function renderDashboard(\App\Models\User $user, array $data = []): string
     {
-        $dashboardModel = new \App\Views\DashboardTemplateModel();
+        $dashboardModel = new \App\Views\DashboardTemplateModel;
         $dashboardModel->user = $user;
         $dashboardModel->userType = $user->user_type ?? 'candidate';
         $dashboardModel->statsData = $data['stats'] ?? [];
         $dashboardModel->recentActivity = $data['recent_activity'] ?? [];
         $dashboardModel->notifications = $data['notifications'] ?? [];
         $dashboardModel->quickActions = $data['quick_actions'] ?? [];
-        
+
         return $this->renderDashboardAsString($dashboardModel);
     }
 
@@ -174,11 +173,11 @@ class HabrViewsService implements ViewNamespaceManagerInterface, ModelFactoryInt
      */
     public function clearCache(): bool
     {
-        if (!is_dir($this->cacheDirectory)) {
+        if (! is_dir($this->cacheDirectory)) {
             return true;
         }
 
-        $files = glob($this->cacheDirectory . '/*');
+        $files = glob($this->cacheDirectory.'/*');
         foreach ($files as $file) {
             if (is_file($file)) {
                 unlink($file);
@@ -193,7 +192,7 @@ class HabrViewsService implements ViewNamespaceManagerInterface, ModelFactoryInt
      */
     public function getCacheInfo(): array
     {
-        $files = glob($this->cacheDirectory . '/*');
+        $files = glob($this->cacheDirectory.'/*');
         $totalSize = 0;
         $fileCount = 0;
 
@@ -243,7 +242,7 @@ class HabrViewsService implements ViewNamespaceManagerInterface, ModelFactoryInt
     public function getPerformanceStats(): array
     {
         // Create a simple job for benchmarking without mass assignment
-        $job = new \App\Models\Job();
+        $job = new \App\Models\Job;
         $job->title = 'Test Job';
         $job->description = 'Test job description';
         $job->requirements = 'Test requirements';
@@ -257,6 +256,7 @@ class HabrViewsService implements ViewNamespaceManagerInterface, ModelFactoryInt
         // Benchmark job rendering
         $jobBenchmark = $this->benchmark(function () use ($job) {
             $jobModel = \App\Views\JobTemplateModel::fromJob($job);
+
             return $this->renderJobAsString($jobModel);
         }, 50);
 
@@ -269,7 +269,7 @@ class HabrViewsService implements ViewNamespaceManagerInterface, ModelFactoryInt
                 'renders_per_second' => round($jobBenchmark['renders_per_second'], 2),
                 'memory_efficiency' => 'High',
                 'cache_status' => is_dir($this->cacheDirectory) ? 'Active' : 'Inactive',
-            ]
+            ],
         ];
     }
 
@@ -284,7 +284,7 @@ class HabrViewsService implements ViewNamespaceManagerInterface, ModelFactoryInt
             $bytes /= 1024;
         }
 
-        return round($bytes, $precision) . ' ' . $units[$i];
+        return round($bytes, $precision).' '.$units[$i];
     }
 
     /**
@@ -317,7 +317,7 @@ class HabrViewsService implements ViewNamespaceManagerInterface, ModelFactoryInt
         foreach ($listModel->jobs as $job) {
             $jobsHtml .= $this->renderJobAsString($job);
         }
-        
+
         return sprintf(
             '<div class="job-list"><h2>%s</h2><p>%s</p><div class="jobs">%s</div></div>',
             htmlspecialchars($listModel->title),
@@ -332,7 +332,7 @@ class HabrViewsService implements ViewNamespaceManagerInterface, ModelFactoryInt
         foreach ($listModel->companies as $company) {
             $companiesHtml .= $this->renderCompanyAsString($company);
         }
-        
+
         return sprintf(
             '<div class="company-list"><h2>%s</h2><p>%s</p><div class="companies">%s</div></div>',
             htmlspecialchars($listModel->title),
@@ -346,10 +346,13 @@ class HabrViewsService implements ViewNamespaceManagerInterface, ModelFactoryInt
         $stats = $dashboardModel->statistics();
         $statsHtml = '';
         foreach ($stats as $key => $value) {
-            $statsHtml .= sprintf('<div class="stat"><span class="label">%s</span><span class="value">%d</span></div>', 
-                ucfirst(str_replace('_', ' ', $key)), $value);
+            $statsHtml .= sprintf(
+                '<div class="stat"><span class="label">%s</span><span class="value">%d</span></div>',
+                ucfirst(str_replace('_', ' ', $key)),
+                $value
+            );
         }
-        
+
         return sprintf(
             '<div class="dashboard"><h2>%s</h2><p>%s</p><div class="stats">%s</div></div>',
             htmlspecialchars($dashboardModel->dashboardTitle()),
@@ -357,4 +360,4 @@ class HabrViewsService implements ViewNamespaceManagerInterface, ModelFactoryInt
             $statsHtml
         );
     }
-} 
+}

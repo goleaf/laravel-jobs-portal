@@ -15,7 +15,6 @@ class InquiryRepository extends BaseRepository implements InquiryRepositoryInter
     /**
      * Get inquiries by status.
      *
-     * @param string $status
      * @return mixed
      */
     public function getByStatus(string $status)

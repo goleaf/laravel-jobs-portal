@@ -160,11 +160,11 @@ abstract class BaseService implements ServiceInterface
     /**
      * Check if user is authorized for operation.
      *
-     * @param null|mixed $resource
+     * @param  null|mixed  $resource
      */
     protected function authorize(string $ability, $resource = null): bool
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             $this->log('warning', 'Unauthorized access attempt', [
                 'ability' => $ability,
                 'resource' => $resource,
@@ -175,7 +175,7 @@ abstract class BaseService implements ServiceInterface
 
         $authorized = auth()->user()->can($ability, $resource);
 
-        if (!$authorized) {
+        if (! $authorized) {
             $this->log('warning', 'Authorization failed', [
                 'user_id' => auth()->id(),
                 'ability' => $ability,
@@ -189,7 +189,7 @@ abstract class BaseService implements ServiceInterface
     /**
      * Format success response.
      *
-     * @param null|mixed $data
+     * @param  null|mixed  $data
      */
     protected function successResponse($data = null, string $message = 'Operation completed successfully', array $meta = []): array
     {
@@ -205,7 +205,7 @@ abstract class BaseService implements ServiceInterface
     /**
      * Format error response.
      *
-     * @param null|mixed $errors
+     * @param  null|mixed  $errors
      */
     protected function errorResponse(string $message, $errors = null, int $code = 400, array $meta = []): array
     {
@@ -235,7 +235,7 @@ abstract class BaseService implements ServiceInterface
         if (empty($keys)) {
             // Clear all cache for this service
             $pattern = strtolower($this->serviceName).'_*';
-        // Implementation depends on cache driver
+            // Implementation depends on cache driver
         } else {
             foreach ($keys as $key) {
                 cache()->forget($key);
@@ -254,7 +254,7 @@ abstract class BaseService implements ServiceInterface
     /**
      * Dispatch event.
      *
-     * @param mixed $event
+     * @param  mixed  $event
      */
     protected function dispatchEvent($event): void
     {
@@ -268,7 +268,7 @@ abstract class BaseService implements ServiceInterface
     /**
      * Queue job.
      *
-     * @param mixed $job
+     * @param  mixed  $job
      */
     protected function queueJob($job): void
     {
@@ -282,8 +282,8 @@ abstract class BaseService implements ServiceInterface
     /**
      * Send notification.
      *
-     * @param mixed $notifiable
-     * @param mixed $notification
+     * @param  mixed  $notifiable
+     * @param  mixed  $notification
      */
     protected function sendNotification($notifiable, $notification): void
     {

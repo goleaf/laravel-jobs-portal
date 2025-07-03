@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Universal;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 
 class UniversalDocumentationController extends Controller
@@ -30,21 +29,21 @@ class UniversalDocumentationController extends Controller
                 'testing' => $this->getTestingDocumentation(),
                 'rate_limiting' => $this->getRateLimitingDocs(),
                 'webhooks' => $this->getWebhookDocumentation(),
-                'errors' => $this->getErrorDocumentation()
+                'errors' => $this->getErrorDocumentation(),
             ];
 
             return response()->json([
                 'success' => true,
                 'documentation' => $documentation,
                 'generated_at' => now()->toISOString(),
-                'version' => config('app.version', '1.0.0')
+                'version' => config('app.version', '1.0.0'),
             ]);
 
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'error' => 'Documentation generation failed',
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], 500);
         }
     }
@@ -56,21 +55,21 @@ class UniversalDocumentationController extends Controller
     {
         $endpoints = $this->getInteractiveEndpoints();
         $selectedEndpoint = $request->get('endpoint');
-        
+
         if ($selectedEndpoint) {
             $endpointDetails = $this->getEndpointDetails($selectedEndpoint);
             $examples = $this->getEndpointExamples($selectedEndpoint);
             $schema = $this->getEndpointSchema($selectedEndpoint);
-            
+
             return view('documentation.api-explorer', compact(
-                'endpoints', 
-                'selectedEndpoint', 
-                'endpointDetails', 
-                'examples', 
+                'endpoints',
+                'selectedEndpoint',
+                'endpointDetails',
+                'examples',
                 'schema'
             ));
         }
-        
+
         return view('documentation.api-explorer', compact('endpoints'));
     }
 
@@ -85,7 +84,7 @@ class UniversalDocumentationController extends Controller
             'errors' => $this->getErrorMetrics(),
             'usage' => $this->getUsageMetrics(),
             'health' => $this->getHealthMetrics(),
-            'alerts' => $this->getActiveAlerts()
+            'alerts' => $this->getActiveAlerts(),
         ];
 
         return view('documentation.monitoring-dashboard', compact('metrics'));
@@ -102,7 +101,7 @@ class UniversalDocumentationController extends Controller
             'webhook_tester' => $this->getWebhookTesterTool(),
             'rate_limit_checker' => $this->getRateLimitChecker(),
             'response_validator' => $this->getResponseValidator(),
-            'playground' => $this->getAPIPlayground()
+            'playground' => $this->getAPIPlayground(),
         ];
 
         return view('documentation.developer-tools', compact('tools'));
@@ -121,28 +120,28 @@ class UniversalDocumentationController extends Controller
             'contact' => [
                 'name' => 'API Support Team',
                 'email' => 'api-support@jobportal.dev',
-                'url' => 'https://support.jobportal.dev'
+                'url' => 'https://support.jobportal.dev',
             ],
             'license' => [
                 'name' => 'MIT License',
-                'url' => 'https://opensource.org/licenses/MIT'
+                'url' => 'https://opensource.org/licenses/MIT',
             ],
             'servers' => [
                 [
                     'url' => url('/api'),
-                    'description' => 'Production API Server'
+                    'description' => 'Production API Server',
                 ],
                 [
                     'url' => url('/api/v1'),
-                    'description' => 'API Version 1'
-                ]
+                    'description' => 'API Version 1',
+                ],
             ],
             'last_updated' => now()->toISOString(),
             'supported_formats' => ['JSON', 'XML'],
             'rate_limits' => [
                 'authenticated' => '1000 requests/hour',
-                'unauthenticated' => '100 requests/hour'
-            ]
+                'unauthenticated' => '100 requests/hour',
+            ],
         ];
     }
 
@@ -158,13 +157,13 @@ class UniversalDocumentationController extends Controller
                     'name' => 'Bearer Token',
                     'description' => 'Include your API token in the Authorization header',
                     'header' => 'Authorization: Bearer {your-api-token}',
-                    'example' => 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...'
+                    'example' => 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...',
                 ],
                 'api_key' => [
                     'name' => 'API Key',
                     'description' => 'Pass your API key as a query parameter or header',
                     'query' => '?api_key={your-api-key}',
-                    'header' => 'X-API-Key: {your-api-key}'
+                    'header' => 'X-API-Key: {your-api-key}',
                 ],
                 'oauth2' => [
                     'name' => 'OAuth 2.0',
@@ -174,21 +173,21 @@ class UniversalDocumentationController extends Controller
                     'scopes' => [
                         'read' => 'Read access to resources',
                         'write' => 'Write access to resources',
-                        'admin' => 'Administrative access'
-                    ]
-                ]
+                        'admin' => 'Administrative access',
+                    ],
+                ],
             ],
             'security_features' => [
                 'rate_limiting' => 'Requests are rate limited based on authentication status',
                 'token_expiration' => 'Tokens expire after 24 hours and must be refreshed',
                 'ip_whitelisting' => 'Optional IP whitelisting for enhanced security',
-                'request_signing' => 'Request signing available for high-security applications'
+                'request_signing' => 'Request signing available for high-security applications',
             ],
             'examples' => [
-                'curl' => 'curl -H "Authorization: Bearer {token}" ' . url('/api/jobs'),
-                'javascript' => "fetch('" . url('/api/jobs') . "', {\n  headers: {\n    'Authorization': 'Bearer {token}'\n  }\n})",
-                'php' => "\$response = Http::withToken(\$token)->get('" . url('/api/jobs') . "');"
-            ]
+                'curl' => 'curl -H "Authorization: Bearer {token}" '.url('/api/jobs'),
+                'javascript' => "fetch('".url('/api/jobs')."', {\n  headers: {\n    'Authorization': 'Bearer {token}'\n  }\n})",
+                'php' => "\$response = Http::withToken(\$token)->get('".url('/api/jobs')."');",
+            ],
         ];
     }
 
@@ -213,7 +212,7 @@ class UniversalDocumentationController extends Controller
                     'request_format' => $this->getRequestFormat($route),
                     'response_format' => $this->getResponseFormat($route),
                     'examples' => $this->getEndpointExamples($route->uri()),
-                    'status_codes' => $this->getStatusCodes($route)
+                    'status_codes' => $this->getStatusCodes($route),
                 ];
             }
         }
@@ -233,11 +232,11 @@ class UniversalDocumentationController extends Controller
             $files = File::files($modelPath);
 
             foreach ($files as $file) {
-                $className = 'App\\Models\\' . $file->getFilenameWithoutExtension();
-                
+                $className = 'App\\Models\\'.$file->getFilenameWithoutExtension();
+
                 if (class_exists($className)) {
                     $reflection = new \ReflectionClass($className);
-                    
+
                     $models[] = [
                         'name' => $reflection->getShortName(),
                         'namespace' => $reflection->getNamespaceName(),
@@ -246,7 +245,7 @@ class UniversalDocumentationController extends Controller
                         'scopes' => $this->getModelScopes($className),
                         'mutators' => $this->getModelMutators($className),
                         'events' => $this->getModelEvents($className),
-                        'validation_rules' => $this->getModelValidationRules($className)
+                        'validation_rules' => $this->getModelValidationRules($className),
                     ];
                 }
             }
@@ -265,25 +264,25 @@ class UniversalDocumentationController extends Controller
                 'curl' => $this->getCurlAuthExample(),
                 'javascript' => $this->getJavaScriptAuthExample(),
                 'php' => $this->getPHPAuthExample(),
-                'python' => $this->getPythonAuthExample()
+                'python' => $this->getPythonAuthExample(),
             ],
             'crud_operations' => [
                 'create_job' => $this->getCreateJobExamples(),
                 'list_jobs' => $this->getListJobsExamples(),
                 'update_job' => $this->getUpdateJobExamples(),
-                'delete_job' => $this->getDeleteJobExamples()
+                'delete_job' => $this->getDeleteJobExamples(),
             ],
             'advanced_features' => [
                 'pagination' => $this->getPaginationExamples(),
                 'filtering' => $this->getFilteringExamples(),
                 'sorting' => $this->getSortingExamples(),
-                'searching' => $this->getSearchingExamples()
+                'searching' => $this->getSearchingExamples(),
             ],
             'error_handling' => [
                 'validation_errors' => $this->getValidationErrorExamples(),
                 'authentication_errors' => $this->getAuthErrorExamples(),
-                'rate_limit_errors' => $this->getRateLimitErrorExamples()
-            ]
+                'rate_limit_errors' => $this->getRateLimitErrorExamples(),
+            ],
         ];
     }
 
@@ -297,26 +296,26 @@ class UniversalDocumentationController extends Controller
                 'installation' => 'composer require jobportal/php-sdk',
                 'quick_start' => $this->getPHPSDKQuickStart(),
                 'examples' => $this->getPHPSDKExamples(),
-                'documentation_url' => 'https://docs.jobportal.dev/sdk/php'
+                'documentation_url' => 'https://docs.jobportal.dev/sdk/php',
             ],
             'javascript' => [
                 'installation' => 'npm install @jobportal/js-sdk',
                 'quick_start' => $this->getJavaScriptSDKQuickStart(),
                 'examples' => $this->getJavaScriptSDKExamples(),
-                'documentation_url' => 'https://docs.jobportal.dev/sdk/javascript'
+                'documentation_url' => 'https://docs.jobportal.dev/sdk/javascript',
             ],
             'python' => [
                 'installation' => 'pip install jobportal-sdk',
                 'quick_start' => $this->getPythonSDKQuickStart(),
                 'examples' => $this->getPythonSDKExamples(),
-                'documentation_url' => 'https://docs.jobportal.dev/sdk/python'
+                'documentation_url' => 'https://docs.jobportal.dev/sdk/python',
             ],
             'ruby' => [
                 'installation' => 'gem install jobportal-sdk',
                 'quick_start' => $this->getRubySDKQuickStart(),
                 'examples' => $this->getRubySDKExamples(),
-                'documentation_url' => 'https://docs.jobportal.dev/sdk/ruby'
-            ]
+                'documentation_url' => 'https://docs.jobportal.dev/sdk/ruby',
+            ],
         ];
     }
 
@@ -325,14 +324,14 @@ class UniversalDocumentationController extends Controller
      */
     private function getRealTimeMetrics()
     {
-        return Cache::remember('api_real_time_metrics', 60, function() {
+        return Cache::remember('api_real_time_metrics', 60, function () {
             return [
                 'requests_per_minute' => $this->calculateRequestsPerMinute(),
                 'active_connections' => $this->getActiveConnections(),
                 'response_time_avg' => $this->getAverageResponseTime(),
                 'error_rate' => $this->getCurrentErrorRate(),
                 'top_endpoints' => $this->getTopEndpoints(),
-                'geographic_distribution' => $this->getGeographicDistribution()
+                'geographic_distribution' => $this->getGeographicDistribution(),
             ];
         });
     }
@@ -347,23 +346,23 @@ class UniversalDocumentationController extends Controller
                 'p50' => 150, // ms
                 'p90' => 400,
                 'p99' => 800,
-                'max' => 2000
+                'max' => 2000,
             ],
             'throughput' => [
                 'requests_per_second' => 45.2,
                 'peak_rps' => 120.5,
-                'daily_average' => 38.7
+                'daily_average' => 38.7,
             ],
             'database' => [
                 'query_time_avg' => 25, // ms
                 'slow_queries' => 3,
-                'connection_pool_usage' => 68 // percentage
+                'connection_pool_usage' => 68, // percentage
             ],
             'cache' => [
                 'hit_rate' => 87.5, // percentage
                 'miss_rate' => 12.5,
-                'eviction_rate' => 2.1
-            ]
+                'eviction_rate' => 2.1,
+            ],
         ];
     }
 
@@ -377,7 +376,7 @@ class UniversalDocumentationController extends Controller
             'setup' => [
                 'endpoint_url' => 'Provide a URL to receive webhook notifications',
                 'authentication' => 'Webhooks include a signature for verification',
-                'retry_policy' => 'Failed webhooks are retried up to 3 times with exponential backoff'
+                'retry_policy' => 'Failed webhooks are retried up to 3 times with exponential backoff',
             ],
             'events' => [
                 'job.created' => 'Triggered when a new job is posted',
@@ -386,98 +385,325 @@ class UniversalDocumentationController extends Controller
                 'application.created' => 'Triggered when someone applies for a job',
                 'application.updated' => 'Triggered when application status changes',
                 'user.registered' => 'Triggered when a new user registers',
-                'payment.completed' => 'Triggered when a payment is processed'
+                'payment.completed' => 'Triggered when a payment is processed',
             ],
             'payload_format' => [
                 'headers' => [
                     'Content-Type' => 'application/json',
                     'X-Webhook-Signature' => 'HMAC signature for verification',
-                    'X-Webhook-Event' => 'Event type (e.g., job.created)'
+                    'X-Webhook-Event' => 'Event type (e.g., job.created)',
                 ],
                 'structure' => [
                     'event' => 'Event type',
                     'data' => 'Event data payload',
                     'timestamp' => 'When the event occurred',
-                    'webhook_id' => 'Unique webhook delivery ID'
-                ]
+                    'webhook_id' => 'Unique webhook delivery ID',
+                ],
             ],
             'security' => [
                 'signature_verification' => 'Verify webhook signatures using HMAC-SHA256',
                 'ip_whitelist' => 'Optional IP address whitelisting',
-                'https_required' => 'Webhook URLs must use HTTPS'
+                'https_required' => 'Webhook URLs must use HTTPS',
             ],
             'testing' => [
                 'test_endpoint' => url('/api/webhooks/test'),
                 'webhook_inspector' => 'Use our webhook inspector tool for debugging',
-                'sample_payloads' => 'Download sample payloads for each event type'
-            ]
+                'sample_payloads' => 'Download sample payloads for each event type',
+            ],
         ];
     }
 
     /**
      * Placeholder implementations for complex methods
      */
-    private function getInteractiveEndpoints() { return []; }
-    private function getEndpointDetails($endpoint) { return []; }
-    private function getEndpointSchema($endpoint) { return []; }
-    private function extractRouteParameters($route) { return []; }
-    private function getEndpointDescription($route) { return 'API endpoint for ' . $route->uri(); }
-    private function getRequestFormat($route) { return []; }
-    private function getResponseFormat($route) { return []; }
-    private function getStatusCodes($route) { return [200, 400, 401, 403, 404, 500]; }
-    private function getModelProperties($className) { return []; }
-    private function getModelRelationships($className) { return []; }
-    private function getModelScopes($className) { return []; }
-    private function getModelMutators($className) { return []; }
-    private function getModelEvents($className) { return []; }
-    private function getModelValidationRules($className) { return []; }
+    private function getInteractiveEndpoints()
+    {
+        return [];
+    }
+
+    private function getEndpointDetails($endpoint)
+    {
+        return [];
+    }
+
+    private function getEndpointSchema($endpoint)
+    {
+        return [];
+    }
+
+    private function extractRouteParameters($route)
+    {
+        return [];
+    }
+
+    private function getEndpointDescription($route)
+    {
+        return 'API endpoint for '.$route->uri();
+    }
+
+    private function getRequestFormat($route)
+    {
+        return [];
+    }
+
+    private function getResponseFormat($route)
+    {
+        return [];
+    }
+
+    private function getStatusCodes($route)
+    {
+        return [200, 400, 401, 403, 404, 500];
+    }
+
+    private function getModelProperties($className)
+    {
+        return [];
+    }
+
+    private function getModelRelationships($className)
+    {
+        return [];
+    }
+
+    private function getModelScopes($className)
+    {
+        return [];
+    }
+
+    private function getModelMutators($className)
+    {
+        return [];
+    }
+
+    private function getModelEvents($className)
+    {
+        return [];
+    }
+
+    private function getModelValidationRules($className)
+    {
+        return [];
+    }
 
     // Additional placeholder methods for code examples
-    private function getCurlAuthExample() { return 'curl -H "Authorization: Bearer {token}" ' . url('/api/jobs'); }
-    private function getJavaScriptAuthExample() { return "fetch('/api/jobs', { headers: { 'Authorization': 'Bearer {token}' } })"; }
-    private function getPHPAuthExample() { return "Http::withToken(\$token)->get('/api/jobs')"; }
-    private function getPythonAuthExample() { return "requests.get('/api/jobs', headers={'Authorization': 'Bearer {token}'})"; }
+    private function getCurlAuthExample()
+    {
+        return 'curl -H "Authorization: Bearer {token}" '.url('/api/jobs');
+    }
 
-    private function getCreateJobExamples() { return []; }
-    private function getListJobsExamples() { return []; }
-    private function getUpdateJobExamples() { return []; }
-    private function getDeleteJobExamples() { return []; }
-    private function getPaginationExamples() { return []; }
-    private function getFilteringExamples() { return []; }
-    private function getSortingExamples() { return []; }
-    private function getSearchingExamples() { return []; }
-    private function getValidationErrorExamples() { return []; }
-    private function getAuthErrorExamples() { return []; }
-    private function getRateLimitErrorExamples() { return []; }
+    private function getJavaScriptAuthExample()
+    {
+        return "fetch('/api/jobs', { headers: { 'Authorization': 'Bearer {token}' } })";
+    }
 
-    private function getPHPSDKQuickStart() { return []; }
-    private function getPHPSDKExamples() { return []; }
-    private function getJavaScriptSDKQuickStart() { return []; }
-    private function getJavaScriptSDKExamples() { return []; }
-    private function getPythonSDKQuickStart() { return []; }
-    private function getPythonSDKExamples() { return []; }
-    private function getRubySDKQuickStart() { return []; }
-    private function getRubySDKExamples() { return []; }
+    private function getPHPAuthExample()
+    {
+        return "Http::withToken(\$token)->get('/api/jobs')";
+    }
 
-    private function calculateRequestsPerMinute() { return 42; }
-    private function getActiveConnections() { return 127; }
-    private function getAverageResponseTime() { return 245; }
-    private function getCurrentErrorRate() { return 1.2; }
-    private function getTopEndpoints() { return []; }
-    private function getGeographicDistribution() { return []; }
-    private function getErrorMetrics() { return []; }
-    private function getUsageMetrics() { return []; }
-    private function getHealthMetrics() { return []; }
-    private function getActiveAlerts() { return []; }
-    private function getAPITesterTool() { return []; }
-    private function getCodeGeneratorTool() { return []; }
-    private function getWebhookTesterTool() { return []; }
-    private function getRateLimitChecker() { return []; }
-    private function getResponseValidator() { return []; }
-    private function getAPIPlayground() { return []; }
-    private function getIntegrationGuides() { return []; }
-    private function getChangelogData() { return []; }
-    private function getTestingDocumentation() { return []; }
-    private function getRateLimitingDocs() { return []; }
-    private function getErrorDocumentation() { return []; }
-} 
+    private function getPythonAuthExample()
+    {
+        return "requests.get('/api/jobs', headers={'Authorization': 'Bearer {token}'})";
+    }
+
+    private function getCreateJobExamples()
+    {
+        return [];
+    }
+
+    private function getListJobsExamples()
+    {
+        return [];
+    }
+
+    private function getUpdateJobExamples()
+    {
+        return [];
+    }
+
+    private function getDeleteJobExamples()
+    {
+        return [];
+    }
+
+    private function getPaginationExamples()
+    {
+        return [];
+    }
+
+    private function getFilteringExamples()
+    {
+        return [];
+    }
+
+    private function getSortingExamples()
+    {
+        return [];
+    }
+
+    private function getSearchingExamples()
+    {
+        return [];
+    }
+
+    private function getValidationErrorExamples()
+    {
+        return [];
+    }
+
+    private function getAuthErrorExamples()
+    {
+        return [];
+    }
+
+    private function getRateLimitErrorExamples()
+    {
+        return [];
+    }
+
+    private function getPHPSDKQuickStart()
+    {
+        return [];
+    }
+
+    private function getPHPSDKExamples()
+    {
+        return [];
+    }
+
+    private function getJavaScriptSDKQuickStart()
+    {
+        return [];
+    }
+
+    private function getJavaScriptSDKExamples()
+    {
+        return [];
+    }
+
+    private function getPythonSDKQuickStart()
+    {
+        return [];
+    }
+
+    private function getPythonSDKExamples()
+    {
+        return [];
+    }
+
+    private function getRubySDKQuickStart()
+    {
+        return [];
+    }
+
+    private function getRubySDKExamples()
+    {
+        return [];
+    }
+
+    private function calculateRequestsPerMinute()
+    {
+        return 42;
+    }
+
+    private function getActiveConnections()
+    {
+        return 127;
+    }
+
+    private function getAverageResponseTime()
+    {
+        return 245;
+    }
+
+    private function getCurrentErrorRate()
+    {
+        return 1.2;
+    }
+
+    private function getTopEndpoints()
+    {
+        return [];
+    }
+
+    private function getGeographicDistribution()
+    {
+        return [];
+    }
+
+    private function getErrorMetrics()
+    {
+        return [];
+    }
+
+    private function getUsageMetrics()
+    {
+        return [];
+    }
+
+    private function getHealthMetrics()
+    {
+        return [];
+    }
+
+    private function getActiveAlerts()
+    {
+        return [];
+    }
+
+    private function getAPITesterTool()
+    {
+        return [];
+    }
+
+    private function getCodeGeneratorTool()
+    {
+        return [];
+    }
+
+    private function getWebhookTesterTool()
+    {
+        return [];
+    }
+
+    private function getRateLimitChecker()
+    {
+        return [];
+    }
+
+    private function getResponseValidator()
+    {
+        return [];
+    }
+
+    private function getAPIPlayground()
+    {
+        return [];
+    }
+
+    private function getIntegrationGuides()
+    {
+        return [];
+    }
+
+    private function getChangelogData()
+    {
+        return [];
+    }
+
+    private function getTestingDocumentation()
+    {
+        return [];
+    }
+
+    private function getRateLimitingDocs()
+    {
+        return [];
+    }
+
+    private function getErrorDocumentation()
+    {
+        return [];
+    }
+}

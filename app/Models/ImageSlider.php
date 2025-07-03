@@ -19,13 +19,13 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  *
  * @mixin \Eloquent
  *
- * @property int                $id
- * @property null|string        $description
- * @property null|Carbon        $created_at
- * @property null|Carbon        $updated_at
- * @property mixed              $image_slider_url
+ * @property int $id
+ * @property null|string $description
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property mixed $image_slider_url
  * @property Collection|Media[] $media
- * @property null|int           $media_count
+ * @property null|int $media_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ImageSlider whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ImageSlider whereDescription($value)
@@ -82,7 +82,7 @@ class ImageSlider extends Model implements HasMedia
     {
         /** @var Media $media */
         $media = $this->media->first();
-        if (!empty($media)) {
+        if (! empty($media)) {
             return $media->getFullUrl();
         }
 
@@ -92,7 +92,7 @@ class ImageSlider extends Model implements HasMedia
     /**
      * Scope for active image sliders.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -102,7 +102,7 @@ class ImageSlider extends Model implements HasMedia
     /**
      * Scope for inactive image sliders.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -112,7 +112,7 @@ class ImageSlider extends Model implements HasMedia
     /**
      * Scope for featured image sliders.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFeatured($query)
     {
@@ -122,7 +122,7 @@ class ImageSlider extends Model implements HasMedia
     /**
      * Scope for non-featured image sliders.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNotFeatured($query)
     {
@@ -132,19 +132,18 @@ class ImageSlider extends Model implements HasMedia
     /**
      * Scope for searching image sliders.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where('title', 'like', "%{$term}%")
-            ->orWhere('description', 'like', "%{$term}%")
-        ;
+            ->orWhere('description', 'like', "%{$term}%");
     }
 
     /**
      * Scope for recent image sliders.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -154,7 +153,7 @@ class ImageSlider extends Model implements HasMedia
     /**
      * Scope for old image sliders.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -164,7 +163,7 @@ class ImageSlider extends Model implements HasMedia
     /**
      * Scope for ordering by sort order.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOrdered($query)
     {
@@ -174,7 +173,7 @@ class ImageSlider extends Model implements HasMedia
     /**
      * Scope for alphabetical ordering.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
@@ -184,7 +183,7 @@ class ImageSlider extends Model implements HasMedia
     /**
      * Scope for sliders with images.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithImages($query)
     {
@@ -194,7 +193,7 @@ class ImageSlider extends Model implements HasMedia
     /**
      * Scope for sliders with links.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithLinks($query)
     {
@@ -204,7 +203,7 @@ class ImageSlider extends Model implements HasMedia
     /**
      * Scope for sliders without links.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithoutLinks($query)
     {
@@ -216,7 +215,7 @@ class ImageSlider extends Model implements HasMedia
     /**
      * Scope for gallery sliders.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeGallery($query)
     {
@@ -226,7 +225,7 @@ class ImageSlider extends Model implements HasMedia
     /**
      * Scope for promotional sliders.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePromotional($query)
     {
@@ -240,7 +239,7 @@ class ImageSlider extends Model implements HasMedia
     /**
      * Scope for latest image sliders.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeLatest($query)
     {
@@ -250,7 +249,7 @@ class ImageSlider extends Model implements HasMedia
     /**
      * Scope for oldest image sliders.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOldest($query)
     {
@@ -260,7 +259,7 @@ class ImageSlider extends Model implements HasMedia
     /**
      * Scope for today's image sliders.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeToday($query)
     {
@@ -270,7 +269,7 @@ class ImageSlider extends Model implements HasMedia
     /**
      * Scope for this week's image sliders.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeThisWeek($query)
     {
@@ -280,19 +279,18 @@ class ImageSlider extends Model implements HasMedia
     /**
      * Scope for this month's image sliders.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeThisMonth($query)
     {
         return $query->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
-        ;
+            ->whereYear('created_at', now()->year);
     }
 
     /**
      * Scope for popular image sliders (active + featured).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopular($query)
     {
@@ -302,7 +300,7 @@ class ImageSlider extends Model implements HasMedia
     /**
      * Scope for homepage display.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeHomepage($query)
     {
@@ -334,7 +332,7 @@ class ImageSlider extends Model implements HasMedia
      */
     public function hasImage(): bool
     {
-        return $this->media->isNotEmpty() || !empty($this->image_url);
+        return $this->media->isNotEmpty() || ! empty($this->image_url);
     }
 
     /**

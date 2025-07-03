@@ -41,7 +41,7 @@ class DeletePlanRequest extends FormRequest
                 'min:1',
                 'exists:plans,id',
                 function ($attribute, $value, $fail) {
-                    if (!$this->validatePlanDeletable($value)) {
+                    if (! $this->validatePlanDeletable($value)) {
                         $fail(__('validation.plan_cannot_be_deleted'));
                     }
                 },
@@ -69,7 +69,7 @@ class DeletePlanRequest extends FormRequest
                     'compliance_issues',
                     'low_adoption',
                     'strategic_decision',
-                    'other'
+                    'other',
                 ]),
             ],
 
@@ -81,7 +81,7 @@ class DeletePlanRequest extends FormRequest
                 'exists:plans,id',
                 'different:id',
                 function ($attribute, $value, $fail) {
-                    if ($value && !$this->validateReplacementPlan($value)) {
+                    if ($value && ! $this->validateReplacementPlan($value)) {
                         $fail(__('validation.invalid_replacement_plan'));
                     }
                 },
@@ -96,7 +96,7 @@ class DeletePlanRequest extends FormRequest
                     'manual_contact',
                     'grace_period',
                     'immediate_cancel',
-                    'honor_existing'
+                    'honor_existing',
                 ]),
             ],
 
@@ -133,7 +133,7 @@ class DeletePlanRequest extends FormRequest
                 'sometimes',
                 'date',
                 'after:today',
-                'before:' . now()->addYear()->toDateString(),
+                'before:'.now()->addYear()->toDateString(),
             ],
 
             // Backup and archival options
@@ -201,30 +201,30 @@ class DeletePlanRequest extends FormRequest
         return [
             'id.required' => __('validation.required_field', ['field' => __('validation.attributes.plan_id')]),
             'id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.plan')]),
-            
+
             'confirm_deletion.required' => __('validation.required_field', ['field' => __('validation.attributes.confirm_deletion')]),
             'confirm_deletion.accepted' => __('validation.must_confirm_deletion'),
-            
+
             'deletion_reason.required' => __('validation.required_field', ['field' => __('validation.attributes.deletion_reason')]),
             'deletion_reason.min' => __('validation.min_chars', ['attribute' => __('validation.attributes.deletion_reason'), 'min' => 10]),
             'deletion_reason.in' => __('validation.invalid_deletion_reason'),
-            
+
             'replacement_plan_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.replacement_plan')]),
             'replacement_plan_id.different' => __('validation.replacement_plan_different'),
-            
+
             'migration_strategy.required' => __('validation.required_field', ['field' => __('validation.attributes.migration_strategy')]),
             'migration_strategy.in' => __('validation.invalid_migration_strategy'),
-            
+
             'grace_period_days.required_if' => __('validation.required_when_grace_period'),
             'grace_period_days.min' => __('validation.min_value', ['attribute' => __('validation.attributes.grace_period_days'), 'min' => 1]),
             'grace_period_days.max' => __('validation.max_value', ['attribute' => __('validation.attributes.grace_period_days'), 'max' => 365]),
-            
+
             'notification_message.required_if' => __('validation.required_when_notify'),
             'notification_message.min' => __('validation.min_chars', ['attribute' => __('validation.attributes.notification_message'), 'min' => 20]),
-            
+
             'effective_date.after' => __('validation.future_date', ['attribute' => __('validation.attributes.effective_date')]),
             'effective_date.before' => __('validation.within_year', ['attribute' => __('validation.attributes.effective_date')]),
-            
+
             'approved_by.required_if' => __('validation.approval_required'),
         ];
     }
@@ -369,7 +369,7 @@ class DeletePlanRequest extends FormRequest
             ->where('id', $planId)
             ->first();
 
-        if (!$plan) {
+        if (! $plan) {
             return false;
         }
 
@@ -378,8 +378,8 @@ class DeletePlanRequest extends FormRequest
         // 2. Plan is not marked as system/core plan
         // 3. Plan is not the default plan
         return ($activeSubscriptions === 0 || $this->has('migration_strategy')) &&
-               !($plan->is_system ?? false) &&
-               !($plan->is_default ?? false);
+               ! ($plan->is_system ?? false) &&
+               ! ($plan->is_default ?? false);
     }
 
     /**

@@ -30,17 +30,17 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAuthorizationReturnsTrue()
+    public function test_authorization_returns_true()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
 
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function testValidationRulesAreDefined()
+    public function test_validation_rules_are_defined()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertIsArray($rules);
@@ -48,9 +48,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationMessagesAreDefined()
+    public function test_validation_messages_are_defined()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
 
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
@@ -61,9 +61,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationAttributesAreDefined()
+    public function test_validation_attributes_are_defined()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
 
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
@@ -74,9 +74,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testJobTitleValidation()
+    public function test_job_title_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('job_title', $rules);
@@ -87,9 +87,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testJobDescriptionValidation()
+    public function test_job_description_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('job_description', $rules);
@@ -100,9 +100,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testJobRequirementValidation()
+    public function test_job_requirement_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('job_requirement', $rules);
@@ -113,9 +113,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testJobBenefitValidation()
+    public function test_job_benefit_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('job_benefit', $rules);
@@ -126,9 +126,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testCountryIdValidation()
+    public function test_country_id_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('country_id', $rules);
@@ -139,9 +139,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testStateIdValidation()
+    public function test_state_id_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('state_id', $rules);
@@ -152,9 +152,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testCityIdValidation()
+    public function test_city_id_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('city_id', $rules);
@@ -165,9 +165,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSalaryFromValidation()
+    public function test_salary_from_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('salary_from', $rules);
@@ -178,9 +178,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSalaryToValidation()
+    public function test_salary_to_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('salary_to', $rules);
@@ -191,9 +191,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSalaryCurrencyIdValidation()
+    public function test_salary_currency_id_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('salary_currency_id', $rules);
@@ -204,9 +204,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSalaryPeriodIdValidation()
+    public function test_salary_period_id_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('salary_period_id', $rules);
@@ -217,9 +217,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testJobCategoryIdValidation()
+    public function test_job_category_id_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('job_category_id', $rules);
@@ -230,9 +230,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testJobTypeIdValidation()
+    public function test_job_type_id_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('job_type_id', $rules);
@@ -243,9 +243,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testCareerLevelIdValidation()
+    public function test_career_level_id_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('career_level_id', $rules);
@@ -256,9 +256,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testFunctionalAreaIdValidation()
+    public function test_functional_area_id_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('functional_area_id', $rules);
@@ -269,9 +269,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testJobShiftIdValidation()
+    public function test_job_shift_id_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('job_shift_id', $rules);
@@ -282,9 +282,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testDegreeLevelIdValidation()
+    public function test_degree_level_id_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('degree_level_id', $rules);
@@ -295,9 +295,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testPositionValidation()
+    public function test_position_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('position', $rules);
@@ -308,9 +308,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testExperienceValidation()
+    public function test_experience_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('experience', $rules);
@@ -321,9 +321,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testJobExpiryDateValidation()
+    public function test_job_expiry_date_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('job_expiry_date', $rules);
@@ -334,9 +334,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testHideSalaryValidation()
+    public function test_hide_salary_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('hide_salary', $rules);
@@ -347,9 +347,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testBooleanValidation()
+    public function test_boolean_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('boolean', $rules);
@@ -360,9 +360,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testIsFreelanceValidation()
+    public function test_is_freelance_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('is_freelance', $rules);
@@ -373,9 +373,9 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testIsSuspendedValidation()
+    public function test_is_suspended_validation()
     {
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('is_suspended', $rules);
@@ -386,7 +386,7 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidDataPassesValidation()
+    public function test_valid_data_passes_validation()
     {
         $validData = [
             'job_title' => 'Test Value',
@@ -415,18 +415,18 @@ class StoreJobRequestTest extends TestCase
             'is_suspended' => 'Test Value',
         ];
 
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $validator = validator($validData, $request->rules());
 
         $this->assertFalse($validator->fails());
     }
 
     /** @test */
-    public function testRequestHandlesEmptyDataCorrectly()
+    public function test_request_handles_empty_data_correctly()
     {
         $emptyData = [];
 
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $validator = validator($emptyData, $request->rules());
 
         // Should handle empty data according to rules
@@ -434,7 +434,7 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSecurityValidationPreventsXss()
+    public function test_security_validation_prevents_xss()
     {
         $maliciousData = [
             'name' => '<script>alert("xss")</script>',
@@ -442,7 +442,7 @@ class StoreJobRequestTest extends TestCase
             'content' => '<img src=x onerror=alert("xss")>',
         ];
 
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $validator = validator($maliciousData, $request->rules());
 
         // XSS data should either fail validation or be properly sanitized
@@ -457,7 +457,7 @@ class StoreJobRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSqlInjectionPrevention()
+    public function test_sql_injection_prevention()
     {
         $sqlInjectionData = [
             'name' => "'; DROP TABLE users; --",
@@ -465,7 +465,7 @@ class StoreJobRequestTest extends TestCase
             'filter' => 'UNION SELECT * FROM passwords',
         ];
 
-        $request = new StoreJobRequest();
+        $request = new StoreJobRequest;
         $validator = validator($sqlInjectionData, $request->rules());
 
         // SQL injection patterns should be handled safely

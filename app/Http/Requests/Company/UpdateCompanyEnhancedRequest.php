@@ -22,7 +22,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
     public function authorize(): bool
     {
         // Enhanced Pattern: Role-based authorization with ownership check
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
 
@@ -98,7 +98,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
             'is_featured' => [
                 'boolean',
                 function ($attribute, $value, $fail) {
-                    if ($value && !auth()->user()->hasRole('Admin')) {
+                    if ($value && ! auth()->user()->hasRole('Admin')) {
                         $fail(__('validation.admin_only_field'));
                     }
                 },
@@ -114,7 +114,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
                 'date',
                 'after:today',
                 function ($attribute, $value, $fail) {
-                    if ($value && !auth()->user()->hasRole('Admin')) {
+                    if ($value && ! auth()->user()->hasRole('Admin')) {
                         $fail(__('validation.admin_only_field'));
                     }
                 },
@@ -293,12 +293,12 @@ class UpdateCompanyEnhancedRequest extends FormRequest
         $user = auth()->user();
         $company = $this->route('company');
 
-        if (!$user || !$company) {
+        if (! $user || ! $company) {
             return true;
         }
 
         // Only admins can change featured status
-        if ($this->has('is_featured') && !$user->hasRole('Admin')) {
+        if ($this->has('is_featured') && ! $user->hasRole('Admin')) {
             return true;
         }
 
@@ -315,7 +315,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
      */
     private function hasSuspiciousContent(): bool
     {
-        if (!$this->details) {
+        if (! $this->details) {
             return false;
         }
 
@@ -328,7 +328,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
         $content = strtolower($this->details);
 
         foreach ($suspiciousPatterns as $pattern) {
-            if (false !== strpos($content, $pattern)) {
+            if (strpos($content, $pattern) !== false) {
                 return true;
             }
         }
@@ -349,7 +349,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
 
         foreach ($socialUrls as $field => $expectedDomain) {
             $url = $this->{$field};
-            if ($url && !empty($url) && false === strpos($url, $expectedDomain)) {
+            if ($url && ! empty($url) && strpos($url, $expectedDomain) === false) {
                 return true;
             }
         }
@@ -366,10 +366,9 @@ class UpdateCompanyEnhancedRequest extends FormRequest
         if ($this->country_id && $this->state_id) {
             $stateExists = State::where('id', $this->state_id)
                 ->where('country_id', $this->country_id)
-                ->exists()
-            ;
+                ->exists();
 
-            if (!$stateExists) {
+            if (! $stateExists) {
                 return true;
             }
         }
@@ -378,10 +377,9 @@ class UpdateCompanyEnhancedRequest extends FormRequest
         if ($this->state_id && $this->city_id) {
             $cityExists = City::where('id', $this->city_id)
                 ->where('state_id', $this->state_id)
-                ->exists()
-            ;
+                ->exists();
 
-            if (!$cityExists) {
+            if (! $cityExists) {
                 return true;
             }
         }
@@ -401,7 +399,7 @@ class UpdateCompanyEnhancedRequest extends FormRequest
         $url = trim($url);
 
         // Add https:// if no protocol specified
-        if (!preg_match('/^https?:\/\//', $url)) {
+        if (! preg_match('/^https?:\/\//', $url)) {
             $url = 'https://'.$url;
         }
 

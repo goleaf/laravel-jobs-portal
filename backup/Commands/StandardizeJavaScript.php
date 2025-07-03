@@ -80,7 +80,7 @@ class StandardizeJavaScript extends Command
 
         $this->info("Standardizing JavaScript files in path: {$path}");
 
-        if (!File::isDirectory($path)) {
+        if (! File::isDirectory($path)) {
             $this->error('The specified path does not exist or is not a directory.');
 
             return 1;
@@ -101,14 +101,14 @@ class StandardizeJavaScript extends Command
             }
 
             // Add 'use strict' if not already present
-            if (!Str::contains($content, "'use strict'") && !Str::contains($content, '"use strict"')) {
+            if (! Str::contains($content, "'use strict'") && ! Str::contains($content, '"use strict"')) {
                 $content = "'use strict';\n\n".$content;
             }
 
             // Save file if changed
             if ($content !== $originalContent) {
                 File::put($file, $content);
-                ++$modifiedFiles;
+                $modifiedFiles++;
                 $this->line("Standardized: {$file}");
             }
         }
@@ -121,8 +121,7 @@ class StandardizeJavaScript extends Command
     /**
      * Find all JavaScript files in the specified directory and its subdirectories.
      *
-     * @param string $path
-     *
+     * @param  string  $path
      * @return array
      */
     protected function findJsFiles($path)

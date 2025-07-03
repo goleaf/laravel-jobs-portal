@@ -31,25 +31,23 @@ class PostTest extends TestCase
     }
 
     /** @test */
-    public function adminCanViewPostsList()
+    public function admin_can_view_posts_list()
     {
         $response = $this->actingAs($this->adminUser)
-            ->get('/admin/posts')
-        ;
+            ->get('/admin/posts');
 
         $response->assertStatus(200);
         $response->assertViewIs('blogs.index');
     }
 
     /** @test */
-    public function adminCanViewCreatePostForm()
+    public function admin_can_view_create_post_form()
     {
         // Create a post category for the form
         PostCategory::factory()->create();
 
         $response = $this->actingAs($this->adminUser)
-            ->get('/admin/posts/create')
-        ;
+            ->get('/admin/posts/create');
 
         $response->assertStatus(200);
         $response->assertViewIs('blogs.create');
@@ -57,7 +55,7 @@ class PostTest extends TestCase
     }
 
     /** @test */
-    public function adminCanCreateAPost()
+    public function admin_can_create_a_post()
     {
         $category = PostCategory::factory()->create();
 
@@ -69,8 +67,7 @@ class PostTest extends TestCase
         ];
 
         $response = $this->actingAs($this->adminUser)
-            ->post('/admin/posts', $postData)
-        ;
+            ->post('/admin/posts', $postData);
 
         $response->assertRedirect('/admin/posts');
         $response->assertSessionHas('success');
@@ -88,13 +85,12 @@ class PostTest extends TestCase
     }
 
     /** @test */
-    public function adminCanViewPostDetails()
+    public function admin_can_view_post_details()
     {
         $post = Post::factory()->create();
 
         $response = $this->actingAs($this->adminUser)
-            ->get("/admin/posts/{$post->id}")
-        ;
+            ->get("/admin/posts/{$post->id}");
 
         $response->assertStatus(200);
         $response->assertViewIs('blogs.show');
@@ -102,7 +98,7 @@ class PostTest extends TestCase
     }
 
     /** @test */
-    public function adminCanViewEditPostForm()
+    public function admin_can_view_edit_post_form()
     {
         $post = Post::factory()->create();
 
@@ -113,8 +109,7 @@ class PostTest extends TestCase
         $post->postAssignCategories()->attach($categories->first()->id);
 
         $response = $this->actingAs($this->adminUser)
-            ->get("/admin/posts/{$post->id}/edit")
-        ;
+            ->get("/admin/posts/{$post->id}/edit");
 
         $response->assertStatus(200);
         $response->assertViewIs('blogs.edit');
@@ -124,7 +119,7 @@ class PostTest extends TestCase
     }
 
     /** @test */
-    public function adminCanUpdateAPost()
+    public function admin_can_update_a_post()
     {
         $post = Post::factory()->create();
         $category = PostCategory::factory()->create();
@@ -137,8 +132,7 @@ class PostTest extends TestCase
         ];
 
         $response = $this->actingAs($this->adminUser)
-            ->put("/admin/posts/{$post->id}", $updatedData)
-        ;
+            ->put("/admin/posts/{$post->id}", $updatedData);
 
         $response->assertRedirect('/admin/posts');
         $response->assertSessionHas('success');
@@ -156,13 +150,12 @@ class PostTest extends TestCase
     }
 
     /** @test */
-    public function adminCanDeleteAPost()
+    public function admin_can_delete_a_post()
     {
         $post = Post::factory()->create();
 
         $response = $this->actingAs($this->adminUser)
-            ->delete("/admin/posts/{$post->id}")
-        ;
+            ->delete("/admin/posts/{$post->id}");
 
         $response->assertStatus(200);
         $response->assertJson(['success' => true]);
@@ -170,25 +163,23 @@ class PostTest extends TestCase
     }
 
     /** @test */
-    public function adminCanViewAllPostComments()
+    public function admin_can_view_all_post_comments()
     {
         $response = $this->actingAs($this->adminUser)
-            ->get('/admin/post-comments')
-        ;
+            ->get('/admin/post-comments');
 
         $response->assertStatus(200);
         $response->assertViewIs('post_comments.index');
     }
 
     /** @test */
-    public function adminCanViewPostCommentDetails()
+    public function admin_can_view_post_comment_details()
     {
         $post = Post::factory()->create();
         $comment = PostComment::factory()->create(['post_id' => $post->id]);
 
         $response = $this->actingAs($this->adminUser)
-            ->getJson("/admin/post-comments/{$comment->id}")
-        ;
+            ->getJson("/admin/post-comments/{$comment->id}");
 
         $response->assertStatus(200);
         $response->assertJson(['success' => true]);

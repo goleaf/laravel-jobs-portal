@@ -34,7 +34,7 @@ class RedisHealthController extends Controller
             'status' => $overall,
             'timestamp' => now()->toISOString(),
             'services' => $status,
-        ], 'healthy' === $overall ? 200 : 503);
+        ], $overall === 'healthy' ? 200 : 503);
     }
 
     private function checkRedisConnection(): array
@@ -66,7 +66,7 @@ class RedisHealthController extends Controller
             $redis->del($testKey);
 
             return [
-                'status' => 'test' === $value ? 'healthy' : 'unhealthy',
+                'status' => $value === 'test' ? 'healthy' : 'unhealthy',
                 'message' => 'Cache read/write test completed',
             ];
         } catch (\Exception $e) {
@@ -125,7 +125,7 @@ class RedisHealthController extends Controller
     private function determineOverallHealth(array $status): string
     {
         foreach ($status as $service => $details) {
-            if (is_array($details) && isset($details['status']) && 'unhealthy' === $details['status']) {
+            if (is_array($details) && isset($details['status']) && $details['status'] === 'unhealthy') {
                 return 'degraded';
             }
         }

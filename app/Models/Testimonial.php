@@ -17,32 +17,32 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * Testimonial Model - Enhanced with Enhanced patterns.
  *
- * @property int                $id
- * @property string             $customer_name
- * @property null|string        $customer_title
- * @property null|string        $customer_company
- * @property null|string        $customer_email
- * @property null|string        $description
- * @property null|int           $rating
- * @property bool               $is_active
- * @property bool               $is_featured
- * @property bool               $is_verified
- * @property null|string        $location
- * @property null|string        $project_type
- * @property null|int           $sort_order
- * @property null|Carbon        $testimonial_date
- * @property null|Carbon        $created_at
- * @property null|Carbon        $updated_at
- * @property null|Carbon        $deleted_at
+ * @property int $id
+ * @property string $customer_name
+ * @property null|string $customer_title
+ * @property null|string $customer_company
+ * @property null|string $customer_email
+ * @property null|string $description
+ * @property null|int $rating
+ * @property bool $is_active
+ * @property bool $is_featured
+ * @property bool $is_verified
+ * @property null|string $location
+ * @property null|string $project_type
+ * @property null|int $sort_order
+ * @property null|Carbon $testimonial_date
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
  * @property Collection|Media[] $media
- * @property string             $customer_image_url
- * @property string             $customer_full_name
- * @property string             $rating_stars
- * @property string             $rating_text
- * @property bool               $has_image
- * @property bool               $is_high_rated
- * @property string             $status_label
- * @property string             $display_text
+ * @property string $customer_image_url
+ * @property string $customer_full_name
+ * @property string $rating_stars
+ * @property string $rating_text
+ * @property bool $has_image
+ * @property bool $is_high_rated
+ * @property string $status_label
+ * @property string $display_text
  *
  * Enhanced Enhanced Scopes:
  *
@@ -76,8 +76,8 @@ class Testimonial extends Model implements HasMedia
 {
     use HasFactory;
     use InteractsWithMedia;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     /**
      * Media collection constants.
@@ -180,8 +180,7 @@ class Testimonial extends Model implements HasMedia
         return LogOptions::defaults()
             ->logOnly(['customer_name', 'description', 'rating', 'is_active', 'is_featured', 'is_verified'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -216,7 +215,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to only include active testimonials.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -226,7 +225,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to only include inactive testimonials.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -236,7 +235,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to only include featured testimonials.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFeatured($query)
     {
@@ -246,7 +245,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to only include non-featured testimonials.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNonFeatured($query)
     {
@@ -256,7 +255,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to only include verified testimonials.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeVerified($query)
     {
@@ -266,7 +265,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to only include unverified testimonials.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeUnverified($query)
     {
@@ -276,7 +275,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to only include published testimonials (active and verified).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePublished($query)
     {
@@ -290,7 +289,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to search testimonials by customer name, company, or description.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
@@ -298,15 +297,14 @@ class Testimonial extends Model implements HasMedia
             $q->where('customer_name', 'like', '%'.$term.'%')
                 ->orWhere('customer_company', 'like', '%'.$term.'%')
                 ->orWhere('description', 'like', '%'.$term.'%')
-                ->orWhere('location', 'like', '%'.$term.'%')
-            ;
+                ->orWhere('location', 'like', '%'.$term.'%');
         });
     }
 
     /**
      * Scope to get testimonials by location.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByLocation($query, string $location)
     {
@@ -316,7 +314,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to get testimonials by project type.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByProjectType($query, string $projectType)
     {
@@ -326,7 +324,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to get testimonials created within specified days.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -336,7 +334,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to get old testimonials created before specified days.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -350,7 +348,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to get testimonials by specific rating.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByRating($query, int $rating)
     {
@@ -360,7 +358,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to get high-rated testimonials (4+ stars).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeHighRated($query)
     {
@@ -370,7 +368,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to get low-rated testimonials (3 or below).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeLowRated($query)
     {
@@ -380,7 +378,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to get 5-star testimonials.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFiveStars($query)
     {
@@ -390,7 +388,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to get 4+ star testimonials.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFourStarsAndAbove($query)
     {
@@ -400,7 +398,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to get 3+ star testimonials.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeThreeStarsAndAbove($query)
     {
@@ -414,7 +412,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to get testimonials with customer images.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithImage($query)
     {
@@ -426,7 +424,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to get testimonials without customer images.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithoutImage($query)
     {
@@ -442,7 +440,7 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to order testimonials alphabetically by customer name.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
@@ -452,20 +450,19 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to order testimonials by sort order and rating.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOrdered($query)
     {
         return $query->orderBy('sort_order', 'asc')
             ->orderBy('rating', 'desc')
-            ->orderBy('created_at', 'desc')
-        ;
+            ->orderBy('created_at', 'desc');
     }
 
     /**
      * Scope to get random testimonials.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRandom($query, int $limit = 5)
     {
@@ -475,14 +472,13 @@ class Testimonial extends Model implements HasMedia
     /**
      * Scope to get popular testimonials (featured and high-rated).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopular($query)
     {
         return $query->where('is_featured', true)
             ->where('rating', '>=', 4)
-            ->orderBy('rating', 'desc')
-        ;
+            ->orderBy('rating', 'desc');
     }
 
     // =============================================
@@ -568,7 +564,7 @@ class Testimonial extends Model implements HasMedia
     public function getRatingStarsAttribute(): string
     {
         $stars = '';
-        for ($i = 1; $i <= 5; ++$i) {
+        for ($i = 1; $i <= 5; $i++) {
             if ($i <= $this->rating) {
                 $stars .= '★';
             } else {
@@ -615,10 +611,10 @@ class Testimonial extends Model implements HasMedia
      */
     public function getStatusLabelAttribute(): string
     {
-        if (!$this->is_active) {
+        if (! $this->is_active) {
             return 'Inactive';
         }
-        if (!$this->is_verified) {
+        if (! $this->is_verified) {
             return 'Pending Verification';
         }
         if ($this->is_featured) {
@@ -738,8 +734,7 @@ class Testimonial extends Model implements HasMedia
     {
         $this->addMediaCollection(self::CUSTOMER_IMAGE_COLLECTION)
             ->singleFile()
-            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp'])
-        ;
+            ->acceptsMimeTypes(['image/jpeg', 'image/png', 'image/webp']);
     }
 
     /**
@@ -751,15 +746,13 @@ class Testimonial extends Model implements HasMedia
             ->width(150)
             ->height(150)
             ->sharpen(10)
-            ->performOnCollections(self::CUSTOMER_IMAGE_COLLECTION)
-        ;
+            ->performOnCollections(self::CUSTOMER_IMAGE_COLLECTION);
 
         $this->addMediaConversion('medium')
             ->width(300)
             ->height(300)
             ->sharpen(10)
-            ->performOnCollections(self::CUSTOMER_IMAGE_COLLECTION)
-        ;
+            ->performOnCollections(self::CUSTOMER_IMAGE_COLLECTION);
     }
 
     // =============================================
@@ -778,7 +771,7 @@ class Testimonial extends Model implements HasMedia
         ];
 
         // Clear random cache variants
-        for ($i = 3; $i <= 10; ++$i) {
+        for ($i = 3; $i <= 10; $i++) {
             $cacheKeys[] = "testimonials.random.{$i}";
         }
 

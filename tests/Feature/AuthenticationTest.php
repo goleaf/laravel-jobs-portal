@@ -16,7 +16,7 @@ class AuthenticationTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function usersCanRegister()
+    public function users_can_register()
     {
         $response = $this->post('/register', [
             'first_name' => 'Test',
@@ -32,7 +32,7 @@ class AuthenticationTest extends TestCase
     }
 
     /** @test */
-    public function usersCanLogin()
+    public function users_can_login()
     {
         $user = User::factory()->create([
             'password' => bcrypt('Password123!'),
@@ -48,7 +48,7 @@ class AuthenticationTest extends TestCase
     }
 
     /** @test */
-    public function usersCanLogout()
+    public function users_can_logout()
     {
         $user = User::factory()->create();
 
@@ -59,7 +59,7 @@ class AuthenticationTest extends TestCase
     }
 
     /** @test */
-    public function loginRequiresValidCredentials()
+    public function login_requires_valid_credentials()
     {
         $response = $this->post('/login', [
             'email' => 'invalid@example.com',

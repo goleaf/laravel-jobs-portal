@@ -85,22 +85,22 @@ class SecurityService
         }
 
         // Check for uppercase letter
-        if ($config['password_require_uppercase'] && !preg_match('/[A-Z]/', $password)) {
+        if ($config['password_require_uppercase'] && ! preg_match('/[A-Z]/', $password)) {
             $errors[] = 'Password must contain at least one uppercase letter.';
         }
 
         // Check for lowercase letter
-        if ($config['password_require_lowercase'] && !preg_match('/[a-z]/', $password)) {
+        if ($config['password_require_lowercase'] && ! preg_match('/[a-z]/', $password)) {
             $errors[] = 'Password must contain at least one lowercase letter.';
         }
 
         // Check for numbers
-        if ($config['password_require_numbers'] && !preg_match('/[0-9]/', $password)) {
+        if ($config['password_require_numbers'] && ! preg_match('/[0-9]/', $password)) {
             $errors[] = 'Password must contain at least one number.';
         }
 
         // Check for symbols
-        if ($config['password_require_symbols'] && !preg_match('/[^A-Za-z0-9]/', $password)) {
+        if ($config['password_require_symbols'] && ! preg_match('/[^A-Za-z0-9]/', $password)) {
             $errors[] = 'Password must contain at least one special character.';
         }
 
@@ -136,7 +136,7 @@ class SecurityService
     /**
      * Check if password was recently used by user.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     public function isPasswordRecentlyUsed($user, string $password): bool
     {
@@ -162,11 +162,11 @@ class SecurityService
     /**
      * Validate session security.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     public function validateSession(Request $request, $user): bool
     {
-        if (!config('security.session.validate_sessions', true)) {
+        if (! config('security.session.validate_sessions', true)) {
             return true;
         }
 
@@ -198,7 +198,7 @@ class SecurityService
     /**
      * Check if user has required permissions.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     public function hasPermission($user, string $permission): bool
     {
@@ -238,7 +238,7 @@ class SecurityService
      */
     public function logSecurityEvent(string $event, Request $request, array $context = []): void
     {
-        if (!config('security.logging.log_security_events', true)) {
+        if (! config('security.logging.log_security_events', true)) {
             return;
         }
 
@@ -290,7 +290,7 @@ class SecurityService
     /**
      * Sanitize input to prevent XSS attacks.
      *
-     * @param mixed $input
+     * @param  mixed  $input
      */
     public function sanitizeInput($input): string
     {
@@ -304,7 +304,7 @@ class SecurityService
     /**
      * Validate file upload security.
      *
-     * @param mixed $file
+     * @param  mixed  $file
      */
     public function validateFileUpload($file): array
     {
@@ -323,7 +323,7 @@ class SecurityService
             $config['allowed_image_types'] ?? []
         );
 
-        if (!in_array($extension, $allowedTypes)) {
+        if (! in_array($extension, $allowedTypes)) {
             $errors[] = 'File type not allowed.';
         }
 
@@ -341,12 +341,12 @@ class SecurityService
     protected function detectSuspiciousActivity(array $stored, array $current): bool
     {
         // Check for IP changes
-        if (!config('security.session.allow_ip_changes', false) && $stored['ip'] !== $current['ip']) {
+        if (! config('security.session.allow_ip_changes', false) && $stored['ip'] !== $current['ip']) {
             return true;
         }
 
         // Check for user agent changes
-        if (!config('security.session.allow_user_agent_changes', false) && $stored['user_agent'] !== $current['user_agent']) {
+        if (! config('security.session.allow_user_agent_changes', false) && $stored['user_agent'] !== $current['user_agent']) {
             return true;
         }
 
@@ -381,7 +381,7 @@ class SecurityService
      */
     protected function sendSecurityAlert(string $event, array $data): void
     {
-        if (!config('security.logging.alert_suspicious_activity', true)) {
+        if (! config('security.logging.alert_suspicious_activity', true)) {
             return;
         }
 

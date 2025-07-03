@@ -17,7 +17,7 @@ class UserVerifyNotification extends VerifyEmail implements ShouldQueue
     /**
      * Create a new notification instance.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     public function __construct($user = '')
     {
@@ -27,7 +27,7 @@ class UserVerifyNotification extends VerifyEmail implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      */
     public function via($notifiable): array
     {
@@ -37,7 +37,7 @@ class UserVerifyNotification extends VerifyEmail implements ShouldQueue
     /**
      * Get the mail representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      */
     public function toMail($notifiable): MailMessage
     {
@@ -51,16 +51,15 @@ class UserVerifyNotification extends VerifyEmail implements ShouldQueue
         $body = str_replace($keyVariable, $value, $templateBody->body);
         $data['body'] = $body;
 
-        return (new MailMessage())
+        return (new MailMessage)
             ->subject($templateBody->subject)
-            ->view('emails.verify_email', $data)
-        ;
+            ->view('emails.verify_email', $data);
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param mixed $notifiable
+     * @param  mixed  $notifiable
      */
     public function toArray($notifiable): array
     {

@@ -26,11 +26,11 @@ class FormHelper
             $attrs
         );
 
-        if ('get' !== strtolower($method) && 'post' !== strtolower($method)) {
+        if (strtolower($method) !== 'get' && strtolower($method) !== 'post') {
             $html .= sprintf('<input type="hidden" name="_method" value="%s">', $method);
         }
 
-        if ('get' !== strtolower($method)) {
+        if (strtolower($method) !== 'get') {
             $html .= csrf_field();
         }
 
@@ -50,9 +50,8 @@ class FormHelper
     /**
      * Create a text input field.
      *
-     * @param string $name
-     * @param string $value
-     *
+     * @param  string  $name
+     * @param  string  $value
      * @return HtmlString
      */
     public static function text($name, $value = null, array $options = [])
@@ -63,10 +62,9 @@ class FormHelper
     /**
      * Create a generic input field.
      *
-     * @param string $type
-     * @param string $name
-     * @param string $value
-     *
+     * @param  string  $type
+     * @param  string  $name
+     * @param  string  $value
      * @return HtmlString
      */
     public static function input($type, $name, $value = null, array $options = [])
@@ -82,8 +80,7 @@ class FormHelper
     /**
      * Create a password input field.
      *
-     * @param string $name
-     *
+     * @param  string  $name
      * @return HtmlString
      */
     public static function password($name, array $options = [])
@@ -94,9 +91,8 @@ class FormHelper
     /**
      * Create an email input field.
      *
-     * @param string $name
-     * @param string $value
-     *
+     * @param  string  $name
+     * @param  string  $value
      * @return HtmlString
      */
     public static function email($name, $value = null, array $options = [])
@@ -107,8 +103,7 @@ class FormHelper
     /**
      * Create a file input field.
      *
-     * @param string $name
-     *
+     * @param  string  $name
      * @return HtmlString
      */
     public static function file($name, array $options = [])
@@ -119,9 +114,8 @@ class FormHelper
     /**
      * Create a textarea input field.
      *
-     * @param string $name
-     * @param string $value
-     *
+     * @param  string  $name
+     * @param  string  $value
      * @return HtmlString
      */
     public static function textarea($name, $value = null, array $options = [])
@@ -141,10 +135,9 @@ class FormHelper
     /**
      * Create a select box field.
      *
-     * @param string       $name
-     * @param array        $list
-     * @param array|string $selected
-     *
+     * @param  string  $name
+     * @param  array  $list
+     * @param  array|string  $selected
      * @return HtmlString
      */
     public static function select($name, $list = [], $selected = null, array $options = [])
@@ -160,7 +153,7 @@ class FormHelper
         }
 
         foreach ($list as $value => $display) {
-            $isSelected = null !== $selected
+            $isSelected = $selected !== null
                           && ((is_array($selected) && in_array($value, $selected))
                            || $selected == $value);
 
@@ -180,10 +173,9 @@ class FormHelper
     /**
      * Create a checkbox input field.
      *
-     * @param string $name
-     * @param mixed  $value
-     * @param bool   $checked
-     *
+     * @param  string  $name
+     * @param  mixed  $value
+     * @param  bool  $checked
      * @return HtmlString
      */
     public static function checkbox($name, $value = 1, $checked = null, array $options = [])
@@ -194,15 +186,14 @@ class FormHelper
     /**
      * Create a radio input field.
      *
-     * @param string $name
-     * @param mixed  $value
-     * @param bool   $checked
-     *
+     * @param  string  $name
+     * @param  mixed  $value
+     * @param  bool  $checked
      * @return HtmlString
      */
     public static function radio($name, $value = null, $checked = null, array $options = [])
     {
-        if (null === $checked) {
+        if ($checked === null) {
             $checked = old($name) === $value;
         }
 
@@ -212,11 +203,10 @@ class FormHelper
     /**
      * Create a checkable input field.
      *
-     * @param string $type
-     * @param string $name
-     * @param mixed  $value
-     * @param bool   $checked
-     *
+     * @param  string  $type
+     * @param  string  $name
+     * @param  mixed  $value
+     * @param  bool  $checked
      * @return HtmlString
      */
     public static function checkable($type, $name, $value, $checked, array $options)
@@ -231,8 +221,7 @@ class FormHelper
     /**
      * Create a submit button element.
      *
-     * @param string $value
-     *
+     * @param  string  $value
      * @return HtmlString
      */
     public static function submit($value = null, array $options = [])
@@ -243,8 +232,7 @@ class FormHelper
     /**
      * Create a button element.
      *
-     * @param string $value
-     *
+     * @param  string  $value
      * @return HtmlString
      */
     public static function button($value = null, array $options = [])
@@ -261,9 +249,8 @@ class FormHelper
     /**
      * Create a label element.
      *
-     * @param string $for
-     * @param string $text
-     *
+     * @param  string  $for
+     * @param  string  $text
      * @return HtmlString
      */
     public static function label($for, $text, array $options = [])
@@ -287,9 +274,9 @@ class FormHelper
         $html = [];
 
         foreach ($attributes as $key => $value) {
-            if (true === $value) {
+            if ($value === true) {
                 $html[] = e($key);
-            } elseif (false !== $value && null !== $value) {
+            } elseif ($value !== false && $value !== null) {
                 $html[] = sprintf('%s="%s"', e($key), e($value));
             }
         }

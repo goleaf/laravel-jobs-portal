@@ -92,7 +92,7 @@ class RegisterRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param Validator $validator
+     * @param  Validator  $validator
      */
     public function withValidator($validator): void
     {
@@ -100,8 +100,8 @@ class RegisterRequest extends FormRequest
             // Check for malicious content in text fields
             foreach (['first_name', 'last_name'] as $field) {
                 if ($this->has($field) && $this->{$field}) {
-                    $rule = new NoMaliciousContent();
-                    if (!$rule->passes($field, $this->{$field})) {
+                    $rule = new NoMaliciousContent;
+                    if (! $rule->passes($field, $this->{$field})) {
                         $validator->errors()->add($field, $rule->message());
                     }
                 }

@@ -101,7 +101,7 @@ class ShowJobRequest extends FormRequest
             $job = $this->route('job');
 
             // Check if job exists and is accessible
-            if (!$job instanceof Job) {
+            if (! $job instanceof Job) {
                 $validator->errors()->add('job', __('jobs.errors.not_found'));
 
                 return;
@@ -117,7 +117,7 @@ class ShowJobRequest extends FormRequest
             // Employers can only view their own jobs unless job is published
             if (Auth::user()->hasRole('Employer')
                 && $job->company?->user_id !== Auth::id()
-                && 'open' !== $job->status) {
+                && $job->status !== 'open') {
                 $validator->errors()->add('job', __('jobs.errors.not_accessible'));
             }
 
@@ -195,7 +195,7 @@ class ShowJobRequest extends FormRequest
         $content = strtolower(($this->name ?? '').' '.($this->description ?? ''));
 
         foreach ($suspiciousPatterns as $pattern) {
-            if (false !== strpos($content, $pattern)) {
+            if (strpos($content, $pattern) !== false) {
                 return true;
             }
         }

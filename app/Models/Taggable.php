@@ -14,10 +14,10 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Taggable Model - Enhanced with Enhanced patterns.
  *
- * @property int         $id
- * @property int         $tag_id
- * @property string      $taggable_type
- * @property int         $taggable_id
+ * @property int $id
+ * @property int $tag_id
+ * @property string $taggable_type
+ * @property int $taggable_id
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|Carbon $deleted_at
@@ -40,8 +40,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Taggable extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     public static $rules = [
         'tag_id' => 'required|integer|exists:tags,id',
@@ -62,8 +62,7 @@ class Taggable extends Model
         return LogOptions::defaults()
             ->logOnly(['tag_id', 'taggable_type', 'taggable_id'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     public function tag()
@@ -89,8 +88,7 @@ class Taggable extends Model
     public function scopeForEntity($query, string $type, int $id)
     {
         return $query->where('taggable_type', $type)
-            ->where('taggable_id', $id)
-        ;
+            ->where('taggable_id', $id);
     }
 
     public function scopeRecent($query, int $days = 30)
@@ -103,8 +101,7 @@ class Taggable extends Model
         return $query->selectRaw('tag_id, taggable_type, COUNT(*) as usage_count')
             ->groupBy('tag_id', 'taggable_type')
             ->orderBy('usage_count', 'desc')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     public function scopeForJobs($query)
@@ -133,8 +130,7 @@ class Taggable extends Model
             ->selectRaw('tag_id, COUNT(*) as trend_count')
             ->groupBy('tag_id')
             ->having('trend_count', '>=', 3)
-            ->orderBy('trend_count', 'desc')
-        ;
+            ->orderBy('trend_count', 'desc');
     }
 
     public function getTaggableTypeDisplayAttribute(): string

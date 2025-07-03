@@ -55,7 +55,7 @@ class GenerateControllerFiles extends Command
         ];
 
         foreach ($directories as $dir) {
-            if (!File::exists(base_path($dir))) {
+            if (! File::exists(base_path($dir))) {
                 continue;
             }
 
@@ -73,9 +73,9 @@ class GenerateControllerFiles extends Command
     /**
      * Process a single controller file.
      *
-     * @param mixed $path
-     * @param mixed $type
-     * @param mixed $dryRun
+     * @param  mixed  $path
+     * @param  mixed  $type
+     * @param  mixed  $dryRun
      */
     protected function processController($path, $type, $dryRun)
     {
@@ -89,7 +89,7 @@ class GenerateControllerFiles extends Command
             $namespace = $this->getNamespace($path);
             $class = $namespace.'\\'.$name;
 
-            if (!class_exists($class)) {
+            if (! class_exists($class)) {
                 return;
             }
 
@@ -113,7 +113,7 @@ class GenerateControllerFiles extends Command
                 $this->generateFiles($path, $name, $methodName, $type, $dryRun);
             }
 
-            ++$this->stats['controllers'];
+            $this->stats['controllers']++;
             $this->stats['methods'] += count($publicMethods);
         } catch (\Exception $e) {
             $this->error("❌ Error: {$name} - ".$e->getMessage());
@@ -126,15 +126,15 @@ class GenerateControllerFiles extends Command
         $relative = str_replace(base_path('app/Http/Controllers'), '', $dir);
         $namespace = str_replace('/', '\\', $relative);
 
-        if ('all' === $type || 'request' === $type) {
+        if ($type === 'all' || $type === 'request') {
             $this->generateRequest($namespace, $controllerName, $methodName, $dryRun);
         }
 
-        if ('all' === $type || 'response' === $type) {
+        if ($type === 'all' || $type === 'response') {
             $this->generateResponse($namespace, $controllerName, $methodName, $dryRun);
         }
 
-        if ('all' === $type || 'test' === $type) {
+        if ($type === 'all' || $type === 'test') {
             $this->generateTest($namespace, $controllerName, $dryRun);
         }
     }
@@ -142,10 +142,10 @@ class GenerateControllerFiles extends Command
     /**
      * Generate request file.
      *
-     * @param mixed $namespace
-     * @param mixed $controller
-     * @param mixed $method
-     * @param mixed $dryRun
+     * @param  mixed  $namespace
+     * @param  mixed  $controller
+     * @param  mixed  $method
+     * @param  mixed  $dryRun
      */
     protected function generateRequest($namespace, $controller, $method, $dryRun)
     {
@@ -154,29 +154,29 @@ class GenerateControllerFiles extends Command
         $path = base_path('app/Http/Requests'.$namespace.'/'.$name.'.php');
 
         if (File::exists($path)) {
-            ++$this->stats['skipped'];
+            $this->stats['skipped']++;
 
             return;
         }
 
         $template = $this->requestTemplate($ns, $name, $method);
 
-        if (!$dryRun) {
+        if (! $dryRun) {
             File::ensureDirectoryExists(dirname($path));
             File::put($path, $template);
         }
 
         $this->line("      ✅ Request: {$name}");
-        ++$this->stats['requests'];
+        $this->stats['requests']++;
     }
 
     /**
      * Generate response file.
      *
-     * @param mixed $namespace
-     * @param mixed $controller
-     * @param mixed $method
-     * @param mixed $dryRun
+     * @param  mixed  $namespace
+     * @param  mixed  $controller
+     * @param  mixed  $method
+     * @param  mixed  $dryRun
      */
     protected function generateResponse($namespace, $controller, $method, $dryRun)
     {
@@ -185,28 +185,28 @@ class GenerateControllerFiles extends Command
         $path = base_path('app/Http/Resources'.$namespace.'/'.$name.'.php');
 
         if (File::exists($path)) {
-            ++$this->stats['skipped'];
+            $this->stats['skipped']++;
 
             return;
         }
 
         $template = $this->responseTemplate($ns, $name, $method);
 
-        if (!$dryRun) {
+        if (! $dryRun) {
             File::ensureDirectoryExists(dirname($path));
             File::put($path, $template);
         }
 
         $this->line("      ✅ Response: {$name}");
-        ++$this->stats['responses'];
+        $this->stats['responses']++;
     }
 
     /**
      * Generate test file (one per controller).
      *
-     * @param mixed $namespace
-     * @param mixed $controller
-     * @param mixed $dryRun
+     * @param  mixed  $namespace
+     * @param  mixed  $controller
+     * @param  mixed  $dryRun
      */
     protected function generateTest($namespace, $controller, $dryRun)
     {
@@ -220,21 +220,21 @@ class GenerateControllerFiles extends Command
 
         $template = $this->testTemplate($ns, $name, $controller);
 
-        if (!$dryRun) {
+        if (! $dryRun) {
             File::ensureDirectoryExists(dirname($path));
             File::put($path, $template);
         }
 
         $this->line("      ✅ Test: {$name}");
-        ++$this->stats['tests'];
+        $this->stats['tests']++;
     }
 
     /**
      * Get request file template.
      *
-     * @param mixed $namespace
-     * @param mixed $className
-     * @param mixed $method
+     * @param  mixed  $namespace
+     * @param  mixed  $className
+     * @param  mixed  $method
      */
     protected function requestTemplate($namespace, $className, $method)
     {
@@ -271,9 +271,9 @@ class {$className} extends FormRequest
     /**
      * Get response file template.
      *
-     * @param mixed $namespace
-     * @param mixed $className
-     * @param mixed $method
+     * @param  mixed  $namespace
+     * @param  mixed  $className
+     * @param  mixed  $method
      */
     protected function responseTemplate($namespace, $className, $method)
     {
@@ -309,9 +309,9 @@ class {$className} extends JsonResource
     /**
      * Get test file template.
      *
-     * @param mixed $namespace
-     * @param mixed $className
-     * @param mixed $controller
+     * @param  mixed  $namespace
+     * @param  mixed  $className
+     * @param  mixed  $controller
      */
     protected function testTemplate($namespace, $className, $controller)
     {
@@ -338,7 +338,7 @@ class {$className} extends TestCase
     /**
      * Get controller namespace.
      *
-     * @param mixed $path
+     * @param  mixed  $path
      */
     protected function getNamespace($path)
     {

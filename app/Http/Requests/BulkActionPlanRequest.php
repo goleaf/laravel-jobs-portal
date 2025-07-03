@@ -46,4 +46,4 @@ class BulkActionPlanRequest extends FormRequest
             'plan_ids.*.exists' => __('validation.exists', ['attribute' => 'plan ID']),
         ];
     }
-} 
+}

@@ -15,7 +15,7 @@ class RouteTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function importantRoutesExist()
+    public function important_routes_exist()
     {
         $importantRoutes = [
             '/',
@@ -33,7 +33,7 @@ class RouteTest extends TestCase
     }
 
     /** @test */
-    public function authenticatedRoutesRequireLogin()
+    public function authenticated_routes_require_login()
     {
         $protectedRoutes = [
             '/dashboard',

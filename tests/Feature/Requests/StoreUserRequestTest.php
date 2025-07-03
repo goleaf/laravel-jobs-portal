@@ -30,17 +30,17 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAuthorizationReturnsTrue()
+    public function test_authorization_returns_true()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
 
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function testValidationRulesAreDefined()
+    public function test_validation_rules_are_defined()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertIsArray($rules);
@@ -48,9 +48,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationMessagesAreDefined()
+    public function test_validation_messages_are_defined()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
 
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
@@ -61,9 +61,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationAttributesAreDefined()
+    public function test_validation_attributes_are_defined()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
 
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
@@ -74,9 +74,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testFirstNameValidation()
+    public function test_first_name_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('first_name', $rules);
@@ -87,9 +87,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testRequiredValidation()
+    public function test_required_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('required', $rules);
@@ -100,9 +100,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testStringValidation()
+    public function test_string_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('string', $rules);
@@ -113,9 +113,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testLastNameValidation()
+    public function test_last_name_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('last_name', $rules);
@@ -126,9 +126,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testEmailValidation()
+    public function test_email_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('email', $rules);
@@ -139,9 +139,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testPasswordValidation()
+    public function test_password_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('password', $rules);
@@ -152,9 +152,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testConfirmedValidation()
+    public function test_confirmed_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('confirmed', $rules);
@@ -165,9 +165,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testUserTypeValidation()
+    public function test_user_type_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('user_type', $rules);
@@ -178,9 +178,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testIntegerValidation()
+    public function test_integer_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('integer', $rules);
@@ -191,9 +191,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testDobValidation()
+    public function test_dob_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('dob', $rules);
@@ -204,9 +204,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testNullableValidation()
+    public function test_nullable_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('nullable', $rules);
@@ -217,9 +217,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testDateValidation()
+    public function test_date_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('date', $rules);
@@ -230,9 +230,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testGenderValidation()
+    public function test_gender_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('gender', $rules);
@@ -243,9 +243,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testPhoneValidation()
+    public function test_phone_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('phone', $rules);
@@ -256,9 +256,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testCountryIdValidation()
+    public function test_country_id_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('country_id', $rules);
@@ -269,9 +269,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testStateIdValidation()
+    public function test_state_id_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('state_id', $rules);
@@ -282,9 +282,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testCityIdValidation()
+    public function test_city_id_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('city_id', $rules);
@@ -295,9 +295,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testFacebookUrlValidation()
+    public function test_facebook_url_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('facebook_url', $rules);
@@ -308,9 +308,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testUrlValidation()
+    public function test_url_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('url', $rules);
@@ -321,9 +321,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testTwitterUrlValidation()
+    public function test_twitter_url_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('twitter_url', $rules);
@@ -334,9 +334,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testLinkedinUrlValidation()
+    public function test_linkedin_url_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('linkedin_url', $rules);
@@ -347,9 +347,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testGooglePlusUrlValidation()
+    public function test_google_plus_url_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('google_plus_url', $rules);
@@ -360,9 +360,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testPinterestUrlValidation()
+    public function test_pinterest_url_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('pinterest_url', $rules);
@@ -373,9 +373,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testLanguageValidation()
+    public function test_language_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('language', $rules);
@@ -386,9 +386,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testRegionCodeValidation()
+    public function test_region_code_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('region_code', $rules);
@@ -399,9 +399,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testTermsAcceptedValidation()
+    public function test_terms_accepted_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('terms_accepted', $rules);
@@ -412,9 +412,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAcceptedValidation()
+    public function test_accepted_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('accepted', $rules);
@@ -425,9 +425,9 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testPrivacyAcceptedValidation()
+    public function test_privacy_accepted_validation()
     {
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('privacy_accepted', $rules);
@@ -438,7 +438,7 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidDataPassesValidation()
+    public function test_valid_data_passes_validation()
     {
         $validData = [
             'first_name' => 'Test Value',
@@ -471,18 +471,18 @@ class StoreUserRequestTest extends TestCase
             'privacy_accepted' => 'Test Value',
         ];
 
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $validator = validator($validData, $request->rules());
 
         $this->assertFalse($validator->fails());
     }
 
     /** @test */
-    public function testRequestHandlesEmptyDataCorrectly()
+    public function test_request_handles_empty_data_correctly()
     {
         $emptyData = [];
 
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $validator = validator($emptyData, $request->rules());
 
         // Should handle empty data according to rules
@@ -490,7 +490,7 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSecurityValidationPreventsXss()
+    public function test_security_validation_prevents_xss()
     {
         $maliciousData = [
             'name' => '<script>alert("xss")</script>',
@@ -498,7 +498,7 @@ class StoreUserRequestTest extends TestCase
             'content' => '<img src=x onerror=alert("xss")>',
         ];
 
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $validator = validator($maliciousData, $request->rules());
 
         // XSS data should either fail validation or be properly sanitized
@@ -513,7 +513,7 @@ class StoreUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSqlInjectionPrevention()
+    public function test_sql_injection_prevention()
     {
         $sqlInjectionData = [
             'name' => "'; DROP TABLE users; --",
@@ -521,7 +521,7 @@ class StoreUserRequestTest extends TestCase
             'filter' => 'UNION SELECT * FROM passwords',
         ];
 
-        $request = new StoreUserRequest();
+        $request = new StoreUserRequest;
         $validator = validator($sqlInjectionData, $request->rules());
 
         // SQL injection patterns should be handled safely

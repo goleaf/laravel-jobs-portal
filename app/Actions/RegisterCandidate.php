@@ -2,12 +2,13 @@
 
 namespace App\Actions;
 
-use LumoSolutions\Actionable\Traits\IsRunnable;
 use LumoSolutions\Actionable\Traits\IsDispatchable;
+use LumoSolutions\Actionable\Traits\IsRunnable;
 
 class RegisterCandidate
 {
-    use IsRunnable, IsDispatchable;
+    use IsDispatchable;
+    use IsRunnable;
 
     public function handle(): void
     {

@@ -20,13 +20,13 @@ class JobApplicationTest extends TestCase
         parent::setUp();
 
         // Explicitly disable foreign key constraints for this test
-        if ('sqlite' === config('database.default')) {
+        if (config('database.default') === 'sqlite') {
             \DB::statement('PRAGMA foreign_keys=OFF');
         }
     }
 
     /** @test */
-    public function itCanBeCreated()
+    public function it_can_be_created()
     {
         $model = JobApplication::factory()->create();
 
@@ -37,9 +37,9 @@ class JobApplicationTest extends TestCase
     }
 
     /** @test */
-    public function itHasFillableAttributes()
+    public function it_has_fillable_attributes()
     {
-        $model = new JobApplication();
+        $model = new JobApplication;
         $fillable = $model->getFillable();
 
         $this->assertIsArray($fillable);
@@ -47,9 +47,9 @@ class JobApplicationTest extends TestCase
     }
 
     /** @test */
-    public function itHasProperCasts()
+    public function it_has_proper_casts()
     {
-        $model = new JobApplication();
+        $model = new JobApplication;
         $casts = $model->getCasts();
 
         $this->assertIsArray($casts);
@@ -57,7 +57,7 @@ class JobApplicationTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeUpdated()
+    public function it_can_be_updated()
     {
         $model = JobApplication::factory()->create();
         $originalData = $model->toArray();
@@ -72,7 +72,7 @@ class JobApplicationTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeDeleted()
+    public function it_can_be_deleted()
     {
         $model = JobApplication::factory()->create();
         $modelId = $model->id;

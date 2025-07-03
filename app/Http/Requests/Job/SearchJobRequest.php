@@ -314,7 +314,7 @@ class SearchJobRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     public function withValidator($validator): void
     {
@@ -334,11 +334,11 @@ class SearchJobRequest extends FormRequest
             }
 
             // Validate location hierarchy
-            if ($this->filled('city_id') && !$this->filled('state_id')) {
+            if ($this->filled('city_id') && ! $this->filled('state_id')) {
                 $validator->errors()->add('state_id', __('validation.search.state_required_for_city'));
             }
 
-            if ($this->filled('state_id') && !$this->filled('country_id')) {
+            if ($this->filled('state_id') && ! $this->filled('country_id')) {
                 $validator->errors()->add('country_id', __('validation.search.country_required_for_state'));
             }
         });

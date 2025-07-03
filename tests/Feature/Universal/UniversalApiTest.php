@@ -36,7 +36,7 @@ class UniversalApiTest extends TestCase
     /**
      * Universal Pattern: Test unauthenticated access protection.
      */
-    public function testUnauthenticatedAccessIsBlocked(): void
+    public function test_unauthenticated_access_is_blocked(): void
     {
         $response = $this->getJson('/api/v1/user');
 
@@ -46,7 +46,7 @@ class UniversalApiTest extends TestCase
     /**
      * Universal Pattern: Test authenticated user endpoint with fluent JSON.
      */
-    public function testAuthenticatedUserEndpoint(): void
+    public function test_authenticated_user_endpoint(): void
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user);
@@ -63,14 +63,13 @@ class UniversalApiTest extends TestCase
                     ->has('created_at')
                     ->has('updated_at')
                     ->etc()
-            )
-        ;
+            );
     }
 
     /**
      * Universal Pattern: Test public jobs endpoint with caching headers.
      */
-    public function testPublicJobsIndexEndpoint(): void
+    public function test_public_jobs_index_endpoint(): void
     {
         $company = Company::factory()->create();
         $jobs = Job::factory(3)->create(['company_id' => $company->id]);
@@ -106,14 +105,13 @@ class UniversalApiTest extends TestCase
                     ->has('jobs.meta.timestamp')
                     ->has('jobs.meta.version')
                     ->where('jobs.meta.resource_type', 'job_collection')
-            )
-        ;
+            );
     }
 
     /**
      * Universal Pattern: Test job show endpoint with relationship loading.
      */
-    public function testPublicJobShowEndpoint(): void
+    public function test_public_job_show_endpoint(): void
     {
         $company = Company::factory()->create();
         $job = Job::factory()->create(['company_id' => $company->id]);
@@ -132,14 +130,13 @@ class UniversalApiTest extends TestCase
                     ->has('meta.timestamp')
                     ->where('meta.resource_type', 'job')
                     ->etc()
-            )
-        ;
+            );
     }
 
     /**
      * Universal Pattern: Test authenticated jobs CRUD with validation.
      */
-    public function testAuthenticatedJobsCrudOperations(): void
+    public function test_authenticated_jobs_crud_operations(): void
     {
         $user = User::factory()->create();
         $company = Company::factory()->create(['user_id' => $user->id]);
@@ -166,8 +163,7 @@ class UniversalApiTest extends TestCase
                     ->has('meta.timestamp')
                     ->where('meta.resource_type', 'job')
                     ->etc()
-            )
-        ;
+            );
 
         $jobId = $createResponse->json('job.id');
 
@@ -182,8 +178,7 @@ class UniversalApiTest extends TestCase
                 fn (AssertableJson $json) => $json->where('job.title', 'Lead Laravel Developer')
                     ->where('job.id', $jobId)
                     ->etc()
-            )
-        ;
+            );
 
         // Test Delete Job
         $deleteResponse = $this->deleteJson("/api/v1/job/{$jobId}");
@@ -197,7 +192,7 @@ class UniversalApiTest extends TestCase
     /**
      * Universal Pattern: Test validation errors with detailed assertions.
      */
-    public function testJobCreationValidationErrors(): void
+    public function test_job_creation_validation_errors(): void
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user);
@@ -212,20 +207,19 @@ class UniversalApiTest extends TestCase
                 'errors' => [
                     'title',
                 ],
-            ])
-        ;
+            ]);
     }
 
     /**
      * Universal Pattern: Test rate limiting functionality.
      */
-    public function testApiRateLimiting(): void
+    public function test_api_rate_limiting(): void
     {
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
         // Make requests within rate limit
-        for ($i = 0; $i < 5; ++$i) {
+        for ($i = 0; $i < 5; $i++) {
             $response = $this->getJson('/api/v1/user');
             $response->assertOk();
         }
@@ -237,7 +231,7 @@ class UniversalApiTest extends TestCase
     /**
      * Universal Pattern: Test companies endpoint with filtering.
      */
-    public function testCompaniesFilteringAndSearch(): void
+    public function test_companies_filtering_and_search(): void
     {
         $companies = Company::factory(5)->create();
         $targetCompany = $companies->first();
@@ -252,14 +246,13 @@ class UniversalApiTest extends TestCase
                     ->whereType('companies.data', 'array')
                     ->has('companies.meta.count')
                     ->etc()
-            )
-        ;
+            );
     }
 
     /**
      * Universal Pattern: Test health endpoint for monitoring.
      */
-    public function testHealthEndpoint(): void
+    public function test_health_endpoint(): void
     {
         $response = $this->getJson('/api/v1/health');
 
@@ -270,14 +263,13 @@ class UniversalApiTest extends TestCase
                     ->has('timestamp')
                     ->has('version')
                     ->etc()
-            )
-        ;
+            );
     }
 
     /**
      * Universal Pattern: Test stats endpoint for analytics.
      */
-    public function testStatsEndpoint(): void
+    public function test_stats_endpoint(): void
     {
         // Create test data
         Company::factory(3)->create();
@@ -296,14 +288,13 @@ class UniversalApiTest extends TestCase
                     ->where('companies_count', 3)
                     ->where('jobs_count', 5)
                     ->etc()
-            )
-        ;
+            );
     }
 
     /**
      * Universal Pattern: Test pagination with cursor-based pagination.
      */
-    public function testCursorPagination(): void
+    public function test_cursor_pagination(): void
     {
         Job::factory(20)->create();
 
@@ -319,28 +310,26 @@ class UniversalApiTest extends TestCase
                     ->has('jobs.meta.per_page')
                     ->has('jobs.meta.total')
                     ->etc()
-            )
-        ;
+            );
     }
 
     /**
      * Universal Pattern: Test response headers for security and caching.
      */
-    public function testResponseHeadersSecurity(): void
+    public function test_response_headers_security(): void
     {
         $response = $this->getJson('/api/v1/health');
 
         $response
             ->assertOk()
             ->assertHeader('Content-Type', 'application/json')
-            ->assertHeaderMissing('X-Powered-By') // Security: Hide server info
-        ;
+            ->assertHeaderMissing('X-Powered-By'); // Security: Hide server info
     }
 
     /**
      * Universal Pattern: Test error handling for non-existent resources.
      */
-    public function testNotFoundResources(): void
+    public function test_not_found_resources(): void
     {
         $response = $this->getJson('/api/v1/public/jobs/99999');
 
@@ -350,14 +339,13 @@ class UniversalApiTest extends TestCase
                 fn (AssertableJson $json) => $json->has('message')
                     ->whereType('message', 'string')
                     ->etc()
-            )
-        ;
+            );
     }
 
     /**
      * Universal Pattern: Test API versioning compatibility.
      */
-    public function testApiVersioning(): void
+    public function test_api_versioning(): void
     {
         $response = $this->getJson('/api/v1/health');
 

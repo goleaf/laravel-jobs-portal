@@ -65,11 +65,10 @@ class JobApplicationTest extends TestCase
     }
 
     /** @test */
-    public function employerCanViewJobApplications()
+    public function employer_can_view_job_applications()
     {
         $response = $this->actingAs($this->employerUser)
-            ->get("/employer/jobs/{$this->job->id}/applications")
-        ;
+            ->get("/employer/jobs/{$this->job->id}/applications");
 
         $response->assertStatus(200);
         $response->assertViewIs('employer.job_applications.index');
@@ -77,7 +76,7 @@ class JobApplicationTest extends TestCase
     }
 
     /** @test */
-    public function employerCannotViewJobApplicationsForJobsNotBelongingToThem()
+    public function employer_cannot_view_job_applications_for_jobs_not_belonging_to_them()
     {
         // Create another employer with job
         $otherEmployer = User::factory()->create(['user_type' => User::EMPLOYER]);
@@ -85,21 +84,19 @@ class JobApplicationTest extends TestCase
         $otherJob = Job::factory()->create(['company_id' => $otherCompany->id]);
 
         $response = $this->actingAs($this->employerUser)
-            ->get("/employer/jobs/{$otherJob->id}/applications")
-        ;
+            ->get("/employer/jobs/{$otherJob->id}/applications");
 
         $response->assertStatus(404);
     }
 
     /** @test */
-    public function employerCanChangeJobApplicationStatus()
+    public function employer_can_change_job_application_status()
     {
         $response = $this->actingAs($this->employerUser)
             ->post("/employer/job-applications/{$this->jobApplication->id}/status-change", [
                 'status' => JobApplication::SHORT_LIST,
                 'jobId' => $this->job->id,
-            ])
-        ;
+            ]);
 
         $response->assertStatus(200);
         $response->assertJson(['success' => true]);
@@ -110,7 +107,7 @@ class JobApplicationTest extends TestCase
     }
 
     /** @test */
-    public function employerCannotChangeStatusOfApplicationsForJobsNotBelongingToThem()
+    public function employer_cannot_change_status_of_applications_for_jobs_not_belonging_to_them()
     {
         // Create another employer with job and application
         $otherEmployer = User::factory()->create(['user_type' => User::EMPLOYER]);
@@ -125,8 +122,7 @@ class JobApplicationTest extends TestCase
             ->post("/employer/job-applications/{$otherApplication->id}/status-change", [
                 'status' => JobApplication::SHORT_LIST,
                 'jobId' => $otherJob->id,
-            ])
-        ;
+            ]);
 
         $response->assertStatus(403); // or appropriate error status
         $this->assertDatabaseMissing('job_applications', [
@@ -136,13 +132,12 @@ class JobApplicationTest extends TestCase
     }
 
     /** @test */
-    public function employerCanDeleteJobApplication()
+    public function employer_can_delete_job_application()
     {
         $response = $this->actingAs($this->employerUser)
             ->delete("/employer/job-applications/{$this->jobApplication->id}", [
                 'jobId' => $this->job->id,
-            ])
-        ;
+            ]);
 
         $response->assertStatus(200);
         $response->assertJson(['success' => true]);
@@ -152,7 +147,7 @@ class JobApplicationTest extends TestCase
     }
 
     /** @test */
-    public function employerCannotDeleteApplicationsForJobsNotBelongingToThem()
+    public function employer_cannot_delete_applications_for_jobs_not_belonging_to_them()
     {
         // Create another employer with job and application
         $otherEmployer = User::factory()->create(['user_type' => User::EMPLOYER]);
@@ -166,8 +161,7 @@ class JobApplicationTest extends TestCase
         $response = $this->actingAs($this->employerUser)
             ->delete("/employer/job-applications/{$otherApplication->id}", [
                 'jobId' => $otherJob->id,
-            ])
-        ;
+            ]);
 
         $response->assertStatus(403); // or appropriate error status
         $this->assertDatabaseHas('job_applications', [
@@ -176,14 +170,13 @@ class JobApplicationTest extends TestCase
     }
 
     /** @test */
-    public function employerCanChangeJobStage()
+    public function employer_can_change_job_stage()
     {
         $response = $this->actingAs($this->employerUser)
             ->post('/employer/job-applications/job-stage', [
                 'job_application_id' => $this->jobApplication->id,
                 'job_stage' => $this->jobStage->id,
-            ])
-        ;
+            ]);
 
         $response->assertStatus(200);
         $response->assertJson(['success' => true]);
@@ -194,23 +187,21 @@ class JobApplicationTest extends TestCase
     }
 
     /** @test */
-    public function candidateCanViewTheirJobApplicationStatus()
+    public function candidate_can_view_their_job_application_status()
     {
         // Assuming there's a route for candidates to view their applications
         $response = $this->actingAs($this->candidateUser)
-            ->get('/candidate/job-applications')
-        ;
+            ->get('/candidate/job-applications');
 
         $response->assertStatus(200);
         // Add any specific assertions for the view response
     }
 
     /** @test */
-    public function employerCanViewSlotScreen()
+    public function employer_can_view_slot_screen()
     {
         $response = $this->actingAs($this->employerUser)
-            ->get("/employer/job-applications/{$this->jobApplication->id}/slots-screen")
-        ;
+            ->get("/employer/job-applications/{$this->jobApplication->id}/slots-screen");
 
         $response->assertStatus(200);
         $response->assertViewIs('employer.job_applications.view_slot_screen');
@@ -218,7 +209,7 @@ class JobApplicationTest extends TestCase
     }
 
     /** @test */
-    public function employerCanStoreInterviewSlot()
+    public function employer_can_store_interview_slot()
     {
         $slotData = [
             'job_application_id' => $this->jobApplication->id,
@@ -229,8 +220,7 @@ class JobApplicationTest extends TestCase
         ];
 
         $response = $this->actingAs($this->employerUser)
-            ->post("/employer/job-applications/{$this->job->id}/slots", $slotData)
-        ;
+            ->post("/employer/job-applications/{$this->job->id}/slots", $slotData);
 
         $response->assertStatus(200);
         $response->assertJson(['success' => true]);
@@ -242,7 +232,7 @@ class JobApplicationTest extends TestCase
     }
 
     /** @test */
-    public function employerCannotCreateDuplicateSlots()
+    public function employer_cannot_create_duplicate_slots()
     {
         // First create a slot
         $slotData = [
@@ -254,24 +244,21 @@ class JobApplicationTest extends TestCase
         ];
 
         $this->actingAs($this->employerUser)
-            ->post("/employer/job-applications/{$this->job->id}/slots", $slotData)
-        ;
+            ->post("/employer/job-applications/{$this->job->id}/slots", $slotData);
 
         // Try to create the same slot again
         $response = $this->actingAs($this->employerUser)
-            ->post("/employer/job-applications/{$this->job->id}/slots", $slotData)
-        ;
+            ->post("/employer/job-applications/{$this->job->id}/slots", $slotData);
 
         $response->assertStatus(422);
         $response->assertJson(['success' => false]);
     }
 
     /** @test */
-    public function employerCanViewSelectedCandidates()
+    public function employer_can_view_selected_candidates()
     {
         $response = $this->actingAs($this->employerUser)
-            ->get('/employer/selected-candidate')
-        ;
+            ->get('/employer/selected-candidate');
 
         $response->assertStatus(200);
         $response->assertViewIs('selected_candidate.index');

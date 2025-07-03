@@ -41,7 +41,7 @@ class JobTypeController extends Controller
     /**
      * Get job type details for editing.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function edit($id): JsonResponse
     {
@@ -56,7 +56,7 @@ class JobTypeController extends Controller
     /**
      * Update the specified job type.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function update(UpdateJobTypeRequest $request, $id): JsonResponse
     {
@@ -73,7 +73,7 @@ class JobTypeController extends Controller
     /**
      * Remove the specified job type.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function destroy($id): JsonResponse
     {

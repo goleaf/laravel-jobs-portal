@@ -31,7 +31,7 @@ class DashboardController extends AppBaseController
         $user = Auth::user();
 
         // Check if user is authenticated
-        if (!$user) {
+        if (! $user) {
             return redirect('/login');
         }
 

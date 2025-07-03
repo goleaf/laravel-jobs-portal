@@ -3,17 +3,17 @@
 use App\Models\User;
 use Carbon\Carbon;
 
-if (!function_exists('getLoggedInUserId')) {
+if (! function_exists('getLoggedInUserId')) {
     function getLoggedInUserId(): ?int
     {
         return auth()->id();
     }
 }
 
-if (!function_exists('settings')) {
+if (! function_exists('settings')) {
     function settings(?string $key = null, $default = null)
     {
-        if (null === $key) {
+        if ($key === null) {
             return collect([
                 'app_name' => config('app.name', 'Job Portal'),
                 'app_logo' => '/images/logo.png',
@@ -35,21 +35,21 @@ if (!function_exists('settings')) {
     }
 }
 
-if (!function_exists('getAppName')) {
+if (! function_exists('getAppName')) {
     function getAppName(): string
     {
         return config('app.name', 'Job Portal');
     }
 }
 
-if (!function_exists('getSettingValue')) {
+if (! function_exists('getSettingValue')) {
     function getSettingValue(string $key, $default = null)
     {
         return settings($key, $default);
     }
 }
 
-if (!function_exists('googleJobSchema')) {
+if (! function_exists('googleJobSchema')) {
     function googleJobSchema(array $job): array
     {
         return [
@@ -63,10 +63,10 @@ if (!function_exists('googleJobSchema')) {
     }
 }
 
-if (!function_exists('formatCurrency')) {
+if (! function_exists('formatCurrency')) {
     function formatCurrency($amount, string $currency = 'USD'): string
     {
-        if (null === $amount || '' === $amount) {
+        if ($amount === null || $amount === '') {
             return '$0.00';
         }
 
@@ -74,14 +74,14 @@ if (!function_exists('formatCurrency')) {
     }
 }
 
-if (!function_exists('timeAgo')) {
+if (! function_exists('timeAgo')) {
     function timeAgo($datetime): string
     {
         if (is_string($datetime)) {
             $datetime = Carbon::parse($datetime);
         }
 
-        if (!$datetime instanceof Carbon) {
+        if (! $datetime instanceof Carbon) {
             $datetime = Carbon::parse($datetime);
         }
 
@@ -89,7 +89,7 @@ if (!function_exists('timeAgo')) {
     }
 }
 
-if (!function_exists('truncateText')) {
+if (! function_exists('truncateText')) {
     function truncateText(string $text, int $length = 100): string
     {
         if (strlen($text) <= $length) {
@@ -100,7 +100,7 @@ if (!function_exists('truncateText')) {
     }
 }
 
-if (!function_exists('getSuperAdmin')) {
+if (! function_exists('getSuperAdmin')) {
     function getSuperAdmin(): ?int
     {
         // For testing environment, return a default value

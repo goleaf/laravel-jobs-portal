@@ -82,7 +82,7 @@ class UserController extends AppBaseController
         /** @var User $user */
         $user = getLoggedInUser();
         $user->update(['language' => $language]);
-        if (!empty($language)) {
+        if (! empty($language)) {
             Session::put('languageName', $language);
         }
 
@@ -93,7 +93,7 @@ class UserController extends AppBaseController
     {
         $user = User::find(getLoggedInUser()->id);
 
-        if (User::LIGHT_MODE == $user->theme_mode) {
+        if ($user->theme_mode == User::LIGHT_MODE) {
             $user['theme_mode'] = User::DARK_MODE;
         } else {
             $user['theme_mode'] = User::LIGHT_MODE;

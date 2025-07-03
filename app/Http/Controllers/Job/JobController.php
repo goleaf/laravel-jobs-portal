@@ -69,7 +69,7 @@ class JobController extends AppBaseController
             fn () => $this->checkJobLimit()
         );
 
-        if (!$canCreateJob) {
+        if (! $canCreateJob) {
             Flash::error(__('messages.flash.job_create_limit'));
         }
 
@@ -107,11 +107,10 @@ class JobController extends AppBaseController
             $input = $this->prepareJobInput($input, $request);
 
             // Check job limit for live jobs
-            if (Job::STATUS_OPEN == $input['status'] && !$this->checkJobLimit()) {
+            if ($input['status'] == Job::STATUS_OPEN && ! $this->checkJobLimit()) {
                 return redirect()->back()
                     ->withInput()
-                    ->withErrors(['error' => __('messages.flash.job_create_limit')])
-                ;
+                    ->withErrors(['error' => __('messages.flash.job_create_limit')]);
             }
 
             $job = $this->jobRepository->store($input);
@@ -168,15 +167,14 @@ class JobController extends AppBaseController
     public function edit(Job $job)
     {
         // Authorization check
-        if (!$this->canUserEditJob($job)) {
+        if (! $this->canUserEditJob($job)) {
             return view('errors.404');
         }
 
         // Status check
-        if (Job::STATUS_CLOSED == $job->status) {
+        if ($job->status == Job::STATUS_CLOSED) {
             return redirect(route('jobs.index'))
-                ->withErrors(__('messages.flash.close_job'))
-            ;
+                ->withErrors(__('messages.flash.close_job'));
         }
 
         // Cache form data
@@ -203,16 +201,15 @@ class JobController extends AppBaseController
     {
         try {
             // Authorization check
-            if (!$this->canUserEditJob($job)) {
+            if (! $this->canUserEditJob($job)) {
                 return $this->sendError(__('messages.common.seems_message'));
             }
 
             // Check job limit for status changes
-            if (Job::STATUS_OPEN != $job->status && !$this->checkJobLimit()) {
+            if ($job->status != Job::STATUS_OPEN && ! $this->checkJobLimit()) {
                 return redirect()->back()
                     ->withInput()
-                    ->withErrors(['error' => __('messages.flash.job_create_limit')])
-                ;
+                    ->withErrors(['error' => __('messages.flash.job_create_limit')]);
             }
 
             $input = $request->validated();
@@ -308,22 +305,20 @@ class JobController extends AppBaseController
         // Get user's subscription or plan limits
         $subscription = $user->subscriptions()->active()->first();
 
-        if (!$subscription) {
+        if (! $subscription) {
             return false; // No active subscription
         }
 
         $plan = $subscription->plan;
         $currentJobCount = Job::where('company_id', $user->company->id)
             ->where('status', Job::STATUS_OPEN)
-            ->count()
-        ;
+            ->count();
 
         return $currentJobCount < $plan->job_limit;
     }
 
     /**
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return Application|Factory|View
      *
      * @throws \Exception
@@ -368,7 +363,7 @@ class JobController extends AppBaseController
      */
     public function editJob(Job $job)
     {
-        if (Job::STATUS_CLOSED == $job->status) {
+        if ($job->status == Job::STATUS_CLOSED) {
             Flash::error(__('messages.flash.close_job'));
 
             return redirect(route('admin.jobs.index'));
@@ -441,12 +436,12 @@ class JobController extends AppBaseController
             return $this->sendError(__('messages.common.seems_message'));
         }
 
-        if (Job::STATUS_OPEN == $job->status && 1 == $job->is_featured) {
+        if ($job->status == Job::STATUS_OPEN && $job->is_featured == 1) {
             $featuredRecord = FeaturedRecord::where('owner_type', Job::class)->where(
                 'owner_id',
                 $job->id
             )->first();
-            if (!empty($featuredRecord)) {
+            if (! empty($featuredRecord)) {
                 $featuredRecord->delete();
             }
         }
@@ -486,8 +481,7 @@ class JobController extends AppBaseController
     }
 
     /**
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return Application|Factory
      */
     public function showReportedJobs(ShowReportedJobsJobRequest $request): View
@@ -496,9 +490,8 @@ class JobController extends AppBaseController
     }
 
     /**
-     * @param mixed $id
-     * @param mixed $status
-     *
+     * @param  mixed  $id
+     * @param  mixed  $status
      * @return mixed
      *
      * @throws \Exception
@@ -529,8 +522,7 @@ class JobController extends AppBaseController
     }
 
     /**
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return mixed
      */
     public function showReportedJobNote(ReportedJob $reportedJob, ShowReportedJobNoteJobRequest $request)
@@ -539,8 +531,7 @@ class JobController extends AppBaseController
     }
 
     /**
-     * @param mixed $jobId
-     *
+     * @param  mixed  $jobId
      * @return mixed
      */
     public function makeFeatured($jobId, MakeFeaturedJobRequest $request)
@@ -559,7 +550,7 @@ class JobController extends AppBaseController
                 return $this->sendError(__('messages.common.seems_message'));
             }
 
-            if (Job::STATUS_OPEN != $job->status) {
+            if ($job->status != Job::STATUS_OPEN) {
                 return $this->sendError(__('messages.flash.only_open_job'));
             }
 
@@ -575,7 +566,7 @@ class JobController extends AppBaseController
                 'end_date' => $endDate,
             ]);
 
-            if (1 == NotificationSetting::where('key', 'NEW_FEATURED_JOB_AVAILABLE')->first()->value) {
+            if (NotificationSetting::where('key', 'NEW_FEATURED_JOB_AVAILABLE')->first()->value == 1) {
                 $users = getAdminNotificationUserIds();
                 foreach ($users as $userId) {
                     addNotification([
@@ -606,8 +597,7 @@ class JobController extends AppBaseController
     }
 
     /**
-     * @param mixed $jobId
-     *
+     * @param  mixed  $jobId
      * @return mixed
      */
     public function makeUnFeatured($jobId, MakeUnFeaturedJobRequest $request)
@@ -619,7 +609,7 @@ class JobController extends AppBaseController
 
         $job->update(['is_featured' => 0]);
         $featuredRecord = FeaturedRecord::where('owner_type', Job::class)->where('owner_id', $job->id)->first();
-        if (!empty($featuredRecord)) {
+        if (! empty($featuredRecord)) {
             $featuredRecord->delete();
         }
 
@@ -627,8 +617,7 @@ class JobController extends AppBaseController
     }
 
     /**
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return Application|Factory|\Illuminate\Contracts\View\View
      */
     public function getExpiredJobs(GetExpiredJobsJobRequest $request): View

@@ -33,7 +33,7 @@ class PurchaseSubscriptionRequest extends FormRequest
                 'min:1',
                 'exists:plans,id',
                 function ($attribute, $value, $fail) {
-                    if (!$this->validatePlanAvailable($value)) {
+                    if (! $this->validatePlanAvailable($value)) {
                         $fail(__('validation.plan_not_available'));
                     }
                 },
@@ -65,7 +65,7 @@ class PurchaseSubscriptionRequest extends FormRequest
                 'min:0',
                 'max:100000',
                 function ($attribute, $value, $fail) {
-                    if (!$this->validateBillingAmount($value)) {
+                    if (! $this->validateBillingAmount($value)) {
                         $fail(__('validation.invalid_billing_amount'));
                     }
                 },
@@ -84,7 +84,7 @@ class PurchaseSubscriptionRequest extends FormRequest
                 'string',
                 'max:50',
                 function ($attribute, $value, $fail) {
-                    if ($value && !$this->validateDiscountCode($value)) {
+                    if ($value && ! $this->validateDiscountCode($value)) {
                         $fail(__('validation.invalid_discount_code'));
                     }
                 },
@@ -94,7 +94,7 @@ class PurchaseSubscriptionRequest extends FormRequest
                 'sometimes',
                 'numeric',
                 'min:0',
-                'max:' . ($this->billing_amount ?? 0),
+                'max:'.($this->billing_amount ?? 0),
             ],
 
             'tax_amount' => [
@@ -151,8 +151,8 @@ class PurchaseSubscriptionRequest extends FormRequest
             'card_expiry_year' => [
                 'required_if:payment_method,credit_card,debit_card',
                 'integer',
-                'min:' . date('Y'),
-                'max:' . (date('Y') + 20),
+                'min:'.date('Y'),
+                'max:'.(date('Y') + 20),
             ],
 
             'card_cvv' => [
@@ -239,7 +239,7 @@ class PurchaseSubscriptionRequest extends FormRequest
                 'sometimes',
                 'date',
                 'after_or_equal:today',
-                'before:' . now()->addMonths(3)->toDateString(),
+                'before:'.now()->addMonths(3)->toDateString(),
             ],
 
             'end_date' => [
@@ -426,7 +426,7 @@ class PurchaseSubscriptionRequest extends FormRequest
                 'sometimes',
                 'date',
                 'after_or_equal:today',
-                'before:' . now()->addDays(30)->toDateString(),
+                'before:'.now()->addDays(30)->toDateString(),
             ],
         ];
     }
@@ -441,88 +441,88 @@ class PurchaseSubscriptionRequest extends FormRequest
         return [
             'plan_id.required' => __('validation.required_field', ['field' => __('validation.attributes.plan')]),
             'plan_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.plan')]),
-            
+
             'plan_type.required' => __('validation.required_field', ['field' => __('validation.attributes.plan_type')]),
             'plan_type.in' => __('validation.invalid_plan_type'),
-            
+
             'billing_cycle.required' => __('validation.required_field', ['field' => __('validation.attributes.billing_cycle')]),
             'billing_cycle.in' => __('validation.invalid_billing_cycle'),
-            
+
             'billing_amount.required' => __('validation.required_field', ['field' => __('validation.attributes.billing_amount')]),
             'billing_amount.numeric' => __('validation.numeric', ['attribute' => __('validation.attributes.billing_amount')]),
             'billing_amount.max' => __('validation.max_value', ['attribute' => __('validation.attributes.billing_amount'), 'max' => 100000]),
-            
+
             'currency.required' => __('validation.required_field', ['field' => __('validation.attributes.currency')]),
             'currency.size' => __('validation.size', ['attribute' => __('validation.attributes.currency'), 'size' => 3]),
             'currency.exists' => __('validation.exists', ['attribute' => __('validation.attributes.currency')]),
             'currency.in' => __('validation.unsupported_currency'),
-            
+
             'discount_code.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.discount_code'), 'max' => 50]),
-            
+
             'total_amount.required' => __('validation.required_field', ['field' => __('validation.attributes.total_amount')]),
             'total_amount.numeric' => __('validation.numeric', ['attribute' => __('validation.attributes.total_amount')]),
-            
+
             'payment_method.required' => __('validation.required_field', ['field' => __('validation.attributes.payment_method')]),
             'payment_method.in' => __('validation.invalid_payment_method'),
-            
+
             'payment_token.required_unless' => __('validation.payment_token_required'),
             'payment_token.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.payment_token'), 'max' => 500]),
-            
+
             'card_number.required_if' => __('validation.card_number_required'),
             'card_number.regex' => __('validation.invalid_card_number'),
-            
+
             'card_expiry_month.required_if' => __('validation.card_expiry_required'),
             'card_expiry_month.min' => __('validation.invalid_month'),
             'card_expiry_month.max' => __('validation.invalid_month'),
-            
+
             'card_expiry_year.required_if' => __('validation.card_expiry_required'),
             'card_expiry_year.min' => __('validation.card_expired'),
-            
+
             'card_cvv.required_if' => __('validation.card_cvv_required'),
             'card_cvv.regex' => __('validation.invalid_cvv'),
-            
+
             'card_holder_name.required_if' => __('validation.card_holder_required'),
             'card_holder_name.regex' => __('validation.invalid_card_holder_name'),
-            
+
             'billing_address.required' => __('validation.required_field', ['field' => __('validation.attributes.billing_address')]),
             'billing_address.array' => __('validation.array', ['attribute' => __('validation.attributes.billing_address')]),
-            
+
             'billing_address.street.required' => __('validation.required_field', ['field' => __('validation.attributes.street_address')]),
             'billing_address.city.required' => __('validation.required_field', ['field' => __('validation.attributes.city')]),
             'billing_address.state.required' => __('validation.required_field', ['field' => __('validation.attributes.state')]),
             'billing_address.postal_code.required' => __('validation.required_field', ['field' => __('validation.attributes.postal_code')]),
             'billing_address.country.required' => __('validation.required_field', ['field' => __('validation.attributes.country')]),
             'billing_address.country.exists' => __('validation.exists', ['attribute' => __('validation.attributes.country')]),
-            
+
             'start_date.after_or_equal' => __('validation.start_date_future'),
             'start_date.before' => __('validation.start_date_limit'),
-            
+
             'end_date.after' => __('validation.end_date_after_start'),
-            
+
             'addons.array' => __('validation.array', ['attribute' => __('validation.attributes.addons')]),
             'addons.max' => __('validation.max_items', ['attribute' => __('validation.attributes.addons'), 'max' => 20]),
             'addons.*.exists' => __('validation.exists', ['attribute' => __('validation.attributes.addon')]),
-            
+
             'terms_accepted.required' => __('validation.terms_required'),
             'terms_accepted.accepted' => __('validation.terms_must_accept'),
-            
+
             'privacy_policy_accepted.required' => __('validation.privacy_policy_required'),
             'privacy_policy_accepted.accepted' => __('validation.privacy_policy_must_accept'),
-            
+
             'data_processing_consent.required' => __('validation.data_processing_required'),
             'data_processing_consent.accepted' => __('validation.data_processing_must_accept'),
-            
+
             'ip_address.ip' => __('validation.ip', ['attribute' => __('validation.attributes.ip_address')]),
-            
+
             'webhook_url.url' => __('validation.url', ['attribute' => __('validation.attributes.webhook_url')]),
             'callback_url.url' => __('validation.url', ['attribute' => __('validation.attributes.callback_url')]),
-            
+
             'trial_days.max' => __('validation.max_value', ['attribute' => __('validation.attributes.trial_days'), 'max' => 365]),
-            
+
             'installment_count.required_if' => __('validation.installment_count_required'),
             'installment_count.min' => __('validation.min_installments'),
             'installment_count.max' => __('validation.max_installments'),
-            
+
             'first_payment_date.after_or_equal' => __('validation.payment_date_future'),
             'first_payment_date.before' => __('validation.payment_date_limit'),
         ];
@@ -592,9 +592,9 @@ class PurchaseSubscriptionRequest extends FormRequest
         }
 
         // Calculate end date based on billing cycle
-        if ($this->has('start_date') && $this->has('billing_cycle') && !$this->has('end_date')) {
+        if ($this->has('start_date') && $this->has('billing_cycle') && ! $this->has('end_date')) {
             $startDate = \Carbon\Carbon::parse($this->start_date);
-            $endDate = match($this->billing_cycle) {
+            $endDate = match ($this->billing_cycle) {
                 'monthly' => $startDate->copy()->addMonth(),
                 'quarterly' => $startDate->copy()->addMonths(3),
                 'semi_annual' => $startDate->copy()->addMonths(6),
@@ -602,7 +602,7 @@ class PurchaseSubscriptionRequest extends FormRequest
                 'biennial' => $startDate->copy()->addYears(2),
                 default => $startDate->copy()->addMonth(),
             };
-            
+
             $this->merge([
                 'end_date' => $endDate->toDateString(),
             ]);
@@ -616,20 +616,20 @@ class PurchaseSubscriptionRequest extends FormRequest
         }
 
         // Calculate total amount if not provided
-        if (!$this->has('total_amount') && $this->has('billing_amount')) {
+        if (! $this->has('total_amount') && $this->has('billing_amount')) {
             $total = $this->billing_amount;
             $total -= $this->discount_amount ?? 0;
             $total += $this->tax_amount ?? 0;
-            
+
             $this->merge([
                 'total_amount' => round($total, 2),
             ]);
         }
 
         // Generate device fingerprint if not provided
-        if (!$this->has('device_fingerprint')) {
+        if (! $this->has('device_fingerprint')) {
             $this->merge([
-                'device_fingerprint' => md5($this->userAgent() . $this->ip()),
+                'device_fingerprint' => md5($this->userAgent().$this->ip()),
             ]);
         }
 
@@ -653,7 +653,7 @@ class PurchaseSubscriptionRequest extends FormRequest
     {
         // Set transaction metadata
         $this->merge([
-            'transaction_id' => 'SUB-' . date('Ymd') . '-' . strtoupper(substr(md5(time() . $this->ip()), 0, 10)),
+            'transaction_id' => 'SUB-'.date('Ymd').'-'.strtoupper(substr(md5(time().$this->ip()), 0, 10)),
             'validated_at' => now(),
             'request_source' => $this->header('X-Request-Source', 'web'),
         ]);
@@ -686,19 +686,19 @@ class PurchaseSubscriptionRequest extends FormRequest
      */
     private function validateBillingAmount($amount): bool
     {
-        if (!$this->has('plan_id')) {
+        if (! $this->has('plan_id')) {
             return true; // Will be caught by plan_id validation
         }
 
         $plan = \DB::table('plans')->where('id', $this->plan_id)->first();
-        if (!$plan) {
+        if (! $plan) {
             return false;
         }
 
         // Allow for reasonable variance (±5%) to account for taxes, discounts
         $expectedAmount = $plan->price ?? 0;
         $variance = $expectedAmount * 0.05;
-        
+
         return $amount >= ($expectedAmount - $variance) && $amount <= ($expectedAmount + $variance + 1000); // +1000 for taxes
     }
 
@@ -722,7 +722,7 @@ class PurchaseSubscriptionRequest extends FormRequest
      */
     private function shouldRequireVerification(): bool
     {
-        return $this->total_amount > 1000 || 
+        return $this->total_amount > 1000 ||
                $this->payment_method === 'bank_transfer' ||
                ($this->risk_score ?? 0) > 50;
     }
@@ -742,8 +742,8 @@ class PurchaseSubscriptionRequest extends FormRequest
      */
     private function verifyCompliance(): bool
     {
-        return $this->terms_accepted && 
-               $this->privacy_policy_accepted && 
+        return $this->terms_accepted &&
+               $this->privacy_policy_accepted &&
                $this->data_processing_consent;
     }
-} 
+}

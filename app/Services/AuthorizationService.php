@@ -34,7 +34,7 @@ class AuthorizationService
     /**
      * Check if user can manage resource.
      *
-     * @param mixed $resource
+     * @param  mixed  $resource
      */
     public static function canManage($resource, ?User $user = null): bool
     {
@@ -66,7 +66,7 @@ class AuthorizationService
      */
     public static function requireRole(string $role): void
     {
-        if (!Auth::check() || !Auth::user()->hasRole($role)) {
+        if (! Auth::check() || ! Auth::user()->hasRole($role)) {
             abort(403, __('errors.403.message'));
         }
     }
@@ -76,7 +76,7 @@ class AuthorizationService
      */
     public static function requireAdmin(): void
     {
-        if (!self::isAdmin()) {
+        if (! self::isAdmin()) {
             abort(403, __('errors.admin_access_denied'));
         }
     }

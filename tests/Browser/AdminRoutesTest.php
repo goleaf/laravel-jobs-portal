@@ -41,7 +41,7 @@ class AdminRoutesTest extends DuskTestCase
     /**
      * Test admin dashboard access.
      */
-    public function testAdminDashboardAccess(): void
+    public function test_admin_dashboard_access(): void
     {
         $this->browse(function (Browser $browser) {
             // Test regular user cannot access admin dashboard
@@ -49,128 +49,114 @@ class AdminRoutesTest extends DuskTestCase
                 ->type('email', 'user@example.com')
                 ->type('password', 'password123')
                 ->press('Login')
-                ->pause(2000)
-            ;
+                ->pause(2000);
 
             $browser->visit('/admin/dashboard')
-                ->pause(2000)
-            ;
+                ->pause(2000);
 
             // Should be redirected away from admin area
             $this->assertStringNotContainsString('/admin/dashboard', $browser->driver->getCurrentURL());
 
             // Logout and test admin access
             $browser->visit('/logout')
-                ->pause(1000)
-            ;
+                ->pause(1000);
 
             // Test admin user can access admin dashboard
             $browser->visit('/login')
                 ->type('email', 'admin@example.com')
                 ->type('password', 'password123')
                 ->press('Login')
-                ->pause(3000)
-            ;
+                ->pause(3000);
 
             $browser->visit('/admin/dashboard')
                 ->pause(2000)
                 ->assertDontSee('Error')
-                ->assertPresent('body')
-            ;
+                ->assertPresent('body');
         });
     }
 
     /**
      * Test admin candidates management.
      */
-    public function testAdminCandidatesRoutes(): void
+    public function test_admin_candidates_routes(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/login')
                 ->type('email', 'admin@example.com')
                 ->type('password', 'password123')
                 ->press('Login')
-                ->pause(3000)
-            ;
+                ->pause(3000);
 
             // Test candidates index
             $browser->visit('/admin/candidates')
                 ->pause(2000)
                 ->assertDontSee('Error')
-                ->assertPresent('body')
-            ;
+                ->assertPresent('body');
 
             // Test candidates create
             $browser->visit('/admin/candidates/create')
                 ->pause(2000)
                 ->assertDontSee('Error')
-                ->assertPresent('body')
-            ;
+                ->assertPresent('body');
         });
     }
 
     /**
      * Test admin jobs management.
      */
-    public function testAdminJobsRoutes(): void
+    public function test_admin_jobs_routes(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/login')
                 ->type('email', 'admin@example.com')
                 ->type('password', 'password123')
                 ->press('Login')
-                ->pause(3000)
-            ;
+                ->pause(3000);
 
             // Test jobs index
             $browser->visit('/admin/jobs')
                 ->pause(2000)
                 ->assertDontSee('Error')
-                ->assertPresent('body')
-            ;
+                ->assertPresent('body');
 
             // Test jobs create
             $browser->visit('/admin/jobs/create')
                 ->pause(2000)
                 ->assertDontSee('Error')
-                ->assertPresent('body')
-            ;
+                ->assertPresent('body');
         });
     }
 
     /**
      * Test admin transactions management.
      */
-    public function testAdminTransactionsRoutes(): void
+    public function test_admin_transactions_routes(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/login')
                 ->type('email', 'admin@example.com')
                 ->type('password', 'password123')
                 ->press('Login')
-                ->pause(3000)
-            ;
+                ->pause(3000);
 
             // Test transactions index
             $browser->visit('/admin/transactions')
                 ->pause(2000)
                 ->assertDontSee('Error')
-                ->assertPresent('body')
-            ;
+                ->assertPresent('body');
 
             // Test transactions create
             $browser->visit('/admin/transactions/create')
                 ->pause(2000)
                 ->assertDontSee('Error')
-                ->assertPresent('body')
-            ;
+                ->assertPresent('body');
         });
     }
 
     /**
      * Test admin routes are protected from non-admin users.
      */
-    public function testAdminRoutesProtectedFromRegularUsers(): void
+    public function test_admin_routes_protected_from_regular_users(): void
     {
         $adminRoutes = [
             '/admin/dashboard',
@@ -188,13 +174,11 @@ class AdminRoutesTest extends DuskTestCase
                 ->type('email', 'user@example.com')
                 ->type('password', 'password123')
                 ->press('Login')
-                ->pause(2000)
-            ;
+                ->pause(2000);
 
             foreach ($adminRoutes as $route) {
                 $browser->visit($route)
-                    ->pause(1000)
-                ;
+                    ->pause(1000);
 
                 // Should not be able to access admin routes
                 $this->assertStringNotContainsString($route, $browser->driver->getCurrentURL());
@@ -205,7 +189,7 @@ class AdminRoutesTest extends DuskTestCase
     /**
      * Test admin routes are protected from guests.
      */
-    public function testAdminRoutesProtectedFromGuests(): void
+    public function test_admin_routes_protected_from_guests(): void
     {
         $adminRoutes = [
             '/admin/dashboard',
@@ -217,8 +201,7 @@ class AdminRoutesTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($adminRoutes) {
             foreach ($adminRoutes as $route) {
                 $browser->visit($route)
-                    ->pause(1000)
-                ;
+                    ->pause(1000);
 
                 // Should redirect to login page
                 $this->assertTrue(

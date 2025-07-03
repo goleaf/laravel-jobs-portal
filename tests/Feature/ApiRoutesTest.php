@@ -21,7 +21,7 @@ class ApiRoutesTest extends TestCase
     use WithFaker;
 
     /** @test */
-    public function unauthenticatedUsersCannotAccessProtectedApiRoutes()
+    public function unauthenticated_users_cannot_access_protected_api_routes()
     {
         $response = $this->getJson('/api/user');
 
@@ -29,37 +29,34 @@ class ApiRoutesTest extends TestCase
     }
 
     /** @test */
-    public function authenticatedUsersCanFetchTheirProfile()
+    public function authenticated_users_can_fetch_their_profile()
     {
         $user = User::factory()->create();
 
         $response = $this->actingAs($user, 'api')
-            ->getJson('/api/user')
-        ;
+            ->getJson('/api/user');
 
         $response->assertStatus(200)
             ->assertJson([
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $user->email,
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function apiCanListJobs()
+    public function api_can_list_jobs()
     {
         Job::factory()->count(3)->create();
 
         $response = $this->getJson('/api/jobs');
 
         $response->assertStatus(200)
-            ->assertJsonCount(3, 'data')
-        ;
+            ->assertJsonCount(3, 'data');
     }
 
     /** @test */
-    public function apiCanShowJobDetails()
+    public function api_can_show_job_details()
     {
         $job = Job::factory()->create([
             'job_title' => 'Software Engineer',
@@ -73,24 +70,22 @@ class ApiRoutesTest extends TestCase
                     'id' => $job->id,
                     'job_title' => 'Software Engineer',
                 ],
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function apiCanListCompanies()
+    public function api_can_list_companies()
     {
         Company::factory()->count(3)->create(['is_active' => true]);
 
         $response = $this->getJson('/api/companies');
 
         $response->assertStatus(200)
-            ->assertJsonCount(3, 'data')
-        ;
+            ->assertJsonCount(3, 'data');
     }
 
     /** @test */
-    public function apiCanShowCompanyDetails()
+    public function api_can_show_company_details()
     {
         $company = Company::factory()->create([
             'name' => 'Acme Inc',
@@ -105,12 +100,11 @@ class ApiRoutesTest extends TestCase
                     'id' => $company->id,
                     'name' => 'Acme Inc',
                 ],
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function apiCanFilterJobsByCategory()
+    public function api_can_filter_jobs_by_category()
     {
         $categoryId = 1;
         Job::factory()->count(2)->create(['job_category_id' => $categoryId]);
@@ -119,12 +113,11 @@ class ApiRoutesTest extends TestCase
         $response = $this->getJson("/api/jobs?category_id={$categoryId}");
 
         $response->assertStatus(200)
-            ->assertJsonCount(2, 'data')
-        ;
+            ->assertJsonCount(2, 'data');
     }
 
     /** @test */
-    public function apiCanSearchJobsByTitle()
+    public function api_can_search_jobs_by_title()
     {
         Job::factory()->create(['job_title' => 'Senior PHP Developer']);
         Job::factory()->create(['job_title' => 'Junior PHP Developer']);
@@ -133,27 +126,24 @@ class ApiRoutesTest extends TestCase
         $response = $this->getJson('/api/jobs?search=PHP');
 
         $response->assertStatus(200)
-            ->assertJsonCount(2, 'data')
-        ;
+            ->assertJsonCount(2, 'data');
     }
 
     /** @test */
-    public function apiCanListCandidates()
+    public function api_can_list_candidates()
     {
         $user = User::factory()->create(['is_active' => true]);
         Candidate::factory()->count(3)->create(['user_id' => $user->id]);
 
         $response = $this->actingAs($user, 'api')
-            ->getJson('/api/candidates')
-        ;
+            ->getJson('/api/candidates');
 
         $response->assertStatus(200)
-            ->assertJsonCount(3, 'data')
-        ;
+            ->assertJsonCount(3, 'data');
     }
 
     /** @test */
-    public function apiCanFilterCandidatesByExperience()
+    public function api_can_filter_candidates_by_experience()
     {
         $user = User::factory()->create(['is_active' => true]);
         Candidate::factory()->count(2)->create([
@@ -166,16 +156,14 @@ class ApiRoutesTest extends TestCase
         ]);
 
         $response = $this->actingAs($user, 'api')
-            ->getJson('/api/candidates?min_experience=5')
-        ;
+            ->getJson('/api/candidates?min_experience=5');
 
         $response->assertStatus(200)
-            ->assertJsonCount(2, 'data')
-        ;
+            ->assertJsonCount(2, 'data');
     }
 
     /** @test */
-    public function authenticatedUsersCanApplyForJobs()
+    public function authenticated_users_can_apply_for_jobs()
     {
         $user = User::factory()->create(['is_active' => true]);
         $candidate = Candidate::factory()->create(['user_id' => $user->id]);
@@ -184,8 +172,7 @@ class ApiRoutesTest extends TestCase
         $response = $this->actingAs($user, 'api')
             ->postJson("/api/jobs/{$job->id}/apply", [
                 'cover_letter' => $this->faker->paragraph,
-            ])
-        ;
+            ]);
 
         $response->assertStatus(201)
             ->assertJson([

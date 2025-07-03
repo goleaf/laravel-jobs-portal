@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->unsignedBigInteger('company_id')->nullable()->after('city_id');
-            
+
             // Add foreign key constraint if companies table exists
             if (Schema::hasTable('companies')) {
                 $table->foreign('company_id')

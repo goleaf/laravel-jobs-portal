@@ -21,7 +21,7 @@ class JobPortalTest extends DuskTestCase
      *
      * @test
      */
-    public function homepageLoadsAndDisplaysBasicContent()
+    public function homepage_loads_and_displays_basic_content()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
@@ -29,8 +29,7 @@ class JobPortalTest extends DuskTestCase
                 ->assertPresent('body')
                 ->assertDontSee('500')
                 ->assertDontSee('404')
-                ->assertDontSee('Fatal error')
-            ;
+                ->assertDontSee('Fatal error');
 
             // Enhanced pattern: Verify page structure
             $pageSource = $browser->driver->getPageSource();
@@ -44,7 +43,7 @@ class JobPortalTest extends DuskTestCase
      *
      * @test
      */
-    public function keyPagesAreAccessible()
+    public function key_pages_are_accessible()
     {
         $this->browse(function (Browser $browser) {
             // Test login page
@@ -52,24 +51,21 @@ class JobPortalTest extends DuskTestCase
                 ->waitFor('body', 10)
                 ->assertPresent('body')
                 ->assertDontSee('500')
-                ->assertDontSee('404')
-            ;
+                ->assertDontSee('404');
 
             // Test register page
             $browser->visit('/register')
                 ->waitFor('body', 10)
                 ->assertPresent('body')
                 ->assertDontSee('500')
-                ->assertDontSee('404')
-            ;
+                ->assertDontSee('404');
 
             // Test jobs page
             $browser->visit('/jobs')
                 ->waitFor('body', 10)
                 ->assertPresent('body')
                 ->assertDontSee('500')
-                ->assertDontSee('404')
-            ;
+                ->assertDontSee('404');
         });
     }
 
@@ -78,19 +74,18 @@ class JobPortalTest extends DuskTestCase
      *
      * @test
      */
-    public function loginFormDisplaysCorrectly()
+    public function login_form_displays_correctly()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/login')
-                ->waitFor('body', 10)
-            ;
+                ->waitFor('body', 10);
 
             // Enhanced pattern: Check for form elements without assuming specific implementation
             $pageSource = $browser->driver->getPageSource();
 
             // Basic checks that a login form exists
-            $hasEmailField = false !== strpos($pageSource, 'email');
-            $hasPasswordField = false !== strpos($pageSource, 'password');
+            $hasEmailField = strpos($pageSource, 'email') !== false;
+            $hasPasswordField = strpos($pageSource, 'password') !== false;
 
             // Assert that basic form elements are present
             $this->assertTrue($hasEmailField || $hasPasswordField, 'Login form should have email or password fields');
@@ -102,19 +97,18 @@ class JobPortalTest extends DuskTestCase
      *
      * @test
      */
-    public function registerFormDisplaysCorrectly()
+    public function register_form_displays_correctly()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/register')
-                ->waitFor('body', 10)
-            ;
+                ->waitFor('body', 10);
 
             // Enhanced pattern: Check for form elements without assuming specific implementation
             $pageSource = $browser->driver->getPageSource();
 
             // Basic checks that a register form exists
-            $hasForm = false !== strpos($pageSource, 'form');
-            $hasInputs = false !== strpos($pageSource, 'input');
+            $hasForm = strpos($pageSource, 'form') !== false;
+            $hasInputs = strpos($pageSource, 'input') !== false;
 
             // Assert that basic form elements are present
             $this->assertTrue($hasForm && $hasInputs, 'Register page should have form elements');
@@ -126,7 +120,7 @@ class JobPortalTest extends DuskTestCase
      *
      * @test
      */
-    public function jobsPageDisplaysWithoutErrors()
+    public function jobs_page_displays_without_errors()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/jobs')
@@ -136,8 +130,7 @@ class JobPortalTest extends DuskTestCase
                 ->assertDontSee('404')
                 ->assertDontSee('Fatal error')
                 ->assertDontSee('Undefined variable')
-                ->assertDontSee('Call to a member function')
-            ;
+                ->assertDontSee('Call to a member function');
 
             // Enhanced pattern: Verify page loaded successfully
             $pageSource = $browser->driver->getPageSource();
@@ -155,7 +148,7 @@ class JobPortalTest extends DuskTestCase
      *
      * @test
      */
-    public function companiesPageDisplaysWithoutErrors()
+    public function companies_page_displays_without_errors()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/companies')
@@ -163,8 +156,7 @@ class JobPortalTest extends DuskTestCase
                 ->assertPresent('body')
                 ->assertDontSee('500')
                 ->assertDontSee('404')
-                ->assertDontSee('Fatal error')
-            ;
+                ->assertDontSee('Fatal error');
 
             // Enhanced pattern: Verify page structure
             $pageSource = $browser->driver->getPageSource();
@@ -178,30 +170,26 @@ class JobPortalTest extends DuskTestCase
      *
      * @test
      */
-    public function browserNavigationWorks()
+    public function browser_navigation_works()
     {
         $this->browse(function (Browser $browser) {
             // Start at homepage
             $browser->visit('/')
-                ->waitFor('body', 10)
-            ;
+                ->waitFor('body', 10);
 
             // Navigate to login
             $browser->visit('/login')
                 ->waitFor('body', 10)
-                ->assertPresent('body')
-            ;
+                ->assertPresent('body');
 
             // Test browser back/forward
             $browser->back()
                 ->waitFor('body', 5)
-                ->assertPresent('body')
-            ;
+                ->assertPresent('body');
 
             $browser->forward()
                 ->waitFor('body', 5)
-                ->assertPresent('body')
-            ;
+                ->assertPresent('body');
         });
     }
 
@@ -210,34 +198,31 @@ class JobPortalTest extends DuskTestCase
      *
      * @test
      */
-    public function pageRespondsToDifferentScreenSizes()
+    public function page_responds_to_different_screen_sizes()
     {
         $this->browse(function (Browser $browser) {
             // Test desktop size
             $browser->resize(1920, 1080)
                 ->visit('/')
                 ->waitFor('body', 10)
-                ->assertPresent('body')
-            ;
+                ->assertPresent('body');
 
             // Test tablet size
             $browser->resize(768, 1024)
                 ->visit('/')
                 ->waitFor('body', 10)
-                ->assertPresent('body')
-            ;
+                ->assertPresent('body');
 
             // Test mobile size
             $browser->resize(375, 667)
                 ->visit('/')
                 ->waitFor('body', 10)
-                ->assertPresent('body')
-            ;
+                ->assertPresent('body');
         });
     }
 
     /** @test */
-    public function userCanRegisterAndLogin()
+    public function user_can_register_and_login()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/register')
@@ -247,13 +232,12 @@ class JobPortalTest extends DuskTestCase
                 ->type('password_confirmation', 'password123')
                 ->press('Register')
                 ->assertPathIs('/dashboard')
-                ->assertSee('Dashboard')
-            ;
+                ->assertSee('Dashboard');
         });
     }
 
     /** @test */
-    public function userCanSearchJobs()
+    public function user_can_search_jobs()
     {
         $user = User::factory()->create();
 
@@ -262,13 +246,12 @@ class JobPortalTest extends DuskTestCase
                 ->visit('/jobs')
                 ->type('search', 'Developer')
                 ->press('Search')
-                ->assertSee('Search Results')
-            ;
+                ->assertSee('Search Results');
         });
     }
 
     /** @test */
-    public function userCanApplyForJob()
+    public function user_can_apply_for_job()
     {
         $user = User::factory()->create();
 

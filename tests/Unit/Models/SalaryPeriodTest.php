@@ -57,7 +57,7 @@ class SalaryPeriodTest extends TestCase
     // =============================================
 
     /** @test */
-    public function itHasCorrectFillableAttributes()
+    public function it_has_correct_fillable_attributes()
     {
         $expected = [
             'period',
@@ -76,7 +76,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function itHasCorrectCasts()
+    public function it_has_correct_casts()
     {
         $expected = [
             'is_active' => 'boolean',
@@ -96,14 +96,14 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function itHidesDeletedAtAttribute()
+    public function it_hides_deleted_at_attribute()
     {
         $expected = ['deleted_at'];
         $this->assertEquals($expected, $this->salaryPeriod->getHidden());
     }
 
     /** @test */
-    public function itUsesCorrectTableName()
+    public function it_uses_correct_table_name()
     {
         $this->assertEquals('salary_periods', $this->salaryPeriod->getTable());
     }
@@ -113,7 +113,7 @@ class SalaryPeriodTest extends TestCase
     // =============================================
 
     /** @test */
-    public function itHasManyJobs()
+    public function it_has_many_jobs()
     {
         $jobs = Job::factory()->count(3)->create(['salary_period_id' => $this->salaryPeriod->id]);
 
@@ -122,7 +122,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function itHasManyCandidates()
+    public function it_has_many_candidates()
     {
         $candidates = Candidate::factory()->count(2)->create(['salary_period_id' => $this->salaryPeriod->id]);
 
@@ -135,7 +135,7 @@ class SalaryPeriodTest extends TestCase
     // =============================================
 
     /** @test */
-    public function scopeActiveReturnsOnlyActivePeriods()
+    public function scope_active_returns_only_active_periods()
     {
         SalaryPeriod::factory()->create(['is_active' => false]);
         $activePeriod = SalaryPeriod::factory()->create(['is_active' => true]);
@@ -148,7 +148,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function scopeInactiveReturnsOnlyInactivePeriods()
+    public function scope_inactive_returns_only_inactive_periods()
     {
         $inactivePeriod = SalaryPeriod::factory()->create(['is_active' => false]);
 
@@ -160,7 +160,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function scopeFeaturedReturnsOnlyFeaturedPeriods()
+    public function scope_featured_returns_only_featured_periods()
     {
         $featuredPeriod = SalaryPeriod::factory()->create(['is_featured' => true]);
 
@@ -172,7 +172,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function scopeDefaultReturnsOnlyDefaultPeriods()
+    public function scope_default_returns_only_default_periods()
     {
         $defaultPeriod = SalaryPeriod::factory()->create(['is_default' => true]);
 
@@ -184,7 +184,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function scopeCustomReturnsOnlyCustomPeriods()
+    public function scope_custom_returns_only_custom_periods()
     {
         SalaryPeriod::factory()->create(['is_default' => true]);
 
@@ -199,7 +199,7 @@ class SalaryPeriodTest extends TestCase
     // =============================================
 
     /** @test */
-    public function scopeHourlyReturnsHourlyPeriods()
+    public function scope_hourly_returns_hourly_periods()
     {
         $hourlyPeriod1 = SalaryPeriod::factory()->create(['period' => 'Per Hour']);
         $hourlyPeriod2 = SalaryPeriod::factory()->create(['period' => 'Hourly Rate']);
@@ -216,7 +216,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function scopeDailyReturnsDailyPeriods()
+    public function scope_daily_returns_daily_periods()
     {
         $dailyPeriod1 = SalaryPeriod::factory()->create(['period' => 'Per Day']);
         $dailyPeriod2 = SalaryPeriod::factory()->create(['period' => 'Daily Rate']);
@@ -230,7 +230,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function scopeWeeklyReturnsWeeklyPeriods()
+    public function scope_weekly_returns_weekly_periods()
     {
         $weeklyPeriod1 = SalaryPeriod::factory()->create(['period' => 'Per Week']);
         $weeklyPeriod2 = SalaryPeriod::factory()->create(['period' => 'Weekly Salary']);
@@ -244,7 +244,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function scopeMonthlyReturnsMonthlyPeriods()
+    public function scope_monthly_returns_monthly_periods()
     {
         $monthlyPeriod1 = SalaryPeriod::factory()->create(['period' => 'Per Month']);
         $monthlyPeriod2 = SalaryPeriod::factory()->create(['period' => 'Monthly Salary']);
@@ -258,7 +258,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function scopeYearlyReturnsYearlyPeriods()
+    public function scope_yearly_returns_yearly_periods()
     {
         $yearlyPeriod1 = SalaryPeriod::factory()->create(['period' => 'Per Year']);
         $yearlyPeriod2 = SalaryPeriod::factory()->create(['period' => 'Annual Salary']);
@@ -278,7 +278,7 @@ class SalaryPeriodTest extends TestCase
     // =============================================
 
     /** @test */
-    public function scopeSearchFindsPeriodsByNameOrDescription()
+    public function scope_search_finds_periods_by_name_or_description()
     {
         $period1 = SalaryPeriod::factory()->create([
             'period' => 'Custom Period',
@@ -301,7 +301,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function scopeRecentReturnsRecentlyCreatedPeriods()
+    public function scope_recent_returns_recently_created_periods()
     {
         $oldPeriod = SalaryPeriod::factory()->create([
             'created_at' => now()->subDays(60),
@@ -315,7 +315,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function scopeOldReturnsOldPeriods()
+    public function scope_old_returns_old_periods()
     {
         $oldPeriod = SalaryPeriod::factory()->create([
             'created_at' => now()->subDays(400),
@@ -329,7 +329,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function scopeAlphabeticalOrdersPeriodsByName()
+    public function scope_alphabetical_orders_periods_by_name()
     {
         $periodA = SalaryPeriod::factory()->create(['period' => 'Alpha Period']);
         $periodZ = SalaryPeriod::factory()->create(['period' => 'Zulu Period']);
@@ -341,7 +341,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function scopeByOrderOrdersPeriodsBySortOrder()
+    public function scope_by_order_orders_periods_by_sort_order()
     {
         $period1 = SalaryPeriod::factory()->create(['sort_order' => 1, 'period' => 'A']);
         $period2 = SalaryPeriod::factory()->create(['sort_order' => 2, 'period' => 'B']);
@@ -358,7 +358,7 @@ class SalaryPeriodTest extends TestCase
     // =============================================
 
     /** @test */
-    public function scopeWithJobsReturnsPeriodsWithJobs()
+    public function scope_with_jobs_returns_periods_with_jobs()
     {
         Job::factory()->create(['salary_period_id' => $this->salaryPeriod->id]);
         $periodWithoutJobs = SalaryPeriod::factory()->create();
@@ -371,7 +371,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function scopeWithActiveJobsReturnsPeriodsWithActiveJobs()
+    public function scope_with_active_jobs_returns_periods_with_active_jobs()
     {
         Job::factory()->create([
             'salary_period_id' => $this->salaryPeriod->id,
@@ -393,7 +393,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function scopeWithCandidatesReturnsPeriodsWithCandidates()
+    public function scope_with_candidates_returns_periods_with_candidates()
     {
         Candidate::factory()->create(['salary_period_id' => $this->salaryPeriod->id]);
         $periodWithoutCandidates = SalaryPeriod::factory()->create();
@@ -406,7 +406,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function scopeWithActiveCandidatesReturnsPeriodsWithActiveCandidates()
+    public function scope_with_active_candidates_returns_periods_with_active_candidates()
     {
         Candidate::factory()->create([
             'salary_period_id' => $this->salaryPeriod->id,
@@ -427,7 +427,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function scopePopularReturnsPeriodsOrderedByActiveJobsCount()
+    public function scope_popular_returns_periods_ordered_by_active_jobs_count()
     {
         $period2 = SalaryPeriod::factory()->create();
 
@@ -450,7 +450,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function scopeTrendingReturnsPeriodsWithRecentJobs()
+    public function scope_trending_returns_periods_with_recent_jobs()
     {
         $period2 = SalaryPeriod::factory()->create();
 
@@ -480,7 +480,7 @@ class SalaryPeriodTest extends TestCase
     // =============================================
 
     /** @test */
-    public function getDisplayNameAttributeIncludesDescription()
+    public function get_display_name_attribute_includes_description()
     {
         $expected = 'Per Hour (Hourly salary payment)';
         $this->assertEquals($expected, $this->salaryPeriod->display_name);
@@ -493,7 +493,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function getPeriodTypeAttributeDetectsPeriodTypesCorrectly()
+    public function get_period_type_attribute_detects_period_types_correctly()
     {
         $this->assertEquals('hourly', $this->salaryPeriod->period_type);
 
@@ -514,7 +514,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function periodTypeCheckMethodsWorkCorrectly()
+    public function period_type_check_methods_work_correctly()
     {
         $this->assertTrue($this->salaryPeriod->isHourly());
         $this->assertFalse($this->salaryPeriod->isDaily());
@@ -528,7 +528,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function convertToYearlyCalculatesCorrectly()
+    public function convert_to_yearly_calculates_correctly()
     {
         // Test with multiplier
         $yearly = $this->salaryPeriod->convertToYearly(25.0); // $25/hour
@@ -544,7 +544,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function convertToMonthlyCalculatesCorrectly()
+    public function convert_to_monthly_calculates_correctly()
     {
         $monthly = $this->salaryPeriod->convertToMonthly(25.0); // $25/hour
         $expected = 52000.0 / 12; // Yearly equivalent / 12
@@ -552,7 +552,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function convertToHourlyCalculatesCorrectly()
+    public function convert_to_hourly_calculates_correctly()
     {
         $hourly = $this->salaryPeriod->convertToHourly(25.0); // $25/hour
         $this->assertEquals(25.0, $hourly); // Should be same for hourly
@@ -568,7 +568,7 @@ class SalaryPeriodTest extends TestCase
     // =============================================
 
     /** @test */
-    public function getCachedActiveReturnsCachedResults()
+    public function get_cached_active_returns_cached_results()
     {
         SalaryPeriod::factory()->count(3)->create(['is_active' => true]);
 
@@ -581,7 +581,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function getCachedFeaturedReturnsCachedResults()
+    public function get_cached_featured_returns_cached_results()
     {
         SalaryPeriod::factory()->create(['is_featured' => true, 'is_active' => true]);
 
@@ -594,7 +594,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function getCachedByTypeReturnsCachedResults()
+    public function get_cached_by_type_returns_cached_results()
     {
         $results1 = SalaryPeriod::getCachedByType('hourly');
         $results2 = SalaryPeriod::getCachedByType('hourly');
@@ -605,7 +605,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function clearCachesRemovesRelatedCacheKeys()
+    public function clear_caches_removes_related_cache_keys()
     {
         // Set up some cache entries
         SalaryPeriod::getCachedActive();
@@ -624,7 +624,7 @@ class SalaryPeriodTest extends TestCase
     // =============================================
 
     /** @test */
-    public function validationRulesAreCorrectlyDefined()
+    public function validation_rules_are_correctly_defined()
     {
         $expectedRules = [
             'period' => 'required|string|max:150|unique:salary_periods,period',
@@ -643,7 +643,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function updateRulesExcludeCurrentPeriodFromUniqueCheck()
+    public function update_rules_exclude_current_period_from_unique_check()
     {
         $updateRules = SalaryPeriod::updateRules($this->salaryPeriod->id);
 
@@ -655,7 +655,7 @@ class SalaryPeriodTest extends TestCase
     // =============================================
 
     /** @test */
-    public function jobsCountAttributeReturnsCachedCount()
+    public function jobs_count_attribute_returns_cached_count()
     {
         Job::factory()->count(3)->create(['salary_period_id' => $this->salaryPeriod->id]);
 
@@ -666,7 +666,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function activeJobsCountAttributeReturnsCachedCount()
+    public function active_jobs_count_attribute_returns_cached_count()
     {
         Job::factory()->count(2)->create([
             'salary_period_id' => $this->salaryPeriod->id,
@@ -684,7 +684,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function candidatesCountAttributeReturnsCachedCount()
+    public function candidates_count_attribute_returns_cached_count()
     {
         Candidate::factory()->count(4)->create(['salary_period_id' => $this->salaryPeriod->id]);
 
@@ -695,7 +695,7 @@ class SalaryPeriodTest extends TestCase
     }
 
     /** @test */
-    public function activeCandidatesCountAttributeReturnsCachedCount()
+    public function active_candidates_count_attribute_returns_cached_count()
     {
         Candidate::factory()->count(3)->create([
             'salary_period_id' => $this->salaryPeriod->id,

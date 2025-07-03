@@ -30,17 +30,17 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAuthorizationReturnsTrue()
+    public function test_authorization_returns_true()
     {
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
 
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function testValidationRulesAreDefined()
+    public function test_validation_rules_are_defined()
     {
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
         $rules = $request->rules();
 
         $this->assertIsArray($rules);
@@ -48,9 +48,9 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationMessagesAreDefined()
+    public function test_validation_messages_are_defined()
     {
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
 
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
@@ -61,9 +61,9 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationAttributesAreDefined()
+    public function test_validation_attributes_are_defined()
     {
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
 
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
@@ -74,9 +74,9 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testUserFirstNameValidation()
+    public function test_user_first_name_validation()
     {
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('user.first_name', $rules);
@@ -87,9 +87,9 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testUserLastNameValidation()
+    public function test_user_last_name_validation()
     {
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('user.last_name', $rules);
@@ -100,9 +100,9 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testUserEmailValidation()
+    public function test_user_email_validation()
     {
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('user.email', $rules);
@@ -113,9 +113,9 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testUserPasswordValidation()
+    public function test_user_password_validation()
     {
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('user.password', $rules);
@@ -126,9 +126,9 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testUserPhoneValidation()
+    public function test_user_phone_validation()
     {
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('user.phone', $rules);
@@ -139,9 +139,9 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testUserDobValidation()
+    public function test_user_dob_validation()
     {
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('user.dob', $rules);
@@ -152,9 +152,9 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testMaritalStatusIdValidation()
+    public function test_marital_status_id_validation()
     {
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('marital_status_id', $rules);
@@ -165,9 +165,9 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testNationalityValidation()
+    public function test_nationality_validation()
     {
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('nationality', $rules);
@@ -178,9 +178,9 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testCountryIdValidation()
+    public function test_country_id_validation()
     {
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('country_id', $rules);
@@ -191,9 +191,9 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testStateIdValidation()
+    public function test_state_id_validation()
     {
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('state_id', $rules);
@@ -204,9 +204,9 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testCityIdValidation()
+    public function test_city_id_validation()
     {
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('city_id', $rules);
@@ -217,9 +217,9 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testIsActiveValidation()
+    public function test_is_active_validation()
     {
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('is_active', $rules);
@@ -230,9 +230,9 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testBooleanValidation()
+    public function test_boolean_validation()
     {
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('boolean', $rules);
@@ -243,9 +243,9 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testIsVerifiedValidation()
+    public function test_is_verified_validation()
     {
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('is_verified', $rules);
@@ -256,7 +256,7 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidDataPassesValidation()
+    public function test_valid_data_passes_validation()
     {
         $validData = [
             'user.first_name' => 'Test Value',
@@ -275,18 +275,18 @@ class StoreCandidateRequestTest extends TestCase
             'is_verified' => 'Test Value',
         ];
 
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
         $validator = validator($validData, $request->rules());
 
         $this->assertFalse($validator->fails());
     }
 
     /** @test */
-    public function testRequestHandlesEmptyDataCorrectly()
+    public function test_request_handles_empty_data_correctly()
     {
         $emptyData = [];
 
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
         $validator = validator($emptyData, $request->rules());
 
         // Should handle empty data according to rules
@@ -294,7 +294,7 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSecurityValidationPreventsXss()
+    public function test_security_validation_prevents_xss()
     {
         $maliciousData = [
             'name' => '<script>alert("xss")</script>',
@@ -302,7 +302,7 @@ class StoreCandidateRequestTest extends TestCase
             'content' => '<img src=x onerror=alert("xss")>',
         ];
 
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
         $validator = validator($maliciousData, $request->rules());
 
         // XSS data should either fail validation or be properly sanitized
@@ -317,7 +317,7 @@ class StoreCandidateRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSqlInjectionPrevention()
+    public function test_sql_injection_prevention()
     {
         $sqlInjectionData = [
             'name' => "'; DROP TABLE users; --",
@@ -325,7 +325,7 @@ class StoreCandidateRequestTest extends TestCase
             'filter' => 'UNION SELECT * FROM passwords',
         ];
 
-        $request = new StoreCandidateRequest();
+        $request = new StoreCandidateRequest;
         $validator = validator($sqlInjectionData, $request->rules());
 
         // SQL injection patterns should be handled safely

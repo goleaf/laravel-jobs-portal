@@ -15,11 +15,10 @@ class CmsServicesRepository extends BaseRepository implements CmsServicesReposit
     /**
      * Get services by status.
      *
-     * @param string $status
      * @return mixed
      */
     public function getByStatus(string $status)
     {
         return $this->model->where('status', $status)->get();
     }
-} 
+}

@@ -74,7 +74,7 @@ class BrandingSliderApiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function show($id): JsonResponse
     {
@@ -98,7 +98,7 @@ class BrandingSliderApiController extends Controller
     /**
      * Update the specified resource.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function update(UpdateBrandingSliderRequest $request, $id): JsonResponse
     {
@@ -124,7 +124,7 @@ class BrandingSliderApiController extends Controller
     /**
      * Remove the specified resource.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function destroy($id): JsonResponse
     {

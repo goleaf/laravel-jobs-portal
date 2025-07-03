@@ -22,8 +22,7 @@ class JobService
             return Job::with(['company', 'jobCategory', 'jobType', 'currency', 'salaryPeriod'])
                 ->active()
                 ->latest()
-                ->paginate($perPage)
-            ;
+                ->paginate($perPage);
         });
     }
 
@@ -37,8 +36,7 @@ class JobService
                 ->featured()
                 ->latest()
                 ->limit($limit)
-                ->get()
-            ;
+                ->get();
         });
     }
 
@@ -48,27 +46,25 @@ class JobService
     public function searchJobs(array $filters, int $perPage = 15): LengthAwarePaginator
     {
         $query = Job::with(['company', 'jobCategory', 'jobType', 'currency'])
-            ->active()
-        ;
+            ->active();
 
         // Apply filters
-        if (!empty($filters['keyword'])) {
+        if (! empty($filters['keyword'])) {
             $query->where(function ($q) use ($filters) {
                 $q->where('job_title', 'like', '%'.$filters['keyword'].'%')
-                    ->orWhere('description', 'like', '%'.$filters['keyword'].'%')
-                ;
+                    ->orWhere('description', 'like', '%'.$filters['keyword'].'%');
             });
         }
 
-        if (!empty($filters['category_id'])) {
+        if (! empty($filters['category_id'])) {
             $query->byCategory($filters['category_id']);
         }
 
-        if (!empty($filters['job_type_id'])) {
+        if (! empty($filters['job_type_id'])) {
             $query->where('job_type_id', $filters['job_type_id']);
         }
 
-        if (!empty($filters['country_id']) || !empty($filters['state_id']) || !empty($filters['city_id'])) {
+        if (! empty($filters['country_id']) || ! empty($filters['state_id']) || ! empty($filters['city_id'])) {
             $query->byLocation(
                 $filters['country_id'] ?? null,
                 $filters['state_id'] ?? null,
@@ -76,14 +72,14 @@ class JobService
             );
         }
 
-        if (!empty($filters['min_salary']) || !empty($filters['max_salary'])) {
+        if (! empty($filters['min_salary']) || ! empty($filters['max_salary'])) {
             $query->bySalaryRange(
                 $filters['min_salary'] ?? null,
                 $filters['max_salary'] ?? null
             );
         }
 
-        if (!empty($filters['skills'])) {
+        if (! empty($filters['skills'])) {
             $query->withSkills($filters['skills']);
         }
 
@@ -99,12 +95,12 @@ class JobService
             $job = Job::create($data);
 
             // Attach skills if provided
-            if (!empty($data['skills'])) {
+            if (! empty($data['skills'])) {
                 $job->jobsSkill()->attach($data['skills']);
             }
 
             // Attach tags if provided
-            if (!empty($data['tags'])) {
+            if (! empty($data['tags'])) {
                 $job->jobsTag()->attach($data['tags']);
             }
 
@@ -181,8 +177,7 @@ class JobService
         return Job::with(['jobCategory', 'jobType', 'appliedJobs'])
             ->byCompany($company->id)
             ->latest()
-            ->paginate($perPage)
-        ;
+            ->paginate($perPage);
     }
 
     /**
@@ -213,8 +208,7 @@ class JobService
                 ->popular()
                 ->active()
                 ->limit($limit)
-                ->get()
-            ;
+                ->get();
         });
     }
 
@@ -229,8 +223,7 @@ class JobService
                 ->active()
                 ->latest()
                 ->limit($limit)
-                ->get()
-            ;
+                ->get();
         });
     }
 
@@ -244,13 +237,11 @@ class JobService
             ->where(function ($query) use ($job) {
                 $query->where('job_category_id', $job->job_category_id)
                     ->orWhere('job_type_id', $job->job_type_id)
-                    ->orWhere('company_id', $job->company_id)
-                ;
+                    ->orWhere('company_id', $job->company_id);
             })
             ->active()
             ->limit($limit)
-            ->get()
-        ;
+            ->get();
     }
 
     /**
@@ -272,7 +263,7 @@ class JobService
                 'expiry_date' => $expiryDate->toDateString(),
             ]);
 
-            return null !== $featuredRecord;
+            return $featuredRecord !== null;
         });
     }
 
@@ -283,8 +274,7 @@ class JobService
     {
         $expiredCount = Job::where('job_expiry_date', '<', now())
             ->where('status', '!=', Job::STATUS_CLOSED)
-            ->update(['status' => Job::STATUS_CLOSED])
-        ;
+            ->update(['status' => Job::STATUS_CLOSED]);
 
         if ($expiredCount > 0) {
             Cache::tags(['jobs'])->flush();

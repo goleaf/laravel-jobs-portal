@@ -43,10 +43,10 @@ class WebRegisterRepository
 
             /** @var User $user */
             $user = User::create($userInput);
-            $userRole = Role::where('name', (1 == $input['type']) ? 'Candidate' : 'Employer')->first();
+            $userRole = Role::where('name', ($input['type'] == 1) ? 'Candidate' : 'Employer')->first();
             $user->assignRole($userRole);
             $adminId = User::role('Admin')->first()->id;
-            if (1 == $input['type']) {
+            if ($input['type'] == 1) {
                 /** @var CandidateRepository $candidateRepo */
                 $candidateRepo = \App::make(CandidateRepository::class);
                 $candidate = Candidate::create([
@@ -54,7 +54,7 @@ class WebRegisterRepository
                     'unique_id' => $candidateRepo->getUniqueCandidateId(),
                 ]);
                 $user->update(['owner_id' => $candidate->id, 'owner_type' => Candidate::class]);
-                1 == NotificationSetting::where('key', 'NEW_CANDIDATE_REGISTERED')->first()->value
+                NotificationSetting::where('key', 'NEW_CANDIDATE_REGISTERED')->first()->value == 1
                     ? addNotification([
                         Notification::NEW_CANDIDATE_REGISTERED,
                         $adminId,
@@ -67,7 +67,7 @@ class WebRegisterRepository
                     'unique_id' => getUniqueCompanyId(),
                 ]);
                 $user->update(['owner_id' => $employer->id, 'owner_type' => Company::class]);
-                1 == NotificationSetting::where('key', 'NEW_EMPLOYER_REGISTERED')->first()->value
+                NotificationSetting::where('key', 'NEW_EMPLOYER_REGISTERED')->first()->value == 1
                     ? addNotification([
                         Notification::NEW_EMPLOYER_REGISTERED,
                         $adminId,

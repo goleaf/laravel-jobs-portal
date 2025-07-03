@@ -2,18 +2,18 @@
 
 namespace Tests\Feature\Requests;
 
-use Tests\TestCase;
-use App\Http\Requests\Foundation\AbstractBaseRequest;
-use App\Http\Requests\MasterData\MasterDataRequest;
-use App\Http\Requests\Financial\FinancialRequest;
 use App\Http\Requests\Api\ApiRequest;
 use App\Http\Requests\Communication\CommunicationRequest;
-use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\Financial\FinancialRequest;
+use App\Http\Requests\Foundation\AbstractBaseRequest;
+use App\Http\Requests\MasterData\MasterDataRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Tests\TestCase;
 
 /**
  * Validation Integration Test Suite
- * 
+ *
  * Tests the integration between different validation components
  */
 class ValidationIntegrationTest extends TestCase
@@ -32,35 +32,63 @@ class ValidationIntegrationTest extends TestCase
     public function it_combines_multiple_domain_validations()
     {
         // Create a combined request that uses multiple domains
-        $combinedRequest = new class extends AbstractBaseRequest {
+        $combinedRequest = new class extends AbstractBaseRequest
+        {
             protected function getDomainRules(): array
             {
                 $masterDataRequest = $this->createMasterDataInstance();
                 $financialRequest = $this->createFinancialInstance();
-                
+
                 return array_merge(
                     $masterDataRequest->getLocationRules(),
                     $financialRequest->getPaymentRules()
                 );
             }
 
-            protected function getDomainMessages(): array { return []; }
-            protected function getDomainAttributes(): array { return []; }
-            protected function getBusinessLogicRules(): array { return []; }
+            protected function getDomainMessages(): array
+            {
+                return [];
+            }
+
+            protected function getDomainAttributes(): array
+            {
+                return [];
+            }
+
+            protected function getBusinessLogicRules(): array
+            {
+                return [];
+            }
 
             private function createMasterDataInstance()
             {
-                return new class extends MasterDataRequest {
-                    public function getLocationRules(): array { return parent::getLocationRules(); }
-                    protected function getBusinessLogicRules(): array { return []; }
+                return new class extends MasterDataRequest
+                {
+                    public function getLocationRules(): array
+                    {
+                        return parent::getLocationRules();
+                    }
+
+                    protected function getBusinessLogicRules(): array
+                    {
+                        return [];
+                    }
                 };
             }
 
             private function createFinancialInstance()
             {
-                return new class extends FinancialRequest {
-                    public function getPaymentRules(): array { return parent::getPaymentRules(); }
-                    protected function getBusinessLogicRules(): array { return []; }
+                return new class extends FinancialRequest
+                {
+                    public function getPaymentRules(): array
+                    {
+                        return parent::getPaymentRules();
+                    }
+
+                    protected function getBusinessLogicRules(): array
+                    {
+                        return [];
+                    }
                 };
             }
         };
@@ -73,7 +101,7 @@ class ValidationIntegrationTest extends TestCase
             'card_holder_name' => 'John Doe',
             'expiry_month' => 12,
             'expiry_year' => 2025,
-            'cvv' => '123'
+            'cvv' => '123',
         ];
 
         $validator = Validator::make($data, $combinedRequest->rules());
@@ -83,7 +111,8 @@ class ValidationIntegrationTest extends TestCase
     /** @test */
     public function it_validates_api_requests_with_domain_data()
     {
-        $apiRequest = new class extends ApiRequest {
+        $apiRequest = new class extends ApiRequest
+        {
             public function rules(): array
             {
                 return array_merge(
@@ -92,7 +121,11 @@ class ValidationIntegrationTest extends TestCase
                     $this->getSortingRules(['name', 'created_at'])
                 );
             }
-            protected function getBusinessLogicRules(): array { return []; }
+
+            protected function getBusinessLogicRules(): array
+            {
+                return [];
+            }
         };
 
         $data = [
@@ -100,7 +133,7 @@ class ValidationIntegrationTest extends TestCase
             'per_page' => 10,
             'sort' => 'name',
             'order' => 'asc',
-            'api_version' => 'v1'
+            'api_version' => 'v1',
         ];
 
         $validator = Validator::make($data, $apiRequest->rules());
@@ -114,19 +147,19 @@ class ValidationIntegrationTest extends TestCase
             $this->createMasterDataRequest(),
             $this->createFinancialRequest(),
             $this->createApiRequest(),
-            $this->createCommunicationRequest()
+            $this->createCommunicationRequest(),
         ];
 
         foreach ($requests as $request) {
             $reflection = new \ReflectionClass($request);
-            
+
             // All requests should have error handling methods
             $this->assertTrue($reflection->hasMethod('getDomainMessages'));
             $this->assertTrue($reflection->hasMethod('getDomainAttributes'));
-            
+
             $messages = $request->messages();
             $attributes = $request->attributes();
-            
+
             $this->assertIsArray($messages);
             $this->assertIsArray($attributes);
         }
@@ -138,16 +171,16 @@ class ValidationIntegrationTest extends TestCase
         $testData = [
             'master_data' => [
                 'company_name' => '  Test Company  ',
-                'country_code' => 'us'
+                'country_code' => 'us',
             ],
             'financial' => [
                 'amount' => '99.999',
-                'currency' => 'usd'
+                'currency' => 'usd',
             ],
             'api' => [
                 'sort' => 'NAME',
-                'order' => 'ASC'
-            ]
+                'order' => 'ASC',
+            ],
         ];
 
         // Test MasterData sanitization
@@ -155,7 +188,7 @@ class ValidationIntegrationTest extends TestCase
         $method = new \ReflectionMethod($masterDataRequest, 'applySanitization');
         $method->setAccessible(true);
         $sanitized = $method->invoke($masterDataRequest, $testData['master_data']);
-        
+
         $this->assertEquals('Test Company', $sanitized['company_name']);
         $this->assertEquals('US', $sanitized['country_code']);
 
@@ -164,7 +197,7 @@ class ValidationIntegrationTest extends TestCase
         $method = new \ReflectionMethod($financialRequest, 'applySanitization');
         $method->setAccessible(true);
         $sanitized = $method->invoke($financialRequest, $testData['financial']);
-        
+
         $this->assertEquals(100.00, $sanitized['amount']);
         $this->assertEquals('USD', $sanitized['currency']);
 
@@ -173,7 +206,7 @@ class ValidationIntegrationTest extends TestCase
         $method = new \ReflectionMethod($apiRequest, 'applySanitization');
         $method->setAccessible(true);
         $sanitized = $method->invoke($apiRequest, $testData['api']);
-        
+
         $this->assertEquals('name', $sanitized['sort']);
         $this->assertEquals('asc', $sanitized['order']);
     }
@@ -185,7 +218,7 @@ class ValidationIntegrationTest extends TestCase
             'MasterData' => 'high',
             'Financial' => 'critical',
             'Api' => 'high',
-            'Communication' => 'medium'
+            'Communication' => 'medium',
         ];
 
         foreach ($securityLevels as $domain => $expectedLevel) {
@@ -193,10 +226,13 @@ class ValidationIntegrationTest extends TestCase
             $reflection = new \ReflectionClass($request);
             $property = $reflection->getProperty('securityLevel');
             $property->setAccessible(true);
-            
+
             $actualLevel = $property->getValue($request);
-            $this->assertEquals($expectedLevel, $actualLevel, 
-                "{$domain}Request should have {$expectedLevel} security level");
+            $this->assertEquals(
+                $expectedLevel,
+                $actualLevel,
+                "{$domain}Request should have {$expectedLevel} security level"
+            );
         }
     }
 
@@ -204,11 +240,11 @@ class ValidationIntegrationTest extends TestCase
     public function it_validates_multilingual_content()
     {
         $communicationRequest = $this->createCommunicationRequest();
-        
+
         $testData = [
             'subject' => 'Test Subject',
             'content' => 'This is test content with some text',
-            'message_type' => 'email'
+            'message_type' => 'email',
         ];
 
         $validator = Validator::make($testData, $communicationRequest->rules());
@@ -218,31 +254,44 @@ class ValidationIntegrationTest extends TestCase
     /** @test */
     public function it_handles_cross_domain_validation_failures()
     {
-        $combinedRequest = new class extends AbstractBaseRequest {
+        $combinedRequest = new class extends AbstractBaseRequest
+        {
             protected function getDomainRules(): array
             {
                 return [
                     'email' => ['required', 'email'],
                     'amount' => ['required', 'numeric', 'min:0'],
                     'country_code' => ['required', 'size:2'],
-                    'api_version' => ['required', 'in:v1,v2,v3']
+                    'api_version' => ['required', 'in:v1,v2,v3'],
                 ];
             }
-            protected function getDomainMessages(): array { return []; }
-            protected function getDomainAttributes(): array { return []; }
-            protected function getBusinessLogicRules(): array { return []; }
+
+            protected function getDomainMessages(): array
+            {
+                return [];
+            }
+
+            protected function getDomainAttributes(): array
+            {
+                return [];
+            }
+
+            protected function getBusinessLogicRules(): array
+            {
+                return [];
+            }
         };
 
         $invalidData = [
             'email' => 'invalid-email',
             'amount' => -10,
             'country_code' => 'USA',
-            'api_version' => 'v99'
+            'api_version' => 'v99',
         ];
 
         $validator = Validator::make($invalidData, $combinedRequest->rules());
         $this->assertTrue($validator->fails());
-        
+
         $errors = $validator->errors()->toArray();
         $this->assertArrayHasKey('email', $errors);
         $this->assertArrayHasKey('amount', $errors);
@@ -253,33 +302,65 @@ class ValidationIntegrationTest extends TestCase
     // Helper methods to create domain request instances
     private function createMasterDataRequest()
     {
-        return new class extends MasterDataRequest {
-            public function rules(): array { return $this->getDomainRules(); }
-            protected function getBusinessLogicRules(): array { return []; }
+        return new class extends MasterDataRequest
+        {
+            public function rules(): array
+            {
+                return $this->getDomainRules();
+            }
+
+            protected function getBusinessLogicRules(): array
+            {
+                return [];
+            }
         };
     }
 
     private function createFinancialRequest()
     {
-        return new class extends FinancialRequest {
-            public function rules(): array { return $this->getDomainRules(); }
-            protected function getBusinessLogicRules(): array { return []; }
+        return new class extends FinancialRequest
+        {
+            public function rules(): array
+            {
+                return $this->getDomainRules();
+            }
+
+            protected function getBusinessLogicRules(): array
+            {
+                return [];
+            }
         };
     }
 
     private function createApiRequest()
     {
-        return new class extends ApiRequest {
-            public function rules(): array { return $this->getDomainRules(); }
-            protected function getBusinessLogicRules(): array { return []; }
+        return new class extends ApiRequest
+        {
+            public function rules(): array
+            {
+                return $this->getDomainRules();
+            }
+
+            protected function getBusinessLogicRules(): array
+            {
+                return [];
+            }
         };
     }
 
     private function createCommunicationRequest()
     {
-        return new class extends CommunicationRequest {
-            public function rules(): array { return $this->getDomainRules(); }
-            protected function getBusinessLogicRules(): array { return []; }
+        return new class extends CommunicationRequest
+        {
+            public function rules(): array
+            {
+                return $this->getDomainRules();
+            }
+
+            protected function getBusinessLogicRules(): array
+            {
+                return [];
+            }
         };
     }
-} 
+}

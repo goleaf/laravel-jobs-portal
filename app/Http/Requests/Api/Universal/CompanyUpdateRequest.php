@@ -155,17 +155,17 @@ class CompanyUpdateRequest extends FormRequest
     {
         $validator->after(function ($validator) {
             // Validate location hierarchy
-            if ($this->has('state_id') && !$this->has('country_id')) {
+            if ($this->has('state_id') && ! $this->has('country_id')) {
                 $company = $this->route('company');
-                if (!$company->country_id) {
+                if (! $company->country_id) {
                     $validator->errors()->add('country_id', 'Country is required when updating state.');
                 }
             }
 
             // Validate revenue currency requirement
-            if ($this->has('revenue') && $this->revenue > 0 && !$this->has('revenue_currency_id')) {
+            if ($this->has('revenue') && $this->revenue > 0 && ! $this->has('revenue_currency_id')) {
                 $company = $this->route('company');
-                if (!$company->revenue_currency_id) {
+                if (! $company->revenue_currency_id) {
                     $validator->errors()->add('revenue_currency_id', 'Currency is required when revenue is specified.');
                 }
             }
@@ -192,7 +192,7 @@ class CompanyUpdateRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Update slug if name is being updated
-        if ($this->has('name') && !$this->has('slug')) {
+        if ($this->has('name') && ! $this->has('slug')) {
             $this->merge([
                 'slug' => \Str::slug($this->name),
             ]);

@@ -21,7 +21,7 @@ class TwoFactorAuthService
     /**
      * Generate a new 2FA secret for user.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     public function generateSecret($user): string
     {
@@ -42,7 +42,7 @@ class TwoFactorAuthService
     /**
      * Generate QR code data for 2FA setup.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     public function generateQrCodeData($user, string $secret): string
     {
@@ -56,11 +56,11 @@ class TwoFactorAuthService
     /**
      * Verify TOTP code and enable 2FA.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     public function enableTwoFactor($user, string $code): bool
     {
-        if (!$user->two_factor_secret) {
+        if (! $user->two_factor_secret) {
             return false;
         }
 
@@ -98,7 +98,7 @@ class TwoFactorAuthService
     /**
      * Disable 2FA for user.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     public function disableTwoFactor($user): bool
     {
@@ -117,11 +117,11 @@ class TwoFactorAuthService
     /**
      * Verify 2FA code during login.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     public function verifyLogin($user, string $code): bool
     {
-        if (!$user->two_factor_enabled) {
+        if (! $user->two_factor_enabled) {
             return true; // 2FA not enabled
         }
 
@@ -157,11 +157,11 @@ class TwoFactorAuthService
     /**
      * Generate new backup codes.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     public function generateNewBackupCodes($user): array
     {
-        if (!$user->two_factor_enabled) {
+        if (! $user->two_factor_enabled) {
             throw new \Exception('2FA must be enabled to generate backup codes');
         }
 
@@ -182,11 +182,11 @@ class TwoFactorAuthService
     /**
      * Get remaining backup codes count.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     public function getRemainingBackupCodesCount($user): int
     {
-        if (!$user->two_factor_backup_codes) {
+        if (! $user->two_factor_backup_codes) {
             return 0;
         }
 
@@ -202,12 +202,12 @@ class TwoFactorAuthService
     /**
      * Check if 2FA is required for user.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     public function isRequired($user): bool
     {
         // Check if globally enabled
-        if (!config('security.authentication.enable_2fa', false)) {
+        if (! config('security.authentication.enable_2fa', false)) {
             return false;
         }
 
@@ -224,13 +224,13 @@ class TwoFactorAuthService
     /**
      * Generate recovery codes for account recovery.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     public function generateRecoveryCodes($user): array
     {
         $codes = [];
 
-        for ($i = 0; $i < 5; ++$i) {
+        for ($i = 0; $i < 5; $i++) {
             $codes[] = Str::random(16);
         }
 
@@ -250,11 +250,11 @@ class TwoFactorAuthService
     /**
      * Verify recovery code and disable 2FA.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     public function verifyRecoveryCode($user, string $code): bool
     {
-        if (!$user->two_factor_recovery_codes) {
+        if (! $user->two_factor_recovery_codes) {
             return false;
         }
 
@@ -268,7 +268,7 @@ class TwoFactorAuthService
         try {
             $recoveryCodes = json_decode(Crypt::decrypt($user->two_factor_recovery_codes), true);
 
-            if (!is_array($recoveryCodes)) {
+            if (! is_array($recoveryCodes)) {
                 return false;
             }
 
@@ -306,13 +306,13 @@ class TwoFactorAuthService
     /**
      * Get rate limit remaining time.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     public function getRateLimitRemainingTime($user, string $action): int
     {
         $key = "2fa_rate_limit:{$action}:{$user->id}";
 
-        if (!Cache::has($key)) {
+        if (! Cache::has($key)) {
             return 0;
         }
 
@@ -326,7 +326,7 @@ class TwoFactorAuthService
     /**
      * Get 2FA statistics for user.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     public function getStatistics($user): array
     {
@@ -334,7 +334,7 @@ class TwoFactorAuthService
             'enabled' => (bool) $user->two_factor_enabled,
             'enabled_at' => $user->two_factor_enabled_at,
             'backup_codes_count' => $this->getRemainingBackupCodesCount($user),
-            'recovery_codes_available' => !empty($user->two_factor_recovery_codes),
+            'recovery_codes_available' => ! empty($user->two_factor_recovery_codes),
             'recovery_codes_generated_at' => $user->two_factor_recovery_codes_generated_at,
             'is_required' => $this->isRequired($user),
         ];
@@ -343,14 +343,14 @@ class TwoFactorAuthService
     /**
      * Validate 2FA setup requirements.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     public function validateSetupRequirements($user): array
     {
         $errors = [];
 
         // Check if user has verified email
-        if (method_exists($user, 'hasVerifiedEmail') && !$user->hasVerifiedEmail()) {
+        if (method_exists($user, 'hasVerifiedEmail') && ! $user->hasVerifiedEmail()) {
             $errors[] = 'Email address must be verified before enabling 2FA';
         }
 
@@ -396,7 +396,7 @@ class TwoFactorAuthService
         try {
             $encrypted = Crypt::encrypt('test');
             $decrypted = Crypt::decrypt($encrypted);
-            $results['checks']['encryption'] = 'test' === $decrypted ? 'ok' : 'failed';
+            $results['checks']['encryption'] = $decrypted === 'test' ? 'ok' : 'failed';
         } catch (\Exception $e) {
             $results['checks']['encryption'] = 'failed: '.$e->getMessage();
             $results['status'] = 'error';
@@ -408,11 +408,11 @@ class TwoFactorAuthService
     /**
      * Verify TOTP code.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     protected function verifyTOTP($user, string $code): bool
     {
-        if (!$user->two_factor_secret) {
+        if (! $user->two_factor_secret) {
             return false;
         }
 
@@ -433,18 +433,18 @@ class TwoFactorAuthService
     /**
      * Verify backup code.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     protected function verifyBackupCode($user, string $code): bool
     {
-        if (!$user->two_factor_backup_codes) {
+        if (! $user->two_factor_backup_codes) {
             return false;
         }
 
         try {
             $backupCodes = json_decode(Crypt::decrypt($user->two_factor_backup_codes), true);
 
-            if (!is_array($backupCodes)) {
+            if (! is_array($backupCodes)) {
                 return false;
             }
 
@@ -495,7 +495,7 @@ class TwoFactorAuthService
             // Allow some time drift (previous, current, next window)
             $timestamp = time();
 
-            for ($i = -1; $i <= 1; ++$i) {
+            for ($i = -1; $i <= 1; $i++) {
                 $timeSlice = $timestamp + ($i * 30); // 30-second windows
                 if ($totp->verify($code, $timeSlice)) {
                     return true;
@@ -520,7 +520,7 @@ class TwoFactorAuthService
     {
         $codes = [];
 
-        for ($i = 0; $i < self::BACKUP_CODES_COUNT; ++$i) {
+        for ($i = 0; $i < self::BACKUP_CODES_COUNT; $i++) {
             $code = Str::random(self::BACKUP_CODE_LENGTH);
             $codes[] = Hash::make($code);
         }
@@ -531,7 +531,7 @@ class TwoFactorAuthService
     /**
      * Check if user is rate limited for specific action.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     protected function isRateLimited($user, string $action): bool
     {
@@ -544,7 +544,7 @@ class TwoFactorAuthService
     /**
      * Record failed attempt for rate limiting.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     protected function recordFailedAttempt($user, string $action): void
     {
@@ -557,7 +557,7 @@ class TwoFactorAuthService
     /**
      * Clear rate limit for user and action.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     protected function clearRateLimit($user, string $action): void
     {
@@ -568,7 +568,7 @@ class TwoFactorAuthService
     /**
      * Log security events related to 2FA.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     protected function logSecurityEvent(string $event, $user, array $context = []): void
     {
@@ -582,7 +582,7 @@ class TwoFactorAuthService
     /**
      * Send enhanced alert when backup codes are running low.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     protected function sendLowBackupCodesAlert($user, int $remainingCount): void
     {

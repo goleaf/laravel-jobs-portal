@@ -25,22 +25,21 @@ class CompanyApiController extends Controller
             $query = Company::query();
 
             // Apply search filter
-            if ($request->has('search') && !empty($request->search)) {
+            if ($request->has('search') && ! empty($request->search)) {
                 $search = $request->search;
                 $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%")
                         ->orWhere('phone', 'like', "%{$search}%")
-                        ->orWhere('website', 'like', "%{$search}%")
-                    ;
+                        ->orWhere('website', 'like', "%{$search}%");
                 });
             }
 
             // Apply status filter
-            if ($request->has('status') && '' !== $request->status) {
-                if ('active' === $request->status) {
+            if ($request->has('status') && $request->status !== '') {
+                if ($request->status === 'active') {
                     $query->where('is_active', true);
-                } elseif ('inactive' === $request->status) {
+                } elseif ($request->status === 'inactive') {
                     $query->where('is_active', false);
                 }
             }
@@ -141,7 +140,7 @@ class CompanyApiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function show($id): JsonResponse
     {
@@ -182,7 +181,7 @@ class CompanyApiController extends Controller
     /**
      * Update the specified resource.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function update(UpdateRequest $request, $id): JsonResponse
     {
@@ -233,7 +232,7 @@ class CompanyApiController extends Controller
     /**
      * Remove the specified resource.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function destroy($id): JsonResponse
     {

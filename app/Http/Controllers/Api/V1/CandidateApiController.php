@@ -25,7 +25,7 @@ class CandidateApiController extends Controller
             $query = Candidate::with(['user:id,email,email_verified_at']);
 
             // Apply search filter
-            if ($request->has('search') && !empty($request->search)) {
+            if ($request->has('search') && ! empty($request->search)) {
                 $search = $request->search;
                 $query->where(function ($q) use ($search) {
                     $q->where('first_name', 'like', "%{$search}%")
@@ -34,18 +34,17 @@ class CandidateApiController extends Controller
                         ->orWhere('phone', 'like', "%{$search}%")
                         ->orWhereHas('user', function ($user) use ($search) {
                             $user->where('email', 'like', "%{$search}%");
-                        })
-                    ;
+                        });
                 });
             }
 
             // Apply verification status filter
-            if ($request->has('verified') && '' !== $request->verified) {
-                if ('true' === $request->verified) {
+            if ($request->has('verified') && $request->verified !== '') {
+                if ($request->verified === 'true') {
                     $query->whereHas('user', function ($user) {
                         $user->whereNotNull('email_verified_at');
                     });
-                } elseif ('false' === $request->verified) {
+                } elseif ($request->verified === 'false') {
                     $query->whereHas('user', function ($user) {
                         $user->whereNull('email_verified_at');
                     });
@@ -78,7 +77,7 @@ class CandidateApiController extends Controller
                     'experience' => $candidate->experience,
                     'immediate_available' => $candidate->immediate_available,
                     'applications_count' => $candidate->applications_count ?? 0,
-                    'is_verified' => null !== $candidate->user?->email_verified_at,
+                    'is_verified' => $candidate->user?->email_verified_at !== null,
                     'created_at' => $candidate->created_at?->toISOString(),
                     'updated_at' => $candidate->updated_at?->toISOString(),
                 ];
@@ -149,15 +148,14 @@ class CandidateApiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function show($id): JsonResponse
     {
         try {
             $candidate = Candidate::with(['user:id,email,email_verified_at'])
                 ->withCount('applications')
-                ->findOrFail($id)
-            ;
+                ->findOrFail($id);
 
             return response()->json([
                 'success' => true,
@@ -177,7 +175,7 @@ class CandidateApiController extends Controller
                     'experience' => $candidate->experience,
                     'immediate_available' => $candidate->immediate_available,
                     'applications_count' => $candidate->applications_count ?? 0,
-                    'is_verified' => null !== $candidate->user?->email_verified_at,
+                    'is_verified' => $candidate->user?->email_verified_at !== null,
                     'created_at' => $candidate->created_at?->toISOString(),
                     'updated_at' => $candidate->updated_at?->toISOString(),
                 ],
@@ -194,7 +192,7 @@ class CandidateApiController extends Controller
     /**
      * Update the specified resource.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function update(UpdateRequest $request, $id): JsonResponse
     {
@@ -248,7 +246,7 @@ class CandidateApiController extends Controller
     /**
      * Remove the specified resource.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function destroy($id): JsonResponse
     {

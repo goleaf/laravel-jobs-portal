@@ -15,24 +15,24 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Tag Model - Enhanced with Enhanced patterns.
  *
- * @property int              $id
- * @property string           $name
- * @property null|string      $description
- * @property null|string      $slug
- * @property null|string      $color
- * @property bool             $is_active
- * @property bool             $is_default
- * @property bool             $is_featured
- * @property null|int         $sort_order
- * @property null|Carbon      $created_at
- * @property null|Carbon      $updated_at
- * @property null|Carbon      $deleted_at
+ * @property int $id
+ * @property string $name
+ * @property null|string $description
+ * @property null|string $slug
+ * @property null|string $color
+ * @property bool $is_active
+ * @property bool $is_default
+ * @property bool $is_featured
+ * @property null|int $sort_order
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
  * @property Collection|Job[] $jobs
  * @property Collection|Job[] $activeJobs
- * @property string           $display_name
- * @property int              $jobs_count
- * @property int              $active_jobs_count
- * @property bool             $is_popular
+ * @property string $display_name
+ * @property int $jobs_count
+ * @property int $active_jobs_count
+ * @property bool $is_popular
  *
  * Enhanced Enhanced Scopes:
  *
@@ -60,8 +60,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Tag extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     /**
      * Validation rules for creating tags.
@@ -119,8 +119,7 @@ class Tag extends Model
         return LogOptions::defaults()
             ->logOnly(['name', 'description', 'is_active', 'is_default', 'is_featured'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -185,7 +184,7 @@ class Tag extends Model
     /**
      * Scope to only include active tags.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -195,7 +194,7 @@ class Tag extends Model
     /**
      * Scope to only include inactive tags.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -205,7 +204,7 @@ class Tag extends Model
     /**
      * Scope to only include featured tags.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFeatured($query)
     {
@@ -215,7 +214,7 @@ class Tag extends Model
     /**
      * Scope to only include non-featured tags.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNonFeatured($query)
     {
@@ -225,7 +224,7 @@ class Tag extends Model
     /**
      * Scope to only include default tags.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeDefault($query)
     {
@@ -235,7 +234,7 @@ class Tag extends Model
     /**
      * Scope to only include custom tags.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeCustom($query)
     {
@@ -249,22 +248,21 @@ class Tag extends Model
     /**
      * Scope to search tags by name and description.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
             $q->where('name', 'like', '%'.$term.'%')
                 ->orWhere('description', 'like', '%'.$term.'%')
-                ->orWhere('slug', 'like', '%'.$term.'%')
-            ;
+                ->orWhere('slug', 'like', '%'.$term.'%');
         });
     }
 
     /**
      * Scope to get tags created within specified days.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -274,7 +272,7 @@ class Tag extends Model
     /**
      * Scope to get old tags created before specified days.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -284,7 +282,7 @@ class Tag extends Model
     /**
      * Scope to get tags by color.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByColor($query, string $color)
     {
@@ -298,7 +296,7 @@ class Tag extends Model
     /**
      * Scope to order tags alphabetically.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
@@ -308,7 +306,7 @@ class Tag extends Model
     /**
      * Scope to order tags by sort order.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOrdered($query)
     {
@@ -322,7 +320,7 @@ class Tag extends Model
     /**
      * Scope to get tags with jobs.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithJobs($query)
     {
@@ -332,7 +330,7 @@ class Tag extends Model
     /**
      * Scope to get tags without jobs.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithoutJobs($query)
     {
@@ -342,7 +340,7 @@ class Tag extends Model
     /**
      * Scope to get tags with active jobs.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithActiveJobs($query)
     {
@@ -354,7 +352,7 @@ class Tag extends Model
     /**
      * Scope to get tags with featured jobs.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithFeaturedJobs($query)
     {
@@ -366,7 +364,7 @@ class Tag extends Model
     /**
      * Scope to get tags with job counts.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithJobCounts($query)
     {
@@ -388,7 +386,7 @@ class Tag extends Model
     /**
      * Scope to get popular tags by job count.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopular($query, int $limit = 10)
     {
@@ -400,21 +398,20 @@ class Tag extends Model
     /**
      * Scope to get trending tags by recent activity.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeTrending($query, int $days = 30, int $limit = 10)
     {
         return $query->withCount(['jobs as recent_jobs_count' => function ($q) use ($days) {
             $q->where('jobs.is_active', true)
-                ->where('jobs.created_at', '>=', now()->subDays($days))
-            ;
+                ->where('jobs.created_at', '>=', now()->subDays($days));
         }])->orderBy('recent_jobs_count', 'desc')->limit($limit);
     }
 
     /**
      * Scope to get tags with minimum jobs.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeMinJobs($query, int $minJobs = 5)
     {
@@ -579,7 +576,7 @@ class Tag extends Model
      */
     public function hasColor(): bool
     {
-        return !empty($this->color);
+        return ! empty($this->color);
     }
 
     /**

@@ -15,11 +15,10 @@ class UserSettingsRepository extends BaseRepository implements UserSettingsRepos
     /**
      * Get settings by user ID.
      *
-     * @param int $userId
      * @return mixed
      */
     public function getByUserId(int $userId)
     {
         return $this->model->where('user_id', $userId)->first();
     }
-} 
+}

@@ -3,10 +3,10 @@
 namespace App\Providers;
 
 use App\Models\Setting;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\ServiceProvider;
 
 class SettingsServiceProvider extends ServiceProvider
 {
@@ -17,7 +17,7 @@ class SettingsServiceProvider extends ServiceProvider
     {
         // Register settings manager singleton
         $this->app->singleton('settings', function ($app) {
-            return new \App\Services\SettingsManager();
+            return new \App\Services\SettingsManager;
         });
     }
 
@@ -64,7 +64,7 @@ class SettingsServiceProvider extends ServiceProvider
 
         } catch (\Exception $e) {
             // If there's any error loading settings, log it but don't break the app
-            \Log::error('Failed to load settings: ' . $e->getMessage());
+            \Log::error('Failed to load settings: '.$e->getMessage());
         }
     }
 
@@ -84,7 +84,7 @@ class SettingsServiceProvider extends ServiceProvider
                 Config::set("settings.{$group}", $groupSettings);
             }
         } catch (\Exception $e) {
-            \Log::error('Failed to load group settings: ' . $e->getMessage());
+            \Log::error('Failed to load group settings: '.$e->getMessage());
         }
     }
 
@@ -93,12 +93,11 @@ class SettingsServiceProvider extends ServiceProvider
      */
     private function registerSettingsHelpers(): void
     {
-        if (!function_exists('setting')) {
+        if (! function_exists('setting')) {
             /**
              * Get a setting value
              *
-             * @param string $key
-             * @param mixed $default
+             * @param  mixed  $default
              * @return mixed
              */
             function setting(string $key, $default = null)
@@ -107,14 +106,11 @@ class SettingsServiceProvider extends ServiceProvider
             }
         }
 
-        if (!function_exists('setting_set')) {
+        if (! function_exists('setting_set')) {
             /**
              * Set a setting value
              *
-             * @param string $key
-             * @param mixed $value
-             * @param array $options
-             * @return bool
+             * @param  mixed  $value
              */
             function setting_set(string $key, $value, array $options = []): bool
             {
@@ -122,12 +118,9 @@ class SettingsServiceProvider extends ServiceProvider
             }
         }
 
-        if (!function_exists('settings_group')) {
+        if (! function_exists('settings_group')) {
             /**
              * Get all settings from a group
-             *
-             * @param string $group
-             * @return array
              */
             function settings_group(string $group): array
             {

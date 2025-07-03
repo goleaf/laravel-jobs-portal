@@ -15,13 +15,13 @@ class AuthenticationOptimizedTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testLoginPageLoads(): void
+    public function test_login_page_loads(): void
     {
         $response = $this->get('/login');
         $response->assertStatus(200);
     }
 
-    public function testUserCanLoginWithValidCredentials(): void
+    public function test_user_can_login_with_valid_credentials(): void
     {
         $user = TestHelpers::createUserWithUniqueEmail([
             'email' => 'test@example.com',
@@ -36,7 +36,7 @@ class AuthenticationOptimizedTest extends TestCase
         $this->assertAuthenticated();
     }
 
-    public function testUserCannotLoginWithInvalidCredentials(): void
+    public function test_user_cannot_login_with_invalid_credentials(): void
     {
         $user = TestHelpers::createUserWithUniqueEmail([
             'email' => 'test@example.com',
@@ -51,7 +51,7 @@ class AuthenticationOptimizedTest extends TestCase
         $this->assertGuest();
     }
 
-    public function testRegistrationCreatesNewUser(): void
+    public function test_registration_creates_new_user(): void
     {
         $userData = [
             'name' => 'New User',

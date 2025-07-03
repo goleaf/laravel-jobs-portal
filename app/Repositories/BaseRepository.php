@@ -72,11 +72,11 @@ abstract class BaseRepository
 
         $query = $this->newQuery();
 
-        if (!empty($this->with)) {
+        if (! empty($this->with)) {
             $query->with($this->with);
         }
 
-        if (!empty($this->withCount)) {
+        if (! empty($this->withCount)) {
             $query->withCount($this->withCount);
         }
 
@@ -92,7 +92,7 @@ abstract class BaseRepository
     /**
      * Find record by ID with caching.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function find($id, array $columns = ['*'], bool $useCache = true): ?Model
     {
@@ -104,7 +104,7 @@ abstract class BaseRepository
 
         $query = $this->newQuery();
 
-        if (!empty($this->with)) {
+        if (! empty($this->with)) {
             $query->with($this->with);
         }
 
@@ -120,7 +120,7 @@ abstract class BaseRepository
     /**
      * Find record by ID or fail.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function findOrFail($id, array $columns = ['*']): Model
     {
@@ -148,7 +148,7 @@ abstract class BaseRepository
     /**
      * Update record by ID.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function update($id, array $attributes): bool
     {
@@ -169,7 +169,7 @@ abstract class BaseRepository
     /**
      * Delete record by ID.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function delete($id): bool
     {
@@ -200,11 +200,11 @@ abstract class BaseRepository
         $query = $this->newQuery();
 
         // Apply relationships
-        if (!empty($this->with)) {
+        if (! empty($this->with)) {
             $query->with($this->with);
         }
 
-        if (!empty($this->withCount)) {
+        if (! empty($this->withCount)) {
             $query->withCount($this->withCount);
         }
 
@@ -243,7 +243,7 @@ abstract class BaseRepository
 
         $query = $this->newQuery();
 
-        if (!empty($this->with)) {
+        if (! empty($this->with)) {
             $query->with($this->with);
         }
 
@@ -271,7 +271,7 @@ abstract class BaseRepository
     {
         $query = $this->newQuery();
 
-        if (!empty($this->with)) {
+        if (! empty($this->with)) {
             $query->with($this->with);
         }
 
@@ -362,7 +362,7 @@ abstract class BaseRepository
     {
         $query = $this->newQuery();
 
-        if (!empty($this->with)) {
+        if (! empty($this->with)) {
             $query->with($this->with);
         }
 
@@ -442,10 +442,10 @@ abstract class BaseRepository
     protected function applyFilters(Builder $query, array $filters): Builder
     {
         foreach ($filters as $field => $value) {
-            if (null !== $value && '' !== $value) {
+            if ($value !== null && $value !== '') {
                 if (is_array($value)) {
                     $query->whereIn($field, $value);
-                } elseif (false !== strpos($field, '_like')) {
+                } elseif (strpos($field, '_like') !== false) {
                     $actualField = str_replace('_like', '', $field);
                     $query->where($actualField, 'LIKE', "%{$value}%");
                 } else {
@@ -487,7 +487,7 @@ abstract class BaseRepository
     /**
      * Clear model cache.
      *
-     * @param null|mixed $id
+     * @param  null|mixed  $id
      */
     protected function clearModelCache($id = null): void
     {
@@ -496,7 +496,7 @@ abstract class BaseRepository
 
         // Clear all cache keys matching the pattern
         $keys = Cache::getRedis()->keys($pattern);
-        if (!empty($keys)) {
+        if (! empty($keys)) {
             Cache::getRedis()->del($keys);
         }
 

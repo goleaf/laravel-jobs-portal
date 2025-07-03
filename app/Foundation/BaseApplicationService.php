@@ -58,7 +58,7 @@ abstract class BaseApplicationService implements ApplicationServiceInterface
      */
     public function executeQuery(Query $query): mixed
     {
-        if (!$query->isCacheable()) {
+        if (! $query->isCacheable()) {
             return $this->handleQuery($query);
         }
 
@@ -132,7 +132,7 @@ abstract class BaseApplicationService implements ApplicationServiceInterface
     {
         $tags = $command->getCacheTags();
 
-        if (!empty($tags)) {
+        if (! empty($tags)) {
             $this->cacheManager->tags($tags)->flush();
         }
     }
@@ -144,7 +144,7 @@ abstract class BaseApplicationService implements ApplicationServiceInterface
      */
     protected function validateCommand(Command $command): bool
     {
-        if (!$command->isValid()) {
+        if (! $command->isValid()) {
             throw new \Exception('Invalid command: '.implode(', ', $command->getValidationErrors()));
         }
 

@@ -21,4 +21,4 @@ class EnvSettingFactory extends Factory
             'value' => $this->faker->word(),
         ];
     }
-} 
+}

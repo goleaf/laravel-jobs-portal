@@ -15,7 +15,6 @@ class ApplicationRepository extends BaseRepository implements ApplicationReposit
     /**
      * Get applications by user ID.
      *
-     * @param int $userId
      * @return mixed
      */
     public function getByUserId(int $userId)
@@ -26,11 +25,10 @@ class ApplicationRepository extends BaseRepository implements ApplicationReposit
     /**
      * Get applications by job ID.
      *
-     * @param int $jobId
      * @return mixed
      */
     public function getByJobId(int $jobId)
     {
         return $this->model->where('job_id', $jobId)->get();
     }
-} 
+}

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\ProfessionCategory;
 use App\Http\Requests\StoreProfessionCategoryRequest;
 use App\Http\Requests\UpdateProfessionCategoryRequest;
-use Illuminate\Http\Request;
+use App\Models\ProfessionCategory;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ProfessionCategoryController extends Controller
 {
@@ -39,13 +39,13 @@ class ProfessionCategoryController extends Controller
         if ($request->has('search')) {
             $locale = $request->get('locale', app()->getLocale());
             $searchTerm = $request->get('search');
-            
+
             $query->whereHas('translations', function ($q) use ($locale, $searchTerm) {
                 $q->where('locale', $locale)
-                  ->where(function ($subQ) use ($searchTerm) {
-                      $subQ->where('name', 'LIKE', "%{$searchTerm}%")
-                           ->orWhere('description', 'LIKE', "%{$searchTerm}%");
-                  });
+                    ->where(function ($subQ) use ($searchTerm) {
+                        $subQ->where('name', 'LIKE', "%{$searchTerm}%")
+                            ->orWhere('description', 'LIKE', "%{$searchTerm}%");
+                    });
             });
         }
 
@@ -53,7 +53,7 @@ class ProfessionCategoryController extends Controller
 
         // Transform the data to include localized names
         $locale = $request->get('locale', app()->getLocale());
-        
+
         $categories->getCollection()->transform(function ($category) use ($locale) {
             return [
                 'id' => $category->id,
@@ -118,7 +118,7 @@ class ProfessionCategoryController extends Controller
     public function show(Request $request, ProfessionCategory $professionCategory): JsonResponse
     {
         $professionCategory->load(['translations', 'parent.translations', 'children.translations', 'professions.translations']);
-        
+
         $locale = $request->get('locale', app()->getLocale());
 
         $data = [
@@ -240,7 +240,7 @@ class ProfessionCategoryController extends Controller
     public function tree(Request $request): JsonResponse
     {
         $locale = $request->get('locale', app()->getLocale());
-        
+
         $categories = ProfessionCategory::with(['translations', 'children.translations', 'children.children.translations'])
             ->root()
             ->active()
@@ -332,4 +332,4 @@ class ProfessionCategoryController extends Controller
 
         return $data;
     }
-} 
+}

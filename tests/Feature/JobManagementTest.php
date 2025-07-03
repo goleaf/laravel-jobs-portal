@@ -31,7 +31,7 @@ class JobManagementTest extends TestCase
     }
 
     /** @test */
-    public function employerCanCreateJob()
+    public function employer_can_create_job()
     {
         $category = Category::factory()->create();
 
@@ -54,7 +54,7 @@ class JobManagementTest extends TestCase
     }
 
     /** @test */
-    public function candidateCanApplyForJob()
+    public function candidate_can_apply_for_job()
     {
         $job = Job::factory()->create(['company_id' => $this->company->id]);
 
@@ -68,7 +68,7 @@ class JobManagementTest extends TestCase
     }
 
     /** @test */
-    public function jobsCanBeSearched()
+    public function jobs_can_be_searched()
     {
         Job::factory()->create(['title' => 'PHP Developer']);
         Job::factory()->create(['title' => 'JavaScript Developer']);
@@ -81,7 +81,7 @@ class JobManagementTest extends TestCase
     }
 
     /** @test */
-    public function jobsCanBeFilteredByCategory()
+    public function jobs_can_be_filtered_by_category()
     {
         $techCategory = Category::factory()->create(['name' => 'Technology']);
         $marketingCategory = Category::factory()->create(['name' => 'Marketing']);

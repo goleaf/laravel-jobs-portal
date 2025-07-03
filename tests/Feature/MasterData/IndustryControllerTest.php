@@ -42,7 +42,7 @@ class IndustryControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanCreateIndustry(): void
+    public function admin_can_create_industry(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -58,8 +58,7 @@ class IndustryControllerTest extends TestCase
         $response->assertStatus(201)
             ->assertJsonStructure([
                 'data' => ['name', 'description', 'is_active', 'size', 'id', 'created_at', 'updated_at'],
-            ])
-        ;
+            ]);
 
         $this->assertDatabaseHas('industries', [
             'name' => $data['name'] ?? $data[array_key_first($data)],
@@ -67,7 +66,7 @@ class IndustryControllerTest extends TestCase
     }
 
     /** @test */
-    public function employerCanCreateIndustry(): void
+    public function employer_can_create_industry(): void
     {
         Sanctum::actingAs($this->employer);
 
@@ -84,7 +83,7 @@ class IndustryControllerTest extends TestCase
     }
 
     /** @test */
-    public function candidateCannotCreateIndustry(): void
+    public function candidate_cannot_create_industry(): void
     {
         Sanctum::actingAs($this->candidate);
 
@@ -101,7 +100,7 @@ class IndustryControllerTest extends TestCase
     }
 
     /** @test */
-    public function unauthenticatedUserCannotCreateIndustry(): void
+    public function unauthenticated_user_cannot_create_industry(): void
     {
         $data = [
             'name' => 'Technology',
@@ -116,7 +115,7 @@ class IndustryControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanUpdateIndustry(): void
+    public function admin_can_update_industry(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -139,7 +138,7 @@ class IndustryControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanDeleteIndustry(): void
+    public function admin_can_delete_industry(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -155,7 +154,7 @@ class IndustryControllerTest extends TestCase
     }
 
     /** @test */
-    public function validationFailsWithInvalidData(): void
+    public function validation_fails_with_invalid_data(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -166,12 +165,11 @@ class IndustryControllerTest extends TestCase
         $response = $this->postJson('/api/industry', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function validationFailsWithDuplicateName(): void
+    public function validation_fails_with_duplicate_name(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -188,12 +186,11 @@ class IndustryControllerTest extends TestCase
         $response = $this->postJson('/api/industry', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function canListIndustrys(): void
+    public function can_list_industrys(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -206,12 +203,11 @@ class IndustryControllerTest extends TestCase
                 'data' => [
                     '*' => ['name', 'description', 'is_active', 'size', 'id', 'created_at', 'updated_at'],
                 ],
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function canShowSingleIndustry(): void
+    public function can_show_single_industry(): void
     {
         Sanctum::actingAs($this->admin);
 

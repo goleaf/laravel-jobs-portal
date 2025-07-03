@@ -89,7 +89,7 @@ class CreateMaritalStatusRequest extends FormRequest
         }
 
         // Set default active status
-        if (!$this->has('is_active')) {
+        if (! $this->has('is_active')) {
             $this->merge([
                 'is_active' => true,
             ]);

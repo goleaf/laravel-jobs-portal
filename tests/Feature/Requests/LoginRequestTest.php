@@ -30,17 +30,17 @@ class LoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAuthorizationReturnsTrue()
+    public function test_authorization_returns_true()
     {
-        $request = new LoginRequest();
+        $request = new LoginRequest;
 
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function testValidationRulesAreDefined()
+    public function test_validation_rules_are_defined()
     {
-        $request = new LoginRequest();
+        $request = new LoginRequest;
         $rules = $request->rules();
 
         $this->assertIsArray($rules);
@@ -48,9 +48,9 @@ class LoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationMessagesAreDefined()
+    public function test_validation_messages_are_defined()
     {
-        $request = new LoginRequest();
+        $request = new LoginRequest;
 
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
@@ -61,9 +61,9 @@ class LoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationAttributesAreDefined()
+    public function test_validation_attributes_are_defined()
     {
-        $request = new LoginRequest();
+        $request = new LoginRequest;
 
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
@@ -74,9 +74,9 @@ class LoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testEmailValidation()
+    public function test_email_validation()
     {
-        $request = new LoginRequest();
+        $request = new LoginRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('email', $rules);
@@ -87,9 +87,9 @@ class LoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testPasswordValidation()
+    public function test_password_validation()
     {
-        $request = new LoginRequest();
+        $request = new LoginRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('password', $rules);
@@ -100,9 +100,9 @@ class LoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testRememberValidation()
+    public function test_remember_validation()
     {
-        $request = new LoginRequest();
+        $request = new LoginRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('remember', $rules);
@@ -113,9 +113,9 @@ class LoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testBooleanValidation()
+    public function test_boolean_validation()
     {
-        $request = new LoginRequest();
+        $request = new LoginRequest;
         $rules = $request->rules();
 
         // The remember field should have boolean validation
@@ -127,7 +127,7 @@ class LoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidDataPassesValidation()
+    public function test_valid_data_passes_validation()
     {
         $validData = [
             'email' => 'test@example.com',
@@ -135,18 +135,18 @@ class LoginRequestTest extends TestCase
             'remember' => true, // Boolean value for remember field
         ];
 
-        $request = new LoginRequest();
+        $request = new LoginRequest;
         $validator = validator($validData, $request->rules());
 
         $this->assertFalse($validator->fails());
     }
 
     /** @test */
-    public function testRequestHandlesEmptyDataCorrectly()
+    public function test_request_handles_empty_data_correctly()
     {
         $emptyData = [];
 
-        $request = new LoginRequest();
+        $request = new LoginRequest;
         $validator = validator($emptyData, $request->rules());
 
         // Should handle empty data according to rules - email and password are required
@@ -155,14 +155,14 @@ class LoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSecurityValidationPreventsXss()
+    public function test_security_validation_prevents_xss()
     {
         $maliciousData = [
             'email' => 'test<script>alert("xss")</script>@example.com',
             'password' => 'password<script>alert("xss")</script>',
         ];
 
-        $request = new LoginRequest();
+        $request = new LoginRequest;
         $validator = validator($maliciousData, $request->rules());
 
         // Email validation should fail for malicious content
@@ -171,14 +171,14 @@ class LoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSqlInjectionPrevention()
+    public function test_sql_injection_prevention()
     {
         $sqlInjectionData = [
             'email' => "test'; DROP TABLE users; --@example.com",
             'password' => "1' OR '1'='1",
         ];
 
-        $request = new LoginRequest();
+        $request = new LoginRequest;
         $validator = validator($sqlInjectionData, $request->rules());
 
         // SQL injection patterns should be handled safely - email should fail validation

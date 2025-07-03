@@ -42,7 +42,7 @@ class CityControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanCreateCity(): void
+    public function admin_can_create_city(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -56,8 +56,7 @@ class CityControllerTest extends TestCase
         $response->assertStatus(201)
             ->assertJsonStructure([
                 'data' => ['name', 'state_id', 'is_active', 'id', 'created_at', 'updated_at'],
-            ])
-        ;
+            ]);
 
         $this->assertDatabaseHas('cities', [
             'name' => $data['name'] ?? $data[array_key_first($data)],
@@ -65,7 +64,7 @@ class CityControllerTest extends TestCase
     }
 
     /** @test */
-    public function employerCanCreateCity(): void
+    public function employer_can_create_city(): void
     {
         Sanctum::actingAs($this->employer);
 
@@ -80,7 +79,7 @@ class CityControllerTest extends TestCase
     }
 
     /** @test */
-    public function candidateCannotCreateCity(): void
+    public function candidate_cannot_create_city(): void
     {
         Sanctum::actingAs($this->candidate);
 
@@ -95,7 +94,7 @@ class CityControllerTest extends TestCase
     }
 
     /** @test */
-    public function unauthenticatedUserCannotCreateCity(): void
+    public function unauthenticated_user_cannot_create_city(): void
     {
         $data = [
             'name' => 'Los Angeles',
@@ -108,7 +107,7 @@ class CityControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanUpdateCity(): void
+    public function admin_can_update_city(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -129,7 +128,7 @@ class CityControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanDeleteCity(): void
+    public function admin_can_delete_city(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -145,7 +144,7 @@ class CityControllerTest extends TestCase
     }
 
     /** @test */
-    public function validationFailsWithInvalidData(): void
+    public function validation_fails_with_invalid_data(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -156,12 +155,11 @@ class CityControllerTest extends TestCase
         $response = $this->postJson('/api/city', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function validationFailsWithDuplicateName(): void
+    public function validation_fails_with_duplicate_name(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -176,12 +174,11 @@ class CityControllerTest extends TestCase
         $response = $this->postJson('/api/city', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function canListCitys(): void
+    public function can_list_citys(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -194,12 +191,11 @@ class CityControllerTest extends TestCase
                 'data' => [
                     '*' => ['name', 'state_id', 'is_active', 'id', 'created_at', 'updated_at'],
                 ],
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function canShowSingleCity(): void
+    public function can_show_single_city(): void
     {
         Sanctum::actingAs($this->admin);
 

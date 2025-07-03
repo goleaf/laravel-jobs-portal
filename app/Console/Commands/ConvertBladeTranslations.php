@@ -83,7 +83,7 @@ class ConvertBladeTranslations extends Command
         $progressBar->finish();
         $this->newLine(2);
 
-        if (!$this->dryRun) {
+        if (! $this->dryRun) {
             $this->generateTranslationFiles();
         }
 
@@ -108,7 +108,7 @@ class ConvertBladeTranslations extends Command
 
         $bladeFiles = [];
         foreach ($finder as $file) {
-            if ('php' === $file->getExtension() && false !== strpos($file->getFilename(), '.blade.')) {
+            if ($file->getExtension() === 'php' && strpos($file->getFilename(), '.blade.') !== false) {
                 $bladeFiles[] = $file->getPathname();
             }
         }
@@ -128,10 +128,10 @@ class ConvertBladeTranslations extends Command
 
         // Only write if changes were made and not in dry run mode
         if ($content !== $originalContent) {
-            if (!$this->dryRun) {
+            if (! $this->dryRun) {
                 file_put_contents($filePath, $content);
             }
-            ++$this->processedFiles;
+            $this->processedFiles++;
         }
     }
 
@@ -146,7 +146,7 @@ class ConvertBladeTranslations extends Command
             if ($this->shouldTranslate($text)) {
                 $key = $this->generateTranslationKey($text, $filePath);
                 $this->addTranslationKey($key, $text);
-                ++$this->convertedStrings;
+                $this->convertedStrings++;
 
                 return "{{ __('".$key."') }}";
             }
@@ -163,10 +163,10 @@ class ConvertBladeTranslations extends Command
         return preg_replace_callback($pattern, function ($matches) use ($filePath) {
             $text = trim($matches[1]);
 
-            if ($this->shouldTranslate($text) && !$this->containsBladeCode($text)) {
+            if ($this->shouldTranslate($text) && ! $this->containsBladeCode($text)) {
                 $key = $this->generateTranslationKey($text, $filePath);
                 $this->addTranslationKey($key, $text);
-                ++$this->convertedStrings;
+                $this->convertedStrings++;
 
                 return ">{{ __('".$key."') }}<";
             }
@@ -186,7 +186,7 @@ class ConvertBladeTranslations extends Command
             if ($this->shouldTranslate($text)) {
                 $key = $this->generateTranslationKey($text, $filePath, 'placeholder');
                 $this->addTranslationKey($key, $text);
-                ++$this->convertedStrings;
+                $this->convertedStrings++;
 
                 return "placeholder=\"{{ __('".$key."') }}\"";
             }
@@ -206,23 +206,23 @@ class ConvertBladeTranslations extends Command
 
         // Skip if contains excluded strings
         foreach ($this->excludeStrings as $exclude) {
-            if (false !== stripos($text, $exclude)) {
+            if (stripos($text, $exclude) !== false) {
                 return false;
             }
         }
 
         // Skip if it's already a translation
-        if (false !== strpos($text, '__(') || false !== strpos($text, 'trans(')) {
+        if (strpos($text, '__(') !== false || strpos($text, 'trans(') !== false) {
             return false;
         }
 
         // Skip if it's a variable or blade expression
-        if (false !== strpos($text, '$') || false !== strpos($text, '{{') || false !== strpos($text, '{!!')) {
+        if (strpos($text, '$') !== false || strpos($text, '{{') !== false || strpos($text, '{!!') !== false) {
             return false;
         }
 
         // Must start with letter
-        if (!preg_match('/^[A-Z]/', $text)) {
+        if (! preg_match('/^[A-Z]/', $text)) {
             return false;
         }
 
@@ -231,10 +231,10 @@ class ConvertBladeTranslations extends Command
 
     private function containsBladeCode($text)
     {
-        return false !== strpos($text, '{{')
-               || false !== strpos($text, '{!!')
-               || false !== strpos($text, '@')
-               || false !== strpos($text, '$');
+        return strpos($text, '{{') !== false
+               || strpos($text, '{!!') !== false
+               || strpos($text, '@') !== false
+               || strpos($text, '$') !== false;
     }
 
     private function generateTranslationKey($text, $filePath, $prefix = '')
@@ -264,7 +264,7 @@ class ConvertBladeTranslations extends Command
 
         // Check file path for context
         foreach ($this->categories as $category => $keywords) {
-            if (false !== strpos($path, $category)) {
+            if (strpos($path, $category) !== false) {
                 return $category;
             }
         }
@@ -272,7 +272,7 @@ class ConvertBladeTranslations extends Command
         // Check text content for category
         foreach ($this->categories as $category => $keywords) {
             foreach ($keywords as $keyword) {
-                if (false !== strpos($text, $keyword)) {
+                if (strpos($text, $keyword) !== false) {
                     return $category;
                 }
             }
@@ -283,7 +283,7 @@ class ConvertBladeTranslations extends Command
 
     private function addTranslationKey($key, $text)
     {
-        if (!isset($this->translationKeys[$key])) {
+        if (! isset($this->translationKeys[$key])) {
             $this->translationKeys[$key] = $text;
         }
     }
@@ -314,7 +314,7 @@ class ConvertBladeTranslations extends Command
 
         // Ensure directory exists
         $directory = dirname($filePath);
-        if (!is_dir($directory)) {
+        if (! is_dir($directory)) {
             mkdir($directory, 0755, true);
         }
 
@@ -347,7 +347,7 @@ class ConvertBladeTranslations extends Command
             ['Translation Keys Created', count($this->translationKeys)],
         ]);
 
-        if (!empty($this->translationKeys)) {
+        if (! empty($this->translationKeys)) {
             $this->info('📂 Translation Categories:');
             $categoryStats = [];
             foreach ($this->translationKeys as $key => $text) {
@@ -363,7 +363,7 @@ class ConvertBladeTranslations extends Command
         $this->newLine();
         $this->info('✅ All blade templates have been processed for translation!');
 
-        if (!$this->dryRun) {
+        if (! $this->dryRun) {
             $this->info('🔄 Next steps:');
             $this->line('  1. Review generated translation files in lang/en_json/');
             $this->line('  2. Run AI translator to generate other language files');

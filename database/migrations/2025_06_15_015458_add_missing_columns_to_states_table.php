@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -12,16 +13,16 @@ return new class extends Migration {
     {
         Schema::table('states', function (Blueprint $table) {
             // Add missing columns for Context7 pattern enhancement
-            if (!Schema::hasColumn('states', 'is_active')) {
+            if (! Schema::hasColumn('states', 'is_active')) {
                 $table->boolean('is_active')->default(true)->after('country_id')->comment('Active status');
             }
-            if (!Schema::hasColumn('states', 'is_featured')) {
+            if (! Schema::hasColumn('states', 'is_featured')) {
                 $table->boolean('is_featured')->default(false)->after('is_active')->comment('Featured status');
             }
-            if (!Schema::hasColumn('states', 'sort_order')) {
+            if (! Schema::hasColumn('states', 'sort_order')) {
                 $table->integer('sort_order')->default(0)->after('is_featured')->comment('Sort order for display');
             }
-            if (!Schema::hasColumn('states', 'deleted_at')) {
+            if (! Schema::hasColumn('states', 'deleted_at')) {
                 $table->softDeletes();
             }
         });

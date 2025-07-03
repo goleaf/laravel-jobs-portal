@@ -13,14 +13,14 @@ use Illuminate\Support\Facades\Cache;
 /**
  * Class Plan.
  *
- * @property int                       $id
- * @property string                    $name
- * @property null|string               $stripe_plan_id
- * @property int                       $allowed_jobs
- * @property float                     $amount
- * @property bool                      $is_trial_plan
- * @property null|Carbon               $created_at
- * @property null|Carbon               $updated_at
+ * @property int $id
+ * @property string $name
+ * @property null|string $stripe_plan_id
+ * @property int $allowed_jobs
+ * @property float $amount
+ * @property bool $is_trial_plan
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
  * @property Collection|Subscription[] $subscriptions
  */
 class Plan extends Model
@@ -59,7 +59,7 @@ class Plan extends Model
     /**
      * Scopes.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
 
     /**
@@ -73,7 +73,7 @@ class Plan extends Model
     /**
      * Scope for paid plans.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePaid($query)
     {
@@ -83,7 +83,7 @@ class Plan extends Model
     /**
      * Scope for plans with Stripe integration.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithStripe($query)
     {
@@ -93,7 +93,7 @@ class Plan extends Model
     /**
      * Scope for plans without Stripe integration.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithoutStripe($query)
     {
@@ -103,9 +103,9 @@ class Plan extends Model
     /**
      * Scope for plans by price range.
      *
-     * @param mixed $query
-     * @param mixed $min
-     * @param mixed $max
+     * @param  mixed  $query
+     * @param  mixed  $min
+     * @param  mixed  $max
      */
     public function scopeByPriceRange($query, $min, $max)
     {
@@ -115,7 +115,7 @@ class Plan extends Model
     /**
      * Scope for free plans.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFree($query)
     {
@@ -125,7 +125,7 @@ class Plan extends Model
     /**
      * Scope for premium plans.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePremium($query)
     {
@@ -135,7 +135,7 @@ class Plan extends Model
     /**
      * Scope for plans with unlimited jobs.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeUnlimited($query)
     {
@@ -145,7 +145,7 @@ class Plan extends Model
     /**
      * Scope for plans with job limits.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeLimited($query)
     {
@@ -155,7 +155,7 @@ class Plan extends Model
     /**
      * Scope for searching plans.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
@@ -165,7 +165,7 @@ class Plan extends Model
     /**
      * Scope for recent plans.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -175,7 +175,7 @@ class Plan extends Model
     /**
      * Scope for old plans.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -185,20 +185,19 @@ class Plan extends Model
     /**
      * Scope for popular plans (with most subscriptions).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopular($query, int $limit = 5)
     {
         return $query->withCount('subscriptions')
             ->orderBy('subscriptions_count', 'desc')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     /**
      * Scope for alphabetical ordering.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
@@ -208,7 +207,7 @@ class Plan extends Model
     /**
      * Scope for ordering by price.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOrderByPrice($query, string $direction = 'asc')
     {
@@ -218,7 +217,7 @@ class Plan extends Model
     /**
      * Scope for ordering by job allowance.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOrderByJobs($query, string $direction = 'desc')
     {
@@ -228,7 +227,7 @@ class Plan extends Model
     /**
      * Scope for plans by currency.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByCurrency($query, int $currencyId)
     {
@@ -238,7 +237,7 @@ class Plan extends Model
     /**
      * Scope for plans by duration.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByDuration($query, int $days)
     {
@@ -248,7 +247,7 @@ class Plan extends Model
     /**
      * Scope for monthly plans.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeMonthly($query)
     {
@@ -258,7 +257,7 @@ class Plan extends Model
     /**
      * Scope for yearly plans.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeYearly($query)
     {
@@ -274,7 +273,7 @@ class Plan extends Model
      */
     public function isFree(): bool
     {
-        return 0 == $this->amount;
+        return $this->amount == 0;
     }
 
     /**
@@ -282,7 +281,7 @@ class Plan extends Model
      */
     public function hasUnlimitedJobs(): bool
     {
-        return -1 == $this->allowed_jobs;
+        return $this->allowed_jobs == -1;
     }
 
     /**
@@ -410,12 +409,12 @@ class Plan extends Model
         if ($this->duration_days >= 365) {
             $years = round($this->duration_days / 365);
 
-            return 1 == $years ? '1 Year' : "{$years} Years";
+            return $years == 1 ? '1 Year' : "{$years} Years";
         }
         if ($this->duration_days >= 30) {
             $months = round($this->duration_days / 30);
 
-            return 1 == $months ? '1 Month' : "{$months} Months";
+            return $months == 1 ? '1 Month' : "{$months} Months";
         }
 
         return "{$this->duration_days} Days";
@@ -430,7 +429,7 @@ class Plan extends Model
             return 'Unlimited Jobs';
         }
 
-        return $this->allowed_jobs.' Job'.(1 != $this->allowed_jobs ? 's' : '');
+        return $this->allowed_jobs.' Job'.($this->allowed_jobs != 1 ? 's' : '');
     }
 
     /**
@@ -443,7 +442,7 @@ class Plan extends Model
         ];
 
         if ($this->max_featured_jobs > 0) {
-            $features[] = $this->max_featured_jobs.' Featured Job'.(1 != $this->max_featured_jobs ? 's' : '');
+            $features[] = $this->max_featured_jobs.' Featured Job'.($this->max_featured_jobs != 1 ? 's' : '');
         }
 
         if ($this->hasPrioritySupport()) {
@@ -478,16 +477,15 @@ class Plan extends Model
      */
     public function getSavingsPercentage(): float
     {
-        if (365 != $this->duration_days) {
+        if ($this->duration_days != 365) {
             return 0;
         }
 
         $monthlyPlan = static::where('name', str_replace('Yearly', 'Monthly', $this->name))
             ->where('duration_days', 30)
-            ->first()
-        ;
+            ->first();
 
-        if (!$monthlyPlan) {
+        if (! $monthlyPlan) {
             return 0;
         }
 
@@ -515,7 +513,7 @@ class Plan extends Model
         ];
 
         // Clear popular cache variants
-        for ($i = 3; $i <= 10; ++$i) {
+        for ($i = 3; $i <= 10; $i++) {
             $cacheKeys[] = "plans.popular.{$i}";
         }
 

@@ -42,7 +42,7 @@ class CountryControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanCreateCountry(): void
+    public function admin_can_create_country(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -58,8 +58,7 @@ class CountryControllerTest extends TestCase
         $response->assertStatus(201)
             ->assertJsonStructure([
                 'data' => ['name', 'code', 'phone_code', 'is_active', 'id', 'created_at', 'updated_at'],
-            ])
-        ;
+            ]);
 
         $this->assertDatabaseHas('countries', [
             'name' => $data['name'] ?? $data[array_key_first($data)],
@@ -67,7 +66,7 @@ class CountryControllerTest extends TestCase
     }
 
     /** @test */
-    public function employerCanCreateCountry(): void
+    public function employer_can_create_country(): void
     {
         Sanctum::actingAs($this->employer);
 
@@ -84,7 +83,7 @@ class CountryControllerTest extends TestCase
     }
 
     /** @test */
-    public function candidateCannotCreateCountry(): void
+    public function candidate_cannot_create_country(): void
     {
         Sanctum::actingAs($this->candidate);
 
@@ -101,7 +100,7 @@ class CountryControllerTest extends TestCase
     }
 
     /** @test */
-    public function unauthenticatedUserCannotCreateCountry(): void
+    public function unauthenticated_user_cannot_create_country(): void
     {
         $data = [
             'name' => 'United States',
@@ -116,7 +115,7 @@ class CountryControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanUpdateCountry(): void
+    public function admin_can_update_country(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -139,7 +138,7 @@ class CountryControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanDeleteCountry(): void
+    public function admin_can_delete_country(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -155,7 +154,7 @@ class CountryControllerTest extends TestCase
     }
 
     /** @test */
-    public function validationFailsWithInvalidData(): void
+    public function validation_fails_with_invalid_data(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -166,12 +165,11 @@ class CountryControllerTest extends TestCase
         $response = $this->postJson('/api/country', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function validationFailsWithDuplicateName(): void
+    public function validation_fails_with_duplicate_name(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -188,12 +186,11 @@ class CountryControllerTest extends TestCase
         $response = $this->postJson('/api/country', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function canListCountrys(): void
+    public function can_list_countrys(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -206,12 +203,11 @@ class CountryControllerTest extends TestCase
                 'data' => [
                     '*' => ['name', 'code', 'phone_code', 'is_active', 'id', 'created_at', 'updated_at'],
                 ],
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function canShowSingleCountry(): void
+    public function can_show_single_country(): void
     {
         Sanctum::actingAs($this->admin);
 

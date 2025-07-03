@@ -114,7 +114,7 @@ class LoginRequest extends FormRequest
         }
 
         // Set default device name if not provided
-        if (!$this->has('device_name')) {
+        if (! $this->has('device_name')) {
             $this->merge([
                 'device_name' => 'API Client',
             ]);

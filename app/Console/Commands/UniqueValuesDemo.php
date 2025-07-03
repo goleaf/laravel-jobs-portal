@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use JustBetter\UniqueValues\Support\UniqueValue;
-use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
+use Illuminate\Support\Str;
+use JustBetter\UniqueValues\Support\UniqueValue;
 
 class UniqueValuesDemo extends Command
 {
@@ -29,7 +29,7 @@ class UniqueValuesDemo extends Command
     public function handle()
     {
         $count = (int) $this->option('count');
-        
+
         $this->info('🔧 Laravel Unique Values Integration Demo for Job Portal');
         $this->info('='.str_repeat('=', 60));
         $this->newLine();
@@ -82,35 +82,35 @@ class UniqueValuesDemo extends Command
         $this->line('🔑 6. API KEYS:');
         for ($i = 0; $i < min($count, 3); $i++) {
             $apiKey = $this->generateApiKey(rand(1, 10));
-            $this->line("   • " . substr($apiKey, 0, 30) . '...');
+            $this->line('   • '.substr($apiKey, 0, 30).'...');
         }
         $this->newLine();
 
         // Demo 7: Concurrency Test
         $this->line('🚀 7. CONCURRENCY TEST:');
         $this->line('   Testing concurrent generation of job references...');
-        
+
         $startTime = microtime(true);
         $references = [];
-        
+
         for ($i = 0; $i < 10; $i++) {
             $references[] = $this->generateJobReference();
         }
-        
+
         $endTime = microtime(true);
         $duration = round(($endTime - $startTime) * 1000, 2);
-        
+
         $this->line("   ✅ Generated 10 unique references in {$duration}ms");
-        $this->line("   ✅ All references unique: " . (count($references) === count(array_unique($references)) ? 'YES' : 'NO'));
+        $this->line('   ✅ All references unique: '.(count($references) === count(array_unique($references)) ? 'YES' : 'NO'));
         $this->newLine();
 
         // Database check
         $this->line('💾 8. DATABASE STORAGE:');
         $uniqueValueCount = \DB::table('unique_values')->count();
         $this->line("   📊 Total unique values stored: {$uniqueValueCount}");
-        
+
         $scopes = \DB::table('unique_values')->distinct('scope')->pluck('scope');
-        $this->line("   📂 Active scopes: " . $scopes->implode(', '));
+        $this->line('   📂 Active scopes: '.$scopes->implode(', '));
         $this->newLine();
 
         $this->info('✨ Laravel Unique Values integration demo completed!');
@@ -123,12 +123,13 @@ class UniqueValuesDemo extends Command
     {
         $prefix = $companyPrefix ? strtoupper(substr($companyPrefix, 0, 3)) : 'JOB';
         $year = Carbon::now()->format('Y');
-        
+
         return UniqueValue::make()
             ->scope('job-references')
             ->attempts(10)
             ->generator(function (int $attempt) use ($prefix, $year): string {
                 $baseNumber = str_pad((string) (1000 + $attempt), 4, '0', STR_PAD_LEFT);
+
                 return "{$prefix}-{$year}-{$baseNumber}";
             })
             ->generate();
@@ -143,6 +144,7 @@ class UniqueValuesDemo extends Command
             ->generator(function (int $attempt) use ($jobId, $candidateId): string {
                 $timestamp = Carbon::now()->format('ymd');
                 $suffix = $attempt > 0 ? "-{$attempt}" : '';
+
                 return "APP-{$timestamp}-{$jobId}-{$candidateId}{$suffix}";
             })
             ->generate();
@@ -152,10 +154,10 @@ class UniqueValuesDemo extends Command
     {
         $baseSlug = Str::slug($companyName);
         $subject = $companyId ? "company-{$companyId}" : null;
-        
+
         return UniqueValue::make()
             ->scope('company-slugs')
-            ->when($subject, fn($builder) => $builder->subject($subject))
+            ->when($subject, fn ($builder) => $builder->subject($subject))
             ->attempts(20)
             ->generator(function (int $attempt) use ($baseSlug): string {
                 return $attempt === 0 ? $baseSlug : "{$baseSlug}-{$attempt}";
@@ -170,7 +172,7 @@ class UniqueValuesDemo extends Command
             'admin' => 'ADM',
             default => 'CAN',
         };
-        
+
         return UniqueValue::make()
             ->scope("user-references-{$userType}")
             ->attempts(15)
@@ -178,6 +180,7 @@ class UniqueValuesDemo extends Command
                 $timestamp = Carbon::now()->format('ymd');
                 $random = strtoupper(Str::random(3));
                 $counter = str_pad((string) $attempt, 3, '0', STR_PAD_LEFT);
+
                 return "{$prefix}-{$timestamp}-{$random}-{$counter}";
             })
             ->generate();
@@ -186,7 +189,7 @@ class UniqueValuesDemo extends Command
     protected function generateJobSlug(string $jobTitle, int $companyId): string
     {
         $baseSlug = Str::slug($jobTitle);
-        
+
         return UniqueValue::make()
             ->scope('job-slugs')
             ->attempts(15)
@@ -194,7 +197,7 @@ class UniqueValuesDemo extends Command
                 if ($attempt === 0) {
                     return $baseSlug;
                 }
-                
+
                 return "{$baseSlug}-{$companyId}-{$attempt}";
             })
             ->generate();
@@ -211,6 +214,7 @@ class UniqueValuesDemo extends Command
                 $timestamp = Carbon::now()->format('ymdH');
                 $random = Str::random(32);
                 $suffix = $attempt > 0 ? $attempt : '';
+
                 return "{$prefix}_{$timestamp}_{$companyId}_{$random}{$suffix}";
             })
             ->generate();

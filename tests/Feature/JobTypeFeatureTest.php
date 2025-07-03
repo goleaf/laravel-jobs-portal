@@ -40,7 +40,7 @@ class JobTypeFeatureTest extends TestCase
     }
 
     /** @test */
-    public function itCanListJobTypesPublicly(): void
+    public function it_can_list_job_types_publicly(): void
     {
         JobType::factory()->count(5)->active()->create();
         JobType::factory()->count(2)->inactive()->create();
@@ -65,14 +65,13 @@ class JobTypeFeatureTest extends TestCase
                     'last_page',
                     'total',
                 ],
-            ])
-        ;
+            ]);
 
         $this->assertGreaterThanOrEqual(7, $response->json('meta.total'));
     }
 
     /** @test */
-    public function itCanShowSingleJobTypePublicly(): void
+    public function it_can_show_single_job_type_publicly(): void
     {
         $jobType = JobType::factory()->active()->create();
 
@@ -86,12 +85,11 @@ class JobTypeFeatureTest extends TestCase
                     'description' => $jobType->description,
                     'is_active' => $jobType->is_active,
                 ],
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function itCanSearchJobTypes(): void
+    public function it_can_search_job_types(): void
     {
         JobType::factory()->create(['name' => 'Full-Time Developer']);
         JobType::factory()->create(['name' => 'Part-Time Designer']);
@@ -105,7 +103,7 @@ class JobTypeFeatureTest extends TestCase
     }
 
     /** @test */
-    public function itRequiresAuthenticationToCreateJobType(): void
+    public function it_requires_authentication_to_create_job_type(): void
     {
         $response = $this->postJson('/api/v1/job-types', [
             'name' => 'New Job Type',
@@ -116,7 +114,7 @@ class JobTypeFeatureTest extends TestCase
     }
 
     /** @test */
-    public function authenticatedAdminCanCreateJobType(): void
+    public function authenticated_admin_can_create_job_type(): void
     {
         Sanctum::actingAs($this->adminUser);
 
@@ -141,8 +139,7 @@ class JobTypeFeatureTest extends TestCase
                     'is_active' => true,
                     'is_featured' => false,
                 ],
-            ])
-        ;
+            ]);
 
         $this->assertDatabaseHas('job_types', [
             'name' => 'Remote Developer',
@@ -151,7 +148,7 @@ class JobTypeFeatureTest extends TestCase
     }
 
     /** @test */
-    public function itValidatesJobTypeCreationData(): void
+    public function it_validates_job_type_creation_data(): void
     {
         Sanctum::actingAs($this->adminUser);
 
@@ -162,12 +159,11 @@ class JobTypeFeatureTest extends TestCase
         ]);
 
         $response->assertUnprocessableEntity()
-            ->assertJsonValidationErrors(['name', 'color', 'sort_order'])
-        ;
+            ->assertJsonValidationErrors(['name', 'color', 'sort_order']);
     }
 
     /** @test */
-    public function itPreventsDuplicateJobTypeNames(): void
+    public function it_prevents_duplicate_job_type_names(): void
     {
         Sanctum::actingAs($this->adminUser);
 
@@ -179,12 +175,11 @@ class JobTypeFeatureTest extends TestCase
         ]);
 
         $response->assertUnprocessableEntity()
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function authenticatedAdminCanUpdateJobType(): void
+    public function authenticated_admin_can_update_job_type(): void
     {
         Sanctum::actingAs($this->adminUser);
 
@@ -204,8 +199,7 @@ class JobTypeFeatureTest extends TestCase
                     'name' => 'Updated Name',
                     'is_active' => false,
                 ],
-            ])
-        ;
+            ]);
 
         $this->assertDatabaseHas('job_types', [
             'id' => $jobType->id,
@@ -215,7 +209,7 @@ class JobTypeFeatureTest extends TestCase
     }
 
     /** @test */
-    public function itRequiresPermissionToUpdateJobType(): void
+    public function it_requires_permission_to_update_job_type(): void
     {
         Sanctum::actingAs($this->candidateUser);
 
@@ -229,7 +223,7 @@ class JobTypeFeatureTest extends TestCase
     }
 
     /** @test */
-    public function authenticatedAdminCanDeleteJobType(): void
+    public function authenticated_admin_can_delete_job_type(): void
     {
         Sanctum::actingAs($this->adminUser);
 
@@ -240,14 +234,13 @@ class JobTypeFeatureTest extends TestCase
         $response->assertOk()
             ->assertJson([
                 'message' => __('job_type.messages.deleted_successfully'),
-            ])
-        ;
+            ]);
 
         $this->assertDatabaseMissing('job_types', ['id' => $jobType->id]);
     }
 
     /** @test */
-    public function itPreventsDeletingJobTypeWithJobs(): void
+    public function it_prevents_deleting_job_type_with_jobs(): void
     {
         Sanctum::actingAs($this->adminUser);
 
@@ -259,14 +252,13 @@ class JobTypeFeatureTest extends TestCase
         $response->assertUnprocessableEntity()
             ->assertJson([
                 'message' => __('job_type.errors.cannot_delete_in_use'),
-            ])
-        ;
+            ]);
 
         $this->assertDatabaseHas('job_types', ['id' => $jobType->id]);
     }
 
     /** @test */
-    public function itCanGetJobTypeStatistics(): void
+    public function it_can_get_job_type_statistics(): void
     {
         Sanctum::actingAs($this->adminUser);
 
@@ -290,8 +282,7 @@ class JobTypeFeatureTest extends TestCase
                     'popular',
                     'trending',
                 ],
-            ])
-        ;
+            ]);
 
         $stats = $response->json('data');
         $this->assertGreaterThanOrEqual(10, $stats['active']);
@@ -301,7 +292,7 @@ class JobTypeFeatureTest extends TestCase
     }
 
     /** @test */
-    public function itCanPerformBulkOperations(): void
+    public function it_can_perform_bulk_operations(): void
     {
         Sanctum::actingAs($this->adminUser);
 
@@ -315,8 +306,7 @@ class JobTypeFeatureTest extends TestCase
         $response->assertOk()
             ->assertJson([
                 'message' => __('job_type.messages.bulk_updated', ['count' => 3]),
-            ])
-        ;
+            ]);
 
         foreach ($jobTypes as $jobType) {
             $this->assertDatabaseHas('job_types', [
@@ -327,7 +317,7 @@ class JobTypeFeatureTest extends TestCase
     }
 
     /** @test */
-    public function itCanFilterJobTypesByStatus(): void
+    public function it_can_filter_job_types_by_status(): void
     {
         JobType::factory()->count(5)->active()->create();
         JobType::factory()->count(3)->inactive()->create();
@@ -343,7 +333,7 @@ class JobTypeFeatureTest extends TestCase
     }
 
     /** @test */
-    public function itCanFilterJobTypesByType(): void
+    public function it_can_filter_job_types_by_type(): void
     {
         JobType::factory()->count(3)->default()->create();
         JobType::factory()->count(4)->custom()->create();
@@ -359,7 +349,7 @@ class JobTypeFeatureTest extends TestCase
     }
 
     /** @test */
-    public function itCanSortJobTypes(): void
+    public function it_can_sort_job_types(): void
     {
         JobType::factory()->create(['name' => 'Zebra Type']);
         JobType::factory()->create(['name' => 'Alpha Type']);
@@ -376,7 +366,7 @@ class JobTypeFeatureTest extends TestCase
     }
 
     /** @test */
-    public function itIncludesJobCountsWhenRequested(): void
+    public function it_includes_job_counts_when_requested(): void
     {
         $jobType = JobType::factory()->create();
         Job::factory()->count(5)->create(['job_type_id' => $jobType->id]);
@@ -391,12 +381,11 @@ class JobTypeFeatureTest extends TestCase
                         'active_jobs_count',
                     ],
                 ],
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function itIncludesUsageStatisticsWhenRequested(): void
+    public function it_includes_usage_statistics_when_requested(): void
     {
         $jobType = JobType::factory()->create();
 
@@ -408,12 +397,11 @@ class JobTypeFeatureTest extends TestCase
                     'usage_count',
                     'formatted_usage_stats',
                 ],
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function itIncludesAnalysisDataWhenRequested(): void
+    public function it_includes_analysis_data_when_requested(): void
     {
         $jobType = JobType::factory()->fullTime()->create();
 
@@ -427,8 +415,7 @@ class JobTypeFeatureTest extends TestCase
                     'is_part_time',
                     'is_remote',
                 ],
-            ])
-        ;
+            ]);
 
         $analysisData = $response->json('data');
         $this->assertTrue($analysisData['is_full_time']);
@@ -436,7 +423,7 @@ class JobTypeFeatureTest extends TestCase
     }
 
     /** @test */
-    public function itCachesResponsesProperly(): void
+    public function it_caches_responses_properly(): void
     {
         $jobType = JobType::factory()->create();
 
@@ -456,12 +443,12 @@ class JobTypeFeatureTest extends TestCase
     }
 
     /** @test */
-    public function itRespectsRateLimitingOnProtectedEndpoints(): void
+    public function it_respects_rate_limiting_on_protected_endpoints(): void
     {
         Sanctum::actingAs($this->adminUser);
 
         // Make multiple requests quickly to trigger rate limiting
-        for ($i = 0; $i < 10; ++$i) {
+        for ($i = 0; $i < 10; $i++) {
             $response = $this->postJson('/api/v1/job-types', [
                 'name' => "Job Type {$i}",
                 'description' => 'Test description',
@@ -474,7 +461,7 @@ class JobTypeFeatureTest extends TestCase
     }
 
     /** @test */
-    public function itLogsActivityForCrudOperations(): void
+    public function it_logs_activity_for_crud_operations(): void
     {
         Sanctum::actingAs($this->adminUser);
 
@@ -515,7 +502,7 @@ class JobTypeFeatureTest extends TestCase
     }
 
     /** @test */
-    public function itValidatesSlugFormat(): void
+    public function it_validates_slug_format(): void
     {
         Sanctum::actingAs($this->adminUser);
 
@@ -525,12 +512,11 @@ class JobTypeFeatureTest extends TestCase
         ]);
 
         $response->assertUnprocessableEntity()
-            ->assertJsonValidationErrors(['slug'])
-        ;
+            ->assertJsonValidationErrors(['slug']);
     }
 
     /** @test */
-    public function itAutoGeneratesSlugWhenNotProvided(): void
+    public function it_auto_generates_slug_when_not_provided(): void
     {
         Sanctum::actingAs($this->adminUser);
 

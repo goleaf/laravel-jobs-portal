@@ -107,7 +107,7 @@ class SendRealTimeNotification implements ShouldQueue
             'hires_made' => 0,
         ]);
 
-        ++$stats['status_changes'];
+        $stats['status_changes']++;
 
         switch ($event->newStatus) {
             case 'reviewed':
@@ -135,7 +135,7 @@ class SendRealTimeNotification implements ShouldQueue
             'active_applications' => 0,
         ]);
 
-        ++$companyStats['status_changes'];
+        $companyStats['status_changes']++;
         Cache::put($companyStatsKey, $companyStats, now()->addDays(30));
     }
 

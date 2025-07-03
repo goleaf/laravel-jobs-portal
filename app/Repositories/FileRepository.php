@@ -15,7 +15,6 @@ class FileRepository extends BaseRepository implements FileRepositoryInterface
     /**
      * Get files by type.
      *
-     * @param string $type
      * @return mixed
      */
     public function getByType(string $type)
@@ -26,11 +25,10 @@ class FileRepository extends BaseRepository implements FileRepositoryInterface
     /**
      * Get files by user ID.
      *
-     * @param int $userId
      * @return mixed
      */
     public function getByUserId(int $userId)
     {
         return $this->model->where('user_id', $userId)->get();
     }
-} 
+}

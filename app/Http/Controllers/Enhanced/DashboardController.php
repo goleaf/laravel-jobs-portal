@@ -61,7 +61,7 @@ class DashboardController extends AppBaseController
         try {
             $user = Auth::user();
 
-            if (!$user) {
+            if (! $user) {
                 return redirect()->route('login');
             }
 
@@ -168,7 +168,7 @@ class DashboardController extends AppBaseController
         try {
             $user = Auth::user();
 
-            if (!$user->company) {
+            if (! $user->company) {
                 return view('employer.dashboard.setup', [
                     'message' => 'Please complete your company profile to access the dashboard.',
                 ]);
@@ -233,7 +233,7 @@ class DashboardController extends AppBaseController
             $user = Auth::user();
             $input = $request->all();
 
-            if (!$user->company) {
+            if (! $user->company) {
                 return $this->sendError('Company profile required', 400);
             }
 
@@ -465,7 +465,7 @@ class DashboardController extends AppBaseController
     {
         $company = $user->company;
 
-        if (!$company) {
+        if (! $company) {
             return ['setup_required' => true];
         }
 
@@ -497,7 +497,7 @@ class DashboardController extends AppBaseController
     {
         $candidate = $user->candidate;
 
-        if (!$candidate) {
+        if (! $candidate) {
             return ['setup_required' => true];
         }
 

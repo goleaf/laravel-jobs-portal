@@ -19,7 +19,7 @@ class CreateUserRequest extends FormRequest
     public function authorize(): bool
     {
         // Allow registration for guests, or admin creating users
-        return !auth()->check() || auth()->user()?->hasRole(['Admin', 'Super Admin']);
+        return ! auth()->check() || auth()->user()?->hasRole(['Admin', 'Super Admin']);
     }
 
     /**
@@ -227,7 +227,7 @@ class CreateUserRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     public function withValidator($validator): void
     {
@@ -288,19 +288,19 @@ class CreateUserRequest extends FormRequest
         ]);
 
         // Clean up social media URLs
-        if ($this->facebook_url && !str_starts_with($this->facebook_url, 'http')) {
+        if ($this->facebook_url && ! str_starts_with($this->facebook_url, 'http')) {
             $this->merge(['facebook_url' => 'https://'.$this->facebook_url]);
         }
 
-        if ($this->twitter_url && !str_starts_with($this->twitter_url, 'http')) {
+        if ($this->twitter_url && ! str_starts_with($this->twitter_url, 'http')) {
             $this->merge(['twitter_url' => 'https://'.$this->twitter_url]);
         }
 
-        if ($this->linkedin_url && !str_starts_with($this->linkedin_url, 'http')) {
+        if ($this->linkedin_url && ! str_starts_with($this->linkedin_url, 'http')) {
             $this->merge(['linkedin_url' => 'https://'.$this->linkedin_url]);
         }
 
-        if ($this->pinterest_url && !str_starts_with($this->pinterest_url, 'http')) {
+        if ($this->pinterest_url && ! str_starts_with($this->pinterest_url, 'http')) {
             $this->merge(['pinterest_url' => 'https://'.$this->pinterest_url]);
         }
     }

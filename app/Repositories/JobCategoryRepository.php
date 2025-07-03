@@ -42,7 +42,7 @@ class JobCategoryRepository extends BaseRepository
             /** @var JobCategory $jobCategory */
             $jobCategory = $this->create($input);
 
-            if (isset($input['customer_image']) && !empty($input['customer_image'])) {
+            if (isset($input['customer_image']) && ! empty($input['customer_image'])) {
                 $jobCategory->addMedia($input['customer_image'])->toMediaCollection(
                     JobCategory::PATH,
                     config('app.media_disc')
@@ -63,7 +63,7 @@ class JobCategoryRepository extends BaseRepository
             /** @var JobCategory $jobCategories */
             $jobCategories = $this->update($input, $id);
 
-            if (!empty($input['customer_image'])) {
+            if (! empty($input['customer_image'])) {
                 $jobCategories->clearMediaCollection(JobCategory::PATH);
                 $jobCategories->addMedia($input['customer_image'])->toMediaCollection(
                     JobCategory::PATH,

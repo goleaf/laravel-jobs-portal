@@ -271,8 +271,7 @@ class CompanyController extends AppBaseController
             ]);
 
             return redirect()->route('companies.show', $company)
-                ->with('error', 'Unable to load edit form.')
-            ;
+                ->with('error', 'Unable to load edit form.');
         }
     }
 
@@ -418,7 +417,7 @@ class CompanyController extends AppBaseController
 
             foreach ($companyIds as $companyId) {
                 $company = Company::find($companyId);
-                if (!$company) {
+                if (! $company) {
                     continue;
                 }
 
@@ -561,8 +560,7 @@ class CompanyController extends AppBaseController
                 return State::where('country_id', $countryId)
                     ->active()
                     ->alphabetical()
-                    ->pluck('name', 'id')
-                ;
+                    ->pluck('name', 'id');
             });
 
             return $this->sendResponse($states, 'States retrieved successfully');
@@ -593,8 +591,7 @@ class CompanyController extends AppBaseController
                 return City::where('state_id', $stateId)
                     ->active()
                     ->alphabetical()
-                    ->pluck('name', 'id')
-                ;
+                    ->pluck('name', 'id');
             });
 
             return $this->sendResponse($cities, 'Cities retrieved successfully');
@@ -617,7 +614,7 @@ class CompanyController extends AppBaseController
             $this->authorize('update', $company);
 
             $isActive = $company->user->is_active;
-            $company->user->update(['is_active' => !$isActive]);
+            $company->user->update(['is_active' => ! $isActive]);
 
             if (Auth::user()->hasRole('Admin')) {
                 $company->update(['last_change' => Auth::id()]);
@@ -626,7 +623,7 @@ class CompanyController extends AppBaseController
             // Clear caches
             $this->clearCompanyCaches($company);
 
-            $status = !$isActive ? 'activated' : 'deactivated';
+            $status = ! $isActive ? 'activated' : 'deactivated';
 
             Log::info("Company {$status}", [
                 'company_id' => $company->id,
@@ -635,7 +632,7 @@ class CompanyController extends AppBaseController
             ]);
 
             return $this->sendResponse([
-                'is_active' => !$isActive,
+                'is_active' => ! $isActive,
                 'status' => $status,
             ], "Company {$status} successfully");
         } catch (\Exception $e) {
@@ -653,23 +650,23 @@ class CompanyController extends AppBaseController
     {
         $query = Company::with(['user', 'industry', 'companySize', 'country']);
 
-        if (!empty($filters['search'])) {
+        if (! empty($filters['search'])) {
             $query->search($filters['search']);
         }
 
-        if (!empty($filters['status'])) {
+        if (! empty($filters['status'])) {
             $query->byStatus($filters['status']);
         }
 
-        if (!empty($filters['industry'])) {
+        if (! empty($filters['industry'])) {
             $query->byIndustry($filters['industry']);
         }
 
-        if (!empty($filters['size'])) {
+        if (! empty($filters['size'])) {
             $query->bySize($filters['size']);
         }
 
-        if (!empty($filters['location'])) {
+        if (! empty($filters['location'])) {
             $query->byLocation($filters['location']);
         }
 

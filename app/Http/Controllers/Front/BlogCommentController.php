@@ -10,7 +10,7 @@ class BlogCommentController extends Controller
     /**
      * Store a newly created blog comment.
      *
-     * @param mixed $blog
+     * @param  mixed  $blog
      */
     public function store(StoreBlogCommentRequest $request, $blog): JsonResponse
     {

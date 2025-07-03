@@ -6,16 +6,16 @@ use App\Http\Requests\BusinessLogic\BusinessLogicRequest;
 
 /**
  * Update Admin Request - Validation for updating existing admin users
- * 
+ *
  * Validates admin updates with comprehensive rules:
  * - Personal information validation
  * - Optional password updates with security requirements
  * - Role-based access validation
  * - Email uniqueness checking (excluding current record)
  * - Business logic constraints
- * 
- * @package App\Http\Requests\Admin
+ *
  * @version 2.0.0
+ *
  * @since 2024-12-28
  */
 class UpdateAdminRequest extends BusinessLogicRequest
@@ -37,21 +37,21 @@ class UpdateAdminRequest extends BusinessLogicRequest
             'first_name' => ['required', 'string', 'max:100', 'min:2', 'regex:/^[a-zA-Z\s]+$/'],
             'last_name' => ['sometimes', 'nullable', 'string', 'max:100', 'min:2', 'regex:/^[a-zA-Z\s]+$/'],
             'name' => ['sometimes', 'required', 'string', 'max:255'],
-            'email' => ['required', 'email:rfc,dns', 'max:255', 'unique:users,email,' . $userId],
-            
+            'email' => ['required', 'email:rfc,dns', 'max:255', 'unique:users,email,'.$userId],
+
             // Optional Security Requirements
             'password' => ['sometimes', 'nullable', 'string', 'min:12', 'max:255', 'confirmed', 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/'],
             'password_confirmation' => ['sometimes', 'nullable', 'same:password'],
-            
+
             // Admin-Specific Fields
             'role' => ['sometimes', 'string', 'in:admin,super_admin'],
             'is_active' => ['sometimes', 'boolean'],
             'phone' => ['sometimes', 'nullable', 'string', 'max:20', 'regex:/^[\+]?[0-9\s\-\(\)]{7,20}$/'],
-            
+
             // Optional Personal Information
             'dob' => ['sometimes', 'nullable', 'date', 'before:today', 'after:1900-01-01'],
             'gender' => ['sometimes', 'nullable', 'in:male,female,other,prefer_not_to_say'],
-            
+
             // Optional Administrative Fields
             'department' => ['sometimes', 'nullable', 'string', 'max:100'],
             'position' => ['sometimes', 'nullable', 'string', 'max:100'],
@@ -71,31 +71,31 @@ class UpdateAdminRequest extends BusinessLogicRequest
             'first_name.min' => __('validation.admin.first_name_min'),
             'last_name.regex' => __('validation.admin.last_name_format'),
             'name.required' => __('validation.admin.name_required'),
-            
+
             // Email Messages
             'email.required' => __('validation.admin.email_required'),
             'email.email' => __('validation.admin.email_format'),
             'email.unique' => __('validation.admin.email_unique_update'),
-            
+
             // Password Messages (Optional)
             'password.min' => __('validation.admin.password_min'),
             'password.regex' => __('validation.admin.password_complexity'),
             'password.confirmed' => __('validation.admin.password_confirmation'),
             'password_confirmation.same' => __('validation.admin.password_match'),
-            
+
             // Role Messages
             'role.in' => __('validation.admin.role_invalid'),
-            
+
             // Phone Messages
             'phone.regex' => __('validation.admin.phone_format'),
-            
+
             // Date Messages
             'dob.before' => __('validation.admin.dob_before_today'),
             'dob.after' => __('validation.admin.dob_after_1900'),
-            
+
             // Gender Messages
             'gender.in' => __('validation.admin.gender_invalid'),
-            
+
             // General Messages
             'is_active.boolean' => __('validation.admin.status_boolean'),
         ];
@@ -130,16 +130,16 @@ class UpdateAdminRequest extends BusinessLogicRequest
     protected function performCustomValidation($validator): void
     {
         parent::performCustomValidation($validator);
-        
+
         // Validate admin update business rules
         $this->validateAdminUpdateRules($validator);
-        
+
         // Validate role permissions for updates
         $this->validateRoleUpdatePermissions($validator);
-        
+
         // Validate security constraints for updates
         $this->validateUpdateSecurityConstraints($validator);
-        
+
         // Validate password requirements if provided
         $this->validatePasswordUpdateConstraints($validator);
     }
@@ -150,20 +150,20 @@ class UpdateAdminRequest extends BusinessLogicRequest
     protected function validateAdminUpdateRules($validator): void
     {
         $userId = $this->route('admin') ? $this->route('admin')->id : $this->route('id');
-        
+
         // Ensure full name is updated if first_name and last_name are provided
         if ($this->filled('first_name') && $this->filled('last_name')) {
             $this->merge([
-                'name' => trim($this->first_name . ' ' . $this->last_name)
+                'name' => trim($this->first_name.' '.$this->last_name),
             ]);
-        } elseif ($this->filled('first_name') && !$this->filled('name')) {
+        } elseif ($this->filled('first_name') && ! $this->filled('name')) {
             $this->merge([
-                'name' => $this->first_name
+                'name' => $this->first_name,
             ]);
         }
 
         // Prevent self-deactivation
-        if ($this->has('is_active') && !$this->is_active && $userId == auth()->id()) {
+        if ($this->has('is_active') && ! $this->is_active && $userId == auth()->id()) {
             $validator->errors()->add('is_active', __('validation.admin.cannot_deactivate_self'));
         }
 
@@ -186,10 +186,10 @@ class UpdateAdminRequest extends BusinessLogicRequest
     {
         // Note: Since authentication is being removed, this validation is minimal
         // In a real scenario, you'd check if current user can update admin roles
-        
+
         if ($this->filled('role')) {
             $allowedRoles = ['admin', 'super_admin'];
-            if (!in_array($this->role, $allowedRoles)) {
+            if (! in_array($this->role, $allowedRoles)) {
                 $validator->errors()->add('role', __('validation.admin.role_not_allowed'));
             }
         }
@@ -204,10 +204,10 @@ class UpdateAdminRequest extends BusinessLogicRequest
         if ($this->filled('email')) {
             $email = $this->email;
             $allowedDomains = config('admin.allowed_email_domains', []);
-            
-            if (!empty($allowedDomains)) {
+
+            if (! empty($allowedDomains)) {
                 $emailDomain = substr(strrchr($email, '@'), 1);
-                if (!in_array($emailDomain, $allowedDomains)) {
+                if (! in_array($emailDomain, $allowedDomains)) {
                     $validator->errors()->add('email', __('validation.admin.email_domain_not_allowed'));
                 }
             }
@@ -223,16 +223,16 @@ class UpdateAdminRequest extends BusinessLogicRequest
         if ($this->filled('password')) {
             // Validate password against common passwords list
             $commonPasswords = [
-                'password123', 'admin123', 'administrator', 'password1', 
-                '123456789', 'qwerty123', 'admin1234'
+                'password123', 'admin123', 'administrator', 'password1',
+                '123456789', 'qwerty123', 'admin1234',
             ];
-            
+
             if (in_array(strtolower($this->password), $commonPasswords)) {
                 $validator->errors()->add('password', __('validation.admin.password_too_common'));
             }
 
             // Ensure password confirmation is provided when password is updated
-            if (!$this->filled('password_confirmation')) {
+            if (! $this->filled('password_confirmation')) {
                 $validator->errors()->add('password_confirmation', __('validation.admin.password_confirmation_required'));
             }
         }
@@ -249,7 +249,7 @@ class UpdateAdminRequest extends BusinessLogicRequest
         if (isset($sanitized['first_name'])) {
             $sanitized['first_name'] = ucwords(strtolower(trim($sanitized['first_name'])));
         }
-        
+
         if (isset($sanitized['last_name'])) {
             $sanitized['last_name'] = ucwords(strtolower(trim($sanitized['last_name'])));
         }
@@ -283,10 +283,10 @@ class UpdateAdminRequest extends BusinessLogicRequest
     protected function prepareForValidation(): void
     {
         // Auto-generate name if not provided but first_name is
-        if (!$this->filled('name') && $this->filled('first_name')) {
+        if (! $this->filled('name') && $this->filled('first_name')) {
             $name = trim($this->first_name);
             if ($this->filled('last_name')) {
-                $name .= ' ' . trim($this->last_name);
+                $name .= ' '.trim($this->last_name);
             }
             $this->merge(['name' => $name]);
         }
@@ -302,7 +302,7 @@ class UpdateAdminRequest extends BusinessLogicRequest
                 '0' => 'male',
                 '1' => 'female',
                 '2' => 'other',
-                '3' => 'prefer_not_to_say'
+                '3' => 'prefer_not_to_say',
             ];
             $this->merge(['gender' => $genderMapping[$this->gender] ?? 'prefer_not_to_say']);
         }

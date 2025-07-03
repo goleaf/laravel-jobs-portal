@@ -46,7 +46,7 @@ class TestHelpers
         try {
             // Create minimal data needed for foreign key relationships
             // Using DB::table to avoid model constraints
-            if (!\DB::table('marital_status')->count()) {
+            if (! \DB::table('marital_status')->count()) {
                 \DB::table('marital_status')->insert([
                     'id' => 1,
                     'marital_status' => 'Single',
@@ -55,7 +55,7 @@ class TestHelpers
                 ]);
             }
 
-            if (!\DB::table('career_levels')->count()) {
+            if (! \DB::table('career_levels')->count()) {
                 \DB::table('career_levels')->insert([
                     'id' => 1,
                     'level_name' => 'Entry Level',
@@ -65,7 +65,7 @@ class TestHelpers
                 ]);
             }
 
-            if (!\DB::table('industries')->count()) {
+            if (! \DB::table('industries')->count()) {
                 \DB::table('industries')->insert([
                     'id' => 1,
                     'name' => 'Technology',
@@ -75,7 +75,7 @@ class TestHelpers
                 ]);
             }
 
-            if (!\DB::table('functional_areas')->count()) {
+            if (! \DB::table('functional_areas')->count()) {
                 \DB::table('functional_areas')->insert([
                     'id' => 1,
                     'name' => 'Software Development',

@@ -54,14 +54,14 @@ class CandidateApiController extends UniversalBaseController
     /**
      * Universal Pattern: Display the specified resource with caching.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function show(ShowCandidateRequest $request, $id): JsonResponse
     {
         try {
             $candidate = $this->findCached(Candidate::class, $id, ['user']);
 
-            if (!$candidate) {
+            if (! $candidate) {
                 return $this->errorResponse(ucfirst('candidate').' not found', 404);
             }
 
@@ -108,7 +108,7 @@ class CandidateApiController extends UniversalBaseController
     /**
      * Universal Pattern: Update the specified resource with optimistic locking.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function update(UpdateRequest $request, $id): JsonResponse
     {
@@ -142,7 +142,7 @@ class CandidateApiController extends UniversalBaseController
     /**
      * Universal Pattern: Remove the specified resource with soft delete.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function destroy(DestroyCandidateRequest $request, $id): JsonResponse
     {

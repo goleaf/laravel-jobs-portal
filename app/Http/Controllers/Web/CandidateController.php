@@ -49,7 +49,7 @@ class CandidateController extends AppBaseController
     /**
      * Display the specified candidate.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function show($id): View
     {
@@ -61,7 +61,7 @@ class CandidateController extends AppBaseController
     /**
      * Show the form for editing the specified candidate.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function edit($id): View
     {
@@ -73,7 +73,7 @@ class CandidateController extends AppBaseController
     /**
      * Update the specified candidate.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function update(UpdateCandidateRequest $request, $id)
     {
@@ -84,7 +84,7 @@ class CandidateController extends AppBaseController
     /**
      * Remove the specified candidate.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function destroy($id)
     {
@@ -95,8 +95,7 @@ class CandidateController extends AppBaseController
     }
 
     /**
-     * @param mixed $uniqueId
-     *
+     * @param  mixed  $uniqueId
      * @return Application|Factory|View
      */
     public function getCandidateDetails($uniqueId): View

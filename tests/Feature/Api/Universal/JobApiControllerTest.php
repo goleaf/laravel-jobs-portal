@@ -40,7 +40,7 @@ class JobApiControllerTest extends TestCase
     /**
      * Universal Pattern: Test API index endpoint.
      */
-    public function testIndexReturnsPaginatedResults(): void
+    public function test_index_returns_paginated_results(): void
     {
         Job::factory()->count(3)->create();
 
@@ -58,14 +58,13 @@ class JobApiControllerTest extends TestCase
                     'total',
                 ],
                 'meta',
-            ])
-        ;
+            ]);
     }
 
     /**
      * Universal Pattern: Test API store endpoint.
      */
-    public function testStoreCreatesNewResource(): void
+    public function test_store_creates_new_resource(): void
     {
         $data = [
             'name' => $this->faker->name,
@@ -87,8 +86,7 @@ class JobApiControllerTest extends TestCase
                 'message',
                 'data' => ['id', 'name', 'email'],
                 'meta',
-            ])
-        ;
+            ]);
 
         $this->assertDatabaseHas('jobs', [
             'name' => $data['name'],
@@ -99,7 +97,7 @@ class JobApiControllerTest extends TestCase
     /**
      * Universal Pattern: Test API validation.
      */
-    public function testStoreValidatesRequiredFields(): void
+    public function test_store_validates_required_fields(): void
     {
         $response = $this->postJson('/api/v1/jobs', []);
 
@@ -108,14 +106,13 @@ class JobApiControllerTest extends TestCase
                 'success' => false,
                 'message' => 'Validation failed',
             ])
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /**
      * Universal Pattern: Test API show endpoint.
      */
-    public function testShowReturnsSingleResource(): void
+    public function test_show_returns_single_resource(): void
     {
         $job = Job::factory()->create();
 
@@ -128,14 +125,13 @@ class JobApiControllerTest extends TestCase
                     'id' => $job->id,
                     'name' => $job->name,
                 ],
-            ])
-        ;
+            ]);
     }
 
     /**
      * Universal Pattern: Test API update endpoint.
      */
-    public function testUpdateModifiesExistingResource(): void
+    public function test_update_modifies_existing_resource(): void
     {
         $job = Job::factory()->create();
         $updateData = [
@@ -149,8 +145,7 @@ class JobApiControllerTest extends TestCase
             ->assertJson([
                 'success' => true,
                 'message' => 'Job updated successfully',
-            ])
-        ;
+            ]);
 
         $this->assertDatabaseHas('jobs', [
             'id' => $job->id,
@@ -161,7 +156,7 @@ class JobApiControllerTest extends TestCase
     /**
      * Universal Pattern: Test API delete endpoint.
      */
-    public function testDestroyDeletesResource(): void
+    public function test_destroy_deletes_resource(): void
     {
         $job = Job::factory()->create();
 
@@ -171,8 +166,7 @@ class JobApiControllerTest extends TestCase
             ->assertJson([
                 'success' => true,
                 'message' => 'Job deleted successfully',
-            ])
-        ;
+            ]);
 
         $this->assertSoftDeleted($job);
     }
@@ -180,7 +174,7 @@ class JobApiControllerTest extends TestCase
     /**
      * Universal Pattern: Test unauthorized access.
      */
-    public function testUnauthorizedAccessReturns401(): void
+    public function test_unauthorized_access_returns401(): void
     {
         Sanctum::actingAs($this->user, []); // No abilities
 
@@ -195,10 +189,10 @@ class JobApiControllerTest extends TestCase
     /**
      * Universal Pattern: Test rate limiting.
      */
-    public function testRateLimitingPreventsExcessiveRequests(): void
+    public function test_rate_limiting_prevents_excessive_requests(): void
     {
         // Make requests up to the limit
-        for ($i = 0; $i < 60; ++$i) {
+        for ($i = 0; $i < 60; $i++) {
             $this->getJson('/api/v1/jobs');
         }
 
@@ -210,7 +204,7 @@ class JobApiControllerTest extends TestCase
     /**
      * Universal Pattern: Test search functionality.
      */
-    public function testIndexCanSearchResources(): void
+    public function test_index_can_search_resources(): void
     {
         Job::factory()->create(['name' => 'Searchable Item']);
         Job::factory()->create(['name' => 'Other Item']);
@@ -218,14 +212,13 @@ class JobApiControllerTest extends TestCase
         $response = $this->getJson('/api/v1/jobs?search=Searchable');
 
         $response->assertStatus(200)
-            ->assertJsonCount(1, 'data.data')
-        ;
+            ->assertJsonCount(1, 'data.data');
     }
 
     /**
      * Universal Pattern: Test resource not found.
      */
-    public function testShowReturns404ForNonexistentResource(): void
+    public function test_show_returns404_for_nonexistent_resource(): void
     {
         $response = $this->getJson('/api/v1/jobs/999999');
 
@@ -233,14 +226,13 @@ class JobApiControllerTest extends TestCase
             ->assertJson([
                 'success' => false,
                 'message' => 'Job not found',
-            ])
-        ;
+            ]);
     }
 
     /**
      * Universal Pattern: Test invalid JSON.
      */
-    public function testStoreHandlesInvalidJson(): void
+    public function test_store_handles_invalid_json(): void
     {
         $response = $this->json('POST', '/api/v1/jobs', 'invalid-json', [
             'Content-Type' => 'application/json',

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Setting;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class SettingsSeeder extends Seeder
@@ -51,7 +50,7 @@ class SettingsSeeder extends Seeder
                 'is_public' => true,
                 'default_value' => 'admin@example.com',
             ],
-            
+
             // Job Portal Specific Settings
             [
                 'key' => 'jobs_per_page',
@@ -89,7 +88,7 @@ class SettingsSeeder extends Seeder
                 'is_public' => false,
                 'default_value' => '10',
             ],
-            
+
             // User/Registration Settings
             [
                 'key' => 'allow_registration',
@@ -118,7 +117,7 @@ class SettingsSeeder extends Seeder
                 'is_public' => true,
                 'default_value' => '/images/default-avatar.png',
             ],
-            
+
             // Notification Settings
             [
                 'key' => 'admin_notification_email',
@@ -147,7 +146,7 @@ class SettingsSeeder extends Seeder
                 'is_public' => false,
                 'default_value' => '1',
             ],
-            
+
             // SEO & Analytics Settings
             [
                 'key' => 'google_analytics_id',
@@ -176,7 +175,7 @@ class SettingsSeeder extends Seeder
                 'is_public' => false,
                 'default_value' => "User-agent: *\nAllow: /",
             ],
-            
+
             // Company/Employer Settings
             [
                 'key' => 'max_company_jobs',
@@ -196,7 +195,7 @@ class SettingsSeeder extends Seeder
                 'is_public' => false,
                 'default_value' => '0',
             ],
-            
+
             // System Maintenance Settings
             [
                 'key' => 'maintenance_mode',
@@ -216,7 +215,7 @@ class SettingsSeeder extends Seeder
                 'is_public' => false,
                 'default_value' => 'System is under maintenance.',
             ],
-            
+
             // API Settings
             [
                 'key' => 'api_rate_limit',
@@ -248,6 +247,6 @@ class SettingsSeeder extends Seeder
             );
         }
 
-        $this->command->info('Habr-based settings seeded successfully with ' . count($settings) . ' settings.');
+        $this->command->info('Habr-based settings seeded successfully with '.count($settings).' settings.');
     }
 }

@@ -28,7 +28,6 @@ class MakeCountriesSeeder extends Seeder
             ->chunk(500)
             ->each(function ($city) {
                 City::insert($city->toArray());
-            })
-        ;
+            });
     }
 }

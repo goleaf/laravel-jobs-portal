@@ -35,12 +35,12 @@ class JobTypeService
             $this->applySorting($query, $filters['sort'] ?? 'name');
 
             // Include relationships if requested
-            if (!empty($filters['include'])) {
+            if (! empty($filters['include'])) {
                 $query->with($this->parseIncludes($filters['include']));
             }
 
             // Include counts if requested
-            if (!empty($filters['include_counts'])) {
+            if (! empty($filters['include_counts'])) {
                 $query->withCount([
                     'jobs',
                     'jobs as active_jobs_count' => fn ($q) => $q->where('is_active', true),
@@ -138,7 +138,7 @@ class JobTypeService
     public function deleteJobType(JobType $jobType, bool $force = false): bool
     {
         // Check if job type is in use
-        if (!$force && $this->isJobTypeInUse($jobType)) {
+        if (! $force && $this->isJobTypeInUse($jobType)) {
             throw new \InvalidArgumentException('Cannot delete job type that is currently in use');
         }
 
@@ -199,7 +199,7 @@ class JobTypeService
             foreach ($jobTypes as $jobType) {
                 $updated = $this->performBulkAction($jobType, $action, $data);
                 if ($updated) {
-                    ++$updatedCount;
+                    $updatedCount++;
                 }
             }
 
@@ -277,8 +277,7 @@ class JobTypeService
                 ->withCount('jobs')
                 ->orderByDesc('jobs_count')
                 ->limit($limit)
-                ->get()
-            ;
+                ->get();
         });
     }
 
@@ -295,8 +294,7 @@ class JobTypeService
                 ->withCount('jobs')
                 ->orderByDesc('jobs_count')
                 ->limit($limit)
-                ->get()
-            ;
+                ->get();
         });
     }
 
@@ -322,7 +320,7 @@ class JobTypeService
         $counter = 1;
         while (JobType::where('slug', $data['slug'])->exists()) {
             $data['slug'] = $baseSlug.'-'.$counter;
-            ++$counter;
+            $counter++;
         }
 
         return $this->createJobType($data);
@@ -341,8 +339,7 @@ class JobTypeService
                 ->orderBy('name')
                 ->limit($limit)
                 ->get(['id', 'name', 'slug', 'icon', 'color'])
-                ->toArray()
-            ;
+                ->toArray();
         });
     }
 
@@ -386,16 +383,16 @@ class JobTypeService
     /**
      * Apply filters to query.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     private function applyFilters($query, array $filters): void
     {
-        if (!empty($filters['search'])) {
+        if (! empty($filters['search'])) {
             $query->search($filters['search']);
         }
 
-        if (!empty($filters['status'])) {
-            'active' === $filters['status'] ? $query->active() : $query->inactive();
+        if (! empty($filters['status'])) {
+            $filters['status'] === 'active' ? $query->active() : $query->inactive();
         }
 
         if (isset($filters['is_default'])) {
@@ -406,7 +403,7 @@ class JobTypeService
             $query->where('is_featured', $filters['is_featured']);
         }
 
-        if (!empty($filters['type'])) {
+        if (! empty($filters['type'])) {
             match ($filters['type']) {
                 'full_time' => $query->fullTime(),
                 'part_time' => $query->partTime(),
@@ -419,7 +416,7 @@ class JobTypeService
             };
         }
 
-        if (!empty($filters['demand'])) {
+        if (! empty($filters['demand'])) {
             match ($filters['demand']) {
                 'high' => $query->highDemand(50),
                 'medium' => $query->minUsage(10)->withCount('jobs')->having('jobs_count', '<', 50),
@@ -432,7 +429,7 @@ class JobTypeService
     /**
      * Apply sorting to query.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     private function applySorting($query, string $sort): void
     {
@@ -452,12 +449,12 @@ class JobTypeService
     private function prepareJobTypeData(array $data, ?JobType $jobType = null): array
     {
         // Auto-generate slug if not provided
-        if (empty($data['slug']) && !empty($data['name'])) {
+        if (empty($data['slug']) && ! empty($data['name'])) {
             $data['slug'] = Str::slug($data['name']);
         }
 
         // Ensure slug uniqueness
-        if (!empty($data['slug'])) {
+        if (! empty($data['slug'])) {
             $query = JobType::where('slug', $data['slug']);
             if ($jobType) {
                 $query->where('id', '!=', $jobType->id);
@@ -468,7 +465,7 @@ class JobTypeService
                 $counter = 1;
                 do {
                     $data['slug'] = $baseSlug.'-'.$counter;
-                    ++$counter;
+                    $counter++;
                 } while (JobType::where('slug', $data['slug'])->exists());
             }
         }
@@ -531,7 +528,7 @@ class JobTypeService
             'deactivate' => $jobType->update(['is_active' => false]),
             'feature' => $jobType->update(['is_featured' => true]),
             'unfeature' => $jobType->update(['is_featured' => false]),
-            'delete' => !$this->isJobTypeInUse($jobType) && $jobType->delete(),
+            'delete' => ! $this->isJobTypeInUse($jobType) && $jobType->delete(),
             'update' => $jobType->update($data),
             default => false,
         };
@@ -571,8 +568,7 @@ class JobTypeService
                 '=',
                 'jobs_count.job_type_id'
             )
-            ->first()
-        ;
+            ->first();
 
         return [
             'total_types' => $stats->total_types ?? 0,
@@ -594,15 +590,15 @@ class JobTypeService
     /**
      * Apply search filters.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     private function applySearchFilters($query, array $filters): void
     {
-        if (!empty($filters['status'])) {
-            'active' === $filters['status'] ? $query->active() : $query->inactive();
+        if (! empty($filters['status'])) {
+            $filters['status'] === 'active' ? $query->active() : $query->inactive();
         }
 
-        if (!empty($filters['type'])) {
+        if (! empty($filters['type'])) {
             match ($filters['type']) {
                 'default' => $query->default(),
                 'custom' => $query->custom(),

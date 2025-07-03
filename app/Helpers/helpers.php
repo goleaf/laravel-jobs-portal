@@ -5,7 +5,7 @@ use App\Models\Country;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 
-if (!function_exists('settings')) {
+if (! function_exists('settings')) {
     function settings()
     {
         return [
@@ -17,14 +17,14 @@ if (!function_exists('settings')) {
     }
 }
 
-if (!function_exists('getAppName')) {
+if (! function_exists('getAppName')) {
     function getAppName()
     {
         return config('app.name', 'Job Portal');
     }
 }
 
-if (!function_exists('getSettingValue')) {
+if (! function_exists('getSettingValue')) {
     function getSettingValue($key, $default = null)
     {
         $settings = [
@@ -40,14 +40,14 @@ if (!function_exists('getSettingValue')) {
     }
 }
 
-if (!function_exists('formatCurrency')) {
+if (! function_exists('formatCurrency')) {
     function formatCurrency($amount, $currency = 'USD')
     {
         return '$'.number_format($amount, 2);
     }
 }
 
-if (!function_exists('timeAgo')) {
+if (! function_exists('timeAgo')) {
     function timeAgo($date)
     {
         $carbon = Carbon::parse($date);
@@ -56,7 +56,7 @@ if (!function_exists('timeAgo')) {
     }
 }
 
-if (!function_exists('getCountries')) {
+if (! function_exists('getCountries')) {
     function getCountries()
     {
         try {
@@ -67,7 +67,7 @@ if (!function_exists('getCountries')) {
     }
 }
 
-if (!function_exists('getUniqueCompanyId')) {
+if (! function_exists('getUniqueCompanyId')) {
     function getUniqueCompanyId(): string
     {
         $companyUniqueId = Str::random(12);

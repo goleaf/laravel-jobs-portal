@@ -22,19 +22,19 @@ class ShowCompanyRequest extends FormRequest
         $company = $this->route('company');
 
         // Basic access control
-        if (!$company) {
+        if (! $company) {
             return false;
         }
 
         // Public companies are viewable by everyone
-        if ($company->is_active && !$company->is_private) {
+        if ($company->is_active && ! $company->is_private) {
             return true;
         }
 
         $user = auth()->user();
 
         // Unauthenticated users can't view private/inactive companies
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
@@ -65,7 +65,7 @@ class ShowCompanyRequest extends FormRequest
         }
 
         // Inactive companies require admin access
-        if (!$company->is_active) {
+        if (! $company->is_active) {
             return $user->hasRole(['admin', 'super-admin']);
         }
 
@@ -455,7 +455,7 @@ class ShowCompanyRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     public function withValidator($validator): void
     {
@@ -579,7 +579,7 @@ class ShowCompanyRequest extends FormRequest
         ];
 
         foreach ($numericFields as $field) {
-            if ($this->has($field) && !empty($this->{$field})) {
+            if ($this->has($field) && ! empty($this->{$field})) {
                 $this->merge([$field => (int) $this->{$field}]);
             }
         }
@@ -590,7 +590,7 @@ class ShowCompanyRequest extends FormRequest
         ];
 
         foreach ($stringFields as $field) {
-            if ($this->has($field) && !empty($this->{$field})) {
+            if ($this->has($field) && ! empty($this->{$field})) {
                 $this->merge([$field => trim($this->{$field})]);
             }
         }
@@ -599,7 +599,7 @@ class ShowCompanyRequest extends FormRequest
     /**
      * Validate admin access requirements.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     protected function validateAdminAccess($validator): void
     {
@@ -612,7 +612,7 @@ class ShowCompanyRequest extends FormRequest
         ];
 
         foreach ($adminOptions as $option) {
-            if ($this->has($option) && $this->{$option} && (!$user || !$user->hasRole(['admin', 'super-admin']))) {
+            if ($this->has($option) && $this->{$option} && (! $user || ! $user->hasRole(['admin', 'super-admin']))) {
                 $validator->errors()->add($option, __('validation.company_show.admin_access_required'));
             }
         }
@@ -621,7 +621,7 @@ class ShowCompanyRequest extends FormRequest
     /**
      * Validate data access permissions.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     protected function validateDataAccess($validator): void
     {
@@ -630,14 +630,14 @@ class ShowCompanyRequest extends FormRequest
 
         // Financial data requires ownership or admin access
         if ($this->include_financials && $company) {
-            if (!$user || (!$user->hasRole(['admin', 'super-admin']) && $company->user_id !== $user->id)) {
+            if (! $user || (! $user->hasRole(['admin', 'super-admin']) && $company->user_id !== $user->id)) {
                 $validator->errors()->add('include_financials', __('validation.company_show.financial_access_denied'));
             }
         }
 
         // Sensitive data requires special permissions
         if ($this->include_sensitive_data && $company) {
-            if (!$user || !$user->can('viewSensitiveData', $company)) {
+            if (! $user || ! $user->can('viewSensitiveData', $company)) {
                 $validator->errors()->add('include_sensitive_data', __('validation.company_show.sensitive_data_access_denied'));
             }
         }
@@ -646,7 +646,7 @@ class ShowCompanyRequest extends FormRequest
     /**
      * Validate business logic constraints.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     protected function validateBusinessLogic($validator): void
     {

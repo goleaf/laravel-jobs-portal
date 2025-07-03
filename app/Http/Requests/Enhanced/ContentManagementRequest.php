@@ -3,9 +3,8 @@
 namespace App\Http\Requests\Enhanced;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Cache;
-use Carbon\Carbon;
+use Illuminate\Validation\Rule;
 
 class ContentManagementRequest extends FormRequest
 {
@@ -23,7 +22,7 @@ class ContentManagementRequest extends FormRequest
         $rules = array_merge($rules, $this->getContentOptimizationRules());
         $rules = array_merge($rules, $this->getContentAnalyticsRules());
         $rules = array_merge($rules, $this->getAdvancedContentFeaturesRules());
-        
+
         return $rules;
     }
 
@@ -38,7 +37,7 @@ class ContentManagementRequest extends FormRequest
             'content_priority' => ['nullable', 'string', Rule::in(['low', 'normal', 'high', 'urgent', 'critical'])],
             'content_language' => ['nullable', 'string', 'size:2'],
             'content_locale' => ['nullable', 'string', 'max:10'],
-            
+
             // Content Structure
             'title' => ['nullable', 'string', 'max:500'],
             'subtitle' => ['nullable', 'string', 'max:500'],
@@ -51,7 +50,7 @@ class ContentManagementRequest extends FormRequest
             'content_sections.*.section_type' => ['string', Rule::in(['text', 'image', 'video', 'audio', 'embed', 'gallery', 'form'])],
             'content_sections.*.section_content' => ['string'],
             'content_sections.*.section_order' => ['integer', 'min:1'],
-            
+
             // Metadata and SEO
             'meta_title' => ['nullable', 'string', 'max:60'],
             'meta_description' => ['nullable', 'string', 'max:160'],
@@ -64,7 +63,7 @@ class ContentManagementRequest extends FormRequest
             'social_media_meta' => ['nullable', 'array'],
             'structured_data' => ['nullable', 'array'],
             'robots_meta' => ['nullable', 'string', Rule::in(['index,follow', 'noindex,follow', 'index,nofollow', 'noindex,nofollow'])],
-            
+
             // Content Versioning
             'version_control_enabled' => ['nullable', 'boolean'],
             'version_number' => ['nullable', 'string', 'max:20'],
@@ -74,7 +73,7 @@ class ContentManagementRequest extends FormRequest
             'auto_versioning' => ['nullable', 'boolean'],
             'version_retention_count' => ['nullable', 'integer', 'min:1', 'max:100'],
             'version_comparison_enabled' => ['nullable', 'boolean'],
-            
+
             // Publishing Configuration
             'publish_immediately' => ['nullable', 'boolean'],
             'scheduled_publish_date' => ['nullable', 'date', 'after:now'],
@@ -84,7 +83,7 @@ class ContentManagementRequest extends FormRequest
             'access_control_rules' => ['nullable', 'array'],
             'geographic_restrictions' => ['nullable', 'array'],
             'time_based_availability' => ['nullable', 'array'],
-            
+
             // Content Relationships
             'parent_content_id' => ['nullable', 'string', 'max:255'],
             'related_content_ids' => ['nullable', 'array'],
@@ -95,7 +94,7 @@ class ContentManagementRequest extends FormRequest
             'content_tags.*' => ['string', 'max:100'],
             'content_categories' => ['nullable', 'array'],
             'cross_references' => ['nullable', 'array'],
-            
+
             // Collaboration and Workflow
             'author_id' => ['nullable', 'string', 'max:255'],
             'editor_id' => ['nullable', 'string', 'max:255'],
@@ -120,7 +119,7 @@ class ContentManagementRequest extends FormRequest
             'asset_organization_strategy' => ['nullable', 'string', Rule::in(['folder_based', 'tag_based', 'metadata_based', 'ai_categorized'])],
             'asset_search_enabled' => ['nullable', 'boolean'],
             'asset_versioning_enabled' => ['nullable', 'boolean'],
-            
+
             // Media Files
             'media_files' => ['nullable', 'array'],
             'media_files.*.file_type' => ['string', Rule::in(['image', 'video', 'audio', 'document', 'archive', 'font', 'vector'])],
@@ -132,7 +131,7 @@ class ContentManagementRequest extends FormRequest
             'media_files.*.file_alt_text' => ['string', 'max:255'],
             'media_files.*.file_caption' => ['string', 'max:500'],
             'media_files.*.file_metadata' => ['array'],
-            
+
             // Image Processing
             'image_processing_enabled' => ['nullable', 'boolean'],
             'image_optimization_enabled' => ['nullable', 'boolean'],
@@ -144,7 +143,7 @@ class ContentManagementRequest extends FormRequest
             'image_watermark_settings' => ['nullable', 'array'],
             'responsive_images_enabled' => ['nullable', 'boolean'],
             'lazy_loading_enabled' => ['nullable', 'boolean'],
-            
+
             // Video Processing
             'video_processing_enabled' => ['nullable', 'boolean'],
             'video_transcoding_enabled' => ['nullable', 'boolean'],
@@ -155,7 +154,7 @@ class ContentManagementRequest extends FormRequest
             'video_streaming_enabled' => ['nullable', 'boolean'],
             'video_player_configuration' => ['nullable', 'array'],
             'video_analytics_enabled' => ['nullable', 'boolean'],
-            
+
             // Audio Processing
             'audio_processing_enabled' => ['nullable', 'boolean'],
             'audio_formats_supported' => ['nullable', 'array'],
@@ -163,7 +162,7 @@ class ContentManagementRequest extends FormRequest
             'audio_quality_settings' => ['nullable', 'array'],
             'audio_streaming_enabled' => ['nullable', 'boolean'],
             'podcast_support_enabled' => ['nullable', 'boolean'],
-            
+
             // Document Processing
             'document_processing_enabled' => ['nullable', 'boolean'],
             'document_formats_supported' => ['nullable', 'array'],
@@ -172,7 +171,7 @@ class ContentManagementRequest extends FormRequest
             'document_search_enabled' => ['nullable', 'boolean'],
             'document_conversion_enabled' => ['nullable', 'boolean'],
             'document_annotation_enabled' => ['nullable', 'boolean'],
-            
+
             // Asset Security and Access Control
             'asset_access_control_enabled' => ['nullable', 'boolean'],
             'asset_permissions' => ['nullable', 'array'],
@@ -193,7 +192,7 @@ class ContentManagementRequest extends FormRequest
             'workflow_type' => ['nullable', 'string', Rule::in(['editorial', 'approval', 'translation', 'review', 'publishing', 'compliance'])],
             'workflow_automation_enabled' => ['nullable', 'boolean'],
             'workflow_notifications_enabled' => ['nullable', 'boolean'],
-            
+
             // Workflow Steps
             'workflow_steps' => ['nullable', 'array'],
             'workflow_steps.*.step_name' => ['string', 'max:255'],
@@ -204,7 +203,7 @@ class ContentManagementRequest extends FormRequest
             'workflow_steps.*.required' => ['boolean'],
             'workflow_steps.*.parallel_execution' => ['boolean'],
             'workflow_steps.*.auto_transition' => ['boolean'],
-            
+
             // Approval Process
             'approval_process_enabled' => ['nullable', 'boolean'],
             'approval_hierarchy' => ['nullable', 'array'],
@@ -212,7 +211,7 @@ class ContentManagementRequest extends FormRequest
             'approval_threshold' => ['nullable', 'integer', 'min:1', 'max:100'],
             'rejection_handling' => ['nullable', 'string', Rule::in(['return_to_author', 'require_revision', 'escalate', 'archive'])],
             'approval_timeout_action' => ['nullable', 'string', Rule::in(['auto_approve', 'escalate', 'reject', 'notify'])],
-            
+
             // Content Review
             'review_process_enabled' => ['nullable', 'boolean'],
             'review_criteria' => ['nullable', 'array'],
@@ -222,7 +221,7 @@ class ContentManagementRequest extends FormRequest
             'compliance_review_required' => ['nullable', 'boolean'],
             'fact_checking_enabled' => ['nullable', 'boolean'],
             'plagiarism_detection_enabled' => ['nullable', 'boolean'],
-            
+
             // Translation Workflow
             'translation_workflow_enabled' => ['nullable', 'boolean'],
             'target_languages' => ['nullable', 'array'],
@@ -231,7 +230,7 @@ class ContentManagementRequest extends FormRequest
             'translation_quality_review' => ['nullable', 'boolean'],
             'localization_enabled' => ['nullable', 'boolean'],
             'cultural_adaptation_enabled' => ['nullable', 'boolean'],
-            
+
             // Publication Workflow
             'publication_workflow_enabled' => ['nullable', 'boolean'],
             'multi_channel_publishing' => ['nullable', 'boolean'],
@@ -254,7 +253,7 @@ class ContentManagementRequest extends FormRequest
             'real_time_processing_enabled' => ['nullable', 'boolean'],
             'cloud_processing_enabled' => ['nullable', 'boolean'],
             'processing_priority' => ['nullable', 'string', Rule::in(['low', 'normal', 'high', 'urgent'])],
-            
+
             // Image Processing Advanced
             'advanced_image_processing' => ['nullable', 'boolean'],
             'ai_image_enhancement' => ['nullable', 'boolean'],
@@ -266,7 +265,7 @@ class ContentManagementRequest extends FormRequest
             'background_removal_enabled' => ['nullable', 'boolean'],
             'image_upscaling_enabled' => ['nullable', 'boolean'],
             'format_conversion_enabled' => ['nullable', 'boolean'],
-            
+
             // Video Processing Advanced
             'advanced_video_processing' => ['nullable', 'boolean'],
             'video_ai_analysis' => ['nullable', 'boolean'],
@@ -278,7 +277,7 @@ class ContentManagementRequest extends FormRequest
             'video_moderation_enabled' => ['nullable', 'boolean'],
             'video_optimization_enabled' => ['nullable', 'boolean'],
             'adaptive_bitrate_enabled' => ['nullable', 'boolean'],
-            
+
             // Audio Processing Advanced
             'advanced_audio_processing' => ['nullable', 'boolean'],
             'audio_enhancement_enabled' => ['nullable', 'boolean'],
@@ -288,7 +287,7 @@ class ContentManagementRequest extends FormRequest
             'audio_transcription_enabled' => ['nullable', 'boolean'],
             'music_detection_enabled' => ['nullable', 'boolean'],
             'audio_fingerprinting_enabled' => ['nullable', 'boolean'],
-            
+
             // Content Delivery Network
             'cdn_enabled' => ['nullable', 'boolean'],
             'cdn_provider' => ['nullable', 'string', Rule::in(['cloudflare', 'aws_cloudfront', 'azure_cdn', 'google_cdn', 'fastly'])],
@@ -297,7 +296,7 @@ class ContentManagementRequest extends FormRequest
             'edge_processing_enabled' => ['nullable', 'boolean'],
             'cdn_security_enabled' => ['nullable', 'boolean'],
             'cdn_analytics_enabled' => ['nullable', 'boolean'],
-            
+
             // Performance Optimization
             'media_optimization_enabled' => ['nullable', 'boolean'],
             'compression_algorithms' => ['nullable', 'array'],
@@ -321,7 +320,7 @@ class ContentManagementRequest extends FormRequest
             'internal_linking_optimization' => ['nullable', 'boolean'],
             'meta_tag_optimization' => ['nullable', 'boolean'],
             'schema_markup_generation' => ['nullable', 'boolean'],
-            
+
             // AI-Powered Content Optimization
             'ai_content_optimization' => ['nullable', 'boolean'],
             'natural_language_processing' => ['nullable', 'boolean'],
@@ -331,7 +330,7 @@ class ContentManagementRequest extends FormRequest
             'content_personalization_ai' => ['nullable', 'boolean'],
             'auto_tagging_enabled' => ['nullable', 'boolean'],
             'content_suggestions_enabled' => ['nullable', 'boolean'],
-            
+
             // Performance Optimization
             'content_performance_tracking' => ['nullable', 'boolean'],
             'loading_speed_optimization' => ['nullable', 'boolean'],
@@ -341,7 +340,7 @@ class ContentManagementRequest extends FormRequest
             'image_optimization_enabled' => ['nullable', 'boolean'],
             'lazy_loading_optimization' => ['nullable', 'boolean'],
             'critical_css_optimization' => ['nullable', 'boolean'],
-            
+
             // Accessibility Optimization
             'accessibility_compliance_enabled' => ['nullable', 'boolean'],
             'wcag_level' => ['nullable', 'string', Rule::in(['A', 'AA', 'AAA'])],
@@ -350,7 +349,7 @@ class ContentManagementRequest extends FormRequest
             'keyboard_navigation_optimization' => ['nullable', 'boolean'],
             'color_contrast_checking' => ['nullable', 'boolean'],
             'focus_management_optimization' => ['nullable', 'boolean'],
-            
+
             // Mobile Optimization
             'mobile_optimization_enabled' => ['nullable', 'boolean'],
             'responsive_design_optimization' => ['nullable', 'boolean'],
@@ -359,7 +358,7 @@ class ContentManagementRequest extends FormRequest
             'mobile_performance_optimization' => ['nullable', 'boolean'],
             'amp_optimization_enabled' => ['nullable', 'boolean'],
             'progressive_web_app_optimization' => ['nullable', 'boolean'],
-            
+
             // Content Personalization
             'personalization_enabled' => ['nullable', 'boolean'],
             'user_behavior_analysis' => ['nullable', 'boolean'],
@@ -382,7 +381,7 @@ class ContentManagementRequest extends FormRequest
             'custom_metrics_enabled' => ['nullable', 'boolean'],
             'analytics_dashboard_enabled' => ['nullable', 'boolean'],
             'automated_reporting_enabled' => ['nullable', 'boolean'],
-            
+
             // Content Performance Metrics
             'page_view_tracking' => ['nullable', 'boolean'],
             'unique_visitor_tracking' => ['nullable', 'boolean'],
@@ -392,7 +391,7 @@ class ContentManagementRequest extends FormRequest
             'scroll_depth_tracking' => ['nullable', 'boolean'],
             'click_through_rate_tracking' => ['nullable', 'boolean'],
             'conversion_tracking_enabled' => ['nullable', 'boolean'],
-            
+
             // User Behavior Analytics
             'user_journey_tracking' => ['nullable', 'boolean'],
             'heatmap_generation_enabled' => ['nullable', 'boolean'],
@@ -402,7 +401,7 @@ class ContentManagementRequest extends FormRequest
             'social_sharing_analytics' => ['nullable', 'boolean'],
             'referral_tracking_enabled' => ['nullable', 'boolean'],
             'campaign_attribution_tracking' => ['nullable', 'boolean'],
-            
+
             // Content Intelligence
             'content_intelligence_enabled' => ['nullable', 'boolean'],
             'content_performance_scoring' => ['nullable', 'boolean'],
@@ -411,7 +410,7 @@ class ContentManagementRequest extends FormRequest
             'trend_analysis_enabled' => ['nullable', 'boolean'],
             'content_gap_analysis' => ['nullable', 'boolean'],
             'audience_insights_enabled' => ['nullable', 'boolean'],
-            
+
             // Reporting and Insights
             'executive_reporting_enabled' => ['nullable', 'boolean'],
             'automated_insights_enabled' => ['nullable', 'boolean'],
@@ -436,28 +435,28 @@ class ContentManagementRequest extends FormRequest
             'automated_content_moderation' => ['nullable', 'boolean'],
             'content_quality_prediction' => ['nullable', 'boolean'],
             'trend_prediction_enabled' => ['nullable', 'boolean'],
-            
+
             // Blockchain and Web3
             'blockchain_content_verification' => ['nullable', 'boolean'],
             'nft_content_integration' => ['nullable', 'boolean'],
             'decentralized_content_storage' => ['nullable', 'boolean'],
             'content_tokenization_enabled' => ['nullable', 'boolean'],
             'smart_contract_integration' => ['nullable', 'boolean'],
-            
+
             // Voice and Audio
             'voice_content_enabled' => ['nullable', 'boolean'],
             'text_to_speech_enabled' => ['nullable', 'boolean'],
             'voice_search_optimization' => ['nullable', 'boolean'],
             'podcast_integration_enabled' => ['nullable', 'boolean'],
             'audio_content_generation' => ['nullable', 'boolean'],
-            
+
             // Augmented and Virtual Reality
             'ar_content_enabled' => ['nullable', 'boolean'],
             'vr_content_enabled' => ['nullable', 'boolean'],
             'three_d_content_support' => ['nullable', 'boolean'],
             'immersive_experience_enabled' => ['nullable', 'boolean'],
             'spatial_computing_enabled' => ['nullable', 'boolean'],
-            
+
             // Advanced Integrations
             'headless_cms_enabled' => ['nullable', 'boolean'],
             'api_first_architecture' => ['nullable', 'boolean'],
@@ -465,7 +464,7 @@ class ContentManagementRequest extends FormRequest
             'multi_channel_publishing' => ['nullable', 'boolean'],
             'omnichannel_content_management' => ['nullable', 'boolean'],
             'content_syndication_enabled' => ['nullable', 'boolean'],
-            
+
             // Future Technologies
             'quantum_content_encryption' => ['nullable', 'boolean'],
             'neural_network_content_processing' => ['nullable', 'boolean'],
@@ -473,7 +472,7 @@ class ContentManagementRequest extends FormRequest
             'holographic_content_support' => ['nullable', 'boolean'],
             'brain_computer_interface_ready' => ['nullable', 'boolean'],
             'metaverse_content_enabled' => ['nullable', 'boolean'],
-            
+
             // Enterprise Features
             'enterprise_content_governance' => ['nullable', 'boolean'],
             'compliance_automation_enabled' => ['nullable', 'boolean'],
@@ -530,7 +529,7 @@ class ContentManagementRequest extends FormRequest
         }
 
         // Validate SEO configuration
-        if ($this->seo_optimization_enabled && !$this->has('meta_title')) {
+        if ($this->seo_optimization_enabled && ! $this->has('meta_title')) {
             throw new \InvalidArgumentException(__('validation.content_management.meta_title_required_for_seo'));
         }
     }
@@ -551,7 +550,7 @@ class ContentManagementRequest extends FormRequest
         if ($fileSize > $maxSize) {
             throw new \InvalidArgumentException(__('validation.content_management.file_exceeds_type_limit', [
                 'type' => $fileType,
-                'max_size' => $maxSize
+                'max_size' => $maxSize,
             ]));
         }
     }
@@ -560,16 +559,16 @@ class ContentManagementRequest extends FormRequest
     {
         // Optimize based on content type and complexity
         $optimization = $this->calculateContentOptimization();
-        
+
         $this->merge([
             'recommended_cache_duration' => $optimization['cache_duration'],
             'suggested_compression_level' => $optimization['compression_level'],
-            'optimal_image_quality' => $optimization['image_quality']
+            'optimal_image_quality' => $optimization['image_quality'],
         ]);
 
         // Cache content configuration
         if ($this->has('content_id')) {
-            Cache::remember("content_config_{$this->content_id}", 1800, function() {
+            Cache::remember("content_config_{$this->content_id}", 1800, function () {
                 return $this->validated();
             });
         }
@@ -578,8 +577,8 @@ class ContentManagementRequest extends FormRequest
     private function calculateContentOptimization(): array
     {
         $contentType = $this->content_type ?? 'article';
-        $hasMedia = $this->has('media_files') && !empty($this->media_files);
-        $isInteractive = $this->has('content_sections') && !empty($this->content_sections);
+        $hasMedia = $this->has('media_files') && ! empty($this->media_files);
+        $isInteractive = $this->has('content_sections') && ! empty($this->content_sections);
 
         $optimizations = [
             'article' => ['cache_duration' => 3600, 'compression_level' => 85, 'image_quality' => 90],
@@ -616,35 +615,61 @@ class ContentManagementRequest extends FormRequest
             'user_agent' => request()->userAgent(),
             'ip_address' => request()->ip(),
             'timestamp' => now(),
-            'performance_optimizations' => $this->has('recommended_cache_duration')
+            'performance_optimizations' => $this->has('recommended_cache_duration'),
         ]);
     }
 
     private function getContentOperationType(): string
     {
-        if ($this->has('content_body')) return 'content_creation';
-        if ($this->has('media_files')) return 'media_management';
-        if ($this->has('workflow_enabled')) return 'workflow_management';
-        if ($this->has('seo_optimization_enabled')) return 'seo_optimization';
-        if ($this->has('ai_content_optimization')) return 'ai_optimization';
-        if ($this->has('content_analytics_enabled')) return 'analytics_configuration';
-        if ($this->has('blockchain_content_verification')) return 'advanced_features';
-        
+        if ($this->has('content_body')) {
+            return 'content_creation';
+        }
+        if ($this->has('media_files')) {
+            return 'media_management';
+        }
+        if ($this->has('workflow_enabled')) {
+            return 'workflow_management';
+        }
+        if ($this->has('seo_optimization_enabled')) {
+            return 'seo_optimization';
+        }
+        if ($this->has('ai_content_optimization')) {
+            return 'ai_optimization';
+        }
+        if ($this->has('content_analytics_enabled')) {
+            return 'analytics_configuration';
+        }
+        if ($this->has('blockchain_content_verification')) {
+            return 'advanced_features';
+        }
+
         return 'general_content_operation';
     }
 
     private function calculateOptimizationLevel(): string
     {
         $score = 0;
-        
-        if ($this->seo_optimization_enabled) $score += 20;
-        if ($this->ai_content_optimization) $score += 25;
-        if ($this->content_analytics_enabled) $score += 15;
-        if ($this->media_optimization_enabled) $score += 20;
-        if ($this->accessibility_compliance_enabled) $score += 10;
-        if ($this->performance_optimization_enabled ?? false) $score += 10;
-        
-        return match(true) {
+
+        if ($this->seo_optimization_enabled) {
+            $score += 20;
+        }
+        if ($this->ai_content_optimization) {
+            $score += 25;
+        }
+        if ($this->content_analytics_enabled) {
+            $score += 15;
+        }
+        if ($this->media_optimization_enabled) {
+            $score += 20;
+        }
+        if ($this->accessibility_compliance_enabled) {
+            $score += 10;
+        }
+        if ($this->performance_optimization_enabled ?? false) {
+            $score += 10;
+        }
+
+        return match (true) {
             $score >= 80 => 'maximum_optimization',
             $score >= 60 => 'high_optimization',
             $score >= 40 => 'standard_optimization',
@@ -655,16 +680,32 @@ class ContentManagementRequest extends FormRequest
     private function getEnabledAIFeatures(): array
     {
         $features = [];
-        
-        if ($this->ai_content_optimization) $features[] = 'Content Optimization';
-        if ($this->ai_content_generation) $features[] = 'Content Generation';
-        if ($this->natural_language_processing) $features[] = 'NLP';
-        if ($this->sentiment_analysis_enabled) $features[] = 'Sentiment Analysis';
-        if ($this->auto_tagging_enabled) $features[] = 'Auto Tagging';
-        if ($this->content_personalization_ai) $features[] = 'AI Personalization';
-        if ($this->automated_content_moderation) $features[] = 'Content Moderation';
-        if ($this->content_quality_prediction) $features[] = 'Quality Prediction';
-        
+
+        if ($this->ai_content_optimization) {
+            $features[] = 'Content Optimization';
+        }
+        if ($this->ai_content_generation) {
+            $features[] = 'Content Generation';
+        }
+        if ($this->natural_language_processing) {
+            $features[] = 'NLP';
+        }
+        if ($this->sentiment_analysis_enabled) {
+            $features[] = 'Sentiment Analysis';
+        }
+        if ($this->auto_tagging_enabled) {
+            $features[] = 'Auto Tagging';
+        }
+        if ($this->content_personalization_ai) {
+            $features[] = 'AI Personalization';
+        }
+        if ($this->automated_content_moderation) {
+            $features[] = 'Content Moderation';
+        }
+        if ($this->content_quality_prediction) {
+            $features[] = 'Quality Prediction';
+        }
+
         return $features;
     }
 }

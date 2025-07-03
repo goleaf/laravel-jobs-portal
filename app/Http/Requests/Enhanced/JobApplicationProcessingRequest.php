@@ -3,9 +3,8 @@
 namespace App\Http\Requests\Enhanced;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Cache;
-use Carbon\Carbon;
+use Illuminate\Validation\Rule;
 
 class JobApplicationProcessingRequest extends FormRequest
 {
@@ -25,7 +24,7 @@ class JobApplicationProcessingRequest extends FormRequest
         $rules = array_merge($rules, $this->getAnalyticsTrackingRules());
         $rules = array_merge($rules, $this->getComplianceAuditRules());
         $rules = array_merge($rules, $this->getAdvancedProcessingRules());
-        
+
         return $rules;
     }
 
@@ -40,7 +39,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'application_channel' => ['nullable', 'string', 'max:100'],
             'referral_source' => ['nullable', 'string', 'max:255'],
             'utm_parameters' => ['nullable', 'array'],
-            
+
             // Application Status Management
             'current_status' => ['nullable', 'string', Rule::in(['submitted', 'under_review', 'screening', 'assessment', 'interview_scheduled', 'interviewed', 'final_review', 'offer_pending', 'offer_sent', 'accepted', 'rejected', 'withdrawn', 'on_hold'])],
             'status_history' => ['nullable', 'array'],
@@ -49,7 +48,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'status_history.*.changed_by' => ['integer', 'exists:users,id'],
             'status_history.*.reason' => ['string', 'max:500'],
             'status_change_notifications' => ['nullable', 'boolean'],
-            
+
             // Processing Priority
             'priority_level' => ['nullable', 'string', Rule::in(['low', 'normal', 'high', 'urgent', 'critical'])],
             'fast_track_enabled' => ['nullable', 'boolean'],
@@ -57,7 +56,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'vip_candidate' => ['nullable', 'boolean'],
             'internal_candidate' => ['nullable', 'boolean'],
             'return_candidate' => ['nullable', 'boolean'],
-            
+
             // Application Metadata
             'application_completeness' => ['nullable', 'numeric', 'min:0', 'max:100'], // percentage
             'missing_documents' => ['nullable', 'array'],
@@ -66,7 +65,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'custom_fields' => ['nullable', 'array'],
             'tags' => ['nullable', 'array'],
             'tags.*' => ['string', 'max:50'],
-            
+
             // Time Tracking
             'application_submitted_at' => ['nullable', 'date'],
             'first_review_at' => ['nullable', 'date'],
@@ -92,7 +91,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'score_components.cultural_fit' => ['numeric', 'min:0', 'max:100'],
             'score_components.communication_skills' => ['numeric', 'min:0', 'max:100'],
             'score_components.technical_competency' => ['numeric', 'min:0', 'max:100'],
-            
+
             // Skills Assessment
             'skills_evaluation' => ['nullable', 'array'],
             'skills_evaluation.*.skill_id' => ['integer', 'exists:skills,id'],
@@ -102,7 +101,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'skills_evaluation.*.verified' => ['boolean'],
             'skills_gap_analysis' => ['nullable', 'array'],
             'training_recommendations' => ['nullable', 'array'],
-            
+
             // Experience Evaluation
             'experience_analysis' => ['nullable', 'array'],
             'experience_analysis.total_years' => ['numeric', 'min:0', 'max:50'],
@@ -112,7 +111,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'experience_analysis.leadership_experience' => ['boolean'],
             'experience_analysis.management_experience' => ['boolean'],
             'experience_analysis.international_experience' => ['boolean'],
-            
+
             // Education Assessment
             'education_evaluation' => ['nullable', 'array'],
             'education_evaluation.highest_degree' => ['string', Rule::in(['high_school', 'associate', 'bachelor', 'master', 'doctorate', 'professional'])],
@@ -121,7 +120,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'education_evaluation.gpa_score' => ['numeric', 'min:0', 'max:4.0'],
             'education_evaluation.certifications' => ['array'],
             'continuing_education' => ['nullable', 'boolean'],
-            
+
             // Soft Skills Assessment
             'soft_skills_evaluation' => ['nullable', 'array'],
             'soft_skills_evaluation.communication' => ['numeric', 'min:0', 'max:10'],
@@ -146,7 +145,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'screening_criteria.*.weight' => ['numeric', 'min:0', 'max:100'],
             'screening_criteria.*.threshold' => ['numeric', 'min:0', 'max:100'],
             'minimum_passing_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            
+
             // Resume/CV Analysis
             'resume_parsing_enabled' => ['nullable', 'boolean'],
             'resume_analysis_results' => ['nullable', 'array'],
@@ -157,7 +156,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'resume_analysis_results.keywords_matched' => ['array'],
             'resume_analysis_results.formatting_quality' => ['string', Rule::in(['excellent', 'good', 'average', 'poor'])],
             'resume_red_flags' => ['nullable', 'array'],
-            
+
             // AI-Powered Screening
             'ai_screening_enabled' => ['nullable', 'boolean'],
             'machine_learning_model' => ['nullable', 'string', 'max:100'],
@@ -166,7 +165,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'ai_reasoning' => ['nullable', 'array'],
             'bias_detection_enabled' => ['nullable', 'boolean'],
             'fairness_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            
+
             // Keyword and Phrase Analysis
             'keyword_matching' => ['nullable', 'array'],
             'keyword_matching.required_keywords' => ['array'],
@@ -177,7 +176,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'keyword_matching.negative_keywords.*' => ['string', 'max:100'],
             'phrase_analysis' => ['nullable', 'array'],
             'semantic_analysis' => ['nullable', 'boolean'],
-            
+
             // Pre-screening Questions
             'prescreening_questions' => ['nullable', 'array', 'max:20'],
             'prescreening_questions.*.question' => ['string', 'max:500'],
@@ -186,7 +185,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'prescreening_questions.*.weight' => ['numeric', 'min:0', 'max:100'],
             'prescreening_responses' => ['nullable', 'array'],
             'prescreening_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            
+
             // Background Check Integration
             'background_check_required' => ['nullable', 'boolean'],
             'background_check_type' => ['nullable', 'string', Rule::in(['basic', 'standard', 'comprehensive', 'security_clearance'])],
@@ -209,7 +208,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'interview_stages.*.interviewer_count' => ['integer', 'min:1', 'max:20'],
             'interview_stages.*.status' => ['string', Rule::in(['scheduled', 'completed', 'cancelled', 'rescheduled', 'no_show'])],
             'interview_scheduling_automation' => ['nullable', 'boolean'],
-            
+
             // Interview Logistics
             'preferred_interview_times' => ['nullable', 'array'],
             'timezone_preference' => ['nullable', 'string', 'max:50'],
@@ -219,7 +218,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'interview_location.room' => ['string', 'max:100'],
             'remote_interview_platform' => ['nullable', 'string', Rule::in(['zoom', 'teams', 'meet', 'webex', 'custom'])],
             'accessibility_requirements' => ['nullable', 'array'],
-            
+
             // Interview Assessment
             'interview_feedback' => ['nullable', 'array'],
             'interview_feedback.*.interviewer_id' => ['integer', 'exists:users,id'],
@@ -230,7 +229,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'interview_feedback.*.cultural_fit' => ['numeric', 'min:1', 'max:10'],
             'interview_feedback.*.recommendation' => ['string', Rule::in(['strong_hire', 'hire', 'neutral', 'no_hire', 'strong_no_hire'])],
             'interview_feedback.*.detailed_comments' => ['string', 'max:2000'],
-            
+
             // Technical Assessment
             'technical_assessment_required' => ['nullable', 'boolean'],
             'coding_challenge_assigned' => ['nullable', 'boolean'],
@@ -241,7 +240,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'coding_challenge_results.algorithm_efficiency' => ['string', Rule::in(['excellent', 'good', 'average', 'poor'])],
             'portfolio_review_required' => ['nullable', 'boolean'],
             'portfolio_assessment' => ['nullable', 'array'],
-            
+
             // Interview Coordination
             'interview_coordinator_id' => ['nullable', 'integer', 'exists:users,id'],
             'calendar_integration_enabled' => ['nullable', 'boolean'],
@@ -263,7 +262,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'consensus_required' => ['nullable', 'boolean'],
             'minimum_approvals_required' => ['nullable', 'integer', 'min:1', 'max:20'],
             'veto_power_roles' => ['nullable', 'array'],
-            
+
             // Decision Criteria
             'decision_criteria' => ['nullable', 'array'],
             'decision_criteria.*.criterion_name' => ['string', 'max:100'],
@@ -272,7 +271,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'decision_criteria.*.mandatory' => ['boolean'],
             'candidate_ranking' => ['nullable', 'integer', 'min:1'],
             'competitive_analysis' => ['nullable', 'array'],
-            
+
             // Offer Management
             'offer_approved' => ['nullable', 'boolean'],
             'offer_details' => ['nullable', 'array'],
@@ -285,7 +284,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'offer_details.probation_period_months' => ['integer', 'min:0', 'max:12'],
             'offer_negotiation_allowed' => ['nullable', 'boolean'],
             'offer_expiry_date' => ['nullable', 'date', 'after:now'],
-            
+
             // Rejection Management
             'rejection_reason' => ['nullable', 'string', Rule::in(['qualifications', 'experience', 'cultural_fit', 'skills_gap', 'salary_expectations', 'availability', 'background_check', 'references', 'other'])],
             'rejection_feedback' => ['nullable', 'string', 'max:1000'],
@@ -293,7 +292,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'future_consideration' => ['nullable', 'boolean'],
             'talent_pool_addition' => ['nullable', 'boolean'],
             'rejection_communication_sent' => ['nullable', 'boolean'],
-            
+
             // Legal and Compliance
             'eeoc_compliance_check' => ['nullable', 'boolean'],
             'diversity_impact_assessment' => ['nullable', 'boolean'],
@@ -312,7 +311,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'communication_frequency' => ['nullable', 'string', Rule::in(['immediate', 'daily', 'weekly', 'milestone_based', 'minimal'])],
             'language_preference' => ['nullable', 'string', 'size:2'], // ISO language code
             'communication_timezone' => ['nullable', 'string', 'max:50'],
-            
+
             // Automated Communications
             'automated_acknowledgment' => ['nullable', 'boolean'],
             'status_update_notifications' => ['nullable', 'boolean'],
@@ -320,7 +319,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'reminder_notifications' => ['nullable', 'boolean'],
             'outcome_notifications' => ['nullable', 'boolean'],
             'follow_up_sequences' => ['nullable', 'array'],
-            
+
             // Communication Templates
             'email_templates' => ['nullable', 'array'],
             'email_templates.acknowledgment' => ['string', 'max:2000'],
@@ -329,7 +328,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'email_templates.offer_letter' => ['string', 'max:5000'],
             'email_templates.rejection_letter' => ['string', 'max:2000'],
             'personalization_enabled' => ['nullable', 'boolean'],
-            
+
             // Communication Tracking
             'communication_log' => ['nullable', 'array'],
             'communication_log.*.type' => ['string', Rule::in(['email', 'phone', 'sms', 'meeting', 'note'])],
@@ -339,7 +338,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'communication_log.*.content' => ['string', 'max:5000'],
             'communication_log.*.delivery_status' => ['string', Rule::in(['sent', 'delivered', 'read', 'replied', 'bounced', 'failed'])],
             'response_time_tracking' => ['nullable', 'boolean'],
-            
+
             // Escalation Management
             'escalation_triggers' => ['nullable', 'array'],
             'escalation_triggers.no_response_hours' => ['integer', 'min:1', 'max:720'],
@@ -348,7 +347,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'escalation_contacts' => ['nullable', 'array'],
             'escalation_contacts.*' => ['integer', 'exists:users,id'],
             'auto_escalation_enabled' => ['nullable', 'boolean'],
-            
+
             // Candidate Experience
             'candidate_portal_access' => ['nullable', 'boolean'],
             'real_time_status_visibility' => ['nullable', 'boolean'],
@@ -371,7 +370,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'conversion_rates.screening_to_interview' => ['numeric', 'min:0', 'max:100'],
             'conversion_rates.interview_to_offer' => ['numeric', 'min:0', 'max:100'],
             'conversion_rates.offer_to_acceptance' => ['numeric', 'min:0', 'max:100'],
-            
+
             // Quality Metrics
             'hire_quality_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
             'interviewer_effectiveness' => ['nullable', 'array'],
@@ -379,7 +378,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'false_positive_rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
             'false_negative_rate' => ['nullable', 'numeric', 'min:0', 'max:100'],
             'candidate_satisfaction_metrics' => ['nullable', 'array'],
-            
+
             // Process Analytics
             'bottleneck_identification' => ['nullable', 'array'],
             'stage_completion_times' => ['nullable', 'array'],
@@ -387,7 +386,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'process_efficiency_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
             'automation_impact_metrics' => ['nullable', 'array'],
             'resource_utilization' => ['nullable', 'array'],
-            
+
             // Predictive Analytics
             'success_probability' => ['nullable', 'numeric', 'min:0', 'max:100'],
             'retention_prediction' => ['nullable', 'numeric', 'min:0', 'max:100'],
@@ -395,7 +394,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'flight_risk_assessment' => ['nullable', 'numeric', 'min:0', 'max:100'],
             'market_competitiveness' => ['nullable', 'array'],
             'trend_analysis' => ['nullable', 'array'],
-            
+
             // Business Intelligence
             'roi_calculation' => ['nullable', 'numeric'],
             'hiring_velocity' => ['nullable', 'numeric', 'min:0'],
@@ -417,7 +416,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'equal_opportunity_compliance' => ['nullable', 'boolean'],
             'ada_accommodation_required' => ['nullable', 'boolean'],
             'veteran_status_consideration' => ['nullable', 'boolean'],
-            
+
             // Audit Trail
             'audit_log_enabled' => ['nullable', 'boolean'],
             'audit_events' => ['nullable', 'array'],
@@ -428,7 +427,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'audit_events.*.old_value' => ['string', 'max:1000'],
             'audit_events.*.new_value' => ['string', 'max:1000'],
             'audit_events.*.ip_address' => ['ip'],
-            
+
             // Documentation Requirements
             'decision_documentation_complete' => ['nullable', 'boolean'],
             'interview_notes_recorded' => ['nullable', 'boolean'],
@@ -436,7 +435,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'legal_holds_applied' => ['nullable', 'array'],
             'retention_policy_applied' => ['nullable', 'boolean'],
             'data_classification' => ['nullable', 'string', Rule::in(['public', 'internal', 'confidential', 'restricted'])],
-            
+
             // Bias and Fairness
             'bias_detection_enabled' => ['nullable', 'boolean'],
             'fairness_metrics' => ['nullable', 'array'],
@@ -444,7 +443,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'adverse_impact_analysis' => ['nullable', 'boolean'],
             'algorithmic_fairness_score' => ['nullable', 'numeric', 'min:0', 'max:100'],
             'human_oversight_required' => ['nullable', 'boolean'],
-            
+
             // Risk Management
             'risk_assessment_completed' => ['nullable', 'boolean'],
             'high_risk_flags' => ['nullable', 'array'],
@@ -466,7 +465,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'sentiment_analysis_enabled' => ['nullable', 'boolean'],
             'predictive_modeling' => ['nullable', 'boolean'],
             'recommendation_engine' => ['nullable', 'boolean'],
-            
+
             // Advanced Analytics
             'behavioral_analysis' => ['nullable', 'boolean'],
             'psychometric_assessment' => ['nullable', 'boolean'],
@@ -474,7 +473,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'personality_profiling' => ['nullable', 'boolean'],
             'cultural_fit_modeling' => ['nullable', 'boolean'],
             'performance_prediction_modeling' => ['nullable', 'boolean'],
-            
+
             // Workflow Automation
             'robotic_process_automation' => ['nullable', 'boolean'],
             'intelligent_routing' => ['nullable', 'boolean'],
@@ -482,7 +481,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'smart_scheduling' => ['nullable', 'boolean'],
             'dynamic_pricing_offers' => ['nullable', 'boolean'],
             'adaptive_workflows' => ['nullable', 'boolean'],
-            
+
             // Integration Capabilities
             'ats_synchronization' => ['nullable', 'boolean'],
             'crm_integration_enabled' => ['nullable', 'boolean'],
@@ -490,7 +489,7 @@ class JobApplicationProcessingRequest extends FormRequest
             'assessment_platform_integration' => ['nullable', 'boolean'],
             'calendar_system_sync' => ['nullable', 'boolean'],
             'communication_platform_integration' => ['nullable', 'boolean'],
-            
+
             // Future Technologies
             'blockchain_verification' => ['nullable', 'boolean'],
             'virtual_reality_assessments' => ['nullable', 'boolean'],
@@ -508,22 +507,22 @@ class JobApplicationProcessingRequest extends FormRequest
             'sla_target_hours.max' => __('validation.job_application_processing.sla_target_too_long'),
             'time_in_current_status.min' => __('validation.job_application_processing.invalid_time_tracking'),
             'application_completeness.max' => __('validation.job_application_processing.completeness_over_100'),
-            
+
             // Evaluation Messages
             'overall_score.max' => __('validation.job_application_processing.score_over_maximum'),
             'skills_evaluation.*.score.max' => __('validation.job_application_processing.skill_score_too_high'),
             'experience_analysis.relevant_years.max' => __('validation.job_application_processing.experience_unrealistic'),
-            
+
             // Interview Messages
             'interview_stages.*.duration_minutes.max' => __('validation.job_application_processing.interview_too_long'),
             'interview_stages.*.interviewer_count.max' => __('validation.job_application_processing.too_many_interviewers'),
             'interview_feedback.*.overall_rating.min' => __('validation.job_application_processing.rating_too_low'),
-            
+
             // Decision Messages
             'minimum_approvals_required.max' => __('validation.job_application_processing.too_many_approvals'),
             'offer_details.bonus_percentage.max' => __('validation.job_application_processing.bonus_too_high'),
             'offer_details.equity_percentage.max' => __('validation.job_application_processing.equity_too_high'),
-            
+
             // Communication Messages
             'communication_log.*.content.max' => __('validation.job_application_processing.message_too_long'),
             'escalation_triggers.no_response_hours.max' => __('validation.job_application_processing.escalation_time_too_long'),
@@ -554,7 +553,7 @@ class JobApplicationProcessingRequest extends FormRequest
             foreach ($this->interview_stages as $stage) {
                 $totalDuration += $stage['duration_minutes'] ?? 0;
             }
-            
+
             if ($totalDuration > 1440) { // 24 hours
                 throw new \InvalidArgumentException(__('validation.job_application_processing.interview_schedule_too_long'));
             }
@@ -565,7 +564,7 @@ class JobApplicationProcessingRequest extends FormRequest
             $baseSalary = $this->offer_details['salary_base'] ?? 0;
             $bonusPercentage = $this->offer_details['bonus_percentage'] ?? 0;
             $totalCompensation = $baseSalary * (1 + $bonusPercentage / 100);
-            
+
             if ($totalCompensation > 10000000) { // 10M limit
                 throw new \InvalidArgumentException(__('validation.job_application_processing.total_compensation_too_high'));
             }
@@ -577,7 +576,7 @@ class JobApplicationProcessingRequest extends FormRequest
             foreach ($this->decision_criteria as $criterion) {
                 $totalWeight += $criterion['weight'] ?? 0;
             }
-            
+
             if ($totalWeight > 100) {
                 throw new \InvalidArgumentException(__('validation.job_application_processing.decision_weights_exceed_100'));
             }
@@ -589,17 +588,17 @@ class JobApplicationProcessingRequest extends FormRequest
         // Optimize based on application volume
         if ($this->has('priority_level')) {
             $optimizations = $this->calculateProcessingOptimizations($this->priority_level);
-            
+
             $this->merge([
                 'recommended_sla_hours' => $optimizations['sla_hours'],
                 'suggested_automation_level' => $optimizations['automation_level'],
-                'optimal_interview_stages' => $optimizations['interview_stages']
+                'optimal_interview_stages' => $optimizations['interview_stages'],
             ]);
         }
 
         // Cache processing configuration
         if ($this->has('application_id')) {
-            Cache::remember("application_processing_{$this->application_id}", 3600, function() {
+            Cache::remember("application_processing_{$this->application_id}", 3600, function () {
                 return $this->validated();
             });
         }
@@ -612,9 +611,9 @@ class JobApplicationProcessingRequest extends FormRequest
             'normal' => ['sla_hours' => 120, 'automation_level' => 'enhanced', 'interview_stages' => 3],
             'high' => ['sla_hours' => 72, 'automation_level' => 'advanced', 'interview_stages' => 3],
             'urgent' => ['sla_hours' => 48, 'automation_level' => 'maximum', 'interview_stages' => 2],
-            'critical' => ['sla_hours' => 24, 'automation_level' => 'maximum', 'interview_stages' => 1]
+            'critical' => ['sla_hours' => 24, 'automation_level' => 'maximum', 'interview_stages' => 1],
         ];
-        
+
         return $optimizations[$priority] ?? $optimizations['normal'];
     }
 
@@ -628,21 +627,37 @@ class JobApplicationProcessingRequest extends FormRequest
             'user_agent' => request()->userAgent(),
             'ip_address' => request()->ip(),
             'timestamp' => now(),
-            'optimizations_applied' => $this->has('recommended_sla_hours')
+            'optimizations_applied' => $this->has('recommended_sla_hours'),
         ]);
     }
 
     private function getOperationType(): string
     {
-        if ($this->has('current_status')) return 'status_management';
-        if ($this->has('overall_score')) return 'candidate_evaluation';
-        if ($this->has('automated_screening_enabled')) return 'automated_screening';
-        if ($this->has('interview_required')) return 'interview_management';
-        if ($this->has('decision_stage')) return 'decision_making';
-        if ($this->has('preferred_communication_method')) return 'communication_workflow';
-        if ($this->has('time_to_hire')) return 'analytics_tracking';
-        if ($this->has('gdpr_compliance')) return 'compliance_audit';
-        
+        if ($this->has('current_status')) {
+            return 'status_management';
+        }
+        if ($this->has('overall_score')) {
+            return 'candidate_evaluation';
+        }
+        if ($this->has('automated_screening_enabled')) {
+            return 'automated_screening';
+        }
+        if ($this->has('interview_required')) {
+            return 'interview_management';
+        }
+        if ($this->has('decision_stage')) {
+            return 'decision_making';
+        }
+        if ($this->has('preferred_communication_method')) {
+            return 'communication_workflow';
+        }
+        if ($this->has('time_to_hire')) {
+            return 'analytics_tracking';
+        }
+        if ($this->has('gdpr_compliance')) {
+            return 'compliance_audit';
+        }
+
         return 'general_application_processing';
     }
 }

@@ -39,12 +39,12 @@ class StandardizeTranslations extends Command
 
         $this->info('Starting translation standardization...');
 
-        if ('all' === $lang) {
+        if ($lang === 'all') {
             foreach ($this->supportedLanguages as $language) {
                 $this->standardizeTranslation($language);
             }
         } else {
-            if (!in_array($lang, $this->supportedLanguages)) {
+            if (! in_array($lang, $this->supportedLanguages)) {
                 $this->error("Language '{$lang}' is not supported.");
 
                 return 1;
@@ -61,7 +61,7 @@ class StandardizeTranslations extends Command
     /**
      * Standardize the translation for a specific language.
      *
-     * @param string $lang
+     * @param  string  $lang
      */
     protected function standardizeTranslation($lang)
     {
@@ -69,7 +69,7 @@ class StandardizeTranslations extends Command
 
         $langFile = resource_path("lang/{$lang}.php");
 
-        if (!File::exists($langFile)) {
+        if (! File::exists($langFile)) {
             $this->error("Language file for '{$lang}' does not exist.");
 
             return;
@@ -78,7 +78,7 @@ class StandardizeTranslations extends Command
         $translations = require $langFile;
 
         // Ensure all translations are under the 'messages' key
-        if (!isset($translations['messages'])) {
+        if (! isset($translations['messages'])) {
             $newTranslations = [
                 'messages' => [],
             ];
@@ -100,7 +100,7 @@ class StandardizeTranslations extends Command
         ];
 
         foreach ($requiredGroups as $group) {
-            if (!isset($translations['messages'][$group])) {
+            if (! isset($translations['messages'][$group])) {
                 $translations['messages'][$group] = [];
             }
         }
@@ -115,9 +115,8 @@ class StandardizeTranslations extends Command
     /**
      * Export a variable with proper formatting.
      *
-     * @param mixed $var
-     * @param bool  $return
-     *
+     * @param  mixed  $var
+     * @param  bool  $return
      * @return null|string
      */
     protected function varExport($var, $return = false)

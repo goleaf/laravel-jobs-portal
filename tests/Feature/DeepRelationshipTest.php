@@ -2,31 +2,32 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
+use App\Models\Candidate;
+use App\Models\City;
 use App\Models\Company;
+use App\Models\Country;
 use App\Models\Job;
 use App\Models\JobApplication;
-use App\Models\Country;
-use App\Models\State; 
-use App\Models\City;
-use App\Models\Candidate;
+use App\Models\State;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 /**
  * Deep Relationship Integration Test
- * 
+ *
  * Tests the integration of staudenmeir/eloquent-has-many-deep package
  * with our Laravel job portal's complex relationship scenarios.
- * 
+ *
  * Package: https://github.com/staudenmeir/eloquent-has-many-deep
  * Reference: https://madewithlaravel.com/eloquent-has-many-deep
  * Version: v1.21
  */
 class DeepRelationshipTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     protected User $candidate;
     protected User $employer;
@@ -38,31 +39,31 @@ class DeepRelationshipTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create location hierarchy
         $this->country = Country::factory()->create(['name' => 'Test Country']);
         $this->state = State::factory()->create([
             'name' => 'Test State',
-            'country_id' => $this->country->id
+            'country_id' => $this->country->id,
         ]);
         $this->city = City::factory()->create([
             'name' => 'Test City',
             'state_id' => $this->state->id,
-            'country_id' => $this->country->id
+            'country_id' => $this->country->id,
         ]);
 
         // Create users with location
         $this->candidate = User::factory()->create([
             'country_id' => $this->country->id,
             'state_id' => $this->state->id,
-            'city_id' => $this->city->id
+            'city_id' => $this->city->id,
         ]);
         $this->candidate->assignRole('candidate');
 
         $this->employer = User::factory()->create([
             'country_id' => $this->country->id,
             'state_id' => $this->state->id,
-            'city_id' => $this->city->id
+            'city_id' => $this->city->id,
         ]);
         $this->employer->assignRole('employer');
 
@@ -74,7 +75,7 @@ class DeepRelationshipTest extends TestCase
             'user_id' => $this->employer->id,
             'country_id' => $this->country->id,
             'state_id' => $this->state->id,
-            'city_id' => $this->city->id
+            'city_id' => $this->city->id,
         ]);
     }
 
@@ -87,7 +88,7 @@ class DeepRelationshipTest extends TestCase
             'country_id' => $this->country->id,
             'state_id' => $this->state->id,
             'city_id' => $this->city->id,
-            'is_active' => true
+            'is_active' => true,
         ]);
 
         $job2 = Job::factory()->create([
@@ -95,7 +96,7 @@ class DeepRelationshipTest extends TestCase
             'country_id' => $this->country->id,
             'state_id' => $this->state->id,
             'city_id' => $this->city->id,
-            'is_active' => true
+            'is_active' => true,
         ]);
 
         // Test the API endpoint
@@ -109,8 +110,8 @@ class DeepRelationshipTest extends TestCase
                 'data' => [
                     'user_location' => [
                         'country_id',
-                        'state_id', 
-                        'city_id'
+                        'state_id',
+                        'city_id',
                     ],
                     'jobs_count',
                     'jobs' => [
@@ -121,24 +122,24 @@ class DeepRelationshipTest extends TestCase
                             'location',
                             'salary_range',
                             'posted_date',
-                            'expires_at'
-                        ]
-                    ]
+                            'expires_at',
+                        ],
+                    ],
                 ],
                 'query_info' => [
                     'method',
                     'path',
-                    'package'
-                ]
+                    'package',
+                ],
             ])
             ->assertJson([
                 'success' => true,
                 'data' => [
-                    'jobs_count' => 2
+                    'jobs_count' => 2,
                 ],
                 'query_info' => [
-                    'package' => 'staudenmeir/eloquent-has-many-deep v1.21'
-                ]
+                    'package' => 'staudenmeir/eloquent-has-many-deep v1.21',
+                ],
             ]);
     }
 
@@ -147,13 +148,13 @@ class DeepRelationshipTest extends TestCase
     {
         // Create jobs for the company
         $job = Job::factory()->create([
-            'company_id' => $this->company->id
+            'company_id' => $this->company->id,
         ]);
 
         // Create job applications
         JobApplication::factory()->count(3)->create([
             'job_id' => $job->id,
-            'candidate_id' => $this->candidate->id
+            'candidate_id' => $this->candidate->id,
         ]);
 
         // Test the API endpoint
@@ -175,21 +176,21 @@ class DeepRelationshipTest extends TestCase
                             'job_title',
                             'applied_date',
                             'status',
-                            'expected_salary'
-                        ]
-                    ]
+                            'expected_salary',
+                        ],
+                    ],
                 ],
                 'query_info' => [
                     'method',
                     'path',
-                    'package'
-                ]
+                    'package',
+                ],
             ])
             ->assertJson([
                 'success' => true,
                 'data' => [
-                    'applications_count' => 3
-                ]
+                    'applications_count' => 3,
+                ],
             ]);
     }
 
@@ -200,7 +201,7 @@ class DeepRelationshipTest extends TestCase
         $candidate2 = User::factory()->create([
             'country_id' => $this->country->id,
             'state_id' => $this->state->id,
-            'city_id' => $this->city->id
+            'city_id' => $this->city->id,
         ]);
         $candidate2->assignRole('candidate');
         Candidate::factory()->create(['user_id' => $candidate2->id]);
@@ -208,7 +209,7 @@ class DeepRelationshipTest extends TestCase
         $candidate3 = User::factory()->create([
             'country_id' => $this->country->id,
             'state_id' => $this->state->id,
-            'city_id' => $this->city->id
+            'city_id' => $this->city->id,
         ]);
         $candidate3->assignRole('candidate');
         Candidate::factory()->create(['user_id' => $candidate3->id]);
@@ -231,17 +232,17 @@ class DeepRelationshipTest extends TestCase
                             'email',
                             'profile_views',
                             'skills_count',
-                            'registered_date'
-                        ]
-                    ]
+                            'registered_date',
+                        ],
+                    ],
                 ],
-                'query_info'
+                'query_info',
             ])
             ->assertJson([
                 'success' => true,
                 'data' => [
-                    'candidates_count' => 2 // Excludes the requesting user
-                ]
+                    'candidates_count' => 2, // Excludes the requesting user
+                ],
             ]);
     }
 
@@ -251,12 +252,12 @@ class DeepRelationshipTest extends TestCase
         // Create some test data
         $job = Job::factory()->create([
             'company_id' => $this->company->id,
-            'city_id' => $this->city->id
+            'city_id' => $this->city->id,
         ]);
 
         JobApplication::factory()->create([
             'job_id' => $job->id,
-            'candidate_id' => $this->candidate->id
+            'candidate_id' => $this->candidate->id,
         ]);
 
         // Test candidate analytics
@@ -271,16 +272,16 @@ class DeepRelationshipTest extends TestCase
                     'user_info' => [
                         'id',
                         'name',
-                        'role'
+                        'role',
                     ],
-                    'deep_relationships'
+                    'deep_relationships',
                 ],
                 'package_info' => [
                     'name',
                     'version',
                     'github',
-                    'reference'
-                ]
+                    'reference',
+                ],
             ])
             ->assertJson([
                 'success' => true,
@@ -288,8 +289,8 @@ class DeepRelationshipTest extends TestCase
                     'name' => 'staudenmeir/eloquent-has-many-deep',
                     'version' => 'v1.21',
                     'github' => 'https://github.com/staudenmeir/eloquent-has-many-deep',
-                    'reference' => 'https://madewithlaravel.com/eloquent-has-many-deep'
-                ]
+                    'reference' => 'https://madewithlaravel.com/eloquent-has-many-deep',
+                ],
             ]);
 
         // Test employer analytics
@@ -309,7 +310,7 @@ class DeepRelationshipTest extends TestCase
             '/api/deep-relationships/region-candidates',
             '/api/deep-relationships/applied-skills',
             '/api/deep-relationships/similar-candidates',
-            '/api/deep-relationships/analytics'
+            '/api/deep-relationships/analytics',
         ];
 
         foreach ($endpoints as $endpoint) {
@@ -327,7 +328,7 @@ class DeepRelationshipTest extends TestCase
 
         $response->assertStatus(403)
             ->assertJson([
-                'error' => 'Access denied. Employer role required.'
+                'error' => 'Access denied. Employer role required.',
             ]);
     }
 
@@ -340,7 +341,7 @@ class DeepRelationshipTest extends TestCase
 
         $response->assertStatus(403)
             ->assertJson([
-                'error' => 'Access denied. Candidate role required.'
+                'error' => 'Access denied. Candidate role required.',
             ]);
     }
 
@@ -350,7 +351,7 @@ class DeepRelationshipTest extends TestCase
         // Create test data
         $jobs = Job::factory()->count(10)->create([
             'company_id' => $this->company->id,
-            'city_id' => $this->city->id
+            'city_id' => $this->city->id,
         ]);
 
         // Enable query logging
@@ -364,9 +365,12 @@ class DeepRelationshipTest extends TestCase
         $queries = \DB::getQueryLog();
 
         $response->assertStatus(200);
-        
+
         // Verify efficient querying (should not have N+1 queries)
-        $this->assertLessThan(10, count($queries), 
-            'Deep relationship queries should be efficient and avoid N+1 problems');
+        $this->assertLessThan(
+            10,
+            count($queries),
+            'Deep relationship queries should be efficient and avoid N+1 problems'
+        );
     }
-} 
+}

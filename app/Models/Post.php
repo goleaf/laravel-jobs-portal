@@ -20,37 +20,37 @@ use Spatie\MediaLibrary\Models\Media;
 /**
  * Post Model - Enhanced with Enhanced patterns.
  *
- * @property int                       $id
- * @property string                    $title
- * @property string                    $description
- * @property null|string               $content
- * @property null|string               $excerpt
- * @property null|string               $slug
- * @property int                       $created_by
- * @property bool                      $is_active
- * @property bool                      $is_featured
- * @property bool                      $is_published
- * @property bool                      $is_default
- * @property null|Carbon               $published_at
- * @property null|int                  $views_count
- * @property null|int                  $likes_count
- * @property null|int                  $comments_count
- * @property null|array                $meta_data
- * @property null|string               $meta_title
- * @property null|string               $meta_description
- * @property null|string               $meta_keywords
- * @property null|Carbon               $created_at
- * @property null|Carbon               $updated_at
- * @property null|Carbon               $deleted_at
- * @property User                      $user
+ * @property int $id
+ * @property string $title
+ * @property string $description
+ * @property null|string $content
+ * @property null|string $excerpt
+ * @property null|string $slug
+ * @property int $created_by
+ * @property bool $is_active
+ * @property bool $is_featured
+ * @property bool $is_published
+ * @property bool $is_default
+ * @property null|Carbon $published_at
+ * @property null|int $views_count
+ * @property null|int $likes_count
+ * @property null|int $comments_count
+ * @property null|array $meta_data
+ * @property null|string $meta_title
+ * @property null|string $meta_description
+ * @property null|string $meta_keywords
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
+ * @property User $user
  * @property Collection|PostCategory[] $postAssignCategories
- * @property Collection|PostComment[]  $comments
- * @property Collection|Media[]        $media
- * @property string                    $blog_image_url
- * @property string                    $display_title
- * @property string                    $reading_time
- * @property string                    $status_label
- * @property string                    $formatted_published_date
+ * @property Collection|PostComment[] $comments
+ * @property Collection|Media[] $media
+ * @property string $blog_image_url
+ * @property string $display_title
+ * @property string $reading_time
+ * @property string $status_label
+ * @property string $formatted_published_date
  *
  * Enhanced Enhanced Scopes:
  *
@@ -83,8 +83,8 @@ class Post extends Model implements HasMedia
 {
     use HasFactory;
     use InteractsWithMedia;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     /**
      * Media collection path constant.
@@ -182,8 +182,7 @@ class Post extends Model implements HasMedia
                 'meta_description',
             ])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -247,7 +246,7 @@ class Post extends Model implements HasMedia
     /**
      * Scope for active posts.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -257,7 +256,7 @@ class Post extends Model implements HasMedia
     /**
      * Scope for inactive posts.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -267,31 +266,29 @@ class Post extends Model implements HasMedia
     /**
      * Scope for published posts.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePublished($query)
     {
         return $query->where('is_published', true)
-            ->where('published_at', '<=', now())
-        ;
+            ->where('published_at', '<=', now());
     }
 
     /**
      * Scope for unpublished posts.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeUnpublished($query)
     {
         return $query->where('is_published', false)
-            ->orWhere('published_at', '>', now())
-        ;
+            ->orWhere('published_at', '>', now());
     }
 
     /**
      * Scope for featured posts.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFeatured($query)
     {
@@ -301,7 +298,7 @@ class Post extends Model implements HasMedia
     /**
      * Scope for non-featured posts.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNotFeatured($query)
     {
@@ -311,7 +308,7 @@ class Post extends Model implements HasMedia
     /**
      * Scope for searching posts.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
@@ -319,15 +316,14 @@ class Post extends Model implements HasMedia
             $q->where('title', 'like', '%'.$term.'%')
                 ->orWhere('description', 'like', '%'.$term.'%')
                 ->orWhere('content', 'like', '%'.$term.'%')
-                ->orWhere('excerpt', 'like', '%'.$term.'%')
-            ;
+                ->orWhere('excerpt', 'like', '%'.$term.'%');
         });
     }
 
     /**
      * Scope for recent posts.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -337,7 +333,7 @@ class Post extends Model implements HasMedia
     /**
      * Scope for old posts.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -347,7 +343,7 @@ class Post extends Model implements HasMedia
     /**
      * Scope for posts by category.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByCategory($query, int $categoryId)
     {
@@ -359,7 +355,7 @@ class Post extends Model implements HasMedia
     /**
      * Scope for posts by author.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByAuthor($query, int $authorId)
     {
@@ -369,7 +365,7 @@ class Post extends Model implements HasMedia
     /**
      * Scope for posts with featured images.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithFeaturedImages($query)
     {
@@ -379,7 +375,7 @@ class Post extends Model implements HasMedia
     /**
      * Scope for posts without featured images.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithoutFeaturedImages($query)
     {
@@ -389,7 +385,7 @@ class Post extends Model implements HasMedia
     /**
      * Scope for posts with comments.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithComments($query)
     {
@@ -399,7 +395,7 @@ class Post extends Model implements HasMedia
     /**
      * Scope for posts without comments.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithoutComments($query)
     {
@@ -409,7 +405,7 @@ class Post extends Model implements HasMedia
     /**
      * Scope for popular posts (most viewed).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopular($query, int $limit = 10)
     {
@@ -419,19 +415,18 @@ class Post extends Model implements HasMedia
     /**
      * Scope for trending posts (recent with high engagement).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeTrending($query, int $days = 7)
     {
         return $query->where('created_at', '>=', now()->subDays($days))
-            ->orderByRaw('(views_count + likes_count + comments_count) DESC')
-        ;
+            ->orderByRaw('(views_count + likes_count + comments_count) DESC');
     }
 
     /**
      * Scope for latest posts.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeLatest($query, int $limit = 10)
     {
@@ -441,7 +436,7 @@ class Post extends Model implements HasMedia
     /**
      * Scope for alphabetical ordering.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
@@ -451,7 +446,7 @@ class Post extends Model implements HasMedia
     /**
      * Scope for most viewed posts.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeMostViewed($query, int $limit = 10)
     {
@@ -461,7 +456,7 @@ class Post extends Model implements HasMedia
     /**
      * Scope for most liked posts.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeMostLiked($query, int $limit = 10)
     {
@@ -471,7 +466,7 @@ class Post extends Model implements HasMedia
     /**
      * Scope for most commented posts.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeMostCommented($query, int $limit = 10)
     {
@@ -488,7 +483,7 @@ class Post extends Model implements HasMedia
     public function getBlogImageUrlAttribute(): string
     {
         $media = $this->media->first();
-        if (!empty($media)) {
+        if (! empty($media)) {
             return $media->getFullUrl();
         }
 
@@ -519,11 +514,11 @@ class Post extends Model implements HasMedia
      */
     public function getStatusLabelAttribute(): string
     {
-        if (!$this->is_active) {
+        if (! $this->is_active) {
             return 'Inactive';
         }
 
-        if (!$this->is_published) {
+        if (! $this->is_published) {
             return 'Draft';
         }
 
@@ -539,7 +534,7 @@ class Post extends Model implements HasMedia
      */
     public function getFormattedPublishedDateAttribute(): string
     {
-        if (!$this->published_at) {
+        if (! $this->published_at) {
             return 'Not published';
         }
 
@@ -609,7 +604,7 @@ class Post extends Model implements HasMedia
 
         while (static::where('slug', $slug)->where('id', '!=', $this->id)->exists()) {
             $slug = $originalSlug.'-'.$counter;
-            ++$counter;
+            $counter++;
         }
 
         return $slug;
@@ -740,7 +735,7 @@ class Post extends Model implements HasMedia
         if (method_exists(Cache::getStore(), 'flush')) {
             // For stores that support pattern clearing
             $keys = Cache::getStore()->getRedis()->keys($pattern);
-            if (!empty($keys)) {
+            if (! empty($keys)) {
                 Cache::getStore()->getRedis()->del($keys);
             }
         }

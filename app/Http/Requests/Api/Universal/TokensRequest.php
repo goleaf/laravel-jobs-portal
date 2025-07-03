@@ -14,7 +14,7 @@ class TokensRequest extends FormRequest
     public function authorize(): bool
     {
         // User must be authenticated to view their tokens
-        return null !== $this->user();
+        return $this->user() !== null;
     }
 
     /**

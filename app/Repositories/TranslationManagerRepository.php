@@ -24,7 +24,7 @@ class TranslationManagerRepository
         }
 
         try {
-            if (!empty($input['name'])) {
+            if (! empty($input['name'])) {
                 // Make directory in lang folder
                 \File::makeDirectory(resource_path().'/lang/'.$input['name']);
 
@@ -43,9 +43,8 @@ class TranslationManagerRepository
     }
 
     /**
-     * @param mixed $selectedLang
-     * @param mixed $selectedFile
-     *
+     * @param  mixed  $selectedLang
+     * @param  mixed  $selectedFile
      * @return mixed
      */
     public function getSubDirectoryFiles($selectedLang, $selectedFile)
@@ -63,7 +62,7 @@ class TranslationManagerRepository
             foreach ($data['languages'] as $key => $language) {
                 $lName = substr($language, -2);
                 $shorLang = substr($language, -6);
-                if ('vendor' == $shorLang) {
+                if ($shorLang == 'vendor') {
                     continue;
                 }
                 $data['allLanguagesArr'][$key] = strtoupper($key);
@@ -78,9 +77,8 @@ class TranslationManagerRepository
     }
 
     /**
-     * @param mixed $selectedLang
-     * @param mixed $selectedFile
-     *
+     * @param  mixed  $selectedLang
+     * @param  mixed  $selectedFile
      * @return mixed
      */
     public function checkFileExistOrNot($selectedLang, $selectedFile)
@@ -94,7 +92,7 @@ class TranslationManagerRepository
                 $data['allFiles'][] = ucfirst(basename($file));
             }
 
-            if (!in_array(ucfirst($selectedFile), $data['allFiles'])) {
+            if (! in_array(ucfirst($selectedFile), $data['allFiles'])) {
                 $fileExists = false;
             }
 
@@ -113,13 +111,13 @@ class TranslationManagerRepository
             $languages = \File::directories(base_path().'/lang');
             foreach ($languages as $language) {
                 $shorLang = substr($language, -6);
-                if ('vendor' == $shorLang) {
+                if ($shorLang == 'vendor') {
                     continue;
                 }
                 $allLanguagesArr[] = substr($language, -2);
             }
 
-            if (!in_array($selectedLang, $allLanguagesArr)) {
+            if (! in_array($selectedLang, $allLanguagesArr)) {
                 $langExists = false;
             }
 

@@ -79,4 +79,4 @@ class CreateJobRequest extends FormRequest
             'status.in' => __('validation.in', ['attribute' => 'status']),
         ];
     }
-} 
+}

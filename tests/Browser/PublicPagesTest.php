@@ -15,7 +15,7 @@ class PublicPagesTest extends DuskTestCase
     /**
      * Test homepage loads and has proper content.
      */
-    public function testHomepageLoadsSuccessfully(): void
+    public function test_homepage_loads_successfully(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
@@ -23,8 +23,7 @@ class PublicPagesTest extends DuskTestCase
                 ->assertPresent('body')
                 ->assertDontSee('500')
                 ->assertDontSee('404')
-                ->assertDontSee('Error')
-            ;
+                ->assertDontSee('Error');
 
             // Enhanced pattern: Verify page structure
             $pageSource = $browser->driver->getPageSource();
@@ -36,15 +35,14 @@ class PublicPagesTest extends DuskTestCase
     /**
      * Test about us page.
      */
-    public function testAboutUsPage(): void
+    public function test_about_us_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/about-us')
                 ->waitFor('body', 10)
                 ->assertPresent('body')
                 ->assertDontSee('500')
-                ->assertDontSee('404')
-            ;
+                ->assertDontSee('404');
 
             // Enhanced pattern: Verify page structure
             $pageSource = $browser->driver->getPageSource();
@@ -56,15 +54,14 @@ class PublicPagesTest extends DuskTestCase
     /**
      * Test contact page.
      */
-    public function testContactPage(): void
+    public function test_contact_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/contact')
                 ->waitFor('body', 10)
                 ->assertPresent('body')
                 ->assertDontSee('500')
-                ->assertDontSee('404')
-            ;
+                ->assertDontSee('404');
 
             // Enhanced pattern: Verify page structure
             $pageSource = $browser->driver->getPageSource();
@@ -76,15 +73,14 @@ class PublicPagesTest extends DuskTestCase
     /**
      * Test jobs listing page.
      */
-    public function testJobsListingPage(): void
+    public function test_jobs_listing_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/jobs')
                 ->waitFor('body', 10)
                 ->assertPresent('body')
                 ->assertDontSee('500')
-                ->assertDontSee('404')
-            ;
+                ->assertDontSee('404');
 
             // Enhanced pattern: Verify page structure
             $pageSource = $browser->driver->getPageSource();
@@ -96,15 +92,14 @@ class PublicPagesTest extends DuskTestCase
     /**
      * Test companies listing page.
      */
-    public function testCompaniesListingPage(): void
+    public function test_companies_listing_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/companies')
                 ->waitFor('body', 10)
                 ->assertPresent('body')
                 ->assertDontSee('500')
-                ->assertDontSee('404')
-            ;
+                ->assertDontSee('404');
 
             // Enhanced pattern: Verify page structure
             $pageSource = $browser->driver->getPageSource();
@@ -116,15 +111,14 @@ class PublicPagesTest extends DuskTestCase
     /**
      * Test login page.
      */
-    public function testLoginPage(): void
+    public function test_login_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/login')
                 ->waitFor('body', 10)
                 ->assertPresent('body')
                 ->assertDontSee('500')
-                ->assertDontSee('404')
-            ;
+                ->assertDontSee('404');
 
             // Enhanced pattern: Verify page structure
             $pageSource = $browser->driver->getPageSource();
@@ -136,15 +130,14 @@ class PublicPagesTest extends DuskTestCase
     /**
      * Test register page.
      */
-    public function testRegisterPage(): void
+    public function test_register_page(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/register')
                 ->waitFor('body', 10)
                 ->assertPresent('body')
                 ->assertDontSee('500')
-                ->assertDontSee('404')
-            ;
+                ->assertDontSee('404');
 
             // Enhanced pattern: Verify page structure
             $pageSource = $browser->driver->getPageSource();
@@ -156,18 +149,16 @@ class PublicPagesTest extends DuskTestCase
     /**
      * Test navigation functionality.
      */
-    public function testNavigationFunctionality(): void
+    public function test_navigation_functionality(): void
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
-                ->waitFor('body', 10)
-            ;
+                ->waitFor('body', 10);
 
             // Test basic navigation if links exist
             try {
                 $browser->clickLink('Home')
-                    ->waitFor('body', 5)
-                ;
+                    ->waitFor('body', 5);
             } catch (\Exception $e) {
                 // Navigation link may not exist, continue test
             }

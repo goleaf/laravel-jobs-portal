@@ -402,7 +402,7 @@ class IndexCompanyRequest extends FormRequest
         $content = strtolower(($this->search ?? '').' '.($this->search ?? ''));
 
         foreach ($suspiciousPatterns as $pattern) {
-            if (false !== strpos($content, $pattern)) {
+            if (strpos($content, $pattern) !== false) {
                 return true;
             }
         }

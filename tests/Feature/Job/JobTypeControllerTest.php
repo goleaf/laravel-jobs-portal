@@ -42,7 +42,7 @@ class JobTypeControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanCreateJobtype(): void
+    public function admin_can_create_jobtype(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -57,8 +57,7 @@ class JobTypeControllerTest extends TestCase
         $response->assertStatus(201)
             ->assertJsonStructure([
                 'data' => ['name', 'description', 'is_active', 'id', 'created_at', 'updated_at'],
-            ])
-        ;
+            ]);
 
         $this->assertDatabaseHas('job_types', [
             'name' => $data['name'] ?? $data[array_key_first($data)],
@@ -66,7 +65,7 @@ class JobTypeControllerTest extends TestCase
     }
 
     /** @test */
-    public function employerCanCreateJobtype(): void
+    public function employer_can_create_jobtype(): void
     {
         Sanctum::actingAs($this->employer);
 
@@ -82,7 +81,7 @@ class JobTypeControllerTest extends TestCase
     }
 
     /** @test */
-    public function candidateCannotCreateJobtype(): void
+    public function candidate_cannot_create_jobtype(): void
     {
         Sanctum::actingAs($this->candidate);
 
@@ -98,7 +97,7 @@ class JobTypeControllerTest extends TestCase
     }
 
     /** @test */
-    public function unauthenticatedUserCannotCreateJobtype(): void
+    public function unauthenticated_user_cannot_create_jobtype(): void
     {
         $data = [
             'name' => 'Full Time',
@@ -112,7 +111,7 @@ class JobTypeControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanUpdateJobtype(): void
+    public function admin_can_update_jobtype(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -134,7 +133,7 @@ class JobTypeControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanDeleteJobtype(): void
+    public function admin_can_delete_jobtype(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -150,7 +149,7 @@ class JobTypeControllerTest extends TestCase
     }
 
     /** @test */
-    public function validationFailsWithInvalidData(): void
+    public function validation_fails_with_invalid_data(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -161,12 +160,11 @@ class JobTypeControllerTest extends TestCase
         $response = $this->postJson('/api/jobtype', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function validationFailsWithDuplicateName(): void
+    public function validation_fails_with_duplicate_name(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -182,12 +180,11 @@ class JobTypeControllerTest extends TestCase
         $response = $this->postJson('/api/jobtype', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function canListJobtypes(): void
+    public function can_list_jobtypes(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -200,12 +197,11 @@ class JobTypeControllerTest extends TestCase
                 'data' => [
                     '*' => ['name', 'description', 'is_active', 'id', 'created_at', 'updated_at'],
                 ],
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function canShowSingleJobtype(): void
+    public function can_show_single_jobtype(): void
     {
         Sanctum::actingAs($this->admin);
 

@@ -18,7 +18,7 @@ class ExampleWithHelpersTest extends TestCase
     use WithFaker;
 
     /** @test */
-    public function canCreateUserWithUniqueEmail()
+    public function can_create_user_with_unique_email()
     {
         $user = TestHelpers::createUserWithUniqueEmail([
             'name' => 'Test User',
@@ -33,7 +33,7 @@ class ExampleWithHelpersTest extends TestCase
     }
 
     /** @test */
-    public function canGetApiAuthHeaders()
+    public function can_get_api_auth_headers()
     {
         $user = TestHelpers::createUserWithUniqueEmail();
 
@@ -45,7 +45,7 @@ class ExampleWithHelpersTest extends TestCase
     }
 
     /** @test */
-    public function canCreateCandidateWithProfile()
+    public function can_create_candidate_with_profile()
     {
         [$user, $candidate] = TestHelpers::createCandidateWithProfile([
             'name' => 'Candidate User',
@@ -62,7 +62,7 @@ class ExampleWithHelpersTest extends TestCase
     }
 
     /** @test */
-    public function canCreateEmployerWithCompany()
+    public function can_create_employer_with_company()
     {
         [$user, $company] = TestHelpers::createEmployerWithCompany([
             'name' => 'Employer User',
@@ -82,7 +82,7 @@ class ExampleWithHelpersTest extends TestCase
     }
 
     /** @test */
-    public function canCreateJobsForCompany()
+    public function can_create_jobs_for_company()
     {
         [$user, $company] = TestHelpers::createEmployerWithCompany();
 

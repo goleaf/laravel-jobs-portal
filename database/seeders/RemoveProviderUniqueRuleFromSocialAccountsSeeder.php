@@ -17,13 +17,13 @@ class RemoveProviderUniqueRuleFromSocialAccountsSeeder extends Seeder
     public function run(): void
     {
         // Check if table exists first
-        if (!Schema::hasTable('social_accounts')) {
+        if (! Schema::hasTable('social_accounts')) {
             return;
         }
 
         Schema::table('social_accounts', function (Blueprint $table) {
             // Skip for SQLite in testing as it doesn't support advanced schema introspection
-            if ('sqlite' === config('database.default')) {
+            if (config('database.default') === 'sqlite') {
                 return;
             }
 

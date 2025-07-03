@@ -15,11 +15,10 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
     /**
      * Get categories by type.
      *
-     * @param string $type
      * @return mixed
      */
     public function getByType(string $type)
     {
         return $this->model->where('type', $type)->get();
     }
-} 
+}

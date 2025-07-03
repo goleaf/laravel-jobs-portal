@@ -256,8 +256,7 @@ class StoreCompanyEnhancedRequest extends FormRequest
                 ->orWhereHas('user', function ($query) {
                     $query->where('email', $this->email);
                 })
-                ->exists()
-            ;
+                ->exists();
 
             return $existingCompany;
         }
@@ -270,7 +269,7 @@ class StoreCompanyEnhancedRequest extends FormRequest
      */
     private function hasSuspiciousContent(): bool
     {
-        if (!$this->details) {
+        if (! $this->details) {
             return false;
         }
 
@@ -282,7 +281,7 @@ class StoreCompanyEnhancedRequest extends FormRequest
         $content = strtolower($this->details);
 
         foreach ($suspiciousPatterns as $pattern) {
-            if (false !== strpos($content, $pattern)) {
+            if (strpos($content, $pattern) !== false) {
                 return true;
             }
         }
@@ -303,7 +302,7 @@ class StoreCompanyEnhancedRequest extends FormRequest
 
         foreach ($socialUrls as $field => $expectedDomain) {
             $url = $this->{$field};
-            if ($url && !empty($url) && false === strpos($url, $expectedDomain)) {
+            if ($url && ! empty($url) && strpos($url, $expectedDomain) === false) {
                 return true;
             }
         }
@@ -323,7 +322,7 @@ class StoreCompanyEnhancedRequest extends FormRequest
         $url = trim($url);
 
         // Add https:// if no protocol specified
-        if (!preg_match('/^https?:\/\//', $url)) {
+        if (! preg_match('/^https?:\/\//', $url)) {
             $url = 'https://'.$url;
         }
 

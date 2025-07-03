@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Industry\CreateIndustryRequest;
+use App\Http\Requests\Industry\UpdateIndustryRequest;
 use App\Models\Candidate;
 use App\Models\Company;
 use App\Models\Industry;
 use App\Repositories\IndustryRepository;
-use App\Http\Requests\Industry\CreateIndustryRequest;
-use App\Http\Requests\Industry\UpdateIndustryRequest;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;

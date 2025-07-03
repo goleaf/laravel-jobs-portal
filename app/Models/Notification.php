@@ -15,28 +15,28 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Notification Model - Enhanced with Enhanced patterns.
  *
- * @property int         $id
- * @property int         $type
- * @property int         $notification_for
- * @property int         $user_id
- * @property string      $title
+ * @property int $id
+ * @property int $type
+ * @property int $notification_for
+ * @property int $user_id
+ * @property string $title
  * @property null|string $text
  * @property null|string $data
  * @property null|string $action_url
  * @property null|string $icon
  * @property null|string $read_at
- * @property bool        $is_read
- * @property bool        $is_important
+ * @property bool $is_read
+ * @property bool $is_important
  * @property null|string $category
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|Carbon $deleted_at
- * @property User        $user
- * @property string      $type_label
- * @property string      $category_label
- * @property string      $time_ago
- * @property bool        $is_recent
- * @property array       $parsed_data
+ * @property User $user
+ * @property string $type_label
+ * @property string $category_label
+ * @property string $time_ago
+ * @property bool $is_recent
+ * @property array $parsed_data
  *
  * Enhanced Enhanced Scopes:
  *
@@ -67,8 +67,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Notification extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     // =============================================
     // CONSTANTS
@@ -183,8 +183,7 @@ class Notification extends Model
                 'category',
             ])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -228,7 +227,7 @@ class Notification extends Model
     /**
      * Scope a query to only include read notifications.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRead($query)
     {
@@ -238,7 +237,7 @@ class Notification extends Model
     /**
      * Scope a query to only include unread notifications.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeUnread($query)
     {
@@ -248,7 +247,7 @@ class Notification extends Model
     /**
      * Scope a query to only include important notifications.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeImportant($query)
     {
@@ -258,7 +257,7 @@ class Notification extends Model
     /**
      * Scope a query to only include normal notifications.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNormal($query)
     {
@@ -272,7 +271,7 @@ class Notification extends Model
     /**
      * Scope for notifications by user.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByUser($query, int $userId)
     {
@@ -282,7 +281,7 @@ class Notification extends Model
     /**
      * Scope for notifications by type.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByType($query, int $type)
     {
@@ -292,7 +291,7 @@ class Notification extends Model
     /**
      * Scope for notifications by category.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByCategory($query, string $category)
     {
@@ -302,7 +301,7 @@ class Notification extends Model
     /**
      * Scope for notifications by notification_for.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByNotificationFor($query, int $notificationFor)
     {
@@ -312,14 +311,13 @@ class Notification extends Model
     /**
      * Scope for searching notifications.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
             $q->where('title', 'like', "%{$term}%")
-                ->orWhere('text', 'like', "%{$term}%")
-            ;
+                ->orWhere('text', 'like', "%{$term}%");
         });
     }
 
@@ -330,7 +328,7 @@ class Notification extends Model
     /**
      * Scope for recent notifications.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query, int $days = 7)
     {
@@ -340,7 +338,7 @@ class Notification extends Model
     /**
      * Scope for old notifications.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOld($query, int $days = 30)
     {
@@ -350,7 +348,7 @@ class Notification extends Model
     /**
      * Scope for today's notifications.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeToday($query)
     {
@@ -360,7 +358,7 @@ class Notification extends Model
     /**
      * Scope for this week's notifications.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeThisWeek($query)
     {
@@ -373,13 +371,12 @@ class Notification extends Model
     /**
      * Scope for this month's notifications.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeThisMonth($query)
     {
         return $query->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
-        ;
+            ->whereYear('created_at', now()->year);
     }
 
     // =============================================
@@ -389,7 +386,7 @@ class Notification extends Model
     /**
      * Scope for job-related notifications.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeJob($query)
     {
@@ -399,29 +396,27 @@ class Notification extends Model
                     self::TYPE_JOB_APPLICATION,
                     self::TYPE_JOB_APPROVED,
                     self::TYPE_JOB_REJECTED,
-                ])
-            ;
+                ]);
         });
     }
 
     /**
      * Scope for application-related notifications.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeApplication($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'application')
-                ->orWhere('type', self::TYPE_JOB_APPLICATION)
-            ;
+                ->orWhere('type', self::TYPE_JOB_APPLICATION);
         });
     }
 
     /**
      * Scope for company-related notifications.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeCompany($query)
     {
@@ -430,50 +425,46 @@ class Notification extends Model
                 ->orWhereIn('type', [
                     self::TYPE_COMPANY_APPROVED,
                     self::TYPE_COMPANY_REJECTED,
-                ])
-            ;
+                ]);
         });
     }
 
     /**
      * Scope for system notifications.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSystem($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'system')
-                ->orWhere('type', self::TYPE_SYSTEM_NOTIFICATION)
-            ;
+                ->orWhere('type', self::TYPE_SYSTEM_NOTIFICATION);
         });
     }
 
     /**
      * Scope for marketing notifications.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeMarketing($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'marketing')
-                ->orWhere('type', self::TYPE_MARKETING)
-            ;
+                ->orWhere('type', self::TYPE_MARKETING);
         });
     }
 
     /**
      * Scope for security notifications.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSecurity($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'security')
-                ->orWhere('type', self::TYPE_SECURITY)
-            ;
+                ->orWhere('type', self::TYPE_SECURITY);
         });
     }
 
@@ -484,7 +475,7 @@ class Notification extends Model
     /**
      * Scope for latest notifications.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeLatest($query)
     {
@@ -494,7 +485,7 @@ class Notification extends Model
     /**
      * Scope for oldest notifications.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOldest($query)
     {
@@ -592,7 +583,7 @@ class Notification extends Model
      */
     public function getParsedDataAttribute(): array
     {
-        if (!$this->data) {
+        if (! $this->data) {
             return [];
         }
 
@@ -623,7 +614,7 @@ class Notification extends Model
      */
     public function markAsUnread(): bool
     {
-        if (!$this->is_read) {
+        if (! $this->is_read) {
             return true;
         }
 
@@ -642,7 +633,7 @@ class Notification extends Model
      */
     public function isForCandidate(): bool
     {
-        return self::NOTIFICATION_FOR_CANDIDATE === $this->notification_for;
+        return $this->notification_for === self::NOTIFICATION_FOR_CANDIDATE;
     }
 
     /**
@@ -650,7 +641,7 @@ class Notification extends Model
      */
     public function isForCompany(): bool
     {
-        return self::NOTIFICATION_FOR_COMPANY === $this->notification_for;
+        return $this->notification_for === self::NOTIFICATION_FOR_COMPANY;
     }
 
     /**
@@ -658,7 +649,7 @@ class Notification extends Model
      */
     public function isForAdmin(): bool
     {
-        return self::NOTIFICATION_FOR_ADMIN === $this->notification_for;
+        return $this->notification_for === self::NOTIFICATION_FOR_ADMIN;
     }
 
     /**

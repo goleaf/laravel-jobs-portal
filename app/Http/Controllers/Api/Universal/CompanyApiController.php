@@ -53,14 +53,14 @@ class CompanyApiController extends UniversalBaseController
     /**
      * Universal Pattern: Display the specified resource with caching.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function show(ShowCompanyRequest $request, $id): JsonResponse
     {
         try {
             $company = $this->findCached(Company::class, $id, ['user']);
 
-            if (!$company) {
+            if (! $company) {
                 return $this->errorResponse(ucfirst('company').' not found', 404);
             }
 
@@ -107,7 +107,7 @@ class CompanyApiController extends UniversalBaseController
     /**
      * Universal Pattern: Update the specified resource with optimistic locking.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function update(UpdateRequest $request, $id): JsonResponse
     {
@@ -141,7 +141,7 @@ class CompanyApiController extends UniversalBaseController
     /**
      * Universal Pattern: Remove the specified resource with soft delete.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function destroy(DestroyCompanyRequest $request, $id): JsonResponse
     {

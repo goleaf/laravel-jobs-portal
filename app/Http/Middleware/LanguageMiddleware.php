@@ -15,7 +15,7 @@ class LanguageMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param \Closure(Request): (Response) $next
+     * @param  \Closure(Request): (Response)  $next
      */
     public function handle(Request $request, \Closure $next): Response
     {
@@ -24,9 +24,9 @@ class LanguageMiddleware
 
         // If running in debug mode and not an API or AJAX request, check for missing translations
         if (config('app.debug')
-            && !$request->expectsJson()
-            && !$request->ajax()
-            && !$this->isExcludedPath($request->path())) {
+            && ! $request->expectsJson()
+            && ! $request->ajax()
+            && ! $this->isExcludedPath($request->path())) {
             // Only check for missing translations if we're not using the default locale
             if ($locale !== config('app.fallback_locale')) {
                 $missingCount = count(TranslationHelper::getMissingTranslations($locale));

@@ -18,7 +18,7 @@ class HealthController extends Controller
             'queue' => $this->checkQueue(),
         ];
 
-        $healthy = !in_array(false, $checks);
+        $healthy = ! in_array(false, $checks);
 
         return response()->json([
             'status' => $healthy ? 'healthy' : 'unhealthy',
@@ -44,7 +44,7 @@ class HealthController extends Controller
         try {
             Cache::put('health_check', 'ok', 10);
 
-            return 'ok' === Cache::get('health_check');
+            return Cache::get('health_check') === 'ok';
         } catch (\Exception $e) {
             return false;
         }

@@ -18,6 +18,7 @@ class ReportCandidateController extends Controller
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
         return response()->json(['success' => true]);
     }
-} 
+}

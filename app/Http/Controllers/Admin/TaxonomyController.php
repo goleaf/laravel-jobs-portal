@@ -39,18 +39,18 @@ class TaxonomyController extends Controller
 
         // Filter by status
         if ($request->filled('status')) {
-            if ('active' === $request->status) {
+            if ($request->status === 'active') {
                 $query->active();
-            } elseif ('inactive' === $request->status) {
+            } elseif ($request->status === 'inactive') {
                 $query->inactive();
             }
         }
 
         // Filter by visibility
         if ($request->filled('visibility')) {
-            if ('public' === $request->visibility) {
+            if ($request->visibility === 'public') {
                 $query->public();
-            } elseif ('private' === $request->visibility) {
+            } elseif ($request->visibility === 'private') {
                 $query->private();
             }
         }
@@ -86,8 +86,7 @@ class TaxonomyController extends Controller
 
         $taxonomies = $query->withCount('terms')
             ->paginate(20)
-            ->withQueryString()
-        ;
+            ->withQueryString();
 
         // Get available types for filter
         $types = Taxonomy::distinct('type')->pluck('type')->toArray();
@@ -143,8 +142,7 @@ class TaxonomyController extends Controller
 
         return redirect()
             ->route('admin.taxonomies.index')
-            ->with('success', 'Taxonomy created successfully.')
-        ;
+            ->with('success', 'Taxonomy created successfully.');
     }
 
     /**
@@ -211,8 +209,7 @@ class TaxonomyController extends Controller
 
         return redirect()
             ->route('admin.taxonomies.index')
-            ->with('success', 'Taxonomy updated successfully.')
-        ;
+            ->with('success', 'Taxonomy updated successfully.');
     }
 
     /**
@@ -230,8 +227,7 @@ class TaxonomyController extends Controller
 
             return redirect()
                 ->route('admin.taxonomies.index')
-                ->with('error', 'Cannot delete taxonomy with existing terms. Please remove all terms first.')
-            ;
+                ->with('error', 'Cannot delete taxonomy with existing terms. Please remove all terms first.');
         }
 
         $taxonomy->clearCaches();
@@ -245,8 +241,7 @@ class TaxonomyController extends Controller
 
         return redirect()
             ->route('admin.taxonomies.index')
-            ->with('success', 'Taxonomy deleted successfully.')
-        ;
+            ->with('success', 'Taxonomy deleted successfully.');
     }
 
     /**
@@ -255,7 +250,7 @@ class TaxonomyController extends Controller
     public function toggleStatus(Taxonomy $taxonomy): JsonResponse
     {
         $taxonomy->update([
-            'is_active' => !$taxonomy->is_active,
+            'is_active' => ! $taxonomy->is_active,
         ]);
 
         $taxonomy->clearCaches();
@@ -332,9 +327,9 @@ class TaxonomyController extends Controller
         }
 
         if ($request->filled('status')) {
-            if ('active' === $request->status) {
+            if ($request->status === 'active') {
                 $query->active();
-            } elseif ('inactive' === $request->status) {
+            } elseif ($request->status === 'inactive') {
                 $query->inactive();
             }
         }
@@ -384,8 +379,7 @@ class TaxonomyController extends Controller
         $terms = $taxonomy->terms()
             ->active()
             ->ordered()
-            ->get()
-        ;
+            ->get();
 
         return response()->json([
             'terms' => $terms,

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\Universal\TokenController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,12 +27,11 @@ Route::prefix('auth')->group(function () {
                 ],
                 'token' => 'public-access-token',
                 'abilities' => ['*'], // All abilities for public access
-            ]
+            ],
         ]);
     })
         ->middleware(['throttle:5,1']) // Keep rate limiting for security
-        ->name('universal.auth.login')
-    ;
+        ->name('universal.auth.login');
 
     // Public endpoints (no authentication required)
     Route::group([], function () {
@@ -47,11 +45,10 @@ Route::prefix('auth')->group(function () {
                     'email' => 'public@example.com',
                     'role' => 'public',
                     'permissions' => ['*'], // All permissions
-                ]
+                ],
             ]);
         })
-            ->name('universal.auth.user')
-        ;
+            ->name('universal.auth.user');
 
         // Public logout (for backward compatibility)
         Route::post('/logout', function (Request $request) {
@@ -60,8 +57,7 @@ Route::prefix('auth')->group(function () {
                 'message' => 'Logout successful (authentication disabled)',
             ]);
         })
-            ->name('universal.auth.logout')
-        ;
+            ->name('universal.auth.logout');
 
         // Public logout all (for backward compatibility)
         Route::post('/logout-all', function (Request $request) {
@@ -70,8 +66,7 @@ Route::prefix('auth')->group(function () {
                 'message' => 'All sessions logged out (authentication disabled)',
             ]);
         })
-            ->name('universal.auth.logout-all')
-        ;
+            ->name('universal.auth.logout-all');
 
         // Public tokens list (for backward compatibility)
         Route::get('/tokens', function (Request $request) {
@@ -84,12 +79,11 @@ Route::prefix('auth')->group(function () {
                         'abilities' => ['*'],
                         'created_at' => now()->toISOString(),
                         'last_used_at' => now()->toISOString(),
-                    ]
-                ]
+                    ],
+                ],
             ]);
         })
-            ->name('universal.auth.tokens')
-        ;
+            ->name('universal.auth.tokens');
     });
 });
 

@@ -120,10 +120,9 @@ class SkillStoreRequest extends FormRequest
                     ->where('name', '!=', $this->name)
                     ->limit(5)
                     ->pluck('name')
-                    ->toArray()
-                ;
+                    ->toArray();
 
-                if (!empty($similarSkills)) {
+                if (! empty($similarSkills)) {
                     $validator->errors()->add(
                         'name',
                         'Similar skills already exist: '.implode(', ', $similarSkills)
@@ -159,7 +158,7 @@ class SkillStoreRequest extends FormRequest
                 }
 
                 foreach ($this->metadata as $key => $value) {
-                    if (!is_string($key) || strlen($key) > 50) {
+                    if (! is_string($key) || strlen($key) > 50) {
                         $validator->errors()->add('metadata', 'Metadata keys must be strings with maximum 50 characters.');
                     }
                 }
@@ -202,7 +201,7 @@ class SkillStoreRequest extends FormRequest
         }
 
         // Generate slug from name
-        if ($this->has('name') && !$this->has('slug')) {
+        if ($this->has('name') && ! $this->has('slug')) {
             $this->merge([
                 'slug' => \Str::slug($this->name),
             ]);
@@ -220,7 +219,7 @@ class SkillStoreRequest extends FormRequest
         ];
 
         foreach ($defaults as $key => $default) {
-            if (!$this->has($key)) {
+            if (! $this->has($key)) {
                 $this->merge([$key => $default]);
             }
         }

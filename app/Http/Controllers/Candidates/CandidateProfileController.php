@@ -23,7 +23,7 @@ class CandidateProfileController extends AppBaseController
     public function createExperience(CreateCandidateExperienceCreateExperienceCandidateProfileRequest $request)
     {
         $input = $request->all();
-        if (!isset($input['currently_working'])) {
+        if (! isset($input['currently_working'])) {
             $request->validate([
                 'end_date' => 'required|date',
             ]);
@@ -42,7 +42,7 @@ class CandidateProfileController extends AppBaseController
         $candidateId = getLoggedInUser()->candidate->id;
         $candidateExperienceId = CandidateExperience::whereCandidateId($candidateId)->pluck('id')->toArray();
 
-        if (!in_array($candidateExperience->id, $candidateExperienceId)) {
+        if (! in_array($candidateExperience->id, $candidateExperienceId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 
@@ -80,7 +80,7 @@ class CandidateProfileController extends AppBaseController
         $candidateId = getLoggedInUser()->candidate->id;
         $candidateExperienceId = CandidateExperience::whereCandidateId($candidateId)->pluck('id')->toArray();
 
-        if (!in_array($id, $candidateExperienceId)) {
+        if (! in_array($id, $candidateExperienceId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 
@@ -110,7 +110,7 @@ class CandidateProfileController extends AppBaseController
         $candidateId = getLoggedInUser()->candidate->id;
         $candidateExperienceId = CandidateEducation::whereCandidateId($candidateId)->pluck('id')->toArray();
 
-        if (!in_array($candidateEducation->id, $candidateExperienceId)) {
+        if (! in_array($candidateEducation->id, $candidateExperienceId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 
@@ -148,7 +148,7 @@ class CandidateProfileController extends AppBaseController
         $candidateId = getLoggedInUser()->candidate->id;
         $candidateExperienceId = CandidateEducation::whereCandidateId($candidateId)->pluck('id')->toArray();
 
-        if (!in_array($id, $candidateExperienceId)) {
+        if (! in_array($id, $candidateExperienceId)) {
             return $this->sendError(__('messages.common.seems_message'));
         }
 

@@ -40,7 +40,7 @@ class DashboardChartDataRequest extends FormRequest
                 'before_or_equal:today',
                 'before_or_equal:end_date',
                 function ($attribute, $value, $fail) {
-                    if ($this->input('period') === 'custom' && !$value) {
+                    if ($this->input('period') === 'custom' && ! $value) {
                         $fail(__('validation.start_date_required_for_custom_period'));
                     }
                 },
@@ -52,7 +52,7 @@ class DashboardChartDataRequest extends FormRequest
                 'before_or_equal:today',
                 'after_or_equal:start_date',
                 function ($attribute, $value, $fail) {
-                    if ($this->input('period') === 'custom' && !$value) {
+                    if ($this->input('period') === 'custom' && ! $value) {
                         $fail(__('validation.end_date_required_for_custom_period'));
                     }
                 },
@@ -84,7 +84,7 @@ class DashboardChartDataRequest extends FormRequest
                 Rule::in([
                     'revenue', 'applications', 'jobs', 'hires', 'interviews', 'views',
                     'conversion_rate', 'response_rate', 'time_to_hire', 'cost_per_hire',
-                    'user_engagement', 'system_performance'
+                    'user_engagement', 'system_performance',
                 ]),
             ],
 
@@ -217,41 +217,41 @@ class DashboardChartDataRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Set default values
-        if (!$this->has('period')) {
+        if (! $this->has('period')) {
             $this->merge(['period' => 'week']);
         }
 
-        if (!$this->has('chart_type')) {
+        if (! $this->has('chart_type')) {
             $this->merge(['chart_type' => 'line']);
         }
 
-        if (!$this->has('chart_style')) {
+        if (! $this->has('chart_style')) {
             $this->merge(['chart_style' => 'modern']);
         }
 
-        if (!$this->has('cache_duration')) {
+        if (! $this->has('cache_duration')) {
             $this->merge(['cache_duration' => 600]); // 10 minutes
         }
 
-        if (!$this->has('use_cache')) {
+        if (! $this->has('use_cache')) {
             $this->merge(['use_cache' => true]);
         }
 
         // Set default date range based on period
-        if ($this->input('period') !== 'custom' && !$this->has('start_date')) {
+        if ($this->input('period') !== 'custom' && ! $this->has('start_date')) {
             $dates = $this->getDefaultDateRange($this->input('period'));
             $this->merge($dates);
         }
 
         // Convert string booleans to actual booleans
         $booleanFields = [
-            'use_cache', 'force_refresh', 'real_time', 'include_insights', 'ai_analysis'
+            'use_cache', 'force_refresh', 'real_time', 'include_insights', 'ai_analysis',
         ];
 
         foreach ($booleanFields as $field) {
             if ($this->has($field)) {
                 $this->merge([
-                    $field => filter_var($this->input($field), FILTER_VALIDATE_BOOLEAN)
+                    $field => filter_var($this->input($field), FILTER_VALIDATE_BOOLEAN),
                 ]);
             }
         }
@@ -259,9 +259,9 @@ class DashboardChartDataRequest extends FormRequest
         // Ensure arrays are properly formatted
         $arrayFields = ['metrics', 'industry_ids', 'location_ids'];
         foreach ($arrayFields as $field) {
-            if ($this->has($field) && !is_array($this->input($field))) {
+            if ($this->has($field) && ! is_array($this->input($field))) {
                 $this->merge([
-                    $field => array_filter(explode(',', $this->input($field)))
+                    $field => array_filter(explode(',', $this->input($field))),
                 ]);
             }
         }
@@ -315,4 +315,4 @@ class DashboardChartDataRequest extends FormRequest
             'end_date' => $endDate->format('Y-m-d'),
         ];
     }
-} 
+}

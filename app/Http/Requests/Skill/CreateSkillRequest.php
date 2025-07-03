@@ -91,7 +91,7 @@ class CreateSkillRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     public function withValidator($validator): void
     {
@@ -102,10 +102,9 @@ class CreateSkillRequest extends FormRequest
                     ->where('name', '!=', $this->input('name'))
                     ->limit(3)
                     ->pluck('name')
-                    ->toArray()
-                ;
+                    ->toArray();
 
-                if (!empty($similarSkills)) {
+                if (! empty($similarSkills)) {
                     $validator->errors()->add('name', __('validation.skill.similar_exists', [
                         'skills' => implode(', ', $similarSkills),
                     ]));
@@ -140,7 +139,7 @@ class CreateSkillRequest extends FormRequest
                     }
                 }
 
-                if (!$isValidIcon) {
+                if (! $isValidIcon) {
                     $validator->errors()->add('icon', __('validation.skill.icon_format_invalid'));
                 }
             }
@@ -176,7 +175,7 @@ class CreateSkillRequest extends FormRequest
         // Ensure color has # prefix
         if ($this->has('color') && $this->input('color')) {
             $color = $this->input('color');
-            if (!str_starts_with($color, '#')) {
+            if (! str_starts_with($color, '#')) {
                 $color = '#'.$color;
             }
             $this->merge(['color' => strtoupper($color)]);

@@ -127,7 +127,7 @@ class ComprehensiveDatabaseSeeder extends Seeder
         ];
 
         foreach ($directories as $directory) {
-            if (!Storage::exists($directory)) {
+            if (! Storage::exists($directory)) {
                 Storage::makeDirectory($directory);
                 $this->command->info("✅ Created directory: {$directory}");
             }
@@ -258,7 +258,7 @@ class ComprehensiveDatabaseSeeder extends Seeder
         $this->command->info('📂 Seeding job categories and industries...');
 
         // Job categories with realistic data - only if not exists
-        if (0 == JobCategory::count()) {
+        if (JobCategory::count() == 0) {
             $jobCategories = [
                 'Software Development', 'Data Science', 'Product Management', 'Marketing', 'Sales',
                 'Human Resources', 'Finance', 'Operations', 'Customer Support', 'Design',
@@ -285,7 +285,7 @@ class ComprehensiveDatabaseSeeder extends Seeder
     {
         $this->command->info('🛠️ Seeding skills data...');
 
-        if (0 == Skill::count()) {
+        if (Skill::count() == 0) {
             $skills = [
                 // Programming Languages
                 'PHP', 'JavaScript', 'Python', 'Java', 'C#', 'Ruby', 'Go', 'Rust', 'Swift', 'Kotlin',
@@ -327,62 +327,62 @@ class ComprehensiveDatabaseSeeder extends Seeder
         $this->command->info('📋 Seeding master data...');
 
         // Industry data - check if already exists
-        if (0 == Industry::count()) {
+        if (Industry::count() == 0) {
             Industry::factory(15)->create(); // Reduced to 15 to avoid unique constraint issues
         }
 
         // Company sizes - check if already exists
-        if (0 == CompanySize::count()) {
+        if (CompanySize::count() == 0) {
             CompanySize::factory(8)->create();
         }
 
         // Functional areas - check if already exists
-        if (0 == FunctionalArea::count()) {
+        if (FunctionalArea::count() == 0) {
             FunctionalArea::factory(20)->create(); // Reduced to 20 to avoid unique constraint issues
         }
 
         // Career levels
-        if (0 == CareerLevel::count()) {
+        if (CareerLevel::count() == 0) {
             CareerLevel::factory(8)->create();
         }
 
         // Salary currencies
-        if (0 == SalaryCurrency::count()) {
+        if (SalaryCurrency::count() == 0) {
             SalaryCurrency::factory(15)->create(); // Reduced to 15 to avoid unique constraint issues
         }
 
         // Salary periods
-        if (0 == SalaryPeriod::count()) {
+        if (SalaryPeriod::count() == 0) {
             SalaryPeriod::factory(6)->create();
         }
 
         // Job types
-        if (0 == JobType::count()) {
+        if (JobType::count() == 0) {
             JobType::factory(8)->create();
         }
 
         // Job shifts
-        if (0 == JobShift::count()) {
+        if (JobShift::count() == 0) {
             JobShift::factory(5)->create();
         }
 
         // Required degree levels
-        if (0 == RequiredDegreeLevel::count()) {
+        if (RequiredDegreeLevel::count() == 0) {
             RequiredDegreeLevel::factory(10)->create();
         }
 
         // Marital status
-        if (0 == MaritalStatus::count()) {
+        if (MaritalStatus::count() == 0) {
             MaritalStatus::factory(6)->create();
         }
 
         // Languages
-        if (0 == Language::count()) {
+        if (Language::count() == 0) {
             Language::factory(12)->create(); // Reduced to 12 to avoid unique constraint issues
         }
 
         // Ownership types
-        if (0 == OwnerShipType::count()) {
+        if (OwnerShipType::count() == 0) {
             OwnerShipType::factory(8)->create();
         }
 
@@ -403,7 +403,7 @@ class ComprehensiveDatabaseSeeder extends Seeder
         $jobs = collect();
 
         // Create 1000 jobs
-        for ($i = 0; $i < 1000; ++$i) {
+        for ($i = 0; $i < 1000; $i++) {
             $company = $companies->random();
 
             $job = Job::factory()->create([
@@ -475,17 +475,16 @@ class ComprehensiveDatabaseSeeder extends Seeder
         $applications = collect();
 
         // Create 2000 job applications
-        for ($i = 0; $i < 2000; ++$i) {
+        for ($i = 0; $i < 2000; $i++) {
             $candidate = $candidates->random();
             $job = $jobs->random();
 
             // Avoid duplicate applications
             $exists = JobApplication::where('candidate_id', $candidate->id)
                 ->where('job_id', $job->id)
-                ->exists()
-            ;
+                ->exists();
 
-            if (!$exists) {
+            if (! $exists) {
                 $application = JobApplication::factory()->create([
                     'candidate_id' => $candidate->id,
                     'job_id' => $job->id,
@@ -586,7 +585,7 @@ class ComprehensiveDatabaseSeeder extends Seeder
 
         // Blog posts
         $posts = collect();
-        for ($i = 0; $i < 100; ++$i) {
+        for ($i = 0; $i < 100; $i++) {
             $post = Post::factory()->create();
 
             // Generate featured image for post
@@ -633,8 +632,8 @@ class ComprehensiveDatabaseSeeder extends Seeder
     /**
      * Generate user avatars.
      *
-     * @param mixed $users
-     * @param mixed $type
+     * @param  mixed  $users
+     * @param  mixed  $type
      */
     private function generateUserAvatars($users, $type): void
     {
@@ -651,7 +650,7 @@ class ComprehensiveDatabaseSeeder extends Seeder
     /**
      * Generate company logos.
      *
-     * @param mixed $company
+     * @param  mixed  $company
      */
     private function generateCompanyLogo($company): void
     {
@@ -669,7 +668,7 @@ class ComprehensiveDatabaseSeeder extends Seeder
     /**
      * Generate candidate resume files.
      *
-     * @param mixed $candidate
+     * @param  mixed  $candidate
      */
     private function generateCandidateResume($candidate): void
     {
@@ -686,7 +685,7 @@ class ComprehensiveDatabaseSeeder extends Seeder
     /**
      * Generate candidate images.
      *
-     * @param mixed $candidate
+     * @param  mixed  $candidate
      */
     private function generateCandidateImage($candidate): void
     {
@@ -704,8 +703,8 @@ class ComprehensiveDatabaseSeeder extends Seeder
     /**
      * Generate slider images.
      *
-     * @param mixed $slider
-     * @param mixed $type
+     * @param  mixed  $slider
+     * @param  mixed  $type
      */
     private function generateSliderImage($slider, $type): void
     {
@@ -720,7 +719,7 @@ class ComprehensiveDatabaseSeeder extends Seeder
     /**
      * Generate blog featured images.
      *
-     * @param mixed $post
+     * @param  mixed  $post
      */
     private function generateBlogImage($post): void
     {
@@ -735,9 +734,9 @@ class ComprehensiveDatabaseSeeder extends Seeder
     /**
      * Generate placeholder image.
      *
-     * @param mixed $width
-     * @param mixed $height
-     * @param mixed $text
+     * @param  mixed  $width
+     * @param  mixed  $height
+     * @param  mixed  $text
      */
     private function generatePlaceholderImage($width, $height, $text): string
     {

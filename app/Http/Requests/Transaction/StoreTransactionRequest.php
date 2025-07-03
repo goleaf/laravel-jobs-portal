@@ -82,7 +82,7 @@ class StoreTransactionRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param Validator $validator
+     * @param  Validator  $validator
      */
     public function withValidator($validator): void
     {
@@ -97,8 +97,8 @@ class StoreTransactionRequest extends FormRequest
             // Check for malicious content in text fields
             foreach (['job_description', 'job_requirement', 'job_benefit'] as $field) {
                 if ($this->has($field) && $this->{$field}) {
-                    $rule = new NoMaliciousContent();
-                    if (!$rule->passes($field, $this->{$field})) {
+                    $rule = new NoMaliciousContent;
+                    if (! $rule->passes($field, $this->{$field})) {
                         $validator->errors()->add($field, $rule->message());
                     }
                 }

@@ -15,60 +15,47 @@ class JobApplicationData
     public function __construct(
         #[FieldName('job_id')]
         public int $jobId,
-        
         #[FieldName('candidate_id')]
         public int $candidateId,
-        
         public string $status,
-        
         #[FieldName('cover_letter')]
         public ?string $coverLetter = null,
-        
         #[FieldName('resume_path')]
         public ?string $resumePath = null,
-        
         #[FieldName('expected_salary')]
         public ?float $expectedSalary = null,
-        
         #[DateFormat('Y-m-d')]
         #[FieldName('available_start_date')]
         public ?\DateTime $availableStartDate = null,
-        
         #[ArrayOf('array')]
         #[FieldName('screening_answers')]
         public array $screeningAnswers = [],
-        
         public ?string $notes = null,
-        
         public ?int $rating = null,
-        
         #[DateFormat('Y-m-d H:i:s')]
         #[FieldName('applied_at')]
         public ?\DateTime $appliedAt = null,
-        
         #[DateFormat('Y-m-d H:i:s')]
         #[FieldName('reviewed_at')]
         public ?\DateTime $reviewedAt = null,
-        
+
         // Application source tracking
         #[FieldName('application_source')]
         public ?string $applicationSource = null,
-        
+
         // Privacy settings
         #[FieldName('share_contact_details')]
         public bool $shareContactDetails = true,
-        
         #[FieldName('share_expected_salary')]
         public bool $shareExpectedSalary = false,
-        
+
         // Additional metadata
         #[ArrayOf('array')]
         public array $metadata = [],
-        
+
         // Sensitive data - ignored in API responses
         #[Ignore]
         public ?string $internalNotes = null,
-        
         #[Ignore]
         public ?array $systemFlags = null
     ) {}
@@ -103,7 +90,7 @@ class JobApplicationData
      */
     public function getStatusDisplayName(): string
     {
-        return match($this->status) {
+        return match ($this->status) {
             'pending' => 'Application Pending',
             'reviewed' => 'Under Review',
             'shortlisted' => 'Shortlisted',
@@ -123,8 +110,8 @@ class JobApplicationData
     public function isActive(): bool
     {
         return in_array($this->status, [
-            'pending', 'reviewed', 'shortlisted', 
-            'interview_scheduled', 'interview_completed', 'offered'
+            'pending', 'reviewed', 'shortlisted',
+            'interview_scheduled', 'interview_completed', 'offered',
         ]);
     }
 

@@ -80,7 +80,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         $this->command->info('🚀 Starting Comprehensive All Tables Seeding...');
 
         // Disable foreign key checks for seeding (SQLite-compatible)
-        if ('sqlite' === config('database.default')) {
+        if (config('database.default') === 'sqlite') {
             DB::statement('PRAGMA foreign_keys = OFF;');
         } else {
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
@@ -149,7 +149,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
             throw $e;
         } finally {
             // Re-enable foreign key checks
-            if ('sqlite' === config('database.default')) {
+            if (config('database.default') === 'sqlite') {
                 DB::statement('PRAGMA foreign_keys = ON;');
             } else {
                 DB::statement('SET FOREIGN_KEY_CHECKS=1;');
@@ -180,7 +180,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         ];
 
         foreach ($directories as $directory) {
-            if (!Storage::exists($directory)) {
+            if (! Storage::exists($directory)) {
                 Storage::makeDirectory($directory);
                 $this->command->info("✅ Created directory: {$directory}");
             }
@@ -194,7 +194,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
     {
         $this->command->info('🌍 Seeding location data...');
 
-        if (0 == Country::count()) {
+        if (Country::count() == 0) {
             // Create 30 countries
             $countries = Country::factory(30)->create();
             $this->seedingProgress['countries'] = $countries->count();
@@ -238,7 +238,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         $this->command->info('⚙️ Seeding system settings...');
 
         // Settings table
-        if (0 == Setting::count()) {
+        if (Setting::count() == 0) {
             $settings = Setting::factory(20)->create();
             $this->seedingProgress['settings'] = $settings->count();
         } else {
@@ -246,7 +246,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Front settings
-        if (0 == FrontSetting::count()) {
+        if (FrontSetting::count() == 0) {
             $frontSettings = FrontSetting::factory(15)->create();
             $this->seedingProgress['front_settings'] = $frontSettings->count();
         } else {
@@ -254,7 +254,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Environment settings
-        if (0 == EnvSetting::count()) {
+        if (EnvSetting::count() == 0) {
             $envSettings = EnvSetting::factory(10)->create();
             $this->seedingProgress['env_settings'] = $envSettings->count();
         } else {
@@ -276,7 +276,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
             $permissionClass = Permission::class;
             $roleClass = Role::class;
 
-            if (0 == $permissionClass::count()) {
+            if ($permissionClass::count() == 0) {
                 // Create basic permissions
                 $permissions = [
                     'view users', 'create users', 'edit users', 'delete users',
@@ -295,7 +295,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
                 $this->seedingProgress['permissions'] = $permissionClass::count();
             }
 
-            if (0 == $roleClass::count()) {
+            if ($roleClass::count() == 0) {
                 // Create basic roles
                 $roles = ['admin', 'employer', 'candidate', 'super-admin'];
                 foreach ($roles as $role) {
@@ -322,7 +322,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         $this->command->info('📋 Seeding master data tables...');
 
         // Industries
-        if (0 == Industry::count()) {
+        if (Industry::count() == 0) {
             $industries = Industry::factory(20)->create();
             $this->seedingProgress['industries'] = $industries->count();
         } else {
@@ -330,7 +330,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Company sizes
-        if (0 == CompanySize::count()) {
+        if (CompanySize::count() == 0) {
             $companySizes = CompanySize::factory(8)->create();
             $this->seedingProgress['company_sizes'] = $companySizes->count();
         } else {
@@ -338,7 +338,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Ownership types
-        if (0 == OwnerShipType::count()) {
+        if (OwnerShipType::count() == 0) {
             $ownershipTypes = OwnerShipType::factory(8)->create();
             $this->seedingProgress['ownership_types'] = $ownershipTypes->count();
         } else {
@@ -346,7 +346,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Functional areas
-        if (0 == FunctionalArea::count()) {
+        if (FunctionalArea::count() == 0) {
             $functionalAreas = FunctionalArea::factory(15)->create();
             $this->seedingProgress['functional_areas'] = $functionalAreas->count();
         } else {
@@ -354,7 +354,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Career levels
-        if (0 == CareerLevel::count()) {
+        if (CareerLevel::count() == 0) {
             $careerLevels = CareerLevel::factory(8)->create();
             $this->seedingProgress['career_levels'] = $careerLevels->count();
         } else {
@@ -362,7 +362,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Salary currencies
-        if (0 == SalaryCurrency::count()) {
+        if (SalaryCurrency::count() == 0) {
             $salaryCurrencies = SalaryCurrency::factory(15)->create();
             $this->seedingProgress['salary_currencies'] = $salaryCurrencies->count();
         } else {
@@ -370,7 +370,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Salary periods
-        if (0 == SalaryPeriod::count()) {
+        if (SalaryPeriod::count() == 0) {
             $salaryPeriods = SalaryPeriod::factory(6)->create();
             $this->seedingProgress['salary_periods'] = $salaryPeriods->count();
         } else {
@@ -378,7 +378,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Job types
-        if (0 == JobType::count()) {
+        if (JobType::count() == 0) {
             $jobTypes = JobType::factory(8)->create();
             $this->seedingProgress['job_types'] = $jobTypes->count();
         } else {
@@ -386,7 +386,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Job shifts
-        if (0 == JobShift::count()) {
+        if (JobShift::count() == 0) {
             $jobShifts = JobShift::factory(5)->create();
             $this->seedingProgress['job_shifts'] = $jobShifts->count();
         } else {
@@ -394,7 +394,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Required degree levels
-        if (0 == RequiredDegreeLevel::count()) {
+        if (RequiredDegreeLevel::count() == 0) {
             $degreeLevels = RequiredDegreeLevel::factory(10)->create();
             $this->seedingProgress['required_degree_levels'] = $degreeLevels->count();
         } else {
@@ -402,7 +402,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Marital statuses
-        if (0 == MaritalStatus::count()) {
+        if (MaritalStatus::count() == 0) {
             $maritalStatuses = MaritalStatus::factory(6)->create();
             $this->seedingProgress['marital_status'] = $maritalStatuses->count();
         } else {
@@ -410,7 +410,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Languages
-        if (0 == Language::count()) {
+        if (Language::count() == 0) {
             $languages = Language::factory(15)->create();
             $this->seedingProgress['languages'] = $languages->count();
         } else {
@@ -418,7 +418,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Job stages
-        if (0 == JobStage::count()) {
+        if (JobStage::count() == 0) {
             $jobStages = JobStage::factory(6)->create();
             $this->seedingProgress['job_stages'] = $jobStages->count();
         } else {
@@ -435,7 +435,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
     {
         $this->command->info('👥 Seeding users...');
 
-        if (0 == User::count()) {
+        if (User::count() == 0) {
             // Create admin users
             $admins = User::factory(5)->create([
                 'user_type' => 1, // Admin
@@ -473,7 +473,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
     {
         $this->command->info('🏢 Seeding companies...');
 
-        if (0 == Company::count()) {
+        if (Company::count() == 0) {
             $employers = User::where('user_type', 2)->get();
             $cities = $this->generatedData['cities'] ?? City::all();
             $industries = Industry::all();
@@ -515,7 +515,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
     {
         $this->command->info('📂 Seeding job categories...');
 
-        if (0 == JobCategory::count()) {
+        if (JobCategory::count() == 0) {
             $categories = [
                 'Software Development', 'Data Science', 'Product Management', 'Marketing', 'Sales',
                 'Human Resources', 'Finance', 'Operations', 'Customer Support', 'Design',
@@ -542,7 +542,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
     {
         $this->command->info('🛠️ Seeding skills...');
 
-        if (0 == Skill::count()) {
+        if (Skill::count() == 0) {
             $skills = [
                 // Programming Languages
                 'PHP', 'JavaScript', 'Python', 'Java', 'C#', 'Ruby', 'Go', 'Rust', 'Swift', 'Kotlin',
@@ -582,7 +582,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
     {
         $this->command->info('💼 Seeding jobs...');
 
-        if (0 == Job::count()) {
+        if (Job::count() == 0) {
             $companies = $this->generatedData['companies'] ?? Company::all();
             $jobCategories = JobCategory::all();
             $skills = Skill::all();
@@ -591,7 +591,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
             $jobs = collect();
 
             // Create 500 jobs
-            for ($i = 0; $i < 500; ++$i) {
+            for ($i = 0; $i < 500; $i++) {
                 $company = $companies->random();
                 $city = $cities->isNotEmpty() ? $cities->random() : null;
 
@@ -631,7 +631,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
     {
         $this->command->info('👨‍💼 Seeding candidates...');
 
-        if (0 == Candidate::count()) {
+        if (Candidate::count() == 0) {
             $candidateUsers = User::where('user_type', 3)->get();
             $skills = Skill::all();
             $languages = Language::all();
@@ -657,7 +657,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
 
                 // Create education records (1-3 per candidate)
                 $educationCount = rand(1, 3);
-                for ($i = 0; $i < $educationCount; ++$i) {
+                for ($i = 0; $i < $educationCount; $i++) {
                     CandidateEducation::factory()->create([
                         'candidate_id' => $candidate->id,
                     ]);
@@ -665,7 +665,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
 
                 // Create experience records (0-4 per candidate)
                 $experienceCount = rand(0, 4);
-                for ($i = 0; $i < $experienceCount; ++$i) {
+                for ($i = 0; $i < $experienceCount; $i++) {
                     CandidateExperience::factory()->create([
                         'candidate_id' => $candidate->id,
                     ]);
@@ -696,7 +696,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
     {
         $this->command->info('📝 Seeding job applications...');
 
-        if (0 == JobApplication::count()) {
+        if (JobApplication::count() == 0) {
             $candidates = $this->generatedData['candidates'] ?? Candidate::all();
             $jobs = $this->generatedData['jobs'] ?? Job::where('status', 1)->get();
             $jobStages = JobStage::all();
@@ -704,17 +704,16 @@ class ComprehensiveAllTablesSeeder extends Seeder
             $applications = collect();
 
             // Create 800 job applications
-            for ($i = 0; $i < 800; ++$i) {
+            for ($i = 0; $i < 800; $i++) {
                 $candidate = $candidates->random();
                 $job = $jobs->random();
 
                 // Avoid duplicate applications
                 $exists = JobApplication::where('candidate_id', $candidate->id)
                     ->where('job_id', $job->id)
-                    ->exists()
-                ;
+                    ->exists();
 
-                if (!$exists) {
+                if (! $exists) {
                     $application = JobApplication::factory()->create([
                         'candidate_id' => $candidate->id,
                         'job_id' => $job->id,
@@ -752,7 +751,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         $this->command->info('📝 Seeding content management tables...');
 
         // Post categories
-        if (0 == PostCategory::count()) {
+        if (PostCategory::count() == 0) {
             $postCategories = PostCategory::factory(10)->create();
             $this->seedingProgress['post_categories'] = $postCategories->count();
         } else {
@@ -760,7 +759,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Posts
-        if (0 == Post::count()) {
+        if (Post::count() == 0) {
             $posts = Post::factory(50)->create();
             $this->seedingProgress['posts'] = $posts->count();
 
@@ -768,7 +767,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
             $comments = collect();
             $posts->each(function ($post) use (&$comments) {
                 $commentCount = rand(0, 5);
-                for ($i = 0; $i < $commentCount; ++$i) {
+                for ($i = 0; $i < $commentCount; $i++) {
                     $comment = PostComment::factory()->create(['post_id' => $post->id]);
                     $comments->push($comment);
                 }
@@ -780,7 +779,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Tags
-        if (0 == Tag::count()) {
+        if (Tag::count() == 0) {
             $tags = Tag::factory(30)->create();
             $this->seedingProgress['tags'] = $tags->count();
         } else {
@@ -788,7 +787,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Testimonials
-        if (0 == Testimonial::count()) {
+        if (Testimonial::count() == 0) {
             $testimonials = Testimonial::factory(20)->create();
             $this->seedingProgress['testimonials'] = $testimonials->count();
         } else {
@@ -796,7 +795,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // FAQs
-        if (0 == FAQ::count()) {
+        if (FAQ::count() == 0) {
             $faqs = FAQ::factory(25)->create();
             $this->seedingProgress['faqs'] = $faqs->count();
         } else {
@@ -804,7 +803,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // CMS Services
-        if (0 == CmsServices::count()) {
+        if (CmsServices::count() == 0) {
             $cmsServices = CmsServices::factory(15)->create();
             $this->seedingProgress['cms_services'] = $cmsServices->count();
         } else {
@@ -822,7 +821,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         $this->command->info('📧 Seeding communication tables...');
 
         // Email templates
-        if (0 == EmailTemplate::count()) {
+        if (EmailTemplate::count() == 0) {
             $emailTemplates = EmailTemplate::factory(15)->create();
             $this->seedingProgress['email_templates'] = $emailTemplates->count();
         } else {
@@ -830,7 +829,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Email jobs
-        if (0 == EmailJob::count()) {
+        if (EmailJob::count() == 0) {
             $emailJobs = EmailJob::factory(30)->create();
             $this->seedingProgress['email_jobs'] = $emailJobs->count();
         } else {
@@ -838,7 +837,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Notifications
-        if (0 == Notification::count()) {
+        if (Notification::count() == 0) {
             $notifications = Notification::factory(100)->create();
             $this->seedingProgress['notifications'] = $notifications->count();
         } else {
@@ -846,7 +845,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Notification settings
-        if (0 == NotificationSetting::count()) {
+        if (NotificationSetting::count() == 0) {
             $notificationSettings = NotificationSetting::factory(20)->create();
             $this->seedingProgress['notification_settings'] = $notificationSettings->count();
         } else {
@@ -854,7 +853,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // News letters
-        if (0 == NewsLetter::count()) {
+        if (NewsLetter::count() == 0) {
             $newsLetters = NewsLetter::factory(50)->create();
             $this->seedingProgress['news_letters'] = $newsLetters->count();
         } else {
@@ -862,7 +861,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Inquiries
-        if (0 == Inquiry::count()) {
+        if (Inquiry::count() == 0) {
             $inquiries = Inquiry::factory(40)->create();
             $this->seedingProgress['inquiries'] = $inquiries->count();
         } else {
@@ -880,7 +879,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         $this->command->info('🎨 Seeding media tables...');
 
         // Image sliders
-        if (0 == ImageSlider::count()) {
+        if (ImageSlider::count() == 0) {
             $imageSliders = ImageSlider::factory(10)->create();
             $this->seedingProgress['image_sliders'] = $imageSliders->count();
         } else {
@@ -888,7 +887,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Header sliders
-        if (0 == HeaderSlider::count()) {
+        if (HeaderSlider::count() == 0) {
             $headerSliders = HeaderSlider::factory(8)->create();
             $this->seedingProgress['header_sliders'] = $headerSliders->count();
         } else {
@@ -896,7 +895,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Branding sliders
-        if (0 == BrandingSliders::count()) {
+        if (BrandingSliders::count() == 0) {
             $brandingSliders = BrandingSliders::factory(6)->create();
             $this->seedingProgress['branding_sliders'] = $brandingSliders->count();
         } else {
@@ -904,7 +903,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Files
-        if (0 == File::count()) {
+        if (File::count() == 0) {
             $files = File::factory(50)->create();
             $this->seedingProgress['files'] = $files->count();
         } else {
@@ -927,7 +926,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         $candidates = $this->generatedData['candidates'] ?? Candidate::all();
 
         // Social accounts
-        if (0 == SocialAccount::count()) {
+        if (SocialAccount::count() == 0) {
             $socialAccounts = collect();
             $users->take(50)->each(function ($user) use (&$socialAccounts) {
                 if (rand(0, 100) < 30) { // 30% chance
@@ -941,18 +940,17 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Favourite companies
-        if (0 == FavouriteCompany::count()) {
+        if (FavouriteCompany::count() == 0) {
             $favouriteCompanies = collect();
-            for ($i = 0; $i < 100; ++$i) {
+            for ($i = 0; $i < 100; $i++) {
                 $user = $users->random();
                 $company = $companies->random();
 
                 $exists = FavouriteCompany::where('user_id', $user->id)
                     ->where('company_id', $company->id)
-                    ->exists()
-                ;
+                    ->exists();
 
-                if (!$exists) {
+                if (! $exists) {
                     $favourite = FavouriteCompany::factory()->create([
                         'user_id' => $user->id,
                         'company_id' => $company->id,
@@ -966,18 +964,17 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Favourite jobs
-        if (0 == FavouriteJob::count()) {
+        if (FavouriteJob::count() == 0) {
             $favouriteJobs = collect();
-            for ($i = 0; $i < 150; ++$i) {
+            for ($i = 0; $i < 150; $i++) {
                 $user = $users->random();
                 $job = $jobs->random();
 
                 $exists = FavouriteJob::where('user_id', $user->id)
                     ->where('job_id', $job->id)
-                    ->exists()
-                ;
+                    ->exists();
 
-                if (!$exists) {
+                if (! $exists) {
                     $favourite = FavouriteJob::factory()->create([
                         'user_id' => $user->id,
                         'job_id' => $job->id,
@@ -991,7 +988,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Reported jobs
-        if (0 == ReportedJob::count()) {
+        if (ReportedJob::count() == 0) {
             $reportedJobs = ReportedJob::factory(20)->create();
             $this->seedingProgress['reported_jobs'] = $reportedJobs->count();
         } else {
@@ -999,7 +996,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Reported companies
-        if (0 == ReportedToCompany::count()) {
+        if (ReportedToCompany::count() == 0) {
             $reportedCompanies = ReportedToCompany::factory(15)->create();
             $this->seedingProgress['reported_to_companies'] = $reportedCompanies->count();
         } else {
@@ -1007,7 +1004,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Featured records
-        if (0 == FeaturedRecord::count()) {
+        if (FeaturedRecord::count() == 0) {
             $featuredRecords = FeaturedRecord::factory(30)->create();
             $this->seedingProgress['featured_records'] = $featuredRecords->count();
         } else {
@@ -1025,7 +1022,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         $this->command->info('💳 Seeding financial system...');
 
         // Plans
-        if (0 == Plan::count()) {
+        if (Plan::count() == 0) {
             $plans = Plan::factory(5)->create();
             $this->seedingProgress['plans'] = $plans->count();
             $this->generatedData['plans'] = $plans;
@@ -1035,7 +1032,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Subscriptions
-        if (0 == Subscription::count()) {
+        if (Subscription::count() == 0) {
             $users = $this->generatedData['users'] ?? User::where('user_type', 2)->get(); // Employers
             $plans = $this->generatedData['plans'] ?? Plan::all();
 
@@ -1058,13 +1055,13 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Transactions
-        if (0 == Transaction::count()) {
+        if (Transaction::count() == 0) {
             $subscriptions = $this->generatedData['subscriptions'] ?? Subscription::all();
 
             $transactions = collect();
             $subscriptions->each(function ($subscription) use (&$transactions) {
                 $transactionCount = rand(1, 3);
-                for ($i = 0; $i < $transactionCount; ++$i) {
+                for ($i = 0; $i < $transactionCount; $i++) {
                     $transaction = Transaction::factory()->create([
                         'user_id' => $subscription->user_id,
                         'subscription_id' => $subscription->id,
@@ -1089,7 +1086,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         $this->command->info('⚙️ Seeding system utilities...');
 
         // Noticeboards
-        if (0 == Noticeboard::count()) {
+        if (Noticeboard::count() == 0) {
             $noticeboards = Noticeboard::factory(15)->create();
             $this->seedingProgress['noticeboards'] = $noticeboards->count();
         } else {
@@ -1097,7 +1094,7 @@ class ComprehensiveAllTablesSeeder extends Seeder
         }
 
         // Todos
-        if (0 == Todo::count()) {
+        if (Todo::count() == 0) {
             $todos = Todo::factory(25)->create();
             $this->seedingProgress['todos'] = $todos->count();
         } else {

@@ -25,12 +25,12 @@ class EmailTemplateFactory extends Factory
                 'user_name' => '{{user_name}}',
                 'job_title' => '{{job_title}}',
                 'company_name' => '{{company_name}}',
-                'application_date' => '{{application_date}}'
+                'application_date' => '{{application_date}}',
             ]),
         ];
 
         // Use Laravel 12.16 Arr::hasAll() to validate required fields
-        if (!Arr::hasAll($attributes, ['template_name', 'subject', 'body', 'variables'])) {
+        if (! Arr::hasAll($attributes, ['template_name', 'subject', 'body', 'variables'])) {
             throw new \InvalidArgumentException('EmailTemplateFactory: Missing required fields');
         }
 
@@ -60,8 +60,8 @@ class EmailTemplateFactory extends Factory
                 'user_name' => '{{user_name}}',
                 'job_title' => '{{job_title}}',
                 'company_name' => '{{company_name}}',
-                'application_date' => '{{application_date}}'
+                'application_date' => '{{application_date}}',
             ]),
         ]);
     }
-} 
+}

@@ -25,7 +25,7 @@ return new class extends Migration
             $table->json('meta')->nullable()->after('tags');
             $table->timestamp('published_at')->nullable()->after('meta');
             $table->softDeletes()->after('updated_at');
-            
+
             // Add foreign key constraint
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
         });
@@ -40,7 +40,7 @@ return new class extends Migration
             $table->dropForeign(['user_id']);
             $table->dropColumn([
                 'category',
-                'user_id', 
+                'user_id',
                 'is_active',
                 'is_featured',
                 'is_published',
@@ -51,7 +51,7 @@ return new class extends Migration
                 'tags',
                 'meta',
                 'published_at',
-                'deleted_at'
+                'deleted_at',
             ]);
         });
     }

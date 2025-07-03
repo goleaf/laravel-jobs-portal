@@ -16,18 +16,18 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Class JobCategory.
  *
- * @property int              $id
- * @property string           $name
- * @property null|string      $description
- * @property bool             $is_featured
- * @property bool             $is_default
- * @property bool             $is_active
- * @property null|Carbon      $created_at
- * @property null|Carbon      $updated_at
+ * @property int $id
+ * @property string $name
+ * @property null|string $description
+ * @property bool $is_featured
+ * @property bool $is_default
+ * @property bool $is_active
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
  * @property Collection|Job[] $jobs
- * @property null|int         $jobs_count
- * @property mixed            $usage_count
- * @property mixed            $formatted_usage_stats
+ * @property null|int $jobs_count
+ * @property mixed $usage_count
+ * @property mixed $formatted_usage_stats
  *
  * @method static Builder|JobCategory newModelQuery()
  * @method static Builder|JobCategory newQuery()
@@ -66,8 +66,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class JobCategory extends Model
 {
     use HasFactory;
-    use LogsActivity;
     use HasSettingsField;
+    use LogsActivity;
 
     /**
      * Media path constant for file uploads
@@ -217,14 +217,14 @@ class JobCategory extends Model
         'display.color_scheme' => 'string|in:default,blue,green,red,purple,orange',
         'display.featured_placement' => 'boolean',
         'display.priority_order' => 'integer|min:0|max:100',
-        
+
         'filtering.enable_filtering' => 'boolean',
         'filtering.default_sort' => 'string|in:name,job_count,recent,popular',
         'filtering.show_subcategories' => 'boolean',
         'filtering.group_by_parent' => 'boolean',
         'filtering.min_jobs_to_show' => 'integer|min:0|max:100',
         'filtering.hide_empty_categories' => 'boolean',
-        
+
         'seo.custom_meta_title' => 'string|max:60',
         'seo.custom_meta_description' => 'string|max:160',
         'seo.custom_keywords' => 'string|max:255',
@@ -232,31 +232,31 @@ class JobCategory extends Model
         'seo.robots_index' => 'boolean',
         'seo.robots_follow' => 'boolean',
         'seo.structured_data_enabled' => 'boolean',
-        
+
         'content.show_related_categories' => 'boolean',
         'content.show_trending_jobs' => 'boolean',
         'content.show_salary_insights' => 'boolean',
         'content.show_location_breakdown' => 'boolean',
         'content.enable_category_blog' => 'boolean',
         'content.custom_description' => 'string|max:1000',
-        
+
         'notifications.notify_new_jobs' => 'boolean',
         'notifications.notify_trending_changes' => 'boolean',
         'notifications.weekly_digest' => 'boolean',
         'notifications.admin_alerts' => 'boolean',
-        
+
         'analytics.track_views' => 'boolean',
         'analytics.track_job_clicks' => 'boolean',
         'analytics.track_search_queries' => 'boolean',
         'analytics.google_analytics_enabled' => 'boolean',
         'analytics.custom_tracking_code' => 'string|max:500',
-        
+
         'features.enable_job_alerts' => 'boolean',
         'features.enable_saved_searches' => 'boolean',
         'features.enable_category_following' => 'boolean',
         'features.enable_expert_advice' => 'boolean',
         'features.premium_features_enabled' => 'boolean',
-        
+
         'moderation.auto_approve_jobs' => 'boolean',
         'moderation.require_admin_review' => 'boolean',
         'moderation.spam_detection_enabled' => 'boolean',
@@ -271,8 +271,7 @@ class JobCategory extends Model
         return LogOptions::defaults()
             ->logOnly(['name', 'description', 'is_featured', 'is_active', 'is_default'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -398,8 +397,7 @@ class JobCategory extends Model
     public function scopeSearch(Builder $query, string $term): Builder
     {
         return $query->where('name', 'like', "%{$term}%")
-            ->orWhere('description', 'like', "%{$term}%")
-        ;
+            ->orWhere('description', 'like', "%{$term}%");
     }
 
     /**
@@ -417,8 +415,7 @@ class JobCategory extends Model
     {
         return $query->withCount('jobs')
             ->orderBy('jobs_count', 'desc')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     /**
@@ -439,8 +436,7 @@ class JobCategory extends Model
                 $q->where('created_at', '>=', now()->subDays(30));
             },
         ])
-            ->orderByDesc('jobs_count')
-        ;
+            ->orderByDesc('jobs_count');
     }
 
     /**
@@ -449,8 +445,7 @@ class JobCategory extends Model
     public function scopeMinUsage(Builder $query, int $count = 1): Builder
     {
         return $query->withCount('jobs')
-            ->having('jobs_count', '>=', $count)
-        ;
+            ->having('jobs_count', '>=', $count);
     }
 
     /**
@@ -460,8 +455,7 @@ class JobCategory extends Model
     {
         return $query->withCount('jobs')
             ->having('jobs_count', '>=', $minJobs)
-            ->orderByDesc('jobs_count')
-        ;
+            ->orderByDesc('jobs_count');
     }
 
     /**
@@ -473,8 +467,7 @@ class JobCategory extends Model
             ->orWhere('name', 'like', '%IT%')
             ->orWhere('name', 'like', '%software%')
             ->orWhere('name', 'like', '%computer%')
-            ->orWhere('name', 'like', '%programming%')
-        ;
+            ->orWhere('name', 'like', '%programming%');
     }
 
     /**
@@ -486,8 +479,7 @@ class JobCategory extends Model
             ->orWhere('name', 'like', '%medical%')
             ->orWhere('name', 'like', '%health%')
             ->orWhere('name', 'like', '%nursing%')
-            ->orWhere('name', 'like', '%biomedical%')
-        ;
+            ->orWhere('name', 'like', '%biomedical%');
     }
 
     /**
@@ -498,8 +490,7 @@ class JobCategory extends Model
         return $query->where('name', 'like', '%finance%')
             ->orWhere('name', 'like', '%accounting%')
             ->orWhere('name', 'like', '%banking%')
-            ->orWhere('name', 'like', '%actuaries%')
-        ;
+            ->orWhere('name', 'like', '%actuaries%');
     }
 
     /**
@@ -510,8 +501,7 @@ class JobCategory extends Model
         return $query->where('name', 'like', '%education%')
             ->orWhere('name', 'like', '%teaching%')
             ->orWhere('name', 'like', '%training%')
-            ->orWhere('name', 'like', '%coaches%')
-        ;
+            ->orWhere('name', 'like', '%coaches%');
     }
 
     /**
@@ -521,8 +511,7 @@ class JobCategory extends Model
     {
         return $query->where('name', 'like', '%engineer%')
             ->orWhere('name', 'like', '%civil%')
-            ->orWhere('name', 'like', '%biomedical%')
-        ;
+            ->orWhere('name', 'like', '%biomedical%');
     }
 
     /**
@@ -554,7 +543,7 @@ class JobCategory extends Model
      */
     public function isTechnology(): bool
     {
-        return 'technology' === $this->getCategoryType();
+        return $this->getCategoryType() === 'technology';
     }
 
     /**
@@ -562,7 +551,7 @@ class JobCategory extends Model
      */
     public function isHealthcare(): bool
     {
-        return 'healthcare' === $this->getCategoryType();
+        return $this->getCategoryType() === 'healthcare';
     }
 
     /**
@@ -570,7 +559,7 @@ class JobCategory extends Model
      */
     public function isFinance(): bool
     {
-        return 'finance' === $this->getCategoryType();
+        return $this->getCategoryType() === 'finance';
     }
 
     /**
@@ -578,7 +567,7 @@ class JobCategory extends Model
      */
     public function hasParent(): bool
     {
-        return !is_null($this->parent_id);
+        return ! is_null($this->parent_id);
     }
 
     /**
@@ -600,8 +589,7 @@ class JobCategory extends Model
                 ->withCount('jobs')
                 ->orderByDesc('jobs_count')
                 ->limit($limit)
-                ->get()
-            ;
+                ->get();
         });
     }
 

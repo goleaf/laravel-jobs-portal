@@ -26,14 +26,13 @@ class LocationController extends AppBaseController
     {
         $countryId = $request->get('country_id');
 
-        if (!$countryId) {
+        if (! $countryId) {
             return $this->sendError('Country ID is required', 400);
         }
 
         $states = State::where('country_id', $countryId)
             ->orderBy('name')
-            ->get(['id', 'name'])
-        ;
+            ->get(['id', 'name']);
 
         return $this->sendResponse($states, 'States retrieved successfully.');
     }
@@ -45,14 +44,13 @@ class LocationController extends AppBaseController
     {
         $stateId = $request->get('state_id');
 
-        if (!$stateId) {
+        if (! $stateId) {
             return $this->sendError('State ID is required', 400);
         }
 
         $cities = City::where('state_id', $stateId)
             ->orderBy('name')
-            ->get(['id', 'name'])
-        ;
+            ->get(['id', 'name']);
 
         return $this->sendResponse($cities, 'Cities retrieved successfully.');
     }

@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Api;
 
-use App\Models\User;
-use App\Models\SettingsVersion;
 use App\Actions\SettingsManagement\CreateSettingsVersion;
+use App\Models\SettingsVersion;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -17,7 +17,7 @@ class SettingsVersioningTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->user = User::factory()->create();
         $this->actingAs($this->user);
     }
@@ -34,7 +34,7 @@ class SettingsVersioningTest extends TestCase
         ]);
 
         $response->assertStatus(200);
-        
+
         // Check if version was created
         $this->assertDatabaseHas('settings_versions', [
             'model_type' => User::class,
@@ -59,7 +59,7 @@ class SettingsVersioningTest extends TestCase
 
         // Get version history
         $response = $this->getJson("/api/settings/user/{$this->user->id}/history");
-        
+
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'success',
@@ -73,10 +73,10 @@ class SettingsVersioningTest extends TestCase
                         'change_type',
                         'created_at',
                         'is_latest',
-                    ]
+                    ],
                 ],
                 'total_versions',
-            ]
+            ],
         ]);
 
         $this->assertTrue($response->json('success'));
@@ -95,7 +95,7 @@ class SettingsVersioningTest extends TestCase
 
         // Get version details
         $response = $this->getJson("/api/settings/user/{$this->user->id}/version/{$version->version_id}");
-        
+
         $response->assertStatus(200);
         $response->assertJsonStructure([
             'success',
@@ -107,8 +107,8 @@ class SettingsVersioningTest extends TestCase
                     'change_summary',
                     'integrity_valid',
                 ],
-                'navigation'
-            ]
+                'navigation',
+            ],
         ]);
 
         $this->assertTrue($response->json('success'));
@@ -146,12 +146,12 @@ class SettingsVersioningTest extends TestCase
                     'target_version',
                     'reason',
                 ],
-                'applied_settings'
-            ]
+                'applied_settings',
+            ],
         ]);
 
         $this->assertTrue($response->json('success'));
-        
+
         // Verify rollback created a new version
         $this->assertDatabaseHas('settings_versions', [
             'model_type' => User::class,
@@ -195,7 +195,7 @@ class SettingsVersioningTest extends TestCase
                 ],
                 'version_1_info',
                 'version_2_info',
-            ]
+            ],
         ]);
 
         $this->assertTrue($response->json('success'));
@@ -220,7 +220,7 @@ class SettingsVersioningTest extends TestCase
 
         // Test integrity validation in API
         $response = $this->getJson("/api/settings/user/{$this->user->id}/version/{$version->version_id}");
-        
+
         $response->assertStatus(200);
         $this->assertTrue($response->json('data.version.integrity_valid'));
     }
@@ -233,11 +233,11 @@ class SettingsVersioningTest extends TestCase
             modelId: $this->user->id,
             newSettings: [
                 'profile' => ['theme' => 'dark', 'language' => 'en'],
-                'notifications' => ['email' => true, 'sms' => false]
+                'notifications' => ['email' => true, 'sms' => false],
             ],
             previousSettings: [
                 'profile' => ['theme' => 'light', 'language' => 'en'],
-                'notifications' => ['email' => false, 'sms' => false]
+                'notifications' => ['email' => false, 'sms' => false],
             ],
             changeType: 'update',
             userId: $this->user->id,
@@ -250,7 +250,7 @@ class SettingsVersioningTest extends TestCase
         $this->assertGreaterThan(0, $version->size_bytes);
         $this->assertNotNull($version->ip_address);
         $this->assertEquals('User preference update', $version->change_reason);
-        
+
         // Verify change summary structure
         $summary = $version->change_summary;
         $this->assertArrayHasKey('type', $summary);
@@ -271,15 +271,15 @@ class SettingsVersioningTest extends TestCase
         }
 
         $allVersions = SettingsVersion::forModel(User::class, $this->user->id)
-                                     ->orderBy('version_number')
-                                     ->get();
+            ->orderBy('version_number')
+            ->get();
 
         // Test navigation for middle version
         $middleVersion = $allVersions[1]; // Version 2
         $response = $this->getJson("/api/settings/user/{$this->user->id}/version/{$middleVersion->version_id}");
-        
+
         $response->assertStatus(200);
-        
+
         $navigation = $response->json('data.navigation');
         $this->assertNotNull($navigation['previous_version']); // Version 1
         $this->assertNotNull($navigation['next_version']);     // Version 3
@@ -309,7 +309,7 @@ class SettingsVersioningTest extends TestCase
         $response->assertStatus(400);
         $response->assertJson([
             'success' => false,
-            'error' => 'VERSION_INTEGRITY_ERROR'
+            'error' => 'VERSION_INTEGRITY_ERROR',
         ]);
     }
-} 
+}

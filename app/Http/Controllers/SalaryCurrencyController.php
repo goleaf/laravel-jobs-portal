@@ -55,7 +55,7 @@ class SalaryCurrencyController extends AppBaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param int $currencyId
+     * @param  int  $currencyId
      */
     public function update(UpdateSalaryCurrencyRequest $request, $currencyId): JsonResponse
     {
@@ -84,10 +84,10 @@ class SalaryCurrencyController extends AppBaseController
         }
 
         $result = canDelete($model, 'salary_currency_id', $currency->id);
-        if (!$result) {
+        if (! $result) {
             $result = canDelete([Job::class], 'currency_id', $currency->id);
         }
-        if (!$result) {
+        if (! $result) {
             $result = canDelete([Candidate::class], 'salary_currency', $currency->id);
         }
         if ($result) {

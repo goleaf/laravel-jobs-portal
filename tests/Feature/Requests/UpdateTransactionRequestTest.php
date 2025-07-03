@@ -30,17 +30,17 @@ class UpdateTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAuthorizationReturnsTrue()
+    public function test_authorization_returns_true()
     {
-        $request = new UpdateTransactionRequest();
+        $request = new UpdateTransactionRequest;
 
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function testValidationRulesAreDefined()
+    public function test_validation_rules_are_defined()
     {
-        $request = new UpdateTransactionRequest();
+        $request = new UpdateTransactionRequest;
         $rules = $request->rules();
 
         $this->assertIsArray($rules);
@@ -48,9 +48,9 @@ class UpdateTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationMessagesAreDefined()
+    public function test_validation_messages_are_defined()
     {
-        $request = new UpdateTransactionRequest();
+        $request = new UpdateTransactionRequest;
 
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
@@ -61,9 +61,9 @@ class UpdateTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationAttributesAreDefined()
+    public function test_validation_attributes_are_defined()
     {
-        $request = new UpdateTransactionRequest();
+        $request = new UpdateTransactionRequest;
 
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
@@ -74,9 +74,9 @@ class UpdateTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testStatusValidation()
+    public function test_status_validation()
     {
-        $request = new UpdateTransactionRequest();
+        $request = new UpdateTransactionRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('status', $rules);
@@ -87,9 +87,9 @@ class UpdateTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testMetaValidation()
+    public function test_meta_validation()
     {
-        $request = new UpdateTransactionRequest();
+        $request = new UpdateTransactionRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('meta', $rules);
@@ -100,25 +100,25 @@ class UpdateTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidDataPassesValidation()
+    public function test_valid_data_passes_validation()
     {
         $validData = [
             'status' => true,
             'meta' => 'Test Value',
         ];
 
-        $request = new UpdateTransactionRequest();
+        $request = new UpdateTransactionRequest;
         $validator = validator($validData, $request->rules());
 
         $this->assertFalse($validator->fails());
     }
 
     /** @test */
-    public function testRequestHandlesEmptyDataCorrectly()
+    public function test_request_handles_empty_data_correctly()
     {
         $emptyData = [];
 
-        $request = new UpdateTransactionRequest();
+        $request = new UpdateTransactionRequest;
         $validator = validator($emptyData, $request->rules());
 
         // Should handle empty data according to rules
@@ -126,7 +126,7 @@ class UpdateTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSecurityValidationPreventsXss()
+    public function test_security_validation_prevents_xss()
     {
         $maliciousData = [
             'name' => '<script>alert("xss")</script>',
@@ -134,7 +134,7 @@ class UpdateTransactionRequestTest extends TestCase
             'content' => '<img src=x onerror=alert("xss")>',
         ];
 
-        $request = new UpdateTransactionRequest();
+        $request = new UpdateTransactionRequest;
         $validator = validator($maliciousData, $request->rules());
 
         // XSS data should either fail validation or be properly sanitized
@@ -149,7 +149,7 @@ class UpdateTransactionRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSqlInjectionPrevention()
+    public function test_sql_injection_prevention()
     {
         $sqlInjectionData = [
             'name' => "'; DROP TABLE users; --",
@@ -157,7 +157,7 @@ class UpdateTransactionRequestTest extends TestCase
             'filter' => 'UNION SELECT * FROM passwords',
         ];
 
-        $request = new UpdateTransactionRequest();
+        $request = new UpdateTransactionRequest;
         $validator = validator($sqlInjectionData, $request->rules());
 
         // SQL injection patterns should be handled safely

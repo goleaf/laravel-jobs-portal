@@ -34,7 +34,7 @@ class GetStatesLocationRequest extends FormRequest
                 'min:1',
                 'exists:countries,id',
                 function ($attribute, $value, $fail) {
-                    if ($value && !$this->validateCountryActive($value)) {
+                    if ($value && ! $this->validateCountryActive($value)) {
                         $fail(__('validation.country_not_active'));
                     }
                 },
@@ -108,10 +108,10 @@ class GetStatesLocationRequest extends FormRequest
             'country_id.required' => __('validation.required_field', ['field' => __('validation.attributes.country_id')]),
             'country_id.integer' => __('validation.integer', ['attribute' => __('validation.attributes.country_id')]),
             'country_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.country_id')]),
-            
+
             'page.integer' => __('validation.integer', ['attribute' => __('validation.attributes.page')]),
             'page.min' => __('validation.min_value', ['attribute' => __('validation.attributes.page'), 'min' => 1]),
-            
+
             'search.regex' => __('validation.search_format', ['attribute' => __('validation.attributes.search')]),
             'sort_by.in' => __('validation.in_list', ['attribute' => __('validation.attributes.sort_by')]),
         ];

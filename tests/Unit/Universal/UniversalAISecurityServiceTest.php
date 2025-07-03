@@ -2,14 +2,13 @@
 
 namespace Tests\Unit\Universal;
 
-use Tests\TestCase;
-use App\Services\Universal\UniversalAISecurityService;
 use App\Models\User;
+use App\Services\Universal\UniversalAISecurityService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Mockery;
+use Tests\TestCase;
 
 class UniversalAISecurityServiceTest extends TestCase
 {
@@ -21,7 +20,7 @@ class UniversalAISecurityServiceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->aiSecurityService = new UniversalAISecurityService();
+        $this->aiSecurityService = new UniversalAISecurityService;
         $this->mockRequest = Mockery::mock(Request::class);
     }
 
@@ -82,8 +81,10 @@ class UniversalAISecurityServiceTest extends TestCase
         $this->mockRequest->shouldReceive('isMethod')->andReturn(false);
         $this->mockRequest->shouldReceive('hasHeader')->andReturn(true);
 
-        $service = new class extends UniversalAISecurityService {
-            public function testCalculateRiskLevel($score) {
+        $service = new class extends UniversalAISecurityService
+        {
+            public function test_calculate_risk_level($score)
+            {
                 return $this->calculateRiskLevel($score);
             }
         };
@@ -107,10 +108,10 @@ class UniversalAISecurityServiceTest extends TestCase
         $this->mockRequest->shouldReceive('hasHeader')->andReturn(true);
 
         // Mock high request frequency
-        Cache::put('user_requests:' . auth()->id(), [
+        Cache::put('user_requests:'.auth()->id(), [
             'requests_per_minute' => 50, // High frequency
             'patterns' => ['GET /api/test'],
-            'timestamps' => [now(), now()->subSeconds(30)]
+            'timestamps' => [now(), now()->subSeconds(30)],
         ], 300);
 
         $result = $this->aiSecurityService->analyzeThreatLevel($this->mockRequest);
@@ -125,7 +126,7 @@ class UniversalAISecurityServiceTest extends TestCase
         $this->mockRequest->shouldReceive('ip')->andReturn('192.168.1.1');
         $this->mockRequest->shouldReceive('userAgent')->andReturn('Mozilla/5.0');
         $this->mockRequest->shouldReceive('all')->andReturn([
-            'search' => "'; DROP TABLE users; --"
+            'search' => "'; DROP TABLE users; --",
         ]);
         $this->mockRequest->shouldReceive('getContent')->andReturn('');
         $this->mockRequest->shouldReceive('headers->all')->andReturn([]);
@@ -144,7 +145,7 @@ class UniversalAISecurityServiceTest extends TestCase
         $this->mockRequest->shouldReceive('ip')->andReturn('192.168.1.1');
         $this->mockRequest->shouldReceive('userAgent')->andReturn('Mozilla/5.0');
         $this->mockRequest->shouldReceive('all')->andReturn([
-            'comment' => '<script>alert("xss")</script>'
+            'comment' => '<script>alert("xss")</script>',
         ]);
         $this->mockRequest->shouldReceive('getContent')->andReturn('');
         $this->mockRequest->shouldReceive('headers->all')->andReturn([]);
@@ -189,11 +190,13 @@ class UniversalAISecurityServiceTest extends TestCase
         $threatFactors = [
             'behavioral' => ['score' => 10],
             'ip_reputation' => ['score' => 5],
-            'request_patterns' => ['score' => 0]
+            'request_patterns' => ['score' => 0],
         ];
 
-        $service = new class extends UniversalAISecurityService {
-            public function testExtractMLFeatures($request, $factors) {
+        $service = new class extends UniversalAISecurityService
+        {
+            public function test_extract_ml_features($request, $factors)
+            {
                 return $this->extractMLFeatures($request, $factors);
             }
         };
@@ -217,11 +220,13 @@ class UniversalAISecurityServiceTest extends TestCase
             'behavioral_score' => 30,
             'hour_of_day' => 3, // Late night
             'is_authenticated' => 1,
-            'user_age_days' => 0 // New user
+            'user_age_days' => 0, // New user
         ];
 
-        $service = new class extends UniversalAISecurityService {
-            public function testSimpleDecisionTree($features) {
+        $service = new class extends UniversalAISecurityService
+        {
+            public function test_simple_decision_tree($features)
+            {
                 return $this->simpleDecisionTree($features);
             }
         };
@@ -241,11 +246,13 @@ class UniversalAISecurityServiceTest extends TestCase
         $features = [
             'pattern_score' => 30,
             'ip_reputation_score' => 20,
-            'behavioral_score' => 15
+            'behavioral_score' => 15,
         ];
 
-        $service = new class extends UniversalAISecurityService {
-            public function testEnsembleVoting($features) {
+        $service = new class extends UniversalAISecurityService
+        {
+            public function test_ensemble_voting($features)
+            {
                 return $this->ensembleVoting($features);
             }
         };
@@ -264,18 +271,20 @@ class UniversalAISecurityServiceTest extends TestCase
     {
         $threatFactors = [
             'behavioral' => [
-                'factors' => ['high_request_frequency', 'suspicious_patterns']
+                'factors' => ['high_request_frequency', 'suspicious_patterns'],
             ],
             'ip_reputation' => [
-                'factors' => ['proxy_usage']
+                'factors' => ['proxy_usage'],
             ],
             'request_patterns' => [
-                'factors' => ['sql_injection_patterns']
-            ]
+                'factors' => ['sql_injection_patterns'],
+            ],
         ];
 
-        $service = new class extends UniversalAISecurityService {
-            public function testGenerateSecurityRecommendations($riskLevel, $factors) {
+        $service = new class extends UniversalAISecurityService
+        {
+            public function test_generate_security_recommendations($riskLevel, $factors)
+            {
                 return $this->generateSecurityRecommendations($riskLevel, $factors);
             }
         };
@@ -306,8 +315,10 @@ class UniversalAISecurityServiceTest extends TestCase
     /** @test */
     public function test_private_ip_detection()
     {
-        $service = new class extends UniversalAISecurityService {
-            public function testIsPrivateIP($ip) {
+        $service = new class extends UniversalAISecurityService
+        {
+            public function test_is_private_ip($ip)
+            {
                 return $this->isPrivateIP($ip);
             }
         };
@@ -327,8 +338,10 @@ class UniversalAISecurityServiceTest extends TestCase
             ->with('HTTP_X_FORWARDED_FOR')
             ->andReturn('203.0.113.1');
 
-        $service = new class extends UniversalAISecurityService {
-            public function testHasProxyHeaders($request) {
+        $service = new class extends UniversalAISecurityService
+        {
+            public function test_has_proxy_headers($request)
+            {
                 return $this->hasProxyHeaders($request);
             }
         };
@@ -359,8 +372,10 @@ class UniversalAISecurityServiceTest extends TestCase
     /** @test */
     public function test_sql_injection_pattern_scoring()
     {
-        $service = new class extends UniversalAISecurityService {
-            public function testDetectSQLInjectionPatterns($request) {
+        $service = new class extends UniversalAISecurityService
+        {
+            public function test_detect_sql_injection_patterns($request)
+            {
                 return $this->detectSQLInjectionPatterns($request);
             }
         };
@@ -368,7 +383,7 @@ class UniversalAISecurityServiceTest extends TestCase
         // Test with malicious SQL injection attempt
         $maliciousRequest = Mockery::mock(Request::class);
         $maliciousRequest->shouldReceive('all')->andReturn([
-            'query' => "SELECT * FROM users WHERE id = 1 UNION SELECT password FROM admin"
+            'query' => 'SELECT * FROM users WHERE id = 1 UNION SELECT password FROM admin',
         ]);
 
         $score = $service->testDetectSQLInjectionPatterns($maliciousRequest);
@@ -377,7 +392,7 @@ class UniversalAISecurityServiceTest extends TestCase
         // Test with normal request
         $normalRequest = Mockery::mock(Request::class);
         $normalRequest->shouldReceive('all')->andReturn([
-            'query' => "normal search term"
+            'query' => 'normal search term',
         ]);
 
         $score = $service->testDetectSQLInjectionPatterns($normalRequest);
@@ -392,7 +407,7 @@ class UniversalAISecurityServiceTest extends TestCase
         $this->mockRequest->shouldReceive('userAgent')->andReturn('Malicious Bot');
         $this->mockRequest->shouldReceive('all')->andReturn([
             'injection' => "'; DROP TABLE users; --",
-            'xss' => '<script>alert("hack")</script>'
+            'xss' => '<script>alert("hack")</script>',
         ]);
         $this->mockRequest->shouldReceive('getContent')->andReturn('');
         $this->mockRequest->shouldReceive('headers->all')->andReturn([]);
@@ -404,4 +419,4 @@ class UniversalAISecurityServiceTest extends TestCase
         // Threat score should be capped at 100
         $this->assertLessThanOrEqual(100, $result['threat_score']);
     }
-} 
+}

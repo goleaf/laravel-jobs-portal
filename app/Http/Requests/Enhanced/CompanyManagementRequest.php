@@ -3,9 +3,8 @@
 namespace App\Http\Requests\Enhanced;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Cache;
-use Carbon\Carbon;
+use Illuminate\Validation\Rule;
 
 class CompanyManagementRequest extends FormRequest
 {
@@ -25,7 +24,7 @@ class CompanyManagementRequest extends FormRequest
         $rules = array_merge($rules, $this->getTeamCollaborationRules());
         $rules = array_merge($rules, $this->getPerformanceOptimizationRules());
         $rules = array_merge($rules, $this->getAdvancedFeaturesRules());
-        
+
         return $rules;
     }
 
@@ -39,9 +38,9 @@ class CompanyManagementRequest extends FormRequest
             'company_type' => ['nullable', 'string', Rule::in(['startup', 'small_business', 'medium_enterprise', 'large_enterprise', 'corporation', 'non_profit', 'government'])],
             'industry_sector' => ['nullable', 'string', 'max:100'],
             'company_size' => ['nullable', 'string', Rule::in(['1-10', '11-50', '51-200', '201-500', '501-1000', '1001-5000', '5000+'])],
-            'founding_year' => ['nullable', 'integer', 'min:1800', 'max:' . date('Y')],
+            'founding_year' => ['nullable', 'integer', 'min:1800', 'max:'.date('Y')],
             'company_stage' => ['nullable', 'string', Rule::in(['idea', 'startup', 'growth', 'mature', 'decline', 'turnaround'])],
-            
+
             // Contact & Location Information
             'headquarters_address' => ['nullable', 'array'],
             'headquarters_address.street' => ['nullable', 'string', 'max:255'],
@@ -53,7 +52,7 @@ class CompanyManagementRequest extends FormRequest
             'office_locations.*.location_name' => ['string', 'max:100'],
             'office_locations.*.address' => ['array'],
             'office_locations.*.is_headquarters' => ['boolean'],
-            
+
             // Business Details
             'business_description' => ['nullable', 'string', 'max:5000'],
             'mission_statement' => ['nullable', 'string', 'max:1000'],
@@ -63,7 +62,7 @@ class CompanyManagementRequest extends FormRequest
             'company_culture' => ['nullable', 'string', 'max:2000'],
             'unique_selling_proposition' => ['nullable', 'string', 'max:500'],
             'target_market' => ['nullable', 'string', 'max:1000'],
-            
+
             // Financial Information
             'annual_revenue' => ['nullable', 'string', Rule::in(['0-1M', '1M-10M', '10M-50M', '50M-100M', '100M-500M', '500M-1B', '1B+'])],
             'funding_stage' => ['nullable', 'string', Rule::in(['bootstrapped', 'pre_seed', 'seed', 'series_a', 'series_b', 'series_c', 'ipo', 'acquired'])],
@@ -71,7 +70,7 @@ class CompanyManagementRequest extends FormRequest
             'valuation' => ['nullable', 'numeric', 'min:0', 'max:999999999999.99'],
             'public_company' => ['nullable', 'boolean'],
             'stock_symbol' => ['nullable', 'string', 'max:10', 'regex:/^[A-Z]+$/'],
-            
+
             // Contact Information
             'primary_contact_email' => ['nullable', 'email', 'max:255'],
             'hr_contact_email' => ['nullable', 'email', 'max:255'],
@@ -96,7 +95,7 @@ class CompanyManagementRequest extends FormRequest
             'remote_work_policy' => ['nullable', 'string', Rule::in(['fully_remote', 'hybrid', 'on_site', 'flexible'])],
             'global_hiring' => ['nullable', 'boolean'],
             'visa_sponsorship' => ['nullable', 'boolean'],
-            
+
             // Job Posting Management
             'auto_posting_enabled' => ['nullable', 'boolean'],
             'posting_templates' => ['nullable', 'array'],
@@ -104,7 +103,7 @@ class CompanyManagementRequest extends FormRequest
             'application_auto_response' => ['nullable', 'boolean'],
             'application_tracking_enabled' => ['nullable', 'boolean'],
             'candidate_scoring_algorithm' => ['nullable', 'string', Rule::in(['basic', 'advanced', 'ai_powered', 'custom'])],
-            
+
             // Recruitment Channels
             'preferred_job_boards' => ['nullable', 'array'],
             'preferred_job_boards.*' => ['string', 'max:100'],
@@ -114,7 +113,7 @@ class CompanyManagementRequest extends FormRequest
             'university_partnerships' => ['nullable', 'array'],
             'recruitment_agencies' => ['nullable', 'array'],
             'headhunter_partnerships' => ['nullable', 'boolean'],
-            
+
             // Interview Process
             'interview_process_stages' => ['nullable', 'array', 'max:10'],
             'interview_process_stages.*.stage_name' => ['string', 'max:100'],
@@ -125,7 +124,7 @@ class CompanyManagementRequest extends FormRequest
             'interview_feedback_system' => ['nullable', 'boolean'],
             'background_check_required' => ['nullable', 'boolean'],
             'reference_check_required' => ['nullable', 'boolean'],
-            
+
             // Offer Management
             'offer_approval_workflow' => ['nullable', 'boolean'],
             'salary_negotiation_policy' => ['nullable', 'string', Rule::in(['fixed', 'limited_negotiation', 'full_negotiation'])],
@@ -150,7 +149,7 @@ class CompanyManagementRequest extends FormRequest
             'brand_colors.primary' => ['nullable', 'string', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'brand_colors.secondary' => ['nullable', 'string', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'brand_assets' => ['nullable', 'array'],
-            
+
             // Content Marketing
             'content_marketing_enabled' => ['nullable', 'boolean'],
             'blog_content_strategy' => ['nullable', 'string', Rule::in(['thought_leadership', 'company_culture', 'industry_insights', 'mixed'])],
@@ -160,7 +159,7 @@ class CompanyManagementRequest extends FormRequest
             'employee_advocacy_program' => ['nullable', 'boolean'],
             'testimonials_enabled' => ['nullable', 'boolean'],
             'case_studies_published' => ['nullable', 'boolean'],
-            
+
             // Marketing Campaigns
             'recruitment_campaigns' => ['nullable', 'array'],
             'recruitment_campaigns.*.campaign_name' => ['string', 'max:100'],
@@ -170,7 +169,7 @@ class CompanyManagementRequest extends FormRequest
             'job_fair_participation' => ['nullable', 'boolean'],
             'conference_sponsorships' => ['nullable', 'array'],
             'industry_event_presence' => ['nullable', 'boolean'],
-            
+
             // Digital Marketing
             'seo_optimization' => ['nullable', 'boolean'],
             'google_ads_campaigns' => ['nullable', 'boolean'],
@@ -192,7 +191,7 @@ class CompanyManagementRequest extends FormRequest
             'tracking_methods.*' => ['string', Rule::in(['cookies', 'pixels', 'utm_parameters', 'session_tracking'])],
             'real_time_analytics' => ['nullable', 'boolean'],
             'historical_data_retention' => ['nullable', 'integer', 'min:30', 'max:2555'], // days
-            
+
             // Recruitment Metrics
             'track_source_effectiveness' => ['nullable', 'boolean'],
             'measure_time_to_hire' => ['nullable', 'boolean'],
@@ -201,7 +200,7 @@ class CompanyManagementRequest extends FormRequest
             'track_conversion_funnel' => ['nullable', 'boolean'],
             'measure_candidate_satisfaction' => ['nullable', 'boolean'],
             'analyze_drop_off_points' => ['nullable', 'boolean'],
-            
+
             // Performance Analytics
             'hiring_manager_performance' => ['nullable', 'boolean'],
             'recruiter_performance_metrics' => ['nullable', 'boolean'],
@@ -209,7 +208,7 @@ class CompanyManagementRequest extends FormRequest
             'offer_acceptance_rates' => ['nullable', 'boolean'],
             'employee_retention_analysis' => ['nullable', 'boolean'],
             'onboarding_effectiveness' => ['nullable', 'boolean'],
-            
+
             // Business Intelligence
             'workforce_planning_analytics' => ['nullable', 'boolean'],
             'skills_gap_analysis' => ['nullable', 'boolean'],
@@ -217,7 +216,7 @@ class CompanyManagementRequest extends FormRequest
             'competitor_benchmarking' => ['nullable', 'boolean'],
             'diversity_inclusion_metrics' => ['nullable', 'boolean'],
             'predictive_hiring_models' => ['nullable', 'boolean'],
-            
+
             // Reporting Features
             'automated_reports' => ['nullable', 'boolean'],
             'report_frequency' => ['nullable', 'string', Rule::in(['daily', 'weekly', 'monthly', 'quarterly'])],
@@ -240,7 +239,7 @@ class CompanyManagementRequest extends FormRequest
             'data_portability' => ['nullable', 'boolean'],
             'consent_management' => ['nullable', 'boolean'],
             'audit_trail_enabled' => ['nullable', 'boolean'],
-            
+
             // Employment Law Compliance
             'equal_opportunity_policies' => ['nullable', 'boolean'],
             'anti_discrimination_measures' => ['nullable', 'boolean'],
@@ -249,7 +248,7 @@ class CompanyManagementRequest extends FormRequest
             'diversity_reporting' => ['nullable', 'boolean'],
             'pay_equity_analysis' => ['nullable', 'boolean'],
             'background_check_compliance' => ['nullable', 'boolean'],
-            
+
             // Industry-Specific Compliance
             'industry_certifications' => ['nullable', 'array'],
             'industry_certifications.*' => ['string', 'max:100'],
@@ -257,7 +256,7 @@ class CompanyManagementRequest extends FormRequest
             'security_clearance_jobs' => ['nullable', 'boolean'],
             'professional_licensing' => ['nullable', 'boolean'],
             'continuing_education_requirements' => ['nullable', 'boolean'],
-            
+
             // Governance Structure
             'approval_workflows' => ['nullable', 'array'],
             'approval_workflows.job_posting' => ['boolean'],
@@ -266,7 +265,7 @@ class CompanyManagementRequest extends FormRequest
             'role_based_permissions' => ['nullable', 'boolean'],
             'segregation_of_duties' => ['nullable', 'boolean'],
             'management_oversight' => ['nullable', 'boolean'],
-            
+
             // Risk Management
             'risk_assessment_enabled' => ['nullable', 'boolean'],
             'fraud_detection' => ['nullable', 'boolean'],
@@ -288,7 +287,7 @@ class CompanyManagementRequest extends FormRequest
             'webhook_endpoints.*' => ['url', 'max:500'],
             'api_versioning' => ['nullable', 'string', Rule::in(['v1', 'v2', 'latest'])],
             'api_documentation_access' => ['nullable', 'boolean'],
-            
+
             // Third-party Integrations
             'ats_integration' => ['nullable', 'boolean'],
             'crm_integration' => ['nullable', 'boolean'],
@@ -296,7 +295,7 @@ class CompanyManagementRequest extends FormRequest
             'payroll_system_integration' => ['nullable', 'boolean'],
             'background_check_providers' => ['nullable', 'array'],
             'assessment_tool_integrations' => ['nullable', 'array'],
-            
+
             // Social Media Integrations
             'linkedin_integration' => ['nullable', 'boolean'],
             'indeed_integration' => ['nullable', 'boolean'],
@@ -304,7 +303,7 @@ class CompanyManagementRequest extends FormRequest
             'facebook_jobs_integration' => ['nullable', 'boolean'],
             'twitter_job_posting' => ['nullable', 'boolean'],
             'social_login_providers' => ['nullable', 'array'],
-            
+
             // Enterprise Integrations
             'sso_configuration' => ['nullable', 'array'],
             'sso_configuration.provider' => ['string', Rule::in(['okta', 'azure_ad', 'google', 'saml', 'ldap'])],
@@ -313,7 +312,7 @@ class CompanyManagementRequest extends FormRequest
             'calendar_integration' => ['nullable', 'boolean'],
             'email_system_integration' => ['nullable', 'boolean'],
             'file_storage_integration' => ['nullable', 'boolean'],
-            
+
             // Data Synchronization
             'real_time_sync' => ['nullable', 'boolean'],
             'batch_sync_frequency' => ['nullable', 'string', Rule::in(['hourly', 'daily', 'weekly'])],
@@ -334,7 +333,7 @@ class CompanyManagementRequest extends FormRequest
             'reporting_relationships' => ['nullable', 'array'],
             'cross_functional_teams' => ['nullable', 'boolean'],
             'matrix_organization' => ['nullable', 'boolean'],
-            
+
             // Collaboration Tools
             'internal_communication_tools' => ['nullable', 'array'],
             'project_management_integration' => ['nullable', 'boolean'],
@@ -342,7 +341,7 @@ class CompanyManagementRequest extends FormRequest
             'video_conferencing_setup' => ['nullable', 'boolean'],
             'screen_sharing_enabled' => ['nullable', 'boolean'],
             'real_time_editing' => ['nullable', 'boolean'],
-            
+
             // Workflow Management
             'approval_workflows' => ['nullable', 'boolean'],
             'task_assignment_automation' => ['nullable', 'boolean'],
@@ -350,7 +349,7 @@ class CompanyManagementRequest extends FormRequest
             'progress_tracking' => ['nullable', 'boolean'],
             'milestone_notifications' => ['nullable', 'boolean'],
             'bottleneck_identification' => ['nullable', 'boolean'],
-            
+
             // Knowledge Management
             'knowledge_base_enabled' => ['nullable', 'boolean'],
             'documentation_standards' => ['nullable', 'boolean'],
@@ -358,7 +357,7 @@ class CompanyManagementRequest extends FormRequest
             'lessons_learned_capture' => ['nullable', 'boolean'],
             'expertise_location' => ['nullable', 'boolean'],
             'institutional_knowledge_preservation' => ['nullable', 'boolean'],
-            
+
             // Performance Management
             'individual_goal_setting' => ['nullable', 'boolean'],
             'team_goal_alignment' => ['nullable', 'boolean'],
@@ -379,7 +378,7 @@ class CompanyManagementRequest extends FormRequest
             'lazy_loading_enabled' => ['nullable', 'boolean'],
             'database_optimization' => ['nullable', 'boolean'],
             'query_optimization' => ['nullable', 'boolean'],
-            
+
             // Scalability Configuration
             'auto_scaling_enabled' => ['nullable', 'boolean'],
             'load_balancing' => ['nullable', 'boolean'],
@@ -387,7 +386,7 @@ class CompanyManagementRequest extends FormRequest
             'microservices_architecture' => ['nullable', 'boolean'],
             'containerization' => ['nullable', 'boolean'],
             'cloud_native_deployment' => ['nullable', 'boolean'],
-            
+
             // Monitoring & Alerts
             'performance_monitoring' => ['nullable', 'boolean'],
             'uptime_monitoring' => ['nullable', 'boolean'],
@@ -395,7 +394,7 @@ class CompanyManagementRequest extends FormRequest
             'log_aggregation' => ['nullable', 'boolean'],
             'alert_thresholds' => ['nullable', 'array'],
             'automated_incident_response' => ['nullable', 'boolean'],
-            
+
             // Optimization Metrics
             'page_load_time_target' => ['nullable', 'integer', 'min:500', 'max:10000'], // milliseconds
             'api_response_time_target' => ['nullable', 'integer', 'min:100', 'max:5000'], // milliseconds
@@ -417,7 +416,7 @@ class CompanyManagementRequest extends FormRequest
             'chatbot_integration' => ['nullable', 'boolean'],
             'natural_language_processing' => ['nullable', 'boolean'],
             'machine_learning_insights' => ['nullable', 'boolean'],
-            
+
             // Advanced Analytics
             'behavioral_analytics' => ['nullable', 'boolean'],
             'cohort_analysis' => ['nullable', 'boolean'],
@@ -425,7 +424,7 @@ class CompanyManagementRequest extends FormRequest
             'attribution_modeling' => ['nullable', 'boolean'],
             'predictive_modeling' => ['nullable', 'boolean'],
             'anomaly_detection' => ['nullable', 'boolean'],
-            
+
             // Automation Features
             'workflow_automation' => ['nullable', 'boolean'],
             'email_automation' => ['nullable', 'boolean'],
@@ -433,7 +432,7 @@ class CompanyManagementRequest extends FormRequest
             'candidate_nurturing_automation' => ['nullable', 'boolean'],
             'interview_scheduling_automation' => ['nullable', 'boolean'],
             'offer_generation_automation' => ['nullable', 'boolean'],
-            
+
             // Future-ready Features
             'blockchain_verification' => ['nullable', 'boolean'],
             'virtual_reality_interviews' => ['nullable', 'boolean'],
@@ -441,7 +440,7 @@ class CompanyManagementRequest extends FormRequest
             'voice_interface_support' => ['nullable', 'boolean'],
             'mobile_first_design' => ['nullable', 'boolean'],
             'progressive_web_app' => ['nullable', 'boolean'],
-            
+
             // Enterprise Features
             'multi_tenant_architecture' => ['nullable', 'boolean'],
             'white_label_customization' => ['nullable', 'boolean'],
@@ -460,16 +459,16 @@ class CompanyManagementRequest extends FormRequest
             'company_slug.unique' => __('validation.company_management.company_slug_taken'),
             'founding_year.max' => __('validation.company_management.founding_year_future'),
             'stock_symbol.regex' => __('validation.company_management.invalid_stock_symbol'),
-            
+
             // Recruitment Messages
             'hiring_goals.quarterly_target.max' => __('validation.company_management.quarterly_target_too_high'),
             'referral_bonus_amount.max' => __('validation.company_management.referral_bonus_too_high'),
             'offer_expiry_days.max' => __('validation.company_management.offer_expiry_too_long'),
-            
+
             // Analytics Messages
             'historical_data_retention.max' => __('validation.company_management.data_retention_too_long'),
             'api_rate_limiting.min' => __('validation.company_management.api_rate_too_low'),
-            
+
             // Performance Messages
             'page_load_time_target.min' => __('validation.company_management.page_load_too_fast'),
             'concurrent_user_capacity.max' => __('validation.company_management.user_capacity_exceeded'),
@@ -490,12 +489,12 @@ class CompanyManagementRequest extends FormRequest
         if ($this->has(['company_size', 'hiring_goals'])) {
             $sizeMap = [
                 '1-10' => 10, '11-50' => 50, '51-200' => 200,
-                '201-500' => 500, '501-1000' => 1000, '1001-5000' => 5000, '5000+' => 10000
+                '201-500' => 500, '501-1000' => 1000, '1001-5000' => 5000, '5000+' => 10000,
             ];
-            
+
             $maxSize = $sizeMap[$this->company_size] ?? 10;
             $quarterlyTarget = $this->hiring_goals['quarterly_target'] ?? 0;
-            
+
             if ($quarterlyTarget > $maxSize * 0.5) {
                 throw new \InvalidArgumentException(__('validation.company_management.hiring_goal_unrealistic'));
             }
@@ -505,12 +504,12 @@ class CompanyManagementRequest extends FormRequest
         if ($this->has(['annual_revenue', 'total_funding'])) {
             $revenueMap = [
                 '0-1M' => 1000000, '1M-10M' => 10000000, '10M-50M' => 50000000,
-                '50M-100M' => 100000000, '100M-500M' => 500000000, 
-                '500M-1B' => 1000000000, '1B+' => 10000000000
+                '50M-100M' => 100000000, '100M-500M' => 500000000,
+                '500M-1B' => 1000000000, '1B+' => 10000000000,
             ];
-            
+
             $maxRevenue = $revenueMap[$this->annual_revenue] ?? 1000000;
-            
+
             if ($this->total_funding > $maxRevenue * 10) {
                 throw new \InvalidArgumentException(__('validation.company_management.funding_revenue_mismatch'));
             }
@@ -529,17 +528,17 @@ class CompanyManagementRequest extends FormRequest
         // Optimize based on company size
         if ($this->has('company_size')) {
             $optimizations = $this->calculateOptimizations($this->company_size);
-            
+
             $this->merge([
                 'recommended_cache_strategy' => $optimizations['cache_strategy'],
                 'suggested_api_rate_limit' => $optimizations['api_rate_limit'],
-                'optimal_team_structure' => $optimizations['team_structure']
+                'optimal_team_structure' => $optimizations['team_structure'],
             ]);
         }
 
         // Cache company configuration
         if ($this->has('company_id')) {
-            Cache::remember("company_config_{$this->company_id}", 7200, function() {
+            Cache::remember("company_config_{$this->company_id}", 7200, function () {
                 return $this->validated();
             });
         }
@@ -554,9 +553,9 @@ class CompanyManagementRequest extends FormRequest
             '201-500' => ['cache_strategy' => 'redis', 'api_rate_limit' => 25000, 'team_structure' => 'matrix'],
             '501-1000' => ['cache_strategy' => 'redis', 'api_rate_limit' => 50000, 'team_structure' => 'divisional'],
             '1001-5000' => ['cache_strategy' => 'distributed', 'api_rate_limit' => 75000, 'team_structure' => 'enterprise'],
-            '5000+' => ['cache_strategy' => 'distributed', 'api_rate_limit' => 100000, 'team_structure' => 'enterprise']
+            '5000+' => ['cache_strategy' => 'distributed', 'api_rate_limit' => 100000, 'team_structure' => 'enterprise'],
         ];
-        
+
         return $optimizations[$companySize] ?? $optimizations['1-10'];
     }
 
@@ -569,19 +568,31 @@ class CompanyManagementRequest extends FormRequest
             'user_agent' => request()->userAgent(),
             'ip_address' => request()->ip(),
             'timestamp' => now(),
-            'optimizations_applied' => $this->has('recommended_cache_strategy')
+            'optimizations_applied' => $this->has('recommended_cache_strategy'),
         ]);
     }
 
     private function getOperationType(): string
     {
-        if ($this->has('company_name')) return 'profile_management';
-        if ($this->has('recruitment_strategy')) return 'recruitment_management';
-        if ($this->has('employer_brand_strategy')) return 'branding_marketing';
-        if ($this->has('analytics_enabled')) return 'analytics_configuration';
-        if ($this->has('compliance_framework')) return 'compliance_management';
-        if ($this->has('api_access_enabled')) return 'integration_management';
-        
+        if ($this->has('company_name')) {
+            return 'profile_management';
+        }
+        if ($this->has('recruitment_strategy')) {
+            return 'recruitment_management';
+        }
+        if ($this->has('employer_brand_strategy')) {
+            return 'branding_marketing';
+        }
+        if ($this->has('analytics_enabled')) {
+            return 'analytics_configuration';
+        }
+        if ($this->has('compliance_framework')) {
+            return 'compliance_management';
+        }
+        if ($this->has('api_access_enabled')) {
+            return 'integration_management';
+        }
+
         return 'general_company_operation';
     }
 }

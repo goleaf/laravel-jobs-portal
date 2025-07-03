@@ -12,10 +12,10 @@ use Tests\UnitTestCase;
 class ConfigurationOptimizedTest extends UnitTestCase
 {
     /** @test */
-    public function itHasBasicEnvironmentVariables()
+    public function it_has_basic_environment_variables()
     {
         // Test that basic environment variables or server variables are accessible
-        $envExists = !empty($_ENV) || !empty($_SERVER);
+        $envExists = ! empty($_ENV) || ! empty($_SERVER);
         $this->assertTrue($envExists, 'Either $_ENV or $_SERVER should have values');
 
         // Test basic PHP configuration
@@ -24,7 +24,7 @@ class ConfigurationOptimizedTest extends UnitTestCase
     }
 
     /** @test */
-    public function itHasMemoryConfiguration()
+    public function it_has_memory_configuration()
     {
         $memoryLimit = ini_get('memory_limit');
         $this->assertNotEmpty($memoryLimit);
@@ -32,7 +32,7 @@ class ConfigurationOptimizedTest extends UnitTestCase
     }
 
     /** @test */
-    public function itHasTimezoneConfiguration()
+    public function it_has_timezone_configuration()
     {
         $timezone = date_default_timezone_get();
         $this->assertNotEmpty($timezone);
@@ -40,14 +40,14 @@ class ConfigurationOptimizedTest extends UnitTestCase
     }
 
     /** @test */
-    public function itHasErrorReportingConfiguration()
+    public function it_has_error_reporting_configuration()
     {
         $errorReporting = error_reporting();
         $this->assertIsInt($errorReporting);
     }
 
     /** @test */
-    public function itHasBasicPhpExtensions()
+    public function it_has_basic_php_extensions()
     {
         // Test common PHP extensions that Laravel requires
         $this->assertTrue(extension_loaded('json'));
@@ -56,7 +56,7 @@ class ConfigurationOptimizedTest extends UnitTestCase
     }
 
     /** @test */
-    public function itCanHandleBasicFilesystemOperations()
+    public function it_can_handle_basic_filesystem_operations()
     {
         // Test basic file operations without Laravel
         $tempFile = tempnam(sys_get_temp_dir(), 'test_');

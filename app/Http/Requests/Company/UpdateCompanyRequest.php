@@ -153,7 +153,7 @@ class UpdateCompanyRequest extends FormRequest
                 'sometimes',
                 'boolean',
                 function ($attribute, $value, $fail) {
-                    if (!Auth::user()->hasRole('Admin')) {
+                    if (! Auth::user()->hasRole('Admin')) {
                         $fail(__('companies.validation.admin_only_field'));
                     }
                 },
@@ -162,7 +162,7 @@ class UpdateCompanyRequest extends FormRequest
                 'sometimes',
                 'boolean',
                 function ($attribute, $value, $fail) {
-                    if (!Auth::user()->hasRole('Admin')) {
+                    if (! Auth::user()->hasRole('Admin')) {
                         $fail(__('companies.validation.admin_only_field'));
                     }
                 },
@@ -226,7 +226,7 @@ class UpdateCompanyRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param Validator $validator
+     * @param  Validator  $validator
      */
     public function withValidator($validator): void
     {
@@ -241,8 +241,8 @@ class UpdateCompanyRequest extends FormRequest
             // Check for malicious content in text fields
             foreach (['job_description', 'job_requirement', 'job_benefit'] as $field) {
                 if ($this->has($field) && $this->{$field}) {
-                    $rule = new NoMaliciousContent();
-                    if (!$rule->passes($field, $this->{$field})) {
+                    $rule = new NoMaliciousContent;
+                    if (! $rule->passes($field, $this->{$field})) {
                         $validator->errors()->add($field, $rule->message());
                     }
                 }
@@ -258,7 +258,7 @@ class UpdateCompanyRequest extends FormRequest
         $data = $this->validated();
 
         // Remove admin-only fields if user is not admin
-        if (!Auth::user()->hasRole('Admin')) {
+        if (! Auth::user()->hasRole('Admin')) {
             unset($data['is_active'], $data['is_featured']);
         }
 

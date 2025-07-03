@@ -35,9 +35,9 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test that the request has proper validation rules.
      */
-    public function testValidationRulesAreDefined()
+    public function test_validation_rules_are_defined()
     {
-        $request = new CreateJobRequest();
+        $request = new CreateJobRequest;
         $rules = $request->rules();
 
         $this->assertIsArray($rules);
@@ -54,12 +54,12 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test authorization for employer users.
      */
-    public function testEmployerUserIsAuthorized()
+    public function test_employer_user_is_authorized()
     {
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $request = new CreateJobRequest();
+        $request = new CreateJobRequest;
         // Placeholder until role system is implemented
         $this->assertTrue(true);
     }
@@ -67,14 +67,14 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test validation passes with valid data.
      */
-    public function testValidationPassesWithValidData()
+    public function test_validation_passes_with_valid_data()
     {
         $data = $this->getValidData();
 
-        $request = new CreateJobRequest();
+        $request = new CreateJobRequest;
         $validator = Validator::make($data, $request->rules());
 
-        if (!$validator->passes()) {
+        if (! $validator->passes()) {
             $this->fail('Validation failed with errors: '.json_encode($validator->errors()->toArray()));
         }
 
@@ -84,12 +84,12 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test title is required.
      */
-    public function testTitleIsRequired()
+    public function test_title_is_required()
     {
         $data = $this->getValidData();
         unset($data['title']);
 
-        $request = new CreateJobRequest();
+        $request = new CreateJobRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -99,12 +99,12 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test description is required.
      */
-    public function testDescriptionIsRequired()
+    public function test_description_is_required()
     {
         $data = $this->getValidData();
         unset($data['description']);
 
-        $request = new CreateJobRequest();
+        $request = new CreateJobRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -114,12 +114,12 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test description minimum length.
      */
-    public function testDescriptionMinimumLength()
+    public function test_description_minimum_length()
     {
         $data = $this->getValidData();
         $data['description'] = 'Short'; // Less than 50 characters
 
-        $request = new CreateJobRequest();
+        $request = new CreateJobRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -129,12 +129,12 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test job_category_id is required.
      */
-    public function testJobCategoryIdIsRequired()
+    public function test_job_category_id_is_required()
     {
         $data = $this->getValidData();
         unset($data['job_category_id']);
 
-        $request = new CreateJobRequest();
+        $request = new CreateJobRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -144,12 +144,12 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test job_type_id is required.
      */
-    public function testJobTypeIdIsRequired()
+    public function test_job_type_id_is_required()
     {
         $data = $this->getValidData();
         unset($data['job_type_id']);
 
-        $request = new CreateJobRequest();
+        $request = new CreateJobRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -159,12 +159,12 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test location is required.
      */
-    public function testLocationIsRequired()
+    public function test_location_is_required()
     {
         $data = $this->getValidData();
         unset($data['location']);
 
-        $request = new CreateJobRequest();
+        $request = new CreateJobRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -174,13 +174,13 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test salary validation - salary_to must be greater than salary_from.
      */
-    public function testSalaryToMustBeGreaterThanSalaryFrom()
+    public function test_salary_to_must_be_greater_than_salary_from()
     {
         $data = $this->getValidData();
         $data['salary_from'] = 100000;
         $data['salary_to'] = 50000; // Less than salary_from
 
-        $request = new CreateJobRequest();
+        $request = new CreateJobRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -190,13 +190,13 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test salary fields accept numeric values.
      */
-    public function testSalaryFieldsAcceptNumericValues()
+    public function test_salary_fields_accept_numeric_values()
     {
         $data = $this->getValidData();
         $data['salary_from'] = 50000;
         $data['salary_to'] = 100000;
 
-        $request = new CreateJobRequest();
+        $request = new CreateJobRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->passes());
@@ -205,12 +205,12 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test salary fields reject non-numeric values.
      */
-    public function testSalaryFieldsRejectNonNumericValues()
+    public function test_salary_fields_reject_non_numeric_values()
     {
         $data = $this->getValidData();
         $data['salary_from'] = 'not-a-number';
 
-        $request = new CreateJobRequest();
+        $request = new CreateJobRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -220,12 +220,12 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test expires_at must be future date.
      */
-    public function testExpiresAtMustBeFutureDate()
+    public function test_expires_at_must_be_future_date()
     {
         $data = $this->getValidData();
         $data['expires_at'] = '2020-01-01'; // Past date
 
-        $request = new CreateJobRequest();
+        $request = new CreateJobRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -235,12 +235,12 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test experience field accepts valid range.
      */
-    public function testExperienceAcceptsValidRange()
+    public function test_experience_accepts_valid_range()
     {
         $data = $this->getValidData();
         $data['experience'] = 5;
 
-        $request = new CreateJobRequest();
+        $request = new CreateJobRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertTrue($validator->passes());
@@ -249,12 +249,12 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test experience field rejects values over 50.
      */
-    public function testExperienceRejectsOver50()
+    public function test_experience_rejects_over50()
     {
         $data = $this->getValidData();
         $data['experience'] = 60; // Over maximum
 
-        $request = new CreateJobRequest();
+        $request = new CreateJobRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -264,14 +264,14 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test gender field accepts valid values.
      */
-    public function testGenderAcceptsValidValues()
+    public function test_gender_accepts_valid_values()
     {
         $data = $this->getValidData();
 
         foreach ([0, 1, 2] as $gender) {
             $data['gender'] = $gender;
 
-            $request = new CreateJobRequest();
+            $request = new CreateJobRequest;
             $validator = Validator::make($data, $request->rules());
 
             $this->assertTrue($validator->passes(), "Gender value {$gender} should be valid");
@@ -281,12 +281,12 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test gender field rejects invalid values.
      */
-    public function testGenderRejectsInvalidValues()
+    public function test_gender_rejects_invalid_values()
     {
         $data = $this->getValidData();
         $data['gender'] = 5; // Invalid value
 
-        $request = new CreateJobRequest();
+        $request = new CreateJobRequest;
         $validator = Validator::make($data, $request->rules());
 
         $this->assertFalse($validator->passes());
@@ -296,9 +296,9 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test custom error messages are defined.
      */
-    public function testCustomErrorMessagesAreDefined()
+    public function test_custom_error_messages_are_defined()
     {
-        $request = new CreateJobRequest();
+        $request = new CreateJobRequest;
 
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
@@ -315,9 +315,9 @@ class CreateJobRequestTest extends TestCase
     /**
      * Test custom attributes are defined.
      */
-    public function testCustomAttributesAreDefined()
+    public function test_custom_attributes_are_defined()
     {
-        $request = new CreateJobRequest();
+        $request = new CreateJobRequest;
 
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();

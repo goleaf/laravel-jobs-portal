@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class StoreProfessionRequest extends FormRequest
 {
@@ -68,7 +67,7 @@ class StoreProfessionRequest extends FormRequest
                 'nullable',
                 'boolean',
             ],
-            
+
             // Translation validation
             'translations' => [
                 'required',
@@ -125,7 +124,7 @@ class StoreProfessionRequest extends FormRequest
             'sort_order.required' => 'The sort order is required.',
             'sort_order.min' => 'The sort order must be 0 or greater.',
             'metadata.difficulty_level.in' => 'The difficulty level must be High, Medium, or Low.',
-            
+
             'translations.required' => 'At least one translation is required.',
             'translations.min' => 'At least one translation is required.',
             'translations.*.name.required' => 'The profession name is required for each language.',
@@ -167,7 +166,7 @@ class StoreProfessionRequest extends FormRequest
             // Validate that category exists and is active
             if ($this->category_id) {
                 $category = \App\Models\ProfessionCategory::find($this->category_id);
-                if ($category && !$category->is_active) {
+                if ($category && ! $category->is_active) {
                     $validator->errors()->add(
                         'category_id',
                         'Cannot create profession in an inactive category.'
@@ -178,9 +177,9 @@ class StoreProfessionRequest extends FormRequest
             // Validate translation locales
             if ($this->translations) {
                 $supportedLocales = ['en', 'lt', 'ru', 'pl', 'de', 'fr', 'es', 'zh', 'ar', 'pt', 'tr', 'it', 'ja', 'hi'];
-                
+
                 foreach ($this->translations as $locale => $translation) {
-                    if (!in_array($locale, $supportedLocales)) {
+                    if (! in_array($locale, $supportedLocales)) {
                         $validator->errors()->add(
                             "translations.{$locale}",
                             "The locale '{$locale}' is not supported."
@@ -189,7 +188,7 @@ class StoreProfessionRequest extends FormRequest
                 }
 
                 // Require English translation
-                if (!isset($this->translations['en'])) {
+                if (! isset($this->translations['en'])) {
                     $validator->errors()->add(
                         'translations.en',
                         'English translation is required.'
@@ -235,7 +234,7 @@ class StoreProfessionRequest extends FormRequest
                 $category = \App\Models\ProfessionCategory::find($this->category_id);
                 if ($category) {
                     // Code should start with category code
-                    if (!str_starts_with($this->code, $category->code)) {
+                    if (! str_starts_with($this->code, $category->code)) {
                         $validator->errors()->add(
                             'code',
                             "Profession code should start with category code '{$category->code}'."
@@ -259,7 +258,7 @@ class StoreProfessionRequest extends FormRequest
         ]);
 
         // Set default metadata
-        if (!$this->has('metadata')) {
+        if (! $this->has('metadata')) {
             $this->merge([
                 'metadata' => [
                     'difficulty_level' => $this->skill_level ?? 'Medium',
@@ -271,24 +270,24 @@ class StoreProfessionRequest extends FormRequest
         // Clean up skills and education requirements arrays
         if ($this->translations && is_array($this->translations)) {
             $translations = $this->translations;
-            
+
             foreach ($translations as $locale => &$translation) {
                 // Clean skills_required array
                 if (isset($translation['skills_required']) && is_array($translation['skills_required'])) {
                     $translation['skills_required'] = array_values(array_filter($translation['skills_required'], function ($skill) {
-                        return !empty(trim($skill));
+                        return ! empty(trim($skill));
                     }));
                 }
 
                 // Clean education_requirements array
                 if (isset($translation['education_requirements']) && is_array($translation['education_requirements'])) {
                     $translation['education_requirements'] = array_values(array_filter($translation['education_requirements'], function ($req) {
-                        return !empty(trim($req));
+                        return ! empty(trim($req));
                     }));
                 }
             }
-            
+
             $this->merge(['translations' => $translations]);
         }
     }
-} 
+}

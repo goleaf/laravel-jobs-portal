@@ -16,27 +16,27 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * ReportedToCompany Model - Enhanced with Enhanced patterns.
  *
- * @property int         $id
- * @property int         $user_id
- * @property int         $company_id
- * @property string      $note
- * @property string      $reason
- * @property string      $status
- * @property bool        $is_active
- * @property bool        $is_resolved
+ * @property int $id
+ * @property int $user_id
+ * @property int $company_id
+ * @property string $note
+ * @property string $reason
+ * @property string $status
+ * @property bool $is_active
+ * @property bool $is_resolved
  * @property null|string $admin_notes
  * @property null|Carbon $resolved_at
- * @property null|int    $resolved_by
+ * @property null|int $resolved_by
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|Carbon $deleted_at
- * @property User        $user
- * @property Company     $company
- * @property null|User   $resolver
- * @property bool        $is_recent
- * @property bool        $is_pending
- * @property string      $status_label
- * @property string      $reason_label
+ * @property User $user
+ * @property Company $company
+ * @property null|User $resolver
+ * @property bool $is_recent
+ * @property bool $is_pending
+ * @property string $status_label
+ * @property string $reason_label
  *
  * Enhanced Enhanced Scopes:
  *
@@ -64,8 +64,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class ReportedToCompany extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     /**
      * Status constants.
@@ -155,8 +155,7 @@ class ReportedToCompany extends Model
             ->logOnly(['user_id', 'company_id', 'reason', 'status', 'is_resolved'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn (string $eventName) => "Company report has been {$eventName}")
-        ;
+            ->setDescriptionForEvent(fn (string $eventName) => "Company report has been {$eventName}");
     }
 
     // =============================================
@@ -265,8 +264,7 @@ class ReportedToCompany extends Model
     public function scopeThisMonth(Builder $query): Builder
     {
         return $query->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
-        ;
+            ->whereYear('created_at', now()->year);
     }
 
     // =============================================
@@ -318,8 +316,7 @@ class ReportedToCompany extends Model
             ->selectRaw('COUNT(*) as reports_count')
             ->groupBy('company_id')
             ->having('reports_count', '>', 1)
-            ->orderByDesc('reports_count')
-        ;
+            ->orderByDesc('reports_count');
     }
 
     // =============================================
@@ -335,16 +332,13 @@ class ReportedToCompany extends Model
             ->orWhere('admin_notes', 'like', '%'.$term.'%')
             ->orWhereHas('company', function ($companyQuery) use ($term) {
                 $companyQuery->where('name', 'like', '%'.$term.'%')
-                    ->orWhere('slug', 'like', '%'.$term.'%')
-                ;
+                    ->orWhere('slug', 'like', '%'.$term.'%');
             })
             ->orWhereHas('user', function ($userQuery) use ($term) {
                 $userQuery->where('first_name', 'like', '%'.$term.'%')
                     ->orWhere('last_name', 'like', '%'.$term.'%')
-                    ->orWhere('email', 'like', '%'.$term.'%')
-                ;
-            })
-        ;
+                    ->orWhere('email', 'like', '%'.$term.'%');
+            });
     }
 
     /**
@@ -388,7 +382,7 @@ class ReportedToCompany extends Model
      */
     public function getIsPendingAttribute(): bool
     {
-        return !$this->is_resolved;
+        return ! $this->is_resolved;
     }
 
     /**
@@ -533,8 +527,7 @@ class ReportedToCompany extends Model
                 ->orderByDesc('reports_count')
                 ->limit($limit)
                 ->with('company')
-                ->get()
-            ;
+                ->get();
         });
     }
 
@@ -547,8 +540,7 @@ class ReportedToCompany extends Model
             return self::where('user_id', $userId)
                 ->where('company_id', $companyId)
                 ->active()
-                ->exists()
-            ;
+                ->exists();
         });
     }
 

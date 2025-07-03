@@ -43,14 +43,14 @@ class ImageOptimizationService
     public function convertToWebP(string $imagePath, int $quality = 85): ?string
     {
         try {
-            if (!$this->isImageSupported($imagePath)) {
+            if (! $this->isImageSupported($imagePath)) {
                 Log::warning("Unsupported image format: {$imagePath}");
 
                 return null;
             }
 
             $fullPath = Storage::path($imagePath);
-            if (!file_exists($fullPath)) {
+            if (! file_exists($fullPath)) {
                 Log::warning("Image file not found: {$fullPath}");
 
                 return null;
@@ -65,13 +65,13 @@ class ImageOptimizationService
 
             // Create image from source
             $sourceImage = $this->createImageFromFile($fullPath);
-            if (!$sourceImage) {
+            if (! $sourceImage) {
                 return null;
             }
 
             // Create directory if it doesn't exist
             $webpDir = dirname($webpFullPath);
-            if (!is_dir($webpDir)) {
+            if (! is_dir($webpDir)) {
                 mkdir($webpDir, 0755, true);
             }
 
@@ -109,12 +109,12 @@ class ImageOptimizationService
 
         try {
             $fullPath = Storage::path($imagePath);
-            if (!file_exists($fullPath)) {
+            if (! file_exists($fullPath)) {
                 return [];
             }
 
             $sourceImage = $this->createImageFromFile($fullPath);
-            if (!$sourceImage) {
+            if (! $sourceImage) {
                 return [];
             }
 
@@ -130,7 +130,7 @@ class ImageOptimizationService
                 $responsivePath = $this->generateResponsivePath($imagePath, $sizeName, $width);
                 $responsiveFullPath = Storage::path($responsivePath);
 
-                if (!file_exists($responsiveFullPath)) {
+                if (! file_exists($responsiveFullPath)) {
                     // Calculate new height maintaining aspect ratio
                     $aspectRatio = $originalHeight / $originalWidth;
                     $newHeight = round($width * $aspectRatio);
@@ -157,7 +157,7 @@ class ImageOptimizationService
 
                     // Create directory if it doesn't exist
                     $responsiveDir = dirname($responsiveFullPath);
-                    if (!is_dir($responsiveDir)) {
+                    if (! is_dir($responsiveDir)) {
                         mkdir($responsiveDir, 0755, true);
                     }
 
@@ -167,7 +167,7 @@ class ImageOptimizationService
                     // Generate WebP version
                     $webpPath = $this->generateResponsiveWebPPath($imagePath, $sizeName, $width);
                     $webpFullPath = Storage::path($webpPath);
-                    if (!file_exists($webpFullPath)) {
+                    if (! file_exists($webpFullPath)) {
                         imagewebp($resizedImage, $webpFullPath, $quality);
                     }
 
@@ -203,7 +203,7 @@ class ImageOptimizationService
     public function optimizeImage(string $imagePath, string $quality = 'high'): bool
     {
         try {
-            if (!$this->isImageSupported($imagePath)) {
+            if (! $this->isImageSupported($imagePath)) {
                 return false;
             }
 
@@ -238,12 +238,12 @@ class ImageOptimizationService
     {
         try {
             $fullPath = Storage::path($imagePath);
-            if (!file_exists($fullPath)) {
+            if (! file_exists($fullPath)) {
                 return null;
             }
 
             $sourceImage = $this->createImageFromFile($fullPath);
-            if (!$sourceImage) {
+            if (! $sourceImage) {
                 return null;
             }
 
@@ -383,7 +383,7 @@ class ImageOptimizationService
     public function getImageInfo(string $imagePath): ?array
     {
         try {
-            if (!Storage::exists($imagePath)) {
+            if (! Storage::exists($imagePath)) {
                 return null;
             }
 
@@ -415,7 +415,7 @@ class ImageOptimizationService
     protected function createImageFromFile(string $fullPath)
     {
         $imageInfo = getimagesize($fullPath);
-        if (!$imageInfo) {
+        if (! $imageInfo) {
             return null;
         }
 
@@ -440,19 +440,19 @@ class ImageOptimizationService
     /**
      * Preserve transparency for PNG and GIF images.
      *
-     * @param resource $source
-     * @param resource $destination
+     * @param  resource  $source
+     * @param  resource  $destination
      */
     protected function preserveTransparency($source, $destination, string $imagePath): void
     {
         $extension = strtolower(pathinfo($imagePath, PATHINFO_EXTENSION));
 
-        if ('png' === $extension) {
+        if ($extension === 'png') {
             imagealphablending($destination, false);
             imagesavealpha($destination, true);
             $transparent = imagecolorallocatealpha($destination, 255, 255, 255, 127);
             imagefill($destination, 0, 0, $transparent);
-        } elseif ('gif' === $extension) {
+        } elseif ($extension === 'gif') {
             $transparentIndex = imagecolortransparent($source);
             if ($transparentIndex >= 0) {
                 $transparentColor = imagecolorsforindex($source, $transparentIndex);
@@ -471,7 +471,7 @@ class ImageOptimizationService
     /**
      * Save image with appropriate format.
      *
-     * @param resource $image
+     * @param  resource  $image
      */
     protected function saveImage($image, string $fullPath, string $originalPath, int $quality): void
     {

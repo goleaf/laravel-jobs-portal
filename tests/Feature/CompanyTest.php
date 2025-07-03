@@ -11,11 +11,10 @@ use App\Models\Job;
 use App\Models\OwnerShipType;
 use App\Models\State;
 use App\Models\User;
-use Database\Factories\UserFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 use Spatie\Permission\Models\Role;
+use Tests\TestCase;
 
 /**
  * @internal
@@ -34,16 +33,16 @@ class CompanyTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create roles if they don't exist
         Role::firstOrCreate(['name' => 'admin']);
         Role::firstOrCreate(['name' => 'employer']);
         Role::firstOrCreate(['name' => 'candidate']);
-        
+
         // Create admin user and assign admin role
         $this->adminUser = User::factory()->create(['user_type' => User::ADMIN]);
         $this->adminUser->assignRole('admin');
-        
+
         $this->employerUser = User::factory()->create(['user_type' => User::EMPLOYER]);
         $this->company = Company::factory()->create(['user_id' => $this->employerUser->id]);
         $this->employerUser->company()->save($this->company);
@@ -51,7 +50,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function companyCanBeCreated()
+    public function company_can_be_created()
     {
         $user = User::factory()->create();
 
@@ -90,7 +89,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function companyCanBeUpdated()
+    public function company_can_be_updated()
     {
         $company = Company::factory()->create();
 
@@ -111,7 +110,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function companyBelongsToUser()
+    public function company_belongs_to_user()
     {
         $user = User::factory()->create();
         $company = Company::factory()->create(['user_id' => $user->id]);
@@ -121,7 +120,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function companyBelongsToIndustry()
+    public function company_belongs_to_industry()
     {
         $industry = Industry::factory()->create();
         $company = Company::factory()->create(['industry_id' => $industry->id]);
@@ -131,7 +130,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function companyBelongsToOwnershipType()
+    public function company_belongs_to_ownership_type()
     {
         $ownershipType = OwnerShipType::factory()->create();
         $company = Company::factory()->create(['ownership_type_id' => $ownershipType->id]);
@@ -141,7 +140,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function companyBelongsToCompanySize()
+    public function company_belongs_to_company_size()
     {
         $companySize = CompanySize::factory()->create();
         $company = Company::factory()->create(['company_size_id' => $companySize->id]);
@@ -151,7 +150,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function companyCanHaveJobs()
+    public function company_can_have_jobs()
     {
         $company = Company::factory()->create();
 
@@ -167,11 +166,11 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function companiesCanBeFilteredByFeaturedStatus()
+    public function companies_can_be_filtered_by_featured_status()
     {
         // Clear existing companies to avoid interference
         Company::query()->delete();
-        
+
         Company::factory()->count(3)->create(['is_featured' => true]);
         Company::factory()->count(2)->create(['is_featured' => false]);
 
@@ -183,11 +182,11 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function companiesCanBeFilteredByActiveStatus()
+    public function companies_can_be_filtered_by_active_status()
     {
         // Clear existing companies to avoid interference
         Company::query()->delete();
-        
+
         Company::factory()->count(3)->create(['is_active' => true]);
         Company::factory()->count(2)->create(['is_active' => false]);
 
@@ -203,7 +202,7 @@ class CompanyTest extends TestCase
     // =========================================
 
     /** @test */
-    public function guestsCannotAccessAdminCompaniesSection()
+    public function guests_cannot_access_admin_companies_section()
     {
         $this->get('/admin/companies')->assertRedirect('/login');
         $this->get('/admin/companies/create')->assertRedirect('/login');
@@ -211,7 +210,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function nonAdminUsersCannotAccessAdminCompaniesSection()
+    public function non_admin_users_cannot_access_admin_companies_section()
     {
         $candidateUser = User::factory()->create(['user_type' => User::CANDIDATE]);
 
@@ -225,7 +224,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function adminCanViewCompaniesList()
+    public function admin_can_view_companies_list()
     {
         $response = $this->actingAs($this->adminUser)->get('/admin/companies');
         $response->assertStatus(200);
@@ -233,7 +232,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function adminCanViewCompanyDetails()
+    public function admin_can_view_company_details()
     {
         $response = $this->actingAs($this->adminUser)->get("/admin/companies/{$this->company->id}");
         $response->assertStatus(200);
@@ -242,7 +241,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function adminCanViewEditCompanyForm()
+    public function admin_can_view_edit_company_form()
     {
         $response = $this->actingAs($this->adminUser)->get("/admin/companies/{$this->company->id}/edit");
         $response->assertStatus(200);
@@ -251,7 +250,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function adminCanUpdateCompany()
+    public function admin_can_update_company()
     {
         $updateData = $this->getCompanyData('Updated Company Name');
         // Unset fields not expected in admin update, or ensure factories exist
@@ -269,7 +268,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function adminCanDeleteCompany()
+    public function admin_can_delete_company()
     {
         // Create a separate company/user for deletion test
         $tempEmployer = User::factory()->create(['user_type' => User::EMPLOYER]);
@@ -285,7 +284,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function adminCanChangeCompanyActiveStatus()
+    public function admin_can_change_company_active_status()
     {
         $initialStatus = $this->employerUser->is_active;
 
@@ -294,11 +293,11 @@ class CompanyTest extends TestCase
         $response->assertStatus(200);
         $response->assertJson(['success' => true]);
         $this->employerUser->refresh();
-        $this->assertEquals(!$initialStatus, $this->employerUser->is_active);
+        $this->assertEquals(! $initialStatus, $this->employerUser->is_active);
     }
 
     /** @test */
-    public function adminCanMarkCompanyAsFeaturedAndUnfeatured()
+    public function admin_can_mark_company_as_featured_and_unfeatured()
     {
         // Mark as featured
         $response = $this->actingAs($this->adminUser)->postJson("/admin/companies/{$this->company->id}/mark-featured");
@@ -324,7 +323,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function adminCanChangeCompanyEmailVerifiedStatus()
+    public function admin_can_change_company_email_verified_status()
     {
         $this->employerUser->update(['email_verified_at' => null]); // Ensure not verified
 
@@ -347,7 +346,7 @@ class CompanyTest extends TestCase
     // =========================================
 
     /** @test */
-    public function employerCanViewTheirCompanyEditForm()
+    public function employer_can_view_their_company_edit_form()
     {
         $response = $this->actingAs($this->employerUser)->get("/employer/company/{$this->company->id}/edit"); // Assuming route matches editCompany action
 
@@ -357,7 +356,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function employerCannotViewOtherCompanyEditForm()
+    public function employer_cannot_view_other_company_edit_form()
     {
         $otherEmployer = User::factory()->create(['user_type' => User::EMPLOYER]);
         $otherCompany = Company::factory()->create(['user_id' => $otherEmployer->id]);
@@ -368,7 +367,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function employerCanUpdateTheirCompanyProfile()
+    public function employer_can_update_their_company_profile()
     {
         $updateData = $this->getCompanyData('Updated Profile Name');
         // Unset fields not expected in employer update or ensure factories exist
@@ -395,13 +394,13 @@ class CompanyTest extends TestCase
     protected function getCompanyData(?string $name = null): array
     {
         // Ensure related models exist or create them
-        if (!Country::find(1)) {
+        if (! Country::find(1)) {
             Country::factory()->create(['id' => 1]);
         }
-        if (!State::find(1)) {
+        if (! State::find(1)) {
             State::factory()->create(['id' => 1, 'country_id' => 1]);
         }
-        if (!City::find(1)) {
+        if (! City::find(1)) {
             City::factory()->create(['id' => 1, 'state_id' => 1]);
         }
 

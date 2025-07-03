@@ -140,7 +140,7 @@ class CompanyIndexResource extends JsonResource
      */
     private function canViewContactInfo(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
@@ -167,7 +167,7 @@ class CompanyIndexResource extends JsonResource
      */
     private function canViewStatistics(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
@@ -197,7 +197,7 @@ class CompanyIndexResource extends JsonResource
      */
     private function canView(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return $this->is_active;
         }
 
@@ -217,7 +217,7 @@ class CompanyIndexResource extends JsonResource
      */
     private function canEdit(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
@@ -233,7 +233,7 @@ class CompanyIndexResource extends JsonResource
      */
     private function canDelete(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
@@ -245,7 +245,7 @@ class CompanyIndexResource extends JsonResource
      */
     private function canFeature(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
@@ -257,7 +257,7 @@ class CompanyIndexResource extends JsonResource
      */
     private function canVerify(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
@@ -269,7 +269,7 @@ class CompanyIndexResource extends JsonResource
      */
     private function canContact(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 

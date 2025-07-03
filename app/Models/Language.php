@@ -14,22 +14,22 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Language Model - Enhanced with Enhanced patterns.
  *
- * @property int               $id
- * @property string            $language
- * @property string            $iso_code
- * @property bool              $is_default
- * @property bool              $is_active
- * @property bool              $is_featured
- * @property null|int          $sort_order
- * @property null|Carbon       $created_at
- * @property null|Carbon       $updated_at
+ * @property int $id
+ * @property string $language
+ * @property string $iso_code
+ * @property bool $is_default
+ * @property bool $is_active
+ * @property bool $is_featured
+ * @property null|int $sort_order
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
  * @property Collection|User[] $candidates
- * @property string            $display_name
- * @property string            $native_name
- * @property int               $candidates_count
- * @property bool              $is_popular
- * @property bool              $is_major
- * @property bool              $is_european
+ * @property string $display_name
+ * @property string $native_name
+ * @property int $candidates_count
+ * @property bool $is_popular
+ * @property bool $is_major
+ * @property bool $is_european
  *
  * Enhanced Enhanced Scopes:
  *
@@ -95,7 +95,7 @@ class Language extends Model
     /**
      * Scope for active languages.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -105,7 +105,7 @@ class Language extends Model
     /**
      * Scope for inactive languages.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -115,7 +115,7 @@ class Language extends Model
     /**
      * Scope for default languages.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeDefault($query)
     {
@@ -125,7 +125,7 @@ class Language extends Model
     /**
      * Scope for custom languages.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeCustom($query)
     {
@@ -135,21 +135,20 @@ class Language extends Model
     /**
      * Scope for searching languages by name or ISO code.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
             $q->where('language', 'like', '%'.$term.'%')
-                ->orWhere('iso_code', 'like', '%'.$term.'%')
-            ;
+                ->orWhere('iso_code', 'like', '%'.$term.'%');
         });
     }
 
     /**
      * Scope for alphabetically ordered languages.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
@@ -159,7 +158,7 @@ class Language extends Model
     /**
      * Scope for languages with candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithCandidates($query)
     {
@@ -169,7 +168,7 @@ class Language extends Model
     /**
      * Scope for languages without candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithoutCandidates($query)
     {
@@ -179,7 +178,7 @@ class Language extends Model
     /**
      * Scope for recent languages.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -189,7 +188,7 @@ class Language extends Model
     /**
      * Scope for old languages.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -199,20 +198,19 @@ class Language extends Model
     /**
      * Scope for popular languages (most used by candidates).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopular($query, int $limit = 10)
     {
         return $query->withCount('candidates')
             ->orderByDesc('candidates_count')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     /**
      * Scope for featured languages.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFeatured($query)
     {
@@ -222,7 +220,7 @@ class Language extends Model
     /**
      * Scope for non-featured languages.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNonFeatured($query)
     {
@@ -232,7 +230,7 @@ class Language extends Model
     /**
      * Scope for languages by ISO code.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByIsoCode($query, string $code)
     {
@@ -242,7 +240,7 @@ class Language extends Model
     /**
      * Scope for European languages.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeEuropean($query)
     {
@@ -254,7 +252,7 @@ class Language extends Model
     /**
      * Scope for major world languages.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeMajor($query)
     {
@@ -266,7 +264,7 @@ class Language extends Model
     /**
      * Scope for regional languages.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRegional($query, string $region)
     {
@@ -286,7 +284,7 @@ class Language extends Model
     /**
      * Scope for languages with counts loaded.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithCounts($query)
     {
@@ -296,13 +294,12 @@ class Language extends Model
     /**
      * Scope for ordered languages (by sort_order, then alphabetical).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOrdered($query)
     {
         return $query->orderBy('sort_order', 'asc')
-            ->orderBy('language', 'asc')
-        ;
+            ->orderBy('language', 'asc');
     }
 
     /**
@@ -313,8 +310,7 @@ class Language extends Model
         return LogOptions::defaults()
             ->logOnly(['language', 'iso_code', 'is_default', 'is_active', 'is_featured'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**

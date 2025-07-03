@@ -31,7 +31,7 @@ class CompanySizeControllerTest extends TestCase
     }
 
     /** @test */
-    public function itCanDisplayCompanySizesIndex()
+    public function it_can_display_company_sizes_index()
     {
         $this->actingAs($this->admin);
 
@@ -42,7 +42,7 @@ class CompanySizeControllerTest extends TestCase
     }
 
     /** @test */
-    public function itCanStoreACompanySize()
+    public function it_can_store_a_company_size()
     {
         $this->actingAs($this->admin);
 
@@ -58,7 +58,7 @@ class CompanySizeControllerTest extends TestCase
     }
 
     /** @test */
-    public function itValidatesRequiredFieldsWhenStoring()
+    public function it_validates_required_fields_when_storing()
     {
         $this->actingAs($this->admin);
 
@@ -69,7 +69,7 @@ class CompanySizeControllerTest extends TestCase
     }
 
     /** @test */
-    public function itValidatesUniqueSizeWhenStoring()
+    public function it_validates_unique_size_when_storing()
     {
         $this->actingAs($this->admin);
 
@@ -84,7 +84,7 @@ class CompanySizeControllerTest extends TestCase
     }
 
     /** @test */
-    public function itCanEditACompanySize()
+    public function it_can_edit_a_company_size()
     {
         $this->actingAs($this->admin);
 
@@ -103,7 +103,7 @@ class CompanySizeControllerTest extends TestCase
     }
 
     /** @test */
-    public function itCanUpdateACompanySize()
+    public function it_can_update_a_company_size()
     {
         $this->actingAs($this->admin);
 
@@ -121,7 +121,7 @@ class CompanySizeControllerTest extends TestCase
     }
 
     /** @test */
-    public function itValidatesUniqueSizeWhenUpdatingExcludingSelf()
+    public function it_validates_unique_size_when_updating_excluding_self()
     {
         $this->actingAs($this->admin);
 
@@ -145,7 +145,7 @@ class CompanySizeControllerTest extends TestCase
     }
 
     /** @test */
-    public function itCanDeleteACompanySize()
+    public function it_can_delete_a_company_size()
     {
         $this->actingAs($this->admin);
 
@@ -159,7 +159,7 @@ class CompanySizeControllerTest extends TestCase
     }
 
     /** @test */
-    public function itPreventsDeletionWhenCompanySizeIsInUse()
+    public function it_prevents_deletion_when_company_size_is_in_use()
     {
         $this->actingAs($this->admin);
 
@@ -176,7 +176,7 @@ class CompanySizeControllerTest extends TestCase
     }
 
     /** @test */
-    public function unauthorizedUsersCannotAccessCompanySizeRoutes()
+    public function unauthorized_users_cannot_access_company_size_routes()
     {
         $user = User::factory()->create(); // Regular user without admin role
         $this->actingAs($user);
@@ -184,38 +184,31 @@ class CompanySizeControllerTest extends TestCase
         $companySize = CompanySize::factory()->create();
 
         $this->postJson(route('companySize.store'), ['size' => 'Test'])
-            ->assertStatus(403)
-        ;
+            ->assertStatus(403);
 
         $this->getJson(route('companySize.edit', $companySize))
-            ->assertStatus(403)
-        ;
+            ->assertStatus(403);
 
         $this->putJson(route('companySize.update', $companySize), ['size' => 'Test'])
-            ->assertStatus(403)
-        ;
+            ->assertStatus(403);
 
         $this->deleteJson(route('companySize.destroy', $companySize))
-            ->assertStatus(403)
-        ;
+            ->assertStatus(403);
     }
 
     /** @test */
-    public function guestsCannotAccessCompanySizeRoutes()
+    public function guests_cannot_access_company_size_routes()
     {
         $companySize = CompanySize::factory()->create();
 
         $this->postJson(route('companySize.store'), ['size' => 'Test'])
-            ->assertStatus(401)
-        ;
+            ->assertStatus(401);
 
         $this->getJson(route('companySize.edit', $companySize))
-            ->assertStatus(401)
-        ;
+            ->assertStatus(401);
 
         $this->putJson(route('companySize.update', $companySize), ['size' => 'Test'])
-            ->assertStatus(401)
-        ;
+            ->assertStatus(401);
 
         $this->deleteJson(route('companySize.destroy', $companySize))
             ->assertStatus(401);

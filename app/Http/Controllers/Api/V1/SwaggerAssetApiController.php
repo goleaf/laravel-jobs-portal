@@ -74,7 +74,7 @@ class SwaggerAssetApiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function show($id): JsonResponse
     {
@@ -98,7 +98,7 @@ class SwaggerAssetApiController extends Controller
     /**
      * Update the specified resource.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function update(UpdateSwaggerAssetRequest $request, $id): JsonResponse
     {
@@ -124,7 +124,7 @@ class SwaggerAssetApiController extends Controller
     /**
      * Remove the specified resource.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function destroy($id): JsonResponse
     {

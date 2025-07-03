@@ -28,7 +28,7 @@ class CacheService
     /**
      * Cache a model query result.
      *
-     * @param null|int $ttl TTL in minutes
+     * @param  null|int  $ttl  TTL in minutes
      */
     public function remember(string $key, callable $callback, ?int $ttl = null): mixed
     {
@@ -310,7 +310,7 @@ class CacheService
         $misses = $info['keyspace_misses'] ?? 0;
         $total = $hits + $misses;
 
-        if (0 === $total) {
+        if ($total === 0) {
             return 0.0;
         }
 

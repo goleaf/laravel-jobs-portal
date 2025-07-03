@@ -12,7 +12,7 @@ use Tests\TestCase;
 class HelperFunctionsTest extends TestCase
 {
     /** @test */
-    public function formatCurrencyHelperWorks()
+    public function format_currency_helper_works()
     {
         if (function_exists('formatCurrency')) {
             $result = formatCurrency(1000);
@@ -24,7 +24,7 @@ class HelperFunctionsTest extends TestCase
     }
 
     /** @test */
-    public function slugifyHelperWorks()
+    public function slugify_helper_works()
     {
         if (function_exists('slugify')) {
             $result = slugify('Test Job Title');
@@ -35,7 +35,7 @@ class HelperFunctionsTest extends TestCase
     }
 
     /** @test */
-    public function timeAgoHelperWorks()
+    public function time_ago_helper_works()
     {
         if (function_exists('timeAgo')) {
             $result = timeAgo(now()->subHours(2));

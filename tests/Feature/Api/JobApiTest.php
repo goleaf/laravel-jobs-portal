@@ -25,25 +25,23 @@ class JobApiTest extends TestCase
     }
 
     /** @test */
-    public function itCanListJobsViaApi()
+    public function it_can_list_jobs_via_api()
     {
         Job::factory()->count(3)->create();
 
         $response = $this->actingAs($this->user, 'sanctum')
-            ->getJson('/api/jobs')
-        ;
+            ->getJson('/api/jobs');
 
         $response->assertStatus(200)
             ->assertJsonStructure([
                 'data' => [
                     '*' => ['id', 'title', 'description', 'created_at'],
                 ],
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function itCanCreateJobViaApi()
+    public function it_can_create_job_via_api()
     {
         $jobData = [
             'title' => 'API Test Job',
@@ -54,32 +52,28 @@ class JobApiTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user, 'sanctum')
-            ->postJson('/api/jobs', $jobData)
-        ;
+            ->postJson('/api/jobs', $jobData);
 
         $response->assertStatus(201)
-            ->assertJsonFragment(['title' => 'API Test Job'])
-        ;
+            ->assertJsonFragment(['title' => 'API Test Job']);
 
         $this->assertDatabaseHas('jobs', ['title' => 'API Test Job']);
     }
 
     /** @test */
-    public function itCanShowJobViaApi()
+    public function it_can_show_job_via_api()
     {
         $job = Job::factory()->create();
 
         $response = $this->actingAs($this->user, 'sanctum')
-            ->getJson("/api/jobs/{$job->id}")
-        ;
+            ->getJson("/api/jobs/{$job->id}");
 
         $response->assertStatus(200)
-            ->assertJsonFragment(['id' => $job->id])
-        ;
+            ->assertJsonFragment(['id' => $job->id]);
     }
 
     /** @test */
-    public function itRequiresAuthenticationForProtectedEndpoints()
+    public function it_requires_authentication_for_protected_endpoints()
     {
         $response = $this->postJson('/api/jobs', []);
 
@@ -87,11 +81,10 @@ class JobApiTest extends TestCase
     }
 
     /** @test */
-    public function itValidatesRequiredFields()
+    public function it_validates_required_fields()
     {
         $response = $this->actingAs($this->user, 'sanctum')
-            ->postJson('/api/jobs', [])
-        ;
+            ->postJson('/api/jobs', []);
 
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['title', 'description']);

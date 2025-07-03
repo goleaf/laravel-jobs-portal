@@ -16,7 +16,7 @@ class DeleteSalaryCurrencyRequest extends FormRequest
     public function authorize(): bool
     {
         // Enhanced Pattern: Enhanced authorization with null checks
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
 

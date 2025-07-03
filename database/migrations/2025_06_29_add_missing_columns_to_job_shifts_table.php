@@ -12,16 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('job_shifts', function (Blueprint $table) {
-            if (!Schema::hasColumn('job_shifts', 'start_time')) {
+            if (! Schema::hasColumn('job_shifts', 'start_time')) {
                 $table->string('start_time')->nullable()->after('is_default');
             }
-            if (!Schema::hasColumn('job_shifts', 'end_time')) {
+            if (! Schema::hasColumn('job_shifts', 'end_time')) {
                 $table->string('end_time')->nullable()->after('start_time');
             }
-            if (!Schema::hasColumn('job_shifts', 'duration_hours')) {
+            if (! Schema::hasColumn('job_shifts', 'duration_hours')) {
                 $table->integer('duration_hours')->nullable()->after('end_time');
             }
-            if (!Schema::hasColumn('job_shifts', 'is_flexible')) {
+            if (! Schema::hasColumn('job_shifts', 'is_flexible')) {
                 $table->boolean('is_flexible')->default(false)->after('is_active');
             }
         });
@@ -47,4 +47,4 @@ return new class extends Migration
             }
         });
     }
-}; 
+};

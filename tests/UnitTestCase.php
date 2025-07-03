@@ -18,7 +18,7 @@ abstract class UnitTestCase extends BaseTestCase
         parent::setUp();
 
         // Only set up what's absolutely necessary for unit tests
-        if (!defined('LARAVEL_START')) {
+        if (! defined('LARAVEL_START')) {
             define('LARAVEL_START', microtime(true));
         }
     }

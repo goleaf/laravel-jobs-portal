@@ -63,7 +63,7 @@ class MigrateJsonTranslations extends Command
             $jsonContent = File::get($jsonFile);
             $translations = json_decode($jsonContent, true);
 
-            if (JSON_ERROR_NONE !== json_last_error()) {
+            if (json_last_error() !== JSON_ERROR_NONE) {
                 $this->error("Error parsing JSON file {$jsonFile}: ".json_last_error_msg());
 
                 continue;
@@ -115,12 +115,12 @@ class MigrateJsonTranslations extends Command
         foreach ($translations as $key => $value) {
             $parts = explode('.', $key, 2);
 
-            if (2 === count($parts)) {
+            if (count($parts) === 2) {
                 // Has category prefix
                 $category = $parts[0];
                 $itemKey = $parts[1];
 
-                if (!isset($result[$category])) {
+                if (! isset($result[$category])) {
                     $result[$category] = [];
                 }
 
@@ -128,7 +128,7 @@ class MigrateJsonTranslations extends Command
                 $this->setNestedValue($result[$category], $itemKey, $value);
             } else {
                 // No category prefix, put in "messages"
-                if (!isset($result['messages'])) {
+                if (! isset($result['messages'])) {
                     $result['messages'] = [];
                 }
 
@@ -142,14 +142,14 @@ class MigrateJsonTranslations extends Command
     /**
      * Set a nested value in an array using dot notation.
      *
-     * @param mixed $value
+     * @param  mixed  $value
      */
     protected function setNestedValue(array &$array, string $key, $value): void
     {
         $parts = explode('.', $key);
 
         // If it's a simple key, just set it
-        if (1 === count($parts)) {
+        if (count($parts) === 1) {
             $array[$key] = $value;
 
             return;
@@ -163,7 +163,7 @@ class MigrateJsonTranslations extends Command
                 $current[$part] = $value;
             } else {
                 // Not the last part, navigate deeper
-                if (!isset($current[$part]) || !is_array($current[$part])) {
+                if (! isset($current[$part]) || ! is_array($current[$part])) {
                     $current[$part] = [];
                 }
                 $current = &$current[$part];

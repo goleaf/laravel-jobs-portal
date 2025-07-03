@@ -19,7 +19,7 @@ class AuthTest extends TestCase
     use WithFaker;
 
     /** @test */
-    public function usersCanRegisterAsCandidate()
+    public function users_can_register_as_candidate()
     {
         $userData = [
             'name' => $this->faker->name,
@@ -40,7 +40,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function usersCanRegisterAsEmployer()
+    public function users_can_register_as_employer()
     {
         $userData = [
             'name' => $this->faker->name,
@@ -61,7 +61,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function usersCanLoginWithCorrectCredentials()
+    public function users_can_login_with_correct_credentials()
     {
         $user = User::factory()->create([
             'email' => 'test@example.com',
@@ -79,7 +79,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function usersCannotLoginWithIncorrectCredentials()
+    public function users_cannot_login_with_incorrect_credentials()
     {
         User::factory()->create([
             'email' => 'test@example.com',
@@ -97,7 +97,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function inactiveUsersCannotLogin()
+    public function inactive_users_cannot_login()
     {
         User::factory()->create([
             'email' => 'inactive@example.com',
@@ -115,22 +115,21 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function userCanLogout()
+    public function user_can_logout()
     {
         $user = User::factory()->create([
             'is_active' => true,
         ]);
 
         $response = $this->actingAs($user)
-            ->post('/logout')
-        ;
+            ->post('/logout');
 
         $response->assertRedirect('/');
         $this->assertGuest();
     }
 
     /** @test */
-    public function userCanRequestPasswordReset()
+    public function user_can_request_password_reset()
     {
         $user = User::factory()->create([
             'email' => 'reset@example.com',
@@ -146,7 +145,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function userCanViewPasswordResetForm()
+    public function user_can_view_password_reset_form()
     {
         $response = $this->get('/password/reset');
 
@@ -154,7 +153,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function userCanUpdatePasswordWithValidToken()
+    public function user_can_update_password_with_valid_token()
     {
         $user = User::factory()->create([
             'email' => 'password@example.com',
@@ -174,7 +173,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function registrationRequiresNameEmailPassword()
+    public function registration_requires_name_email_password()
     {
         $response = $this->post('/register', [
             'password_confirmation' => 'password123',
@@ -202,7 +201,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function registrationRequiresValidEmail()
+    public function registration_requires_valid_email()
     {
         $response = $this->post('/register', [
             'name' => 'Test User',
@@ -216,7 +215,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function registrationRequiresPasswordConfirmation()
+    public function registration_requires_password_confirmation()
     {
         $response = $this->post('/register', [
             'name' => 'Test User',
@@ -230,7 +229,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function registrationRequiresAgreeingToTerms()
+    public function registration_requires_agreeing_to_terms()
     {
         $response = $this->post('/register', [
             'name' => $this->faker->name,
@@ -244,7 +243,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function loginRequiresEmailAndPassword()
+    public function login_requires_email_and_password()
     {
         $response = $this->post('/login', [
             'email' => 'test@example.com',
@@ -258,7 +257,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function authenticatedUserIsRedirectedFromLoginPage()
+    public function authenticated_user_is_redirected_from_login_page()
     {
         $user = User::factory()->create(['is_active' => true]);
         $response = $this->actingAs($user)->get('/login');
@@ -266,7 +265,7 @@ class AuthTest extends TestCase
     }
 
     /** @test */
-    public function authenticatedUserIsRedirectedFromRegisterPage()
+    public function authenticated_user_is_redirected_from_register_page()
     {
         $user = User::factory()->create(['is_active' => true]);
         $response = $this->actingAs($user)->get('/register');

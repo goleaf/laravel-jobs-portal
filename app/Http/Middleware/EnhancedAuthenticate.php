@@ -25,9 +25,8 @@ class EnhancedAuthenticate extends Middleware
     /**
      * Handle an incoming request.
      *
-     * @param Request  $request
-     * @param \Closure $next
-     *
+     * @param  Request  $request
+     * @param  \Closure  $next
      * @return mixed
      *
      * @throws AuthenticationException
@@ -110,7 +109,7 @@ class EnhancedAuthenticate extends Middleware
     protected function checkAccountLockout(Request $request): void
     {
         $email = $request->input('email');
-        if (!$email) {
+        if (! $email) {
             return;
         }
 
@@ -139,7 +138,7 @@ class EnhancedAuthenticate extends Middleware
     protected function checkSuspiciousActivity(Request $request): void
     {
         $user = Auth::user();
-        if (!$user) {
+        if (! $user) {
             return;
         }
 
@@ -154,7 +153,7 @@ class EnhancedAuthenticate extends Middleware
         ];
 
         // Check for IP address change
-        if (!empty($lastSession['ip']) && $lastSession['ip'] !== $currentSession['ip']) {
+        if (! empty($lastSession['ip']) && $lastSession['ip'] !== $currentSession['ip']) {
             Log::warning('User IP address changed during session', [
                 'user_id' => $user->id,
                 'user_email' => $user->email,
@@ -167,7 +166,7 @@ class EnhancedAuthenticate extends Middleware
         }
 
         // Check for user agent change
-        if (!empty($lastSession['user_agent']) && $lastSession['user_agent'] !== $currentSession['user_agent']) {
+        if (! empty($lastSession['user_agent']) && $lastSession['user_agent'] !== $currentSession['user_agent']) {
             Log::warning('User agent changed during session', [
                 'user_id' => $user->id,
                 'user_email' => $user->email,
@@ -178,7 +177,7 @@ class EnhancedAuthenticate extends Middleware
         }
 
         // Check for unusual time gaps (more than 12 hours)
-        if (!empty($lastSession['timestamp'])) {
+        if (! empty($lastSession['timestamp'])) {
             $timeDiff = Carbon::parse($lastSession['timestamp'])->diffInHours(now());
             if ($timeDiff > 12) {
                 Log::info('User session resumed after extended absence', [

@@ -23,19 +23,19 @@ class ShowUserApiRequest extends FormRequest
     public function authorize(): bool
     {
         // Check if user is authenticated via API token or session
-        if (!Auth::check() && !$this->hasValidApiToken()) {
+        if (! Auth::check() && ! $this->hasValidApiToken()) {
             return false;
         }
-        
+
         // Apply rate limiting for API requests
         if ($this->isApiRequest() && $this->exceedsRateLimit()) {
             return false;
         }
-        
+
         $user = Auth::user();
         $targetUserId = $this->route('user') ?? $this->input('user_id');
-        
-        if (!$user) {
+
+        if (! $user) {
             return false;
         }
 
@@ -43,22 +43,22 @@ class ShowUserApiRequest extends FormRequest
         if ($user->hasRole('Admin') || $user->hasRole('Super Admin')) {
             return true;
         }
-        
+
         // HR managers can view candidate profiles
         if ($user->hasRole('HR Manager') && $this->isTargetCandidate($targetUserId)) {
             return true;
         }
-        
+
         // Employers can view candidates who applied to their jobs
         if ($user->hasRole('Employer') && $this->canEmployerViewUser($user, $targetUserId)) {
             return true;
         }
-        
+
         // Users can view their own profile
         if ($targetUserId && (int) $targetUserId === $user->id) {
             return true;
         }
-        
+
         // Users can view public profiles
         return $this->isPublicProfile($targetUserId);
     }
@@ -80,7 +80,7 @@ class ShowUserApiRequest extends FormRequest
                     if ($user && $user->is_suspended) {
                         $fail(__('api.validation.user_suspended'));
                     }
-                    if ($user && !$user->is_active) {
+                    if ($user && ! $user->is_active) {
                         $fail(__('api.validation.user_inactive'));
                     }
                 },
@@ -92,7 +92,7 @@ class ShowUserApiRequest extends FormRequest
                 'string',
                 Rule::in(['json', 'xml', 'minimal', 'full']),
             ],
-            
+
             'fields' => [
                 'sometimes',
                 'array',
@@ -104,7 +104,7 @@ class ShowUserApiRequest extends FormRequest
                 Rule::in([
                     'id', 'name', 'email', 'phone', 'avatar', 'bio', 'location',
                     'skills', 'experience', 'education', 'certifications',
-                    'social_links', 'portfolio', 'availability', 'preferences'
+                    'social_links', 'portfolio', 'availability', 'preferences',
                 ]),
                 'distinct',
             ],
@@ -119,7 +119,7 @@ class ShowUserApiRequest extends FormRequest
                 'string',
                 Rule::in([
                     'profile', 'skills', 'experience', 'education', 'applications',
-                    'reviews', 'portfolio', 'certifications', 'social_links'
+                    'reviews', 'portfolio', 'certifications', 'social_links',
                 ]),
                 'distinct',
             ],
@@ -131,14 +131,14 @@ class ShowUserApiRequest extends FormRequest
                 'max:100',
                 Rule::in(['profile_view', 'contact_info', 'recruitment', 'networking', 'verification']),
             ],
-            
+
             'client_id' => [
                 'sometimes',
                 'string',
                 'max:100',
                 'regex:/^[a-zA-Z0-9\-\_]+$/',
             ],
-            
+
             'source' => [
                 'sometimes',
                 'string',
@@ -151,7 +151,7 @@ class ShowUserApiRequest extends FormRequest
                 'sometimes',
                 'boolean',
             ],
-            
+
             'fresh' => [
                 'sometimes',
                 'boolean',
@@ -171,7 +171,7 @@ class ShowUserApiRequest extends FormRequest
                 'size:2',
                 Rule::in(['en', 'ar', 'es', 'fr', 'de', 'pt', 'ru', 'tr', 'zh']),
             ],
-            
+
             'timezone' => [
                 'sometimes',
                 'string',
@@ -191,7 +191,7 @@ class ShowUserApiRequest extends FormRequest
                 'sometimes',
                 'boolean',
                 function ($attribute, $value, $fail) {
-                    if ($value && !Auth::user()?->hasRole('Admin')) {
+                    if ($value && ! Auth::user()?->hasRole('Admin')) {
                         $fail(__('api.validation.debug_not_authorized'));
                     }
                 },
@@ -224,34 +224,34 @@ class ShowUserApiRequest extends FormRequest
             // User validation
             'user_id.integer' => __('api.validation.user_id_invalid'),
             'user_id.exists' => __('api.validation.user_not_found'),
-            
+
             // Format validation
             'format.in' => __('api.validation.format_invalid'),
             'fields.array' => __('api.validation.fields_must_be_array'),
             'fields.max' => __('api.validation.too_many_fields'),
             'fields.*.in' => __('api.validation.invalid_field_name'),
             'fields.*.distinct' => __('api.validation.duplicate_fields'),
-            
+
             // Include validation
             'include.array' => __('api.validation.include_must_be_array'),
             'include.max' => __('api.validation.too_many_includes'),
             'include.*.in' => __('api.validation.invalid_include'),
             'include.*.distinct' => __('api.validation.duplicate_includes'),
-            
+
             // Security validation
             'purpose.in' => __('api.validation.purpose_invalid'),
             'client_id.regex' => __('api.validation.client_id_format'),
             'source.regex' => __('api.validation.source_format'),
-            
+
             // Localization
             'locale.size' => __('api.validation.locale_size'),
             'locale.in' => __('api.validation.locale_invalid'),
             'timezone.regex' => __('api.validation.timezone_format'),
-            
+
             // Callback validation
             'callback_url.url' => __('api.validation.callback_url_invalid'),
             'callback_url.regex' => __('api.validation.callback_url_https'),
-            
+
             // Version validation
             'version.in' => __('api.validation.version_invalid'),
             'priority.in' => __('api.validation.priority_invalid'),
@@ -292,12 +292,12 @@ class ShowUserApiRequest extends FormRequest
             if ($this->hasConflictingParameters()) {
                 $validator->errors()->add('format', __('api.validation.conflicting_parameters'));
             }
-            
+
             // Validate field access permissions
             if ($this->hasUnauthorizedFieldAccess()) {
                 $validator->errors()->add('fields', __('api.validation.unauthorized_field_access'));
             }
-            
+
             // Check API quota limits
             if ($this->exceedsApiQuota()) {
                 $validator->errors()->add('general', __('api.validation.quota_exceeded'));
@@ -326,20 +326,20 @@ class ShowUserApiRequest extends FormRequest
             'debug' => filter_var($this->debug ?? false, FILTER_VALIDATE_BOOLEAN),
             'priority' => $this->priority ?? 'normal',
         ]);
-        
+
         // Normalize arrays
         if ($this->filled('fields')) {
             $this->merge([
                 'fields' => array_filter(array_unique((array) $this->fields)),
             ]);
         }
-        
+
         if ($this->filled('include')) {
             $this->merge([
                 'include' => array_filter(array_unique((array) $this->include)),
             ]);
         }
-        
+
         // Add request tracking data
         $this->merge([
             '_request_id' => $this->header('X-Request-ID') ?? \Str::uuid(),
@@ -377,7 +377,7 @@ class ShowUserApiRequest extends FormRequest
     public function getApiParameters(): array
     {
         $data = $this->validated();
-        
+
         // Add computed parameters
         $data['_computed'] = [
             'is_api_request' => $this->isApiRequest(),
@@ -385,7 +385,7 @@ class ShowUserApiRequest extends FormRequest
             'request_timestamp' => now(),
             'rate_limit_remaining' => $this->getRateLimitRemaining(),
         ];
-        
+
         return $data;
     }
 
@@ -395,11 +395,11 @@ class ShowUserApiRequest extends FormRequest
     private function hasValidApiToken(): bool
     {
         $token = $this->bearerToken() ?? $this->input('api_token');
-        
-        if (!$token) {
+
+        if (! $token) {
             return false;
         }
-        
+
         // Validate token format and check against database
         return \Str::length($token) >= 40 && $this->validateApiToken($token);
     }
@@ -409,8 +409,8 @@ class ShowUserApiRequest extends FormRequest
      */
     private function isApiRequest(): bool
     {
-        return $this->is('api/*') || 
-               $this->expectsJson() || 
+        return $this->is('api/*') ||
+               $this->expectsJson() ||
                $this->hasHeader('X-API-Key') ||
                $this->hasHeader('Authorization');
     }
@@ -420,8 +420,8 @@ class ShowUserApiRequest extends FormRequest
      */
     private function exceedsRateLimit(): bool
     {
-        $key = 'api_rate_limit:' . ($this->user()?->id ?? $this->ip());
-        
+        $key = 'api_rate_limit:'.($this->user()?->id ?? $this->ip());
+
         return RateLimiter::tooManyAttempts($key, 100); // 100 requests per minute
     }
 
@@ -466,17 +466,17 @@ class ShowUserApiRequest extends FormRequest
     private function hasConflictingParameters(): bool
     {
         // Check if minimal format conflicts with detailed fields
-        if ($this->format === 'minimal' && 
-            $this->filled('fields') && 
+        if ($this->format === 'minimal' &&
+            $this->filled('fields') &&
             count($this->fields) > 5) {
             return true;
         }
-        
+
         // Check if fresh and cache are both true
         if ($this->fresh === true && $this->cache === true) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -487,11 +487,12 @@ class ShowUserApiRequest extends FormRequest
     {
         $requestedFields = $this->fields ?? [];
         $sensitiveFields = ['email', 'phone', 'social_links'];
-        
+
         $user = Auth::user();
-        if (!$user || !$user->hasRole(['Admin', 'HR Manager'])) {
+        if (! $user || ! $user->hasRole(['Admin', 'HR Manager'])) {
             $unauthorizedFields = array_intersect($requestedFields, $sensitiveFields);
-            return !empty($unauthorizedFields);
+
+            return ! empty($unauthorizedFields);
         }
 
         return false;
@@ -503,13 +504,13 @@ class ShowUserApiRequest extends FormRequest
     private function exceedsApiQuota(): bool
     {
         $user = Auth::user();
-        if (!$user) {
+        if (! $user) {
             return false;
         }
-        
-        $quotaKey = 'api_quota:' . $user->id . ':' . now()->format('Y-m-d');
+
+        $quotaKey = 'api_quota:'.$user->id.':'.now()->format('Y-m-d');
         $currentUsage = Cache::get($quotaKey, 0);
-        
+
         // Different quotas based on user role
         $dailyQuota = match (true) {
             $user->hasRole('Admin') => 10000,
@@ -517,7 +518,7 @@ class ShowUserApiRequest extends FormRequest
             $user->hasRole('Employer') => 1000,
             default => 100
         };
-        
+
         return $currentUsage >= $dailyQuota;
     }
 
@@ -527,16 +528,16 @@ class ShowUserApiRequest extends FormRequest
     private function hasSuspiciousRequestPattern(): bool
     {
         $ip = $this->ip();
-        $pattern = 'suspicious_api:' . $ip;
-        
+        $pattern = 'suspicious_api:'.$ip;
+
         // Check for rapid successive requests
         $recentRequests = Cache::get($pattern, 0);
         if ($recentRequests > 50) { // More than 50 requests in last minute
             return true;
         }
-        
+
         Cache::put($pattern, $recentRequests + 1, 60); // Store for 1 minute
-        
+
         return false;
     }
 
@@ -557,7 +558,8 @@ class ShowUserApiRequest extends FormRequest
      */
     private function getRateLimitRemaining(): int
     {
-        $key = 'api_rate_limit:' . ($this->user()?->id ?? $this->ip());
+        $key = 'api_rate_limit:'.($this->user()?->id ?? $this->ip());
+
         return RateLimiter::remaining($key, 100);
     }
 }

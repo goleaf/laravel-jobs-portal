@@ -25,7 +25,7 @@ class CandidateControllerTest extends TestCase
     }
 
     /** @test */
-    public function itCanDisplayIndexPage()
+    public function it_can_display_index_page()
     {
         $response = $this->actingAs($this->user)->get('/candidate');
 
@@ -34,7 +34,7 @@ class CandidateControllerTest extends TestCase
     }
 
     /** @test */
-    public function itCanCreateCandidate()
+    public function it_can_create_candidate()
     {
         $data = Candidate::factory()->make()->toArray();
 
@@ -45,7 +45,7 @@ class CandidateControllerTest extends TestCase
     }
 
     /** @test */
-    public function itCanUpdateCandidate()
+    public function it_can_update_candidate()
     {
         $candidate = Candidate::factory()->create();
         $data = Candidate::factory()->make()->toArray();
@@ -57,7 +57,7 @@ class CandidateControllerTest extends TestCase
     }
 
     /** @test */
-    public function itCanDeleteCandidate()
+    public function it_can_delete_candidate()
     {
         $candidate = Candidate::factory()->create();
 

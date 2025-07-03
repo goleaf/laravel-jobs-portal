@@ -30,17 +30,17 @@ class UserLoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAuthorizationReturnsTrue()
+    public function test_authorization_returns_true()
     {
-        $request = new UserLoginRequest();
+        $request = new UserLoginRequest;
 
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function testValidationRulesAreDefined()
+    public function test_validation_rules_are_defined()
     {
-        $request = new UserLoginRequest();
+        $request = new UserLoginRequest;
         $rules = $request->rules();
 
         $this->assertIsArray($rules);
@@ -48,9 +48,9 @@ class UserLoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationMessagesAreDefined()
+    public function test_validation_messages_are_defined()
     {
-        $request = new UserLoginRequest();
+        $request = new UserLoginRequest;
 
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
@@ -61,9 +61,9 @@ class UserLoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationAttributesAreDefined()
+    public function test_validation_attributes_are_defined()
     {
-        $request = new UserLoginRequest();
+        $request = new UserLoginRequest;
 
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
@@ -74,9 +74,9 @@ class UserLoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testEmailValidation()
+    public function test_email_validation()
     {
-        $request = new UserLoginRequest();
+        $request = new UserLoginRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('email', $rules);
@@ -87,9 +87,9 @@ class UserLoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testRequiredValidation()
+    public function test_required_validation()
     {
-        $request = new UserLoginRequest();
+        $request = new UserLoginRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('required', $rules);
@@ -100,9 +100,9 @@ class UserLoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testStringValidation()
+    public function test_string_validation()
     {
-        $request = new UserLoginRequest();
+        $request = new UserLoginRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('string', $rules);
@@ -113,9 +113,9 @@ class UserLoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testPasswordValidation()
+    public function test_password_validation()
     {
-        $request = new UserLoginRequest();
+        $request = new UserLoginRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('password', $rules);
@@ -126,9 +126,9 @@ class UserLoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testRememberValidation()
+    public function test_remember_validation()
     {
-        $request = new UserLoginRequest();
+        $request = new UserLoginRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('remember', $rules);
@@ -139,9 +139,9 @@ class UserLoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testNullableValidation()
+    public function test_nullable_validation()
     {
-        $request = new UserLoginRequest();
+        $request = new UserLoginRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('nullable', $rules);
@@ -152,9 +152,9 @@ class UserLoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testBooleanValidation()
+    public function test_boolean_validation()
     {
-        $request = new UserLoginRequest();
+        $request = new UserLoginRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('boolean', $rules);
@@ -165,7 +165,7 @@ class UserLoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidDataPassesValidation()
+    public function test_valid_data_passes_validation()
     {
         $validData = [
             'email' => 'test@example.com',
@@ -177,18 +177,18 @@ class UserLoginRequestTest extends TestCase
             'boolean' => 'Test Value',
         ];
 
-        $request = new UserLoginRequest();
+        $request = new UserLoginRequest;
         $validator = validator($validData, $request->rules());
 
         $this->assertFalse($validator->fails());
     }
 
     /** @test */
-    public function testRequestHandlesEmptyDataCorrectly()
+    public function test_request_handles_empty_data_correctly()
     {
         $emptyData = [];
 
-        $request = new UserLoginRequest();
+        $request = new UserLoginRequest;
         $validator = validator($emptyData, $request->rules());
 
         // Should handle empty data according to rules
@@ -196,7 +196,7 @@ class UserLoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSecurityValidationPreventsXss()
+    public function test_security_validation_prevents_xss()
     {
         $maliciousData = [
             'name' => '<script>alert("xss")</script>',
@@ -204,7 +204,7 @@ class UserLoginRequestTest extends TestCase
             'content' => '<img src=x onerror=alert("xss")>',
         ];
 
-        $request = new UserLoginRequest();
+        $request = new UserLoginRequest;
         $validator = validator($maliciousData, $request->rules());
 
         // XSS data should either fail validation or be properly sanitized
@@ -219,7 +219,7 @@ class UserLoginRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSqlInjectionPrevention()
+    public function test_sql_injection_prevention()
     {
         $sqlInjectionData = [
             'name' => "'; DROP TABLE users; --",
@@ -227,7 +227,7 @@ class UserLoginRequestTest extends TestCase
             'filter' => 'UNION SELECT * FROM passwords',
         ];
 
-        $request = new UserLoginRequest();
+        $request = new UserLoginRequest;
         $validator = validator($sqlInjectionData, $request->rules());
 
         // SQL injection patterns should be handled safely

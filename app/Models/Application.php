@@ -12,13 +12,13 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Application Model - Job Applications.
  *
- * @property int         $id
- * @property int         $job_id
- * @property int         $candidate_id
- * @property int         $resume_id
- * @property float       $expected_salary
+ * @property int $id
+ * @property int $job_id
+ * @property int $candidate_id
+ * @property int $resume_id
+ * @property float $expected_salary
  * @property null|string $notes
- * @property int         $status
+ * @property int $status
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  */
@@ -53,8 +53,7 @@ class Application extends Model
             ->logOnly(['job_id', 'candidate_id', 'status', 'expected_salary'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn (string $eventName) => "Application has been {$eventName}")
-        ;
+            ->setDescriptionForEvent(fn (string $eventName) => "Application has been {$eventName}");
     }
 
     // =============================================

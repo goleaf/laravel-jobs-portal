@@ -73,7 +73,7 @@ class HomeController extends AppBaseController
 
         /** @var User $user */
         $user = getLoggedInUser();
-        if (!empty($user)) {
+        if (! empty($user)) {
             $user->update(['language' => $language]);
         }
 

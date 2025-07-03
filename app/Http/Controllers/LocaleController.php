@@ -41,7 +41,7 @@ class LocaleController extends Controller
             $locale = $request->input('locale', 'en');
 
             // Validate locale
-            if (!$this->isValidLocale($locale)) {
+            if (! $this->isValidLocale($locale)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid locale provided',
@@ -130,7 +130,7 @@ class LocaleController extends Controller
         try {
             $locale = $locale ?? $request->input('locale', App::getLocale());
 
-            if (!$this->isValidLocale($locale)) {
+            if (! $this->isValidLocale($locale)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid locale provided',
@@ -142,7 +142,7 @@ class LocaleController extends Controller
             $translations = Cache::remember($cacheKey, 3600, function () use ($locale) {
                 $translationPath = lang_path("{$locale}.json");
 
-                if (!file_exists($translationPath)) {
+                if (! file_exists($translationPath)) {
                     return null;
                 }
 
@@ -151,14 +151,14 @@ class LocaleController extends Controller
                 return json_decode($content, true);
             });
 
-            if (null === $translations) {
+            if ($translations === null) {
                 return response()->json([
                     'success' => false,
                     'message' => "Translation file not found for locale: {$locale}",
                 ], 404);
             }
 
-            if (!is_array($translations)) {
+            if (! is_array($translations)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid JSON in translation file',
@@ -237,7 +237,7 @@ class LocaleController extends Controller
                 $lang = trim($subparts[0]);
                 $quality = 1.0;
 
-                if (count($subparts) > 1 && 0 === strpos($subparts[1], 'q=')) {
+                if (count($subparts) > 1 && strpos($subparts[1], 'q=') === 0) {
                     $quality = (float) substr($subparts[1], 2);
                 }
 

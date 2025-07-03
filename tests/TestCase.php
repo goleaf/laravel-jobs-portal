@@ -25,7 +25,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\SQLiteConnection;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -163,7 +162,7 @@ abstract class TestCase extends BaseTestCase
     private function configureDatabaseForTesting(): void
     {
         try {
-            if ('sqlite' === config('database.default')) {
+            if (config('database.default') === 'sqlite') {
                 // Configure SQLite for testing
                 DB::statement('PRAGMA journal_mode=WAL');
                 DB::statement('PRAGMA synchronous=NORMAL');
@@ -181,7 +180,7 @@ abstract class TestCase extends BaseTestCase
     private function restoreDatabaseConstraints(): void
     {
         try {
-            if ('sqlite' === config('database.default')) {
+            if (config('database.default') === 'sqlite') {
                 DB::statement('PRAGMA foreign_keys=ON');
             }
         } catch (\Exception $e) {

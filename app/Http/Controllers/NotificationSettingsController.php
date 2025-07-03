@@ -33,7 +33,7 @@ class NotificationSettingsController extends Controller
         foreach ($notificationArray as $key => $value) {
             /** @var NotificationSetting $notificationSetting */
             $notificationSetting = NotificationSetting::where('key', $key)->first();
-            if (!$notificationSetting) {
+            if (! $notificationSetting) {
                 continue;
             }
             $notificationSetting->update(['value' => $value]);

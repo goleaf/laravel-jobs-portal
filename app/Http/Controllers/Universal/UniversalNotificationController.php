@@ -4,16 +4,15 @@ namespace App\Http\Controllers\Universal;
 
 use App\Http\Controllers\Controller;
 use App\Services\Notifications\UniversalNotificationService;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
 /**
  * Universal Notification Controller
- * 
+ *
  * Comprehensive notification management system with real-time updates,
  * filtering, marking as read/unread, and enterprise-grade features.
  */
@@ -36,15 +35,15 @@ class UniversalNotificationController extends Controller
     {
         try {
             $user = auth()->user();
-            
+
             // Get filter parameters
             $filter = $request->get('filter', 'all');
             $sort = $request->get('sort', 'newest');
             $perPage = $request->get('per_page', 15);
-            
+
             // Build query with proper relationships
             $query = $user->notifications();
-            
+
             // Apply filters
             switch ($filter) {
                 case 'unread':
@@ -66,7 +65,7 @@ class UniversalNotificationController extends Controller
                     $query->where('type', 'like', '%Update%');
                     break;
             }
-            
+
             // Apply sorting
             switch ($sort) {
                 case 'oldest':
@@ -79,10 +78,10 @@ class UniversalNotificationController extends Controller
                     $query->orderBy('created_at', 'desc');
                     break;
             }
-            
+
             // Get paginated notifications
             $notifications = $query->paginate($perPage);
-            
+
             // Get notification counts for filters
             $counts = [
                 'all' => $user->notifications()->count(),
@@ -92,7 +91,7 @@ class UniversalNotificationController extends Controller
                 'system' => $user->notifications()->where('type', 'like', '%System%')->count(),
                 'updates' => $user->notifications()->where('type', 'like', '%Update%')->count(),
             ];
-            
+
             // Return JSON for AJAX requests
             if ($request->expectsJson()) {
                 return response()->json([
@@ -101,28 +100,28 @@ class UniversalNotificationController extends Controller
                         'notifications' => $notifications,
                         'counts' => $counts,
                         'current_filter' => $filter,
-                        'current_sort' => $sort
-                    ]
+                        'current_sort' => $sort,
+                    ],
                 ]);
             }
-            
+
             // Return view for regular requests
             return view('notifications.index', compact('notifications', 'counts', 'filter', 'sort'));
-            
+
         } catch (\Exception $e) {
             Log::error('Notification index error', [
                 'error' => $e->getMessage(),
                 'user_id' => auth()->id(),
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
             ]);
-            
+
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => __('Unable to load notifications')
+                    'message' => __('Unable to load notifications'),
                 ], 500);
             }
-            
+
             return redirect()->back()->with('error', __('Unable to load notifications'));
         }
     }
@@ -135,42 +134,42 @@ class UniversalNotificationController extends Controller
         try {
             $user = auth()->user();
             $notification = $user->notifications()->findOrFail($id);
-            
+
             if ($notification->unread()) {
                 $notification->markAsRead();
-                
+
                 // Log the action
                 Log::info('Notification marked as read', [
                     'notification_id' => $id,
                     'user_id' => $user->id,
-                    'type' => $notification->type
+                    'type' => $notification->type,
                 ]);
             }
-            
+
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => true,
                     'message' => __('Notification marked as read'),
-                    'unread_count' => $user->unreadNotifications()->count()
+                    'unread_count' => $user->unreadNotifications()->count(),
                 ]);
             }
-            
+
             return redirect()->back()->with('success', __('Notification marked as read'));
-            
+
         } catch (\Exception $e) {
             Log::error('Mark notification as read error', [
                 'error' => $e->getMessage(),
                 'notification_id' => $id,
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
             ]);
-            
+
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => __('Unable to mark notification as read')
+                    'message' => __('Unable to mark notification as read'),
                 ], 500);
             }
-            
+
             return redirect()->back()->with('error', __('Unable to mark notification as read'));
         }
     }
@@ -183,40 +182,40 @@ class UniversalNotificationController extends Controller
         try {
             $user = auth()->user();
             $unreadCount = $user->unreadNotifications()->count();
-            
+
             if ($unreadCount > 0) {
                 $user->unreadNotifications->markAsRead();
-                
+
                 Log::info('All notifications marked as read', [
                     'user_id' => $user->id,
-                    'marked_count' => $unreadCount
+                    'marked_count' => $unreadCount,
                 ]);
             }
-            
+
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => true,
                     'message' => __('All notifications marked as read'),
                     'marked_count' => $unreadCount,
-                    'unread_count' => 0
+                    'unread_count' => 0,
                 ]);
             }
-            
+
             return redirect()->back()->with('success', __('All notifications marked as read'));
-            
+
         } catch (\Exception $e) {
             Log::error('Mark all notifications as read error', [
                 'error' => $e->getMessage(),
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
             ]);
-            
+
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => __('Unable to mark all notifications as read')
+                    'message' => __('Unable to mark all notifications as read'),
                 ], 500);
             }
-            
+
             return redirect()->back()->with('error', __('Unable to mark all notifications as read'));
         }
     }
@@ -229,39 +228,39 @@ class UniversalNotificationController extends Controller
         try {
             $user = auth()->user();
             $notification = $user->notifications()->findOrFail($id);
-            
+
             $notification->delete();
-            
+
             Log::info('Notification deleted', [
                 'notification_id' => $id,
                 'user_id' => $user->id,
-                'type' => $notification->type
+                'type' => $notification->type,
             ]);
-            
+
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => true,
                     'message' => __('Notification deleted'),
-                    'unread_count' => $user->unreadNotifications()->count()
+                    'unread_count' => $user->unreadNotifications()->count(),
                 ]);
             }
-            
+
             return redirect()->back()->with('success', __('Notification deleted'));
-            
+
         } catch (\Exception $e) {
             Log::error('Delete notification error', [
                 'error' => $e->getMessage(),
                 'notification_id' => $id,
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
             ]);
-            
+
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => __('Unable to delete notification')
+                    'message' => __('Unable to delete notification'),
                 ], 500);
             }
-            
+
             return redirect()->back()->with('error', __('Unable to delete notification'));
         }
     }
@@ -273,7 +272,7 @@ class UniversalNotificationController extends Controller
     {
         try {
             $user = auth()->user();
-            
+
             // Get user notification preferences (assuming a settings table/model)
             $settings = [
                 'email_notifications' => [
@@ -291,32 +290,32 @@ class UniversalNotificationController extends Controller
                 'quiet_hours' => [
                     'enabled' => true,
                     'start' => '22:00',
-                    'end' => '08:00'
-                ]
+                    'end' => '08:00',
+                ],
             ];
-            
+
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => true,
-                    'data' => $settings
+                    'data' => $settings,
                 ]);
             }
-            
+
             return view('notifications.settings', compact('settings'));
-            
+
         } catch (\Exception $e) {
             Log::error('Get notification settings error', [
                 'error' => $e->getMessage(),
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
             ]);
-            
+
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => __('Unable to load notification settings')
+                    'message' => __('Unable to load notification settings'),
                 ], 500);
             }
-            
+
             return redirect()->back()->with('error', __('Unable to load notification settings'));
         }
     }
@@ -343,40 +342,40 @@ class UniversalNotificationController extends Controller
                 'quiet_hours.start' => 'date_format:H:i',
                 'quiet_hours.end' => 'date_format:H:i',
             ]);
-            
+
             $user = auth()->user();
-            
+
             // Save settings (implement according to your preferences storage)
             // This could be in user profile, separate settings table, etc.
-            
+
             Log::info('Notification settings updated', [
                 'user_id' => $user->id,
-                'settings' => $validated
+                'settings' => $validated,
             ]);
-            
+
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => true,
-                    'message' => __('Notification settings updated successfully')
+                    'message' => __('Notification settings updated successfully'),
                 ]);
             }
-            
+
             return redirect()->back()->with('success', __('Notification settings updated successfully'));
-            
+
         } catch (\Exception $e) {
             Log::error('Update notification settings error', [
                 'error' => $e->getMessage(),
                 'user_id' => auth()->id(),
-                'data' => $request->all()
+                'data' => $request->all(),
             ]);
-            
+
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => __('Unable to update notification settings')
+                    'message' => __('Unable to update notification settings'),
                 ], 500);
             }
-            
+
             return redirect()->back()->with('error', __('Unable to update notification settings'));
         }
     }
@@ -389,21 +388,21 @@ class UniversalNotificationController extends Controller
         try {
             $user = auth()->user();
             $count = $user->unreadNotifications()->count();
-            
+
             return response()->json([
                 'success' => true,
-                'count' => $count
+                'count' => $count,
             ]);
-            
+
         } catch (\Exception $e) {
             Log::error('Get unread count error', [
                 'error' => $e->getMessage(),
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
             ]);
-            
+
             return response()->json([
                 'success' => false,
-                'count' => 0
+                'count' => 0,
             ]);
         }
     }
@@ -415,40 +414,40 @@ class UniversalNotificationController extends Controller
     {
         try {
             $user = auth()->user();
-            
+
             // Create a test notification
             $user->notify(new \App\Notifications\TestNotification([
                 'title' => __('Test Notification'),
                 'message' => __('This is a test notification to verify your notification settings.'),
-                'type' => 'test'
+                'type' => 'test',
             ]));
-            
+
             Log::info('Test notification sent', [
-                'user_id' => $user->id
+                'user_id' => $user->id,
             ]);
-            
+
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => true,
-                    'message' => __('Test notification sent successfully')
+                    'message' => __('Test notification sent successfully'),
                 ]);
             }
-            
+
             return redirect()->back()->with('success', __('Test notification sent successfully'));
-            
+
         } catch (\Exception $e) {
             Log::error('Send test notification error', [
                 'error' => $e->getMessage(),
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
             ]);
-            
+
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
-                    'message' => __('Unable to send test notification')
+                    'message' => __('Unable to send test notification'),
                 ], 500);
             }
-            
+
             return redirect()->back()->with('error', __('Unable to send test notification'));
         }
     }
@@ -475,14 +474,15 @@ class UniversalNotificationController extends Controller
                 'meta' => [
                     'total_unread' => $this->notificationService->getUnreadCount($user->id),
                     'last_updated' => now()->toISOString(),
-                ]
+                ],
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Notification API error: ' . $e->getMessage());
+            Log::error('Notification API error: '.$e->getMessage());
+
             return response()->json([
                 'success' => false,
-                'message' => __('Unable to fetch notifications')
+                'message' => __('Unable to fetch notifications'),
             ], 500);
         }
     }
@@ -496,10 +496,10 @@ class UniversalNotificationController extends Controller
             $user = Auth::user();
             $notification = $this->notificationService->getNotification($id, $user->id);
 
-            if (!$notification) {
+            if (! $notification) {
                 return response()->json([
                     'success' => false,
-                    'message' => __('Notification not found')
+                    'message' => __('Notification not found'),
                 ], 404);
             }
 
@@ -508,14 +508,15 @@ class UniversalNotificationController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $notification
+                'data' => $notification,
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Notification show error: ' . $e->getMessage());
+            Log::error('Notification show error: '.$e->getMessage());
+
             return response()->json([
                 'success' => false,
-                'message' => __('Unable to load notification')
+                'message' => __('Unable to load notification'),
             ], 500);
         }
     }
@@ -542,14 +543,15 @@ class UniversalNotificationController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => $notification,
-                'message' => __('Notification created successfully')
+                'message' => __('Notification created successfully'),
             ], 201);
 
         } catch (\Exception $e) {
-            Log::error('Notification creation error: ' . $e->getMessage());
+            Log::error('Notification creation error: '.$e->getMessage());
+
             return response()->json([
                 'success' => false,
-                'message' => __('Unable to create notification')
+                'message' => __('Unable to create notification'),
             ], 500);
         }
     }
@@ -563,24 +565,25 @@ class UniversalNotificationController extends Controller
             $user = Auth::user();
             $result = $this->notificationService->markAsUnread($id, $user->id);
 
-            if (!$result) {
+            if (! $result) {
                 return response()->json([
                     'success' => false,
-                    'message' => __('Notification not found')
+                    'message' => __('Notification not found'),
                 ], 404);
             }
 
             return response()->json([
                 'success' => true,
                 'message' => __('Notification marked as unread'),
-                'unread_count' => $this->notificationService->getUnreadCount($user->id)
+                'unread_count' => $this->notificationService->getUnreadCount($user->id),
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Mark as unread error: ' . $e->getMessage());
+            Log::error('Mark as unread error: '.$e->getMessage());
+
             return response()->json([
                 'success' => false,
-                'message' => __('Unable to mark notification as unread')
+                'message' => __('Unable to mark notification as unread'),
             ], 500);
         }
     }
@@ -596,14 +599,15 @@ class UniversalNotificationController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $preferences
+                'data' => $preferences,
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Get preferences error: ' . $e->getMessage());
+            Log::error('Get preferences error: '.$e->getMessage());
+
             return response()->json([
                 'success' => false,
-                'message' => __('Unable to load preferences')
+                'message' => __('Unable to load preferences'),
             ], 500);
         }
     }
@@ -616,19 +620,20 @@ class UniversalNotificationController extends Controller
         try {
             $user = Auth::user();
             $period = $request->get('period', '30'); // days
-            
+
             $stats = $this->notificationService->getDetailedStats($user->id, $period);
 
             return response()->json([
                 'success' => true,
-                'data' => $stats
+                'data' => $stats,
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Get stats error: ' . $e->getMessage());
+            Log::error('Get stats error: '.$e->getMessage());
+
             return response()->json([
                 'success' => false,
-                'message' => __('Unable to load statistics')
+                'message' => __('Unable to load statistics'),
             ], 500);
         }
     }
@@ -656,14 +661,15 @@ class UniversalNotificationController extends Controller
                 'success' => true,
                 'message' => __('Bulk action completed successfully'),
                 'affected_count' => $result['affected_count'],
-                'unread_count' => $this->notificationService->getUnreadCount($user->id)
+                'unread_count' => $this->notificationService->getUnreadCount($user->id),
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Bulk action error: ' . $e->getMessage());
+            Log::error('Bulk action error: '.$e->getMessage());
+
             return response()->json([
                 'success' => false,
-                'message' => __('Unable to complete bulk action')
+                'message' => __('Unable to complete bulk action'),
             ], 500);
         }
     }
@@ -692,14 +698,15 @@ class UniversalNotificationController extends Controller
                 'success' => true,
                 'download_url' => $exportData['url'],
                 'expires_at' => $exportData['expires_at'],
-                'message' => __('Export ready for download')
+                'message' => __('Export ready for download'),
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Export notifications error: ' . $e->getMessage());
+            Log::error('Export notifications error: '.$e->getMessage());
+
             return response()->json([
                 'success' => false,
-                'message' => __('Unable to export notifications')
+                'message' => __('Unable to export notifications'),
             ], 500);
         }
     }

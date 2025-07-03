@@ -2,10 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\JobApplication;
-use App\Models\Job;
 use App\Models\Candidate;
-use App\Models\User;
+use App\Models\Job;
+use App\Models\JobApplication;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

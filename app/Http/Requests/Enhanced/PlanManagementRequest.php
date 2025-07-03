@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\Enhanced;
 
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Validation\Rule;
 
 class PlanManagementRequest extends FormRequest
 {
@@ -26,7 +26,7 @@ class PlanManagementRequest extends FormRequest
         $rules = array_merge($rules, $this->getMetricsRules());
         $rules = array_merge($rules, $this->getAdvancedSubscriptionRules());
         $rules = array_merge($rules, $this->getCustomizationRules());
-        
+
         return $rules;
     }
 
@@ -42,7 +42,7 @@ class PlanManagementRequest extends FormRequest
             'plan_type' => ['nullable', 'string', Rule::in(['basic', 'premium', 'enterprise', 'custom', 'trial', 'freemium'])],
             'plan_category' => ['nullable', 'string', Rule::in(['individual', 'business', 'corporate', 'startup', 'agency'])],
             'plan_status' => ['nullable', 'string', Rule::in(['active', 'inactive', 'deprecated', 'coming_soon', 'archived'])],
-            
+
             // Plan Lifecycle
             'is_active' => ['nullable', 'boolean'],
             'is_featured' => ['nullable', 'boolean'],
@@ -52,7 +52,7 @@ class PlanManagementRequest extends FormRequest
             'is_custom_pricing' => ['nullable', 'boolean'],
             'is_enterprise_only' => ['nullable', 'boolean'],
             'requires_approval' => ['nullable', 'boolean'],
-            
+
             // Availability
             'available_from' => ['nullable', 'date', 'after_or_equal:today'],
             'available_until' => ['nullable', 'date', 'after:available_from'],
@@ -75,7 +75,7 @@ class PlanManagementRequest extends FormRequest
             'auto_renewal' => ['nullable', 'boolean'],
             'grace_period_days' => ['nullable', 'integer', 'min:0', 'max:30'],
             'trial_period_days' => ['nullable', 'integer', 'min:0', 'max:365'],
-            
+
             // Subscription Dates
             'subscription_start_date' => ['nullable', 'date'],
             'subscription_end_date' => ['nullable', 'date', 'after:subscription_start_date'],
@@ -84,7 +84,7 @@ class PlanManagementRequest extends FormRequest
             'cancelled_at' => ['nullable', 'date'],
             'suspended_at' => ['nullable', 'date'],
             'expires_at' => ['nullable', 'date'],
-            
+
             // Cancellation Management
             'cancellation_reason' => ['nullable', 'string', Rule::in(['too_expensive', 'not_using', 'found_alternative', 'poor_service', 'business_closure', 'other'])],
             'cancellation_feedback' => ['nullable', 'string', 'max:2000'],
@@ -106,7 +106,7 @@ class PlanManagementRequest extends FormRequest
             'lifetime_price' => ['nullable', 'numeric', 'min:0', 'max:9999999.99'],
             'currency' => ['nullable', 'string', 'size:3', 'regex:/^[A-Z]{3}$/'],
             'currency_symbol' => ['nullable', 'string', 'max:5'],
-            
+
             // Pricing Tiers
             'pricing_tiers' => ['nullable', 'array', 'max:10'],
             'pricing_tiers.*.tier_name' => ['string', 'max:100'],
@@ -114,7 +114,7 @@ class PlanManagementRequest extends FormRequest
             'pricing_tiers.*.max_quantity' => ['integer', 'min:1'],
             'pricing_tiers.*.price_per_unit' => ['numeric', 'min:0'],
             'pricing_tiers.*.discount_percentage' => ['numeric', 'min:0', 'max:100'],
-            
+
             // Dynamic Pricing
             'dynamic_pricing_enabled' => ['nullable', 'boolean'],
             'peak_season_multiplier' => ['nullable', 'numeric', 'min:0.5', 'max:5.0'],
@@ -123,7 +123,7 @@ class PlanManagementRequest extends FormRequest
             'volume_discount_percentage' => ['nullable', 'numeric', 'min:0', 'max:80'],
             'early_bird_discount' => ['nullable', 'numeric', 'min:0', 'max:50'],
             'loyalty_discount_percentage' => ['nullable', 'numeric', 'min:0', 'max:30'],
-            
+
             // Tax Configuration
             'tax_inclusive' => ['nullable', 'boolean'],
             'tax_rate' => ['nullable', 'numeric', 'min:0', 'max:50'],
@@ -144,7 +144,7 @@ class PlanManagementRequest extends FormRequest
             'payment_terms_days' => ['nullable', 'integer', 'min:0', 'max:180'],
             'late_payment_fee' => ['nullable', 'numeric', 'min:0', 'max:1000'],
             'late_payment_fee_type' => ['nullable', 'string', Rule::in(['fixed', 'percentage'])],
-            
+
             // Billing Address
             'billing_address' => ['nullable', 'array'],
             'billing_address.company_name' => ['nullable', 'string', 'max:255'],
@@ -154,7 +154,7 @@ class PlanManagementRequest extends FormRequest
             'billing_address.postal_code' => ['nullable', 'string', 'max:20'],
             'billing_address.country' => ['nullable', 'string', 'size:2'],
             'billing_address.tax_id' => ['nullable', 'string', 'max:50'],
-            
+
             // Payment Configuration
             'dunning_management' => ['nullable', 'boolean'],
             'retry_failed_payments' => ['nullable', 'boolean'],
@@ -179,7 +179,7 @@ class PlanManagementRequest extends FormRequest
             'api_calls_limit' => ['nullable', 'integer', 'min:0', 'max:1000000'],
             'storage_limit_gb' => ['nullable', 'numeric', 'min:0', 'max:1000'],
             'bandwidth_limit_gb' => ['nullable', 'numeric', 'min:0', 'max:10000'],
-            
+
             // Feature Access Control
             'features_included' => ['nullable', 'array'],
             'features_included.*' => ['string', 'max:100'],
@@ -192,7 +192,7 @@ class PlanManagementRequest extends FormRequest
             'multi_user_support' => ['nullable', 'boolean'],
             'team_collaboration' => ['nullable', 'boolean'],
             'advanced_reporting' => ['nullable', 'boolean'],
-            
+
             // Usage Tracking
             'usage_tracking_enabled' => ['nullable', 'boolean'],
             'overage_billing_enabled' => ['nullable', 'boolean'],
@@ -219,7 +219,7 @@ class PlanManagementRequest extends FormRequest
             'promo_minimum_spend' => ['nullable', 'numeric', 'min:0'],
             'promo_first_time_only' => ['nullable', 'boolean'],
             'promo_stackable' => ['nullable', 'boolean'],
-            
+
             // Referral System
             'referral_program_enabled' => ['nullable', 'boolean'],
             'referral_bonus_type' => ['nullable', 'string', Rule::in(['credit', 'discount', 'free_period', 'cash'])],
@@ -245,7 +245,7 @@ class PlanManagementRequest extends FormRequest
             'preserve_usage_data' => ['nullable', 'boolean'],
             'migration_required' => ['nullable', 'boolean'],
             'data_migration_plan' => ['nullable', 'string', 'max:1000'],
-            
+
             // Change Impact Analysis
             'feature_impact_analysis' => ['nullable', 'array'],
             'feature_impact_analysis.removed_features' => ['nullable', 'array'],
@@ -254,7 +254,7 @@ class PlanManagementRequest extends FormRequest
             'user_notification_required' => ['nullable', 'boolean'],
             'admin_approval_required' => ['nullable', 'boolean'],
             'contract_amendment_needed' => ['nullable', 'boolean'],
-            
+
             // Grandfathering Rules
             'grandfathered_pricing' => ['nullable', 'boolean'],
             'grandfathered_features' => ['nullable', 'array'],
@@ -274,14 +274,14 @@ class PlanManagementRequest extends FormRequest
             'ltv_calculation' => ['nullable', 'boolean'],
             'cohort_analysis' => ['nullable', 'boolean'],
             'conversion_tracking' => ['nullable', 'boolean'],
-            
+
             // KPI Thresholds
             'churn_rate_threshold' => ['nullable', 'numeric', 'min:0', 'max:100'],
             'satisfaction_score_minimum' => ['nullable', 'numeric', 'min:1', 'max:10'],
             'support_response_time_hours' => ['nullable', 'integer', 'min:1', 'max:168'],
             'uptime_guarantee_percentage' => ['nullable', 'numeric', 'min:90', 'max:100'],
             'performance_benchmark_ms' => ['nullable', 'integer', 'min:100', 'max:10000'],
-            
+
             // Reporting Configuration
             'automated_reports' => ['nullable', 'boolean'],
             'report_frequency' => ['nullable', 'string', Rule::in(['daily', 'weekly', 'monthly', 'quarterly'])],
@@ -303,7 +303,7 @@ class PlanManagementRequest extends FormRequest
             'tenant_customization' => ['nullable', 'boolean'],
             'cross_tenant_billing' => ['nullable', 'boolean'],
             'tenant_admin_access' => ['nullable', 'boolean'],
-            
+
             // Enterprise Features
             'sso_integration' => ['nullable', 'boolean'],
             'ldap_integration' => ['nullable', 'boolean'],
@@ -312,7 +312,7 @@ class PlanManagementRequest extends FormRequest
             'compliance_reporting' => ['nullable', 'boolean'],
             'data_residency_requirements' => ['nullable', 'array'],
             'security_certifications' => ['nullable', 'array'],
-            
+
             // API & Integration Limits
             'webhook_endpoints_limit' => ['nullable', 'integer', 'min:0', 'max:100'],
             'api_rate_limit_per_minute' => ['nullable', 'integer', 'min:10', 'max:10000'],
@@ -320,7 +320,7 @@ class PlanManagementRequest extends FormRequest
             'data_export_frequency' => ['nullable', 'string', Rule::in(['real_time', 'hourly', 'daily', 'weekly'])],
             'third_party_integrations' => ['nullable', 'array'],
             'custom_api_endpoints' => ['nullable', 'boolean'],
-            
+
             // Advanced Analytics
             'predictive_analytics' => ['nullable', 'boolean'],
             'machine_learning_features' => ['nullable', 'boolean'],
@@ -341,7 +341,7 @@ class PlanManagementRequest extends FormRequest
             'custom_css_allowed' => ['nullable', 'boolean'],
             'custom_domain_supported' => ['nullable', 'boolean'],
             'subdomain_customization' => ['nullable', 'boolean'],
-            
+
             // Workflow Customization
             'custom_workflows' => ['nullable', 'boolean'],
             'workflow_automation' => ['nullable', 'boolean'],
@@ -349,7 +349,7 @@ class PlanManagementRequest extends FormRequest
             'custom_forms_limit' => ['nullable', 'integer', 'min:0', 'max:50'],
             'business_rules_engine' => ['nullable', 'boolean'],
             'conditional_logic_support' => ['nullable', 'boolean'],
-            
+
             // Content Management
             'custom_content_types' => ['nullable', 'boolean'],
             'content_approval_workflow' => ['nullable', 'boolean'],
@@ -357,7 +357,7 @@ class PlanManagementRequest extends FormRequest
             'content_versioning' => ['nullable', 'boolean'],
             'content_scheduling' => ['nullable', 'boolean'],
             'content_collaboration' => ['nullable', 'boolean'],
-            
+
             // Communication Customization
             'custom_email_templates' => ['nullable', 'boolean'],
             'email_template_limit' => ['nullable', 'integer', 'min:0', 'max:100'],
@@ -377,29 +377,29 @@ class PlanManagementRequest extends FormRequest
             'plan_name.max' => __('validation.plan_management.plan_name_max'),
             'plan_slug.unique' => __('validation.plan_management.plan_slug_unique'),
             'plan_type.in' => __('validation.plan_management.plan_type_invalid'),
-            
+
             // Subscription Messages
             'subscription_status.in' => __('validation.plan_management.subscription_status_invalid'),
             'billing_cycle.in' => __('validation.plan_management.billing_cycle_invalid'),
             'next_billing_date.after_or_equal' => __('validation.plan_management.next_billing_date_future'),
             'subscription_end_date.after' => __('validation.plan_management.end_date_after_start'),
-            
+
             // Pricing Messages
             'base_price.numeric' => __('validation.plan_management.base_price_numeric'),
             'base_price.min' => __('validation.plan_management.base_price_minimum'),
             'currency.size' => __('validation.plan_management.currency_code_length'),
             'tax_rate.max' => __('validation.plan_management.tax_rate_maximum'),
-            
+
             // Usage Limit Messages
             'job_posting_limit.integer' => __('validation.plan_management.job_posting_limit_integer'),
             'api_calls_limit.max' => __('validation.plan_management.api_calls_limit_maximum'),
             'storage_limit_gb.numeric' => __('validation.plan_management.storage_limit_numeric'),
-            
+
             // Promo Code Messages
             'promo_code.regex' => __('validation.plan_management.promo_code_format'),
             'promo_valid_until.after' => __('validation.plan_management.promo_end_after_start'),
             'promo_usage_limit.min' => __('validation.plan_management.promo_usage_minimum'),
-            
+
             // Advanced Feature Messages
             'webhook_endpoints_limit.max' => __('validation.plan_management.webhook_limit_exceeded'),
             'api_rate_limit_per_minute.min' => __('validation.plan_management.api_rate_limit_minimum'),
@@ -421,7 +421,7 @@ class PlanManagementRequest extends FormRequest
         if ($this->has(['monthly_price', 'yearly_price'])) {
             $monthlyAnnual = $this->monthly_price * 12;
             $yearlyPrice = $this->yearly_price;
-            
+
             if ($yearlyPrice > $monthlyAnnual) {
                 throw new \InvalidArgumentException(__('validation.plan_management.yearly_price_invalid'));
             }
@@ -430,7 +430,7 @@ class PlanManagementRequest extends FormRequest
         // Validate usage limits consistency
         if ($this->has(['search_limit_daily', 'search_limit_monthly'])) {
             $dailyMonthly = $this->search_limit_daily * 31;
-            
+
             if ($this->search_limit_monthly > $dailyMonthly) {
                 throw new \InvalidArgumentException(__('validation.plan_management.monthly_limit_exceeds_daily'));
             }
@@ -440,7 +440,7 @@ class PlanManagementRequest extends FormRequest
         if ($this->has(['subscription_start_date', 'trial_ends_at'])) {
             $startDate = Carbon::parse($this->subscription_start_date);
             $trialEnd = Carbon::parse($this->trial_ends_at);
-            
+
             if ($trialEnd->lt($startDate)) {
                 throw new \InvalidArgumentException(__('validation.plan_management.trial_end_before_start'));
             }
@@ -451,7 +451,7 @@ class PlanManagementRequest extends FormRequest
     {
         // Cache frequently accessed plan data
         if ($this->has('plan_id')) {
-            Cache::remember("plan_data_{$this->plan_id}", 3600, function() {
+            Cache::remember("plan_data_{$this->plan_id}", 3600, function () {
                 return $this->validated();
             });
         }
@@ -459,7 +459,7 @@ class PlanManagementRequest extends FormRequest
         // Pre-calculate pricing tiers for performance
         if ($this->has('pricing_tiers')) {
             $this->merge([
-                'calculated_pricing_matrix' => $this->calculatePricingMatrix()
+                'calculated_pricing_matrix' => $this->calculatePricingMatrix(),
             ]);
         }
     }
@@ -468,16 +468,16 @@ class PlanManagementRequest extends FormRequest
     {
         $matrix = [];
         $tiers = $this->pricing_tiers ?? [];
-        
+
         foreach ($tiers as $tier) {
             $matrix[] = [
                 'tier_name' => $tier['tier_name'],
                 'range' => "{$tier['min_quantity']}-{$tier['max_quantity']}",
                 'effective_price' => $tier['price_per_unit'] * (1 - ($tier['discount_percentage'] / 100)),
-                'savings' => $tier['discount_percentage']
+                'savings' => $tier['discount_percentage'],
             ];
         }
-        
+
         return $matrix;
     }
 
@@ -491,18 +491,26 @@ class PlanManagementRequest extends FormRequest
                 'user_agent' => request()->userAgent(),
                 'ip_address' => request()->ip(),
                 'timestamp' => now(),
-                'request_data' => $this->except(['password', 'token'])
+                'request_data' => $this->except(['password', 'token']),
             ]);
         }
     }
 
     private function getActionType(): string
     {
-        if ($this->has('subscription_status')) return 'subscription_management';
-        if ($this->has('target_plan_id')) return 'plan_change';
-        if ($this->has('promo_code')) return 'promotional_action';
-        if ($this->has('billing_method')) return 'billing_update';
-        
+        if ($this->has('subscription_status')) {
+            return 'subscription_management';
+        }
+        if ($this->has('target_plan_id')) {
+            return 'plan_change';
+        }
+        if ($this->has('promo_code')) {
+            return 'promotional_action';
+        }
+        if ($this->has('billing_method')) {
+            return 'billing_update';
+        }
+
         return 'general_plan_operation';
     }
 }

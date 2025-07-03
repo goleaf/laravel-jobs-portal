@@ -14,29 +14,29 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * MaritalStatus Model - Enhanced with Enhanced patterns.
  *
- * @property int               $id
- * @property string            $marital_status
- * @property null|string       $description
- * @property null|string       $display_name
- * @property null|string       $short_code
- * @property bool              $is_active
- * @property bool              $is_default
- * @property bool              $is_featured
- * @property null|int          $sort_order
- * @property null|string       $color
- * @property null|string       $icon
- * @property null|Carbon       $created_at
- * @property null|Carbon       $updated_at
+ * @property int $id
+ * @property string $marital_status
+ * @property null|string $description
+ * @property null|string $display_name
+ * @property null|string $short_code
+ * @property bool $is_active
+ * @property bool $is_default
+ * @property bool $is_featured
+ * @property null|int $sort_order
+ * @property null|string $color
+ * @property null|string $icon
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
  * @property Collection|User[] $candidates
  * @property Collection|User[] $activeCandidates
- * @property string            $status_name
- * @property string            $status_category
- * @property int               $candidates_count
- * @property int               $active_candidates_count
- * @property bool              $is_single
- * @property bool              $is_married
- * @property bool              $is_divorced
- * @property bool              $is_widowed
+ * @property string $status_name
+ * @property string $status_category
+ * @property int $candidates_count
+ * @property int $active_candidates_count
+ * @property bool $is_single
+ * @property bool $is_married
+ * @property bool $is_divorced
+ * @property bool $is_widowed
  *
  * Enhanced Enhanced Scopes:
  *
@@ -151,8 +151,7 @@ class MaritalStatus extends Model
         return LogOptions::defaults()
             ->logOnly(['marital_status', 'description', 'is_active', 'is_default', 'is_featured'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -211,7 +210,7 @@ class MaritalStatus extends Model
     /**
      * Scope to only include active marital statuses.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -221,7 +220,7 @@ class MaritalStatus extends Model
     /**
      * Scope to only include inactive marital statuses.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -231,7 +230,7 @@ class MaritalStatus extends Model
     /**
      * Scope to only include featured marital statuses.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFeatured($query)
     {
@@ -241,7 +240,7 @@ class MaritalStatus extends Model
     /**
      * Scope to only include non-featured marital statuses.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNonFeatured($query)
     {
@@ -251,7 +250,7 @@ class MaritalStatus extends Model
     /**
      * Scope to only include default marital statuses.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeDefault($query)
     {
@@ -261,7 +260,7 @@ class MaritalStatus extends Model
     /**
      * Scope to only include custom marital statuses.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeCustom($query)
     {
@@ -275,7 +274,7 @@ class MaritalStatus extends Model
     /**
      * Scope to search marital statuses by name or description.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
@@ -283,15 +282,14 @@ class MaritalStatus extends Model
             $q->where('marital_status', 'like', '%'.$term.'%')
                 ->orWhere('description', 'like', '%'.$term.'%')
                 ->orWhere('display_name', 'like', '%'.$term.'%')
-                ->orWhere('short_code', 'like', '%'.$term.'%')
-            ;
+                ->orWhere('short_code', 'like', '%'.$term.'%');
         });
     }
 
     /**
      * Scope to get marital statuses created within specified days.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -301,7 +299,7 @@ class MaritalStatus extends Model
     /**
      * Scope to get old marital statuses created before specified days.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -315,7 +313,7 @@ class MaritalStatus extends Model
     /**
      * Scope to order marital statuses alphabetically.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
@@ -325,7 +323,7 @@ class MaritalStatus extends Model
     /**
      * Scope to order marital statuses by sort order.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOrdered($query)
     {
@@ -339,7 +337,7 @@ class MaritalStatus extends Model
     /**
      * Scope to get marital statuses with candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithCandidates($query)
     {
@@ -349,7 +347,7 @@ class MaritalStatus extends Model
     /**
      * Scope to get marital statuses without candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithoutCandidates($query)
     {
@@ -359,7 +357,7 @@ class MaritalStatus extends Model
     /**
      * Scope to get marital statuses with active candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithActiveCandidates($query)
     {
@@ -371,7 +369,7 @@ class MaritalStatus extends Model
     /**
      * Scope to get marital statuses with candidate counts.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithCandidateCounts($query)
     {
@@ -393,7 +391,7 @@ class MaritalStatus extends Model
     /**
      * Scope to get popular marital statuses by candidate count.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopular($query, int $limit = 10)
     {
@@ -405,7 +403,7 @@ class MaritalStatus extends Model
     /**
      * Scope to get marital statuses with minimum candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeMinCandidates($query, int $minCandidates = 5)
     {
@@ -419,7 +417,7 @@ class MaritalStatus extends Model
     /**
      * Scope to get single marital statuses.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSingle($query)
     {
@@ -428,15 +426,14 @@ class MaritalStatus extends Model
                 ->orWhere('marital_status', 'like', '%unmarried%')
                 ->orWhere('marital_status', 'like', '%never%married%')
                 ->orWhere('marital_status', 'like', '%bachelor%')
-                ->orWhere('marital_status', 'like', '%spinster%')
-            ;
+                ->orWhere('marital_status', 'like', '%spinster%');
         });
     }
 
     /**
      * Scope to get married marital statuses.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeMarried($query)
     {
@@ -444,45 +441,42 @@ class MaritalStatus extends Model
             $q->where('marital_status', 'like', '%married%')
                 ->orWhere('marital_status', 'like', '%spouse%')
                 ->orWhere('marital_status', 'like', '%civil%union%')
-                ->orWhere('marital_status', 'like', '%domestic%partnership%')
-            ;
+                ->orWhere('marital_status', 'like', '%domestic%partnership%');
         });
     }
 
     /**
      * Scope to get divorced/separated marital statuses.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeDivorced($query)
     {
         return $query->where(function ($q) {
             $q->where('marital_status', 'like', '%divorced%')
                 ->orWhere('marital_status', 'like', '%separated%')
-                ->orWhere('marital_status', 'like', '%annulled%')
-            ;
+                ->orWhere('marital_status', 'like', '%annulled%');
         });
     }
 
     /**
      * Scope to get widowed marital statuses.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWidowed($query)
     {
         return $query->where(function ($q) {
             $q->where('marital_status', 'like', '%widowed%')
                 ->orWhere('marital_status', 'like', '%widow%')
-                ->orWhere('marital_status', 'like', '%widower%')
-            ;
+                ->orWhere('marital_status', 'like', '%widower%');
         });
     }
 
     /**
      * Scope to get marital statuses by category.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByCategory($query, string $category)
     {
@@ -508,7 +502,7 @@ class MaritalStatus extends Model
     /**
      * Scope to get available marital statuses (single, divorced, widowed).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAvailable($query)
     {
@@ -519,8 +513,7 @@ class MaritalStatus extends Model
                     $sq->where('marital_status', 'like', '%single%')
                         ->orWhere('marital_status', 'like', '%divorced%')
                         ->orWhere('marital_status', 'like', '%widowed%')
-                        ->orWhere('marital_status', 'like', '%separated%')
-                    ;
+                        ->orWhere('marital_status', 'like', '%separated%');
                 });
             });
         });
@@ -529,15 +522,14 @@ class MaritalStatus extends Model
     /**
      * Scope to get unavailable marital statuses (married, partnership).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeUnavailable($query)
     {
         return $query->where(function ($q) {
             $q->where('marital_status', 'like', '%married%')
                 ->orWhere('marital_status', 'like', '%partnership%')
-                ->orWhere('marital_status', 'like', '%civil%union%')
-            ;
+                ->orWhere('marital_status', 'like', '%civil%union%');
         });
     }
 
@@ -641,7 +633,7 @@ class MaritalStatus extends Model
      */
     public function getIsSingleAttribute(): bool
     {
-        return self::CATEGORY_SINGLE === $this->status_category;
+        return $this->status_category === self::CATEGORY_SINGLE;
     }
 
     /**
@@ -649,7 +641,7 @@ class MaritalStatus extends Model
      */
     public function getIsMarriedAttribute(): bool
     {
-        return self::CATEGORY_MARRIED === $this->status_category;
+        return $this->status_category === self::CATEGORY_MARRIED;
     }
 
     /**
@@ -657,7 +649,7 @@ class MaritalStatus extends Model
      */
     public function getIsDivorcedAttribute(): bool
     {
-        return self::CATEGORY_DIVORCED === $this->status_category;
+        return $this->status_category === self::CATEGORY_DIVORCED;
     }
 
     /**
@@ -665,7 +657,7 @@ class MaritalStatus extends Model
      */
     public function getIsWidowedAttribute(): bool
     {
-        return self::CATEGORY_WIDOWED === $this->status_category;
+        return $this->status_category === self::CATEGORY_WIDOWED;
     }
 
     // =============================================
@@ -729,7 +721,7 @@ class MaritalStatus extends Model
      */
     public function isUnavailable(): bool
     {
-        return self::CATEGORY_MARRIED === $this->status_category;
+        return $this->status_category === self::CATEGORY_MARRIED;
     }
 
     /**

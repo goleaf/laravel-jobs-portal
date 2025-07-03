@@ -27,4 +27,4 @@ return new class extends Migration
             $table->dropColumn(['is_active', 'is_public', 'is_temporary']);
         });
     }
-}; 
+};

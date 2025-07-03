@@ -39,7 +39,7 @@ class AppBaseController extends Controller
     /**
      * Success response with data.
      *
-     * @param mixed $result
+     * @param  mixed  $result
      */
     public function sendResponse($result, string $message = 'Success', int $code = 200): JsonResponse
     {
@@ -60,7 +60,7 @@ class AppBaseController extends Controller
     /**
      * Error response.
      *
-     * @param mixed $errorMessages
+     * @param  mixed  $errorMessages
      */
     public function sendError(string $error, $errorMessages = [], int $code = 404): JsonResponse
     {
@@ -128,8 +128,8 @@ class AppBaseController extends Controller
     /**
      * Handle API pagination with filters and search.
      *
-     * @param mixed      $query
-     * @param null|mixed $resource
+     * @param  mixed  $query
+     * @param  null|mixed  $resource
      */
     protected function sendPaginated($query, Request $request, $resource = null)
     {
@@ -157,7 +157,7 @@ class AppBaseController extends Controller
     /**
      * Apply search to query.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     protected function applySearch($query, string $search)
     {
@@ -165,15 +165,14 @@ class AppBaseController extends Controller
         return $query->where(function ($q) use ($search) {
             $q->where('name', 'LIKE', "%{$search}%")
                 ->orWhere('title', 'LIKE', "%{$search}%")
-                ->orWhere('description', 'LIKE', "%{$search}%")
-            ;
+                ->orWhere('description', 'LIKE', "%{$search}%");
         });
     }
 
     /**
      * Apply standard filters for job portal entities.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     protected function applyJobPortalFilters($query, Request $request)
     {
@@ -203,8 +202,7 @@ class AppBaseController extends Controller
 
         if ($request->filled('experience_level')) {
             $query->where('experience_from', '<=', $request->get('experience_level'))
-                ->where('experience_to', '>=', $request->get('experience_level'))
-            ;
+                ->where('experience_to', '>=', $request->get('experience_level'));
         }
 
         if ($request->filled('job_type')) {
@@ -225,7 +223,7 @@ class AppBaseController extends Controller
     /**
      * Validation error response.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     protected function sendValidationError($validator): JsonResponse
     {
@@ -251,7 +249,7 @@ class AppBaseController extends Controller
     /**
      * Server error response.
      *
-     * @param null|mixed $debug
+     * @param  null|mixed  $debug
      */
     protected function sendServerError(string $message = 'Internal server error', $debug = null): JsonResponse
     {
@@ -278,7 +276,7 @@ class AppBaseController extends Controller
     {
         $user = $this->getAuthenticatedUser();
 
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
@@ -291,7 +289,7 @@ class AppBaseController extends Controller
      */
     protected function authorizeOrFail(string $permission, string $message = 'Unauthorized action')
     {
-        if (!$this->checkPermission($permission)) {
+        if (! $this->checkPermission($permission)) {
             abort(403, $message);
         }
     }
@@ -299,7 +297,7 @@ class AppBaseController extends Controller
     /**
      * Cache response data with key.
      *
-     * @param mixed $data
+     * @param  mixed  $data
      */
     protected function cacheResponse(string $key, $data, ?int $ttl = null): void
     {
@@ -494,13 +492,13 @@ class AppBaseController extends Controller
      */
     protected function handleFileUpload(Request $request, string $field, string $path = 'uploads'): ?string
     {
-        if (!$request->hasFile($field)) {
+        if (! $request->hasFile($field)) {
             return null;
         }
 
         $file = $request->file($field);
 
-        if (!$file->isValid()) {
+        if (! $file->isValid()) {
             throw new \Exception("Invalid file upload for field: {$field}");
         }
 

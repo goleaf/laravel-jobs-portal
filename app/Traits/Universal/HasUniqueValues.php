@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 
 /**
  * HasUniqueValues Trait
- * 
+ *
  * Provides automatic unique value generation for models
  * using the Universal Unique Value Service.
  */
@@ -30,7 +30,7 @@ trait HasUniqueValues
     public function generateUniqueValues(): void
     {
         $service = App::make(UniversalUniqueValueService::class);
-        
+
         foreach ($this->getUniqueValueFields() as $field => $config) {
             if (empty($this->{$field})) {
                 $this->{$field} = $this->generateUniqueValue($service, $field, $config);
@@ -81,7 +81,7 @@ trait HasUniqueValues
     {
         $timestamp = now()->format('YmdHis');
         $random = Str::random(6);
-        
+
         return match ($type) {
             'job-reference' => "JOB-{$timestamp}-{$random}",
             'application-code' => "APP-{$timestamp}-{$random}",
@@ -90,9 +90,9 @@ trait HasUniqueValues
             'invoice-number' => "INV-{$timestamp}-{$random}",
             'order-reference' => "ORD-{$timestamp}-{$random}",
             'api-key' => Str::random(32),
-            'slug' => Str::slug($this->{$config['source_field'] ?? 'name'}) . '-' . $random,
-            'custom' => $config['scope'] . '-' . $timestamp . '-' . $random,
-            default => $field . '-' . $timestamp . '-' . $random,
+            'slug' => Str::slug($this->{$config['source_field'] ?? 'name'}).'-'.$random,
+            'custom' => $config['scope'].'-'.$timestamp.'-'.$random,
+            default => $field.'-'.$timestamp.'-'.$random,
         };
     }
 
@@ -106,9 +106,9 @@ trait HasUniqueValues
         if ($key) {
             return (string) $key;
         }
-        
+
         // For new models without keys, use a combination of class and timestamp
-        return class_basename($this) . '-' . now()->format('YmdHis') . '-' . Str::random(6);
+        return class_basename($this).'-'.now()->format('YmdHis').'-'.Str::random(6);
     }
 
     /**
@@ -118,7 +118,7 @@ trait HasUniqueValues
     {
         $service = App::make(UniversalUniqueValueService::class);
         $fieldsToRegenerate = empty($fields) ? array_keys($this->getUniqueValueFields()) : $fields;
-        
+
         foreach ($fieldsToRegenerate as $field) {
             $config = $this->getUniqueValueFields()[$field] ?? [];
             $this->{$field} = $this->generateUniqueValue($service, $field, $config);
@@ -149,4 +149,4 @@ trait HasUniqueValues
     {
         return $this->getUniqueValueFields()[$field]['type'] ?? null;
     }
-} 
+}

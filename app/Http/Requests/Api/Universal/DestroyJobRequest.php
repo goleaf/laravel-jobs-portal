@@ -73,7 +73,7 @@ class DestroyJobRequest extends FormRequest
             $jobId = $this->route('id');
             $job = Job::find($jobId);
 
-            if (!$job) {
+            if (! $job) {
                 $validator->errors()->add('job', __('validation.exists', ['attribute' => __('validation.attributes.job')]));
 
                 return;
@@ -84,31 +84,31 @@ class DestroyJobRequest extends FormRequest
 
             if ($activeApplicationsCount > 0) {
                 // Require notification decision for active applications
-                if (!$this->has('notify_applicants')) {
+                if (! $this->has('notify_applicants')) {
                     $validator->errors()->add('notify_applicants', __('validation.required_when_active_applications'));
                 }
             }
 
             // Check if job is featured and eligible for refund
             if ($job->is_featured && $job->featured_until && $job->featured_until->isFuture()) {
-                if (!$this->has('refund_featured')) {
+                if (! $this->has('refund_featured')) {
                     $validator->errors()->add('refund_featured', __('validation.required_when_featured_active'));
                 }
             }
 
             // Check if user owns the job (for non-admins)
-            if ($this->user() && !$this->user()->hasRole('admin')) {
-                if (!$this->userOwnsJob()) {
+            if ($this->user() && ! $this->user()->hasRole('admin')) {
+                if (! $this->userOwnsJob()) {
                     $validator->errors()->add('authorization', __('auth.forbidden'));
                 }
             }
 
             // Validate job status allows deletion
-            if ('closed' === $job->status && 0 === $activeApplicationsCount) {
+            if ($job->status === 'closed' && $activeApplicationsCount === 0) {
                 // Allow deletion of closed jobs with no active applications
-            } elseif ('draft' === $job->status) {
+            } elseif ($job->status === 'draft') {
                 // Allow deletion of draft jobs
-            } elseif (!$this->user()->hasRole('admin')) {
+            } elseif (! $this->user()->hasRole('admin')) {
                 // Only admins can delete active jobs with applications
                 $validator->errors()->add('status', __('validation.job_deletion_not_allowed'));
             }
@@ -185,13 +185,13 @@ class DestroyJobRequest extends FormRequest
         $jobId = $this->route('id');
         $user = $this->user();
 
-        if (!$user || !$jobId) {
+        if (! $user || ! $jobId) {
             return false;
         }
 
         // Check if user's company owns the job
         $job = Job::find($jobId);
-        if (!$job) {
+        if (! $job) {
             return false;
         }
 

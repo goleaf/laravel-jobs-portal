@@ -50,13 +50,11 @@ class JobApplicationRepository extends BaseRepository
         return JobApplication::where('job_id', $jobId)
             ->where('candidate_id', $candidateId)
             ->where('status', $status)
-            ->exists()
-        ;
+            ->exists();
     }
 
     /**
-     * @param mixed $jobId
-     *
+     * @param  mixed  $jobId
      * @return mixed
      */
     public function showApplyJobForm($jobId)
@@ -66,14 +64,14 @@ class JobApplicationRepository extends BaseRepository
 
         /** @var Job $job */
         $job = Job::whereJobId($jobId)->with('company')->first();
-        $data['isActive'] = (Job::STATUS_OPEN == $job->status) ? true : false;
+        $data['isActive'] = ($job->status == Job::STATUS_OPEN) ? true : false;
 
         $jobRepo = app(JobRepository::class);
         $data['isApplied'] = $this->checkJobStatus($job->id, $candidate->id, JobApplication::STATUS_APPLIED);
 
         $data['resumes'] = [];
         $data['isJobDrafted'] = false;
-        if (!$data['isApplied']) {
+        if (! $data['isApplied']) {
             // get candidate resumes
             $data['resumes'] = $candidate->getMedia('resumes')->pluck('custom_properties.title', 'id');
             $data['default_resume'] = $candidate->getMedia('resumes', ['is_default' => true])->first();
@@ -99,27 +97,26 @@ class JobApplicationRepository extends BaseRepository
             $input['candidate_id'] = Auth::user()->owner_id;
 
             $job = Job::findOrFail($input['job_id']);
-            if (Job::STATUS_OPEN != $job->status) {
+            if ($job->status != Job::STATUS_OPEN) {
                 throw new UnprocessableEntityHttpException('job is not active.');
             }
 
             /** @var JobApplication $jobApplication */
             $jobApplication = JobApplication::where('job_id', $input['job_id'])
                 ->where('candidate_id', $input['candidate_id'])
-                ->first()
-            ;
+                ->first();
 
-            if ($jobApplication && JobApplication::STATUS_APPLIED == $jobApplication->status) {
+            if ($jobApplication && $jobApplication->status == JobApplication::STATUS_APPLIED) {
                 throw new UnprocessableEntityHttpException('You have already applied for this job.');
             }
 
-            if ($jobApplication && JobApplication::STATUS_DRAFT == $jobApplication->status) {
+            if ($jobApplication && $jobApplication->status == JobApplication::STATUS_DRAFT) {
                 $jobApplication->delete();
             }
 
             $input['candidate_id'] = Auth::user()->owner_id;
             $input['expected_salary'] = removeCommaFromNumbers($input['expected_salary']);
-            $input['status'] = 'apply' == $input['application_type'] ? JobApplication::STATUS_APPLIED : JobApplication::STATUS_DRAFT;
+            $input['status'] = $input['application_type'] == 'apply' ? JobApplication::STATUS_APPLIED : JobApplication::STATUS_DRAFT;
 
             $this->create($input);
 
@@ -133,14 +130,14 @@ class JobApplicationRepository extends BaseRepository
     {
         try {
             $documentMedia = Media::find($jobApplication->resume_id);
-            if (null == $documentMedia) {
+            if ($documentMedia == null) {
                 $documentMedia = Media::where('model_id', $jobApplication->candidate_id)->where(
                     'collection_name',
                     'resumes'
                 )->latest()->first();
             }
             $documentPath = $documentMedia->getPath();
-            if ('public' === config('app.media_disc')) {
+            if (config('app.media_disc') === 'public') {
                 $documentPath = Str::after($documentMedia->getUrl(), '/uploads');
             }
 

@@ -24,13 +24,13 @@ class CollectionForgetUtility
         $data->forget($alwaysRemove);
 
         // Role-based field removal
-        if ('admin' !== $userRole) {
+        if ($userRole !== 'admin') {
             $adminOnlyFields = ['is_featured', 'admin_notes', 'priority_score', 'internal_flags', 'is_active'];
             $data->forget($adminOnlyFields);
         }
 
         // Subscription-based field removal
-        if (!$hasSubscription) {
+        if (! $hasSubscription) {
             $premiumFields = ['premium_features', 'advanced_analytics', 'priority_support', 'premium_branding'];
             $data->forget($premiumFields);
         }
@@ -85,7 +85,7 @@ class CollectionForgetUtility
         $collection->forget($formMetadata);
 
         // Remove sensitive fields for non-admin users
-        if ('admin' !== $userRole) {
+        if ($userRole !== 'admin') {
             $sensitiveFields = ['is_active', 'is_featured', 'admin_only_field', 'priority_score'];
             $collection->forget($sensitiveFields);
         }
@@ -144,7 +144,7 @@ class CollectionForgetUtility
         }
 
         // Remove specific patterns
-        if (!empty($options['remove_patterns'])) {
+        if (! empty($options['remove_patterns'])) {
             $patternKeys = $collection->keys()->filter(function ($key) use ($options) {
                 return collect($options['remove_patterns'])->contains(fn ($pattern) => str_contains($key, $pattern));
             });
@@ -292,7 +292,7 @@ class CollectionForgetUtility
         }
 
         // Role-based adaptive patterns with usage frequency analysis
-        if ('admin' !== $userRole) {
+        if ($userRole !== 'admin') {
             $adminFields = self::getAdminFieldsWithUsageStats();
             $patterns[] = [
                 'name' => 'admin_restrictions',
@@ -302,7 +302,7 @@ class CollectionForgetUtility
         }
 
         // Subscription-based patterns with feature analytics
-        if (!$hasSubscription) {
+        if (! $hasSubscription) {
             $premiumFields = self::getPremiumFieldsWithFeatureStats();
             $patterns[] = [
                 'name' => 'subscription_restrictions',
@@ -412,7 +412,7 @@ class CollectionForgetUtility
      */
     protected static function isDateExpired(Collection $data, array $condition): bool
     {
-        if (!$data->has($condition['date_field'])) {
+        if (! $data->has($condition['date_field'])) {
             return false;
         }
 
@@ -424,7 +424,7 @@ class CollectionForgetUtility
     protected static function checkUserPermission(array $condition): bool
     {
         $user = auth()->user();
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
@@ -441,7 +441,7 @@ class CollectionForgetUtility
         $field = $condition['field'];
         $pattern = $condition['pattern'];
 
-        if (!$data->has($field)) {
+        if (! $data->has($field)) {
             return false;
         }
 
@@ -453,7 +453,7 @@ class CollectionForgetUtility
         $dependencies = $condition['dependencies'];
 
         foreach ($dependencies as $dependency) {
-            if (!$data->has($dependency)) {
+            if (! $data->has($dependency)) {
                 return true;
             }
         }
@@ -467,14 +467,14 @@ class CollectionForgetUtility
     private static function evaluateCondition(string $condition): bool
     {
         return match ($condition) {
-            'is_guest' => !auth()->check(),
-            'is_mobile' => 'mobile' === request()->header('User-Agent-Type'),
-            'is_basic_user' => !auth()->user()?->hasActiveSubscription(),
+            'is_guest' => ! auth()->check(),
+            'is_mobile' => request()->header('User-Agent-Type') === 'mobile',
+            'is_basic_user' => ! auth()->user()?->hasActiveSubscription(),
             'is_public_api' => request()->is('api/public/*'),
             'is_admin' => auth()->user()?->hasRole('admin'),
             'is_employer' => auth()->user()?->hasRole('employer'),
             'is_candidate' => auth()->user()?->hasRole('candidate'),
-            'non_owner' => !self::isResourceOwner(),
+            'non_owner' => ! self::isResourceOwner(),
             default => false,
         };
     }

@@ -136,8 +136,7 @@ class AdminDashboardController extends Controller
                     'is_active' => $user->is_active,
                 ];
             })
-            ->toArray()
-        ;
+            ->toArray();
     }
 
     /**
@@ -160,8 +159,7 @@ class AdminDashboardController extends Controller
                     'expiry_date' => $job->job_expiry_date ? Carbon::parse($job->job_expiry_date)->format('M d, Y') : null,
                 ];
             })
-            ->toArray()
-        ;
+            ->toArray();
     }
 
     /**
@@ -182,8 +180,7 @@ class AdminDashboardController extends Controller
                     'applied_at' => $application->created_at->format('M d, Y'),
                 ];
             })
-            ->toArray()
-        ;
+            ->toArray();
     }
 
     /**
@@ -194,14 +191,13 @@ class AdminDashboardController extends Controller
         $months = [];
         $data = [];
 
-        for ($i = 11; $i >= 0; --$i) {
+        for ($i = 11; $i >= 0; $i--) {
             $date = Carbon::now()->subMonths($i);
             $months[] = $date->format('M Y');
 
             $count = User::whereYear('created_at', $date->year)
                 ->whereMonth('created_at', $date->month)
-                ->count()
-            ;
+                ->count();
 
             $data[] = $count;
         }
@@ -220,14 +216,13 @@ class AdminDashboardController extends Controller
         $months = [];
         $data = [];
 
-        for ($i = 11; $i >= 0; --$i) {
+        for ($i = 11; $i >= 0; $i--) {
             $date = Carbon::now()->subMonths($i);
             $months[] = $date->format('M Y');
 
             $count = Job::whereYear('created_at', $date->year)
                 ->whereMonth('created_at', $date->month)
-                ->count()
-            ;
+                ->count();
 
             $data[] = $count;
         }
@@ -245,8 +240,7 @@ class AdminDashboardController extends Controller
     {
         $statusData = JobApplication::select('status', DB::raw('count(*) as count'))
             ->groupBy('status')
-            ->get()
-        ;
+            ->get();
 
         return [
             'labels' => $statusData->pluck('status')->toArray(),

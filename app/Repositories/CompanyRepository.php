@@ -17,7 +17,7 @@ class CompanyRepository extends BaseRepository
 
     public function __construct()
     {
-        parent::__construct(new Company());
+        parent::__construct(new Company);
     }
 
     public function model()
@@ -80,7 +80,7 @@ class CompanyRepository extends BaseRepository
                 'is_active' => $input['is_active'] ?? null,
             ]);
 
-            if (!empty($userData)) {
+            if (! empty($userData)) {
                 $company->user->update($userData);
             }
         }
@@ -94,13 +94,13 @@ class CompanyRepository extends BaseRepository
 
         // Role-based field removal
         $currentUser = auth()->user();
-        if ($currentUser && !$currentUser->hasRole('admin')) {
+        if ($currentUser && ! $currentUser->hasRole('admin')) {
             $adminOnlyFields = ['is_featured', 'priority_score', 'admin_notes', 'internal_rating'];
             $companyData->forget($adminOnlyFields);
         }
 
         // Subscription-based field removal
-        if ($currentUser && !$currentUser->hasActiveSubscription()) {
+        if ($currentUser && ! $currentUser->hasActiveSubscription()) {
             $premiumFields = ['premium_branding', 'advanced_analytics', 'priority_support'];
             $companyData->forget($premiumFields);
         }
@@ -150,7 +150,7 @@ class CompanyRepository extends BaseRepository
                 }
             }
 
-            if (!empty($changes)) {
+            if (! empty($changes)) {
                 \Log::info('Company data updated', [
                     'company_id' => $company->id,
                     'user_id' => auth()->id(),

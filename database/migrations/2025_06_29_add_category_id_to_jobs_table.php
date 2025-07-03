@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('jobs', function (Blueprint $table) {
-            if (!Schema::hasColumn('jobs', 'category_id')) {
+            if (! Schema::hasColumn('jobs', 'category_id')) {
                 $table->unsignedBigInteger('category_id')->nullable()->after('job_category_id');
             }
         });
@@ -29,4 +29,4 @@ return new class extends Migration
             }
         });
     }
-}; 
+};

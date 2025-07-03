@@ -100,14 +100,14 @@ class CreateCareerLevelRequest extends FormRequest
         }
 
         // Set default active status
-        if (!$this->has('is_active')) {
+        if (! $this->has('is_active')) {
             $this->merge([
                 'is_active' => true,
             ]);
         }
 
         // Set default sort order if not provided
-        if (!$this->has('sort_order')) {
+        if (! $this->has('sort_order')) {
             $this->merge([
                 'sort_order' => 0,
             ]);

@@ -16,7 +16,7 @@ class HeaderSliderTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function itCanBeCreated()
+    public function it_can_be_created()
     {
         $model = HeaderSlider::factory()->create();
 
@@ -27,9 +27,9 @@ class HeaderSliderTest extends TestCase
     }
 
     /** @test */
-    public function itHasFillableAttributes()
+    public function it_has_fillable_attributes()
     {
-        $model = new HeaderSlider();
+        $model = new HeaderSlider;
         $fillable = $model->getFillable();
 
         $this->assertIsArray($fillable);
@@ -37,9 +37,9 @@ class HeaderSliderTest extends TestCase
     }
 
     /** @test */
-    public function itHasProperCasts()
+    public function it_has_proper_casts()
     {
-        $model = new HeaderSlider();
+        $model = new HeaderSlider;
         $casts = $model->getCasts();
 
         $this->assertIsArray($casts);
@@ -47,7 +47,7 @@ class HeaderSliderTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeUpdated()
+    public function it_can_be_updated()
     {
         $model = HeaderSlider::factory()->create();
 
@@ -55,7 +55,7 @@ class HeaderSliderTest extends TestCase
         $updateData = [
             'title' => 'Updated Title',
             'description' => 'Updated description',
-            'is_active' => !$model->is_active,
+            'is_active' => ! $model->is_active,
         ];
         $model->update($updateData);
 
@@ -66,7 +66,7 @@ class HeaderSliderTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeDeleted()
+    public function it_can_be_deleted()
     {
         $model = HeaderSlider::factory()->create();
         $modelId = $model->id;

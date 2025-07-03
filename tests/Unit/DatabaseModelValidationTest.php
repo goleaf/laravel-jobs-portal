@@ -19,7 +19,7 @@ class DatabaseModelValidationTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function userModelRelationshipsWork()
+    public function user_model_relationships_work()
     {
         $user = User::factory()->create();
 
@@ -32,29 +32,29 @@ class DatabaseModelValidationTest extends TestCase
     }
 
     /** @test */
-    public function jobModelRelationshipsWork()
+    public function job_model_relationships_work()
     {
         if (class_exists('\App\Models\Job')) {
             // Skip factory creation due to foreign key dependencies
             // Just check that the class exists and has expected methods
-            $job = new Job();
+            $job = new Job;
 
             // Check for methods that actually exist in the Job model
             $this->assertTrue(method_exists($job, 'company'));
             $this->assertTrue(method_exists($job, 'appliedJobs')); // Updated to the actual method name
-        // Note: Job model doesn't have user() method based on inspection
+            // Note: Job model doesn't have user() method based on inspection
         } else {
             $this->assertTrue(true, 'Job model does not exist, skipping test');
         }
     }
 
     /** @test */
-    public function companyModelRelationshipsWork()
+    public function company_model_relationships_work()
     {
         if (class_exists('\App\Models\Company')) {
             // Skip factory creation due to foreign key dependencies
             // Just check that the class exists and has expected methods
-            $company = new Company();
+            $company = new Company;
 
             $this->assertTrue(method_exists($company, 'user'));
             $this->assertTrue(method_exists($company, 'jobs'));
@@ -64,7 +64,7 @@ class DatabaseModelValidationTest extends TestCase
     }
 
     /** @test */
-    public function requiredTablesExist()
+    public function required_tables_exist()
     {
         $requiredTables = [
             'users',
@@ -82,7 +82,7 @@ class DatabaseModelValidationTest extends TestCase
     }
 
     /** @test */
-    public function userTableHasRequiredColumns()
+    public function user_table_has_required_columns()
     {
         $requiredColumns = [
             'id',
@@ -103,7 +103,7 @@ class DatabaseModelValidationTest extends TestCase
     }
 
     /** @test */
-    public function factoriesWorkCorrectly()
+    public function factories_work_correctly()
     {
         $user = User::factory()->create();
         $this->assertInstanceOf(User::class, $user);
@@ -112,9 +112,9 @@ class DatabaseModelValidationTest extends TestCase
     }
 
     /** @test */
-    public function modelsUseProperFillableAttributes()
+    public function models_use_proper_fillable_attributes()
     {
-        $user = new User();
+        $user = new User;
         $fillable = $user->getFillable();
         $hidden = $user->getHidden();
 

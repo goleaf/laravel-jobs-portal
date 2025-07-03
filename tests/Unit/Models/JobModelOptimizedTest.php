@@ -13,7 +13,7 @@ use Tests\UnitTestCase;
 class JobModelOptimizedTest extends UnitTestCase
 {
     /** @test */
-    public function itHasStatusConstants()
+    public function it_has_status_constants()
     {
         $this->assertEquals(0, Job::STATUS_DRAFT);
         $this->assertEquals(1, Job::STATUS_OPEN);
@@ -23,7 +23,7 @@ class JobModelOptimizedTest extends UnitTestCase
     }
 
     /** @test */
-    public function itHasBooleanConstants()
+    public function it_has_boolean_constants()
     {
         $this->assertEquals(1, Job::YES);
         $this->assertEquals(0, Job::NO);
@@ -35,9 +35,9 @@ class JobModelOptimizedTest extends UnitTestCase
     }
 
     /** @test */
-    public function itHasCorrectFillableAttributes()
+    public function it_has_correct_fillable_attributes()
     {
-        $job = new Job();
+        $job = new Job;
         $fillable = $job->getFillable();
 
         $expectedAttributes = [
@@ -75,7 +75,7 @@ class JobModelOptimizedTest extends UnitTestCase
     }
 
     /** @test */
-    public function itCanBeInstantiatedWithAttributes()
+    public function it_can_be_instantiated_with_attributes()
     {
         $job = new Job([
             'job_id' => 'JOB123456',
@@ -101,9 +101,9 @@ class JobModelOptimizedTest extends UnitTestCase
     }
 
     /** @test */
-    public function itHasRelationshipMethods()
+    public function it_has_relationship_methods()
     {
-        $job = new Job();
+        $job = new Job;
 
         // Test that relationship methods exist
         $this->assertTrue(method_exists($job, 'company'));
@@ -122,7 +122,7 @@ class JobModelOptimizedTest extends UnitTestCase
     }
 
     /** @test */
-    public function itHasNoPreferenceConstants()
+    public function it_has_no_preference_constants()
     {
         $expectedNoPreference = [
             2 => 'Both',
@@ -134,7 +134,7 @@ class JobModelOptimizedTest extends UnitTestCase
     }
 
     /** @test */
-    public function itHasGenderConstants()
+    public function it_has_gender_constants()
     {
         $expectedGender = [
             0 => 'Male',
@@ -145,7 +145,7 @@ class JobModelOptimizedTest extends UnitTestCase
     }
 
     /** @test */
-    public function itHasStatusArrayConstants()
+    public function it_has_status_array_constants()
     {
         $expectedStatus = [
             0 => 'Drafted',
@@ -158,7 +158,7 @@ class JobModelOptimizedTest extends UnitTestCase
     }
 
     /** @test */
-    public function itHasStatusColorConstants()
+    public function it_has_status_color_constants()
     {
         $expectedColors = [
             0 => 'warning',
@@ -171,7 +171,7 @@ class JobModelOptimizedTest extends UnitTestCase
     }
 
     /** @test */
-    public function itHasFavoriteJobStatusConstants()
+    public function it_has_favorite_job_status_constants()
     {
         $expectedFavoriteStatus = [
             1 => 'Live',

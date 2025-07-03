@@ -2,15 +2,11 @@
 
 namespace App\Http\Requests\User;
 
-use App\Models\City;
-use App\Models\State;
 use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\Password;
-use Illuminate\Validation\Validator;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 class StoreUserRequest extends FormRequest
 {
@@ -63,7 +59,7 @@ class StoreUserRequest extends FormRequest
                 'max:255',
                 'unique:users,email',
                 function ($attribute, $value, $fail) {
-                    if (!$this->isValidEmailDomain($value)) {
+                    if (! $this->isValidEmailDomain($value)) {
                         $fail(__('validation.invalid_email_domain'));
                     }
                 },
@@ -80,8 +76,8 @@ class StoreUserRequest extends FormRequest
             'date_of_birth' => [
                 'sometimes',
                 'date',
-                'before:' . now()->subYears(13)->toDateString(),
-                'after:' . now()->subYears(100)->toDateString(),
+                'before:'.now()->subYears(13)->toDateString(),
+                'after:'.now()->subYears(100)->toDateString(),
             ],
 
             'gender' => [
@@ -252,7 +248,7 @@ class StoreUserRequest extends FormRequest
                 'sometimes',
                 'integer',
                 'min:1950',
-                'max:' . (date('Y') + 10),
+                'max:'.(date('Y') + 10),
             ],
 
             'gpa' => [
@@ -693,144 +689,144 @@ class StoreUserRequest extends FormRequest
             'first_name.min' => __('validation.min_chars', ['attribute' => __('validation.attributes.first_name'), 'min' => 2]),
             'first_name.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.first_name'), 'max' => 100]),
             'first_name.regex' => __('validation.invalid_name_format'),
-            
+
             'last_name.required' => __('validation.required_field', ['field' => __('validation.attributes.last_name')]),
             'last_name.min' => __('validation.min_chars', ['attribute' => __('validation.attributes.last_name'), 'min' => 2]),
             'last_name.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.last_name'), 'max' => 100]),
             'last_name.regex' => __('validation.invalid_name_format'),
-            
+
             'username.min' => __('validation.min_chars', ['attribute' => __('validation.attributes.username'), 'min' => 3]),
             'username.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.username'), 'max' => 50]),
             'username.regex' => __('validation.invalid_username_format'),
             'username.unique' => __('validation.unique', ['attribute' => __('validation.attributes.username')]),
-            
+
             'email.required' => __('validation.required_field', ['field' => __('validation.attributes.email')]),
             'email.email' => __('validation.email', ['attribute' => __('validation.attributes.email')]),
             'email.unique' => __('validation.unique', ['attribute' => __('validation.attributes.email')]),
-            
+
             'phone.regex' => __('validation.invalid_phone_format'),
             'phone.unique' => __('validation.unique', ['attribute' => __('validation.attributes.phone')]),
-            
+
             'date_of_birth.before' => __('validation.minimum_age_required'),
             'date_of_birth.after' => __('validation.invalid_birth_date'),
-            
+
             'gender.in' => __('validation.invalid_gender'),
-            
+
             'city_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.city')]),
             'state_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.state')]),
             'country_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.country')]),
-            
+
             'postal_code.regex' => __('validation.invalid_postal_code'),
-            
+
             'industry_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.industry')]),
-            
+
             'experience_level.in' => __('validation.invalid_experience_level'),
-            
+
             'years_of_experience.min' => __('validation.min_value', ['attribute' => __('validation.attributes.years_of_experience'), 'min' => 0]),
             'years_of_experience.max' => __('validation.max_value', ['attribute' => __('validation.attributes.years_of_experience'), 'max' => 50]),
-            
+
             'current_salary.numeric' => __('validation.numeric', ['attribute' => __('validation.attributes.current_salary')]),
             'current_salary.max' => __('validation.max_value', ['attribute' => __('validation.attributes.current_salary'), 'max' => 10000000]),
-            
+
             'expected_salary.numeric' => __('validation.numeric', ['attribute' => __('validation.attributes.expected_salary')]),
             'expected_salary.max' => __('validation.max_value', ['attribute' => __('validation.attributes.expected_salary'), 'max' => 10000000]),
-            
+
             'salary_currency_id.required_with' => __('validation.salary_currency_required'),
             'salary_currency_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.salary_currency')]),
-            
+
             'salary_period.required_with' => __('validation.salary_period_required'),
             'salary_period.in' => __('validation.invalid_salary_period'),
-            
+
             'skills.array' => __('validation.array', ['attribute' => __('validation.attributes.skills')]),
             'skills.max' => __('validation.max_items', ['attribute' => __('validation.attributes.skills'), 'max' => 50]),
             'skills.*.exists' => __('validation.exists', ['attribute' => __('validation.attributes.skill')]),
-            
+
             'languages.array' => __('validation.array', ['attribute' => __('validation.attributes.languages')]),
             'languages.max' => __('validation.max_items', ['attribute' => __('validation.attributes.languages'), 'max' => 10]),
             'languages.*.exists' => __('validation.exists', ['attribute' => __('validation.attributes.language')]),
-            
+
             'certifications.array' => __('validation.array', ['attribute' => __('validation.attributes.certifications')]),
             'certifications.max' => __('validation.max_items', ['attribute' => __('validation.attributes.certifications'), 'max' => 20]),
-            
+
             'education_level_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.education_level')]),
             'degree_level_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.degree_level')]),
-            
+
             'graduation_year.min' => __('validation.min_value', ['attribute' => __('validation.attributes.graduation_year'), 'min' => 1950]),
             'graduation_year.max' => __('validation.max_value', ['attribute' => __('validation.attributes.graduation_year'), 'max' => date('Y') + 10]),
-            
+
             'gpa.min' => __('validation.min_value', ['attribute' => __('validation.attributes.gpa'), 'min' => 0]),
             'gpa.max' => __('validation.max_value', ['attribute' => __('validation.attributes.gpa'), 'max' => 4.0]),
-            
+
             'bio.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.bio'), 'max' => 2000]),
             'summary.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.summary'), 'max' => 1000]),
-            
+
             'website.url' => __('validation.url', ['attribute' => __('validation.attributes.website')]),
-            
+
             'linkedin_url.url' => __('validation.url', ['attribute' => __('validation.attributes.linkedin_url')]),
             'linkedin_url.regex' => __('validation.invalid_linkedin_url'),
-            
+
             'github_url.url' => __('validation.url', ['attribute' => __('validation.attributes.github_url')]),
             'github_url.regex' => __('validation.invalid_github_url'),
-            
+
             'portfolio_url.url' => __('validation.url', ['attribute' => __('validation.attributes.portfolio_url')]),
-            
+
             'job_types.array' => __('validation.array', ['attribute' => __('validation.attributes.job_types')]),
             'job_types.max' => __('validation.max_items', ['attribute' => __('validation.attributes.job_types'), 'max' => 10]),
             'job_types.*.exists' => __('validation.exists', ['attribute' => __('validation.attributes.job_type')]),
-            
+
             'preferred_locations.array' => __('validation.array', ['attribute' => __('validation.attributes.preferred_locations')]),
             'preferred_locations.max' => __('validation.max_items', ['attribute' => __('validation.attributes.preferred_locations'), 'max' => 20]),
             'preferred_locations.*.exists' => __('validation.exists', ['attribute' => __('validation.attributes.location')]),
-            
+
             'remote_work_preference.in' => __('validation.invalid_remote_work_preference'),
             'travel_willingness.in' => __('validation.invalid_travel_willingness'),
             'availability.in' => __('validation.invalid_availability'),
-            
+
             'avatar.image' => __('validation.image', ['attribute' => __('validation.attributes.avatar')]),
             'avatar.mimes' => __('validation.mimes', ['attribute' => __('validation.attributes.avatar'), 'values' => 'jpeg, png, jpg, gif, webp']),
             'avatar.max' => __('validation.max_file_size', ['attribute' => __('validation.attributes.avatar'), 'max' => '5MB']),
             'avatar.dimensions' => __('validation.avatar_dimensions'),
-            
+
             'resume.file' => __('validation.file', ['attribute' => __('validation.attributes.resume')]),
             'resume.mimes' => __('validation.mimes', ['attribute' => __('validation.attributes.resume'), 'values' => 'pdf, doc, docx']),
             'resume.max' => __('validation.max_file_size', ['attribute' => __('validation.attributes.resume'), 'max' => '10MB']),
-            
+
             'cover_letter.file' => __('validation.file', ['attribute' => __('validation.attributes.cover_letter')]),
             'cover_letter.mimes' => __('validation.mimes', ['attribute' => __('validation.attributes.cover_letter'), 'values' => 'pdf, doc, docx']),
             'cover_letter.max' => __('validation.max_file_size', ['attribute' => __('validation.attributes.cover_letter'), 'max' => '5MB']),
-            
+
             'portfolio_files.array' => __('validation.array', ['attribute' => __('validation.attributes.portfolio_files')]),
             'portfolio_files.max' => __('validation.max_items', ['attribute' => __('validation.attributes.portfolio_files'), 'max' => 10]),
             'portfolio_files.*.file' => __('validation.file', ['attribute' => __('validation.attributes.portfolio_file')]),
             'portfolio_files.*.max' => __('validation.max_file_size', ['attribute' => __('validation.attributes.portfolio_file'), 'max' => '20MB']),
-            
+
             'profile_visibility.in' => __('validation.invalid_profile_visibility'),
             'job_alert_frequency.in' => __('validation.invalid_job_alert_frequency'),
-            
+
             'twitter_url.url' => __('validation.url', ['attribute' => __('validation.attributes.twitter_url')]),
             'twitter_url.regex' => __('validation.invalid_twitter_url'),
-            
+
             'facebook_url.url' => __('validation.url', ['attribute' => __('validation.attributes.facebook_url')]),
             'facebook_url.regex' => __('validation.invalid_facebook_url'),
-            
+
             'instagram_url.url' => __('validation.url', ['attribute' => __('validation.attributes.instagram_url')]),
             'instagram_url.regex' => __('validation.invalid_instagram_url'),
-            
+
             'timezone.in' => __('validation.invalid_timezone'),
             'language_preference.in' => __('validation.invalid_language_preference'),
             'currency_preference.exists' => __('validation.exists', ['attribute' => __('validation.attributes.currency')]),
             'date_format.in' => __('validation.invalid_date_format'),
             'time_format.in' => __('validation.invalid_time_format'),
-            
+
             'terms_accepted.required' => __('validation.terms_required'),
             'terms_accepted.accepted' => __('validation.terms_must_accept'),
-            
+
             'privacy_policy_accepted.required' => __('validation.privacy_policy_required'),
             'privacy_policy_accepted.accepted' => __('validation.privacy_policy_must_accept'),
-            
+
             'data_processing_consent.required' => __('validation.data_processing_required'),
             'data_processing_consent.accepted' => __('validation.data_processing_must_accept'),
-            
+
             'references.array' => __('validation.array', ['attribute' => __('validation.attributes.references')]),
             'references.max' => __('validation.max_items', ['attribute' => __('validation.attributes.references'), 'max' => 5]),
             'references.*.name.required_with' => __('validation.reference_name_required'),
@@ -839,22 +835,22 @@ class StoreUserRequest extends FormRequest
             'references.*.email.required_with' => __('validation.reference_email_required'),
             'references.*.email.email' => __('validation.email', ['attribute' => __('validation.attributes.reference_email')]),
             'references.*.relationship.in' => __('validation.invalid_reference_relationship'),
-            
+
             'emergency_contact_phone.regex' => __('validation.invalid_phone_format'),
-            
+
             'custom_fields.array' => __('validation.array', ['attribute' => __('validation.attributes.custom_fields')]),
             'custom_fields.max' => __('validation.max_items', ['attribute' => __('validation.attributes.custom_fields'), 'max' => 20]),
             'custom_fields.*.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.custom_field'), 'max' => 500]),
-            
+
             'tags.array' => __('validation.array', ['attribute' => __('validation.attributes.tags')]),
             'tags.max' => __('validation.max_items', ['attribute' => __('validation.attributes.tags'), 'max' => 30]),
             'tags.*.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.tag'), 'max' => 50]),
             'tags.*.regex' => __('validation.invalid_tag_format'),
-            
+
             'notes.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.notes'), 'max' => 2000]),
-            
+
             'status.in' => __('validation.invalid_status'),
-            
+
             'priority_score.min' => __('validation.min_value', ['attribute' => __('validation.attributes.priority_score'), 'min' => 0]),
             'priority_score.max' => __('validation.max_value', ['attribute' => __('validation.attributes.priority_score'), 'max' => 100]),
         ];
@@ -964,7 +960,7 @@ class StoreUserRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Generate username from email if not provided
-        if (!$this->has('username') && $this->has('email')) {
+        if (! $this->has('username') && $this->has('email')) {
             $this->merge([
                 'username' => strtolower(explode('@', $this->email)[0]),
             ]);
@@ -1089,7 +1085,7 @@ class StoreUserRequest extends FormRequest
     {
         // Set processing metadata
         $this->merge([
-            'user_id' => 'USER-' . date('Ymd') . '-' . strtoupper(substr(md5($this->email . time()), 0, 8)),
+            'user_id' => 'USER-'.date('Ymd').'-'.strtoupper(substr(md5($this->email.time()), 0, 8)),
             'validated_at' => now(),
             'request_source' => $this->header('X-Request-Source', 'web'),
         ]);
@@ -1108,15 +1104,15 @@ class StoreUserRequest extends FormRequest
      */
     private function isValidEmailDomain($email): bool
     {
-        $domain = substr(strrchr($email, "@"), 1);
-        
+        $domain = substr(strrchr($email, '@'), 1);
+
         // Block known temporary email domains
         $blockedDomains = [
             '10minutemail.com', 'tempmail.org', 'guerrillamail.com',
-            'mailinator.com', 'throwaway.email', 'temp-mail.org'
+            'mailinator.com', 'throwaway.email', 'temp-mail.org',
         ];
 
-        return !in_array(strtolower($domain), $blockedDomains);
+        return ! in_array(strtolower($domain), $blockedDomains);
     }
 
     /**
@@ -1135,8 +1131,8 @@ class StoreUserRequest extends FormRequest
      */
     private function shouldAutoApprove(): bool
     {
-        return !$this->is_premium &&
-               !$this->shouldRequireVerification() &&
+        return ! $this->is_premium &&
+               ! $this->shouldRequireVerification() &&
                $this->profile_visibility === 'public';
     }
 }

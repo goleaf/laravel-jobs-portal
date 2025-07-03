@@ -96,7 +96,7 @@ class JobApplicationResource extends JsonResource
                     $canViewPrivate && $this->cover_letter,
                     \Str::limit($this->cover_letter, 200)
                 ),
-                'has_cover_letter' => !empty($this->cover_letter),
+                'has_cover_letter' => ! empty($this->cover_letter),
                 'availability_date' => $this->availability_date,
                 'notice_period' => $this->notice_period,
                 'willing_to_relocate' => $this->willing_to_relocate,
@@ -151,7 +151,7 @@ class JobApplicationResource extends JsonResource
                         'label' => __('job_application.stages.interview'),
                     ],
                     'hired' => [
-                        'completed' => 'hired' === $this->status,
+                        'completed' => $this->status === 'hired',
                         'date' => $this->hired_at,
                         'label' => __('job_application.stages.hired'),
                     ],
@@ -252,7 +252,7 @@ class JobApplicationResource extends JsonResource
      */
     private function canViewCandidateInfo(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
@@ -275,7 +275,7 @@ class JobApplicationResource extends JsonResource
      */
     private function canViewApplicationDetails(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
@@ -298,7 +298,7 @@ class JobApplicationResource extends JsonResource
      */
     private function canViewResume(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
@@ -323,7 +323,7 @@ class JobApplicationResource extends JsonResource
      */
     private function canViewMetadata(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
@@ -335,7 +335,7 @@ class JobApplicationResource extends JsonResource
      */
     private function canViewFeedback(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
@@ -366,7 +366,7 @@ class JobApplicationResource extends JsonResource
      */
     private function canViewInterviewNotes(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
@@ -384,7 +384,7 @@ class JobApplicationResource extends JsonResource
      */
     private function canViewInterviewFeedback(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
@@ -415,7 +415,7 @@ class JobApplicationResource extends JsonResource
      */
     private function canViewStatistics(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
@@ -433,7 +433,7 @@ class JobApplicationResource extends JsonResource
      */
     private function canViewNextActions(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
@@ -459,12 +459,12 @@ class JobApplicationResource extends JsonResource
      */
     private function canEdit(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
         // Candidate can edit their own application if it's still in applied status
-        if (Auth::id() === $this->candidate_id && 'applied' === $this->status) {
+        if (Auth::id() === $this->candidate_id && $this->status === 'applied') {
             return true;
         }
 
@@ -476,13 +476,13 @@ class JobApplicationResource extends JsonResource
      */
     private function canWithdraw(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
         // Candidate can withdraw their own application if not hired/rejected
         if (Auth::id() === $this->candidate_id
-            && !in_array($this->status, ['hired', 'rejected', 'withdrawn'])) {
+            && ! in_array($this->status, ['hired', 'rejected', 'withdrawn'])) {
             return true;
         }
 
@@ -494,7 +494,7 @@ class JobApplicationResource extends JsonResource
      */
     private function canView(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 

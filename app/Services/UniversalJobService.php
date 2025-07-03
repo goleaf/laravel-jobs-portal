@@ -53,7 +53,7 @@ class UniversalJobService
     public function searchJobs(string $keyword = '', array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
         // Log search activity for analytics
-        if (!empty($keyword)) {
+        if (! empty($keyword)) {
             Log::info('Universal Job Service: Job search performed', [
                 'keyword' => $keyword,
                 'filters' => $filters,
@@ -103,7 +103,7 @@ class UniversalJobService
         return DB::transaction(function () use ($jobData, $companyId) {
             // Validate company ownership
             $company = $this->companyRepository->find($companyId);
-            if (!$company || $company->user_id !== Auth::id()) {
+            if (! $company || $company->user_id !== Auth::id()) {
                 throw new \Exception('Unauthorized to create job for this company');
             }
 
@@ -126,12 +126,12 @@ class UniversalJobService
             $job = $this->jobRepository->create($jobData);
 
             // Handle job skills if provided
-            if (!empty($jobData['skills'])) {
+            if (! empty($jobData['skills'])) {
                 $this->attachJobSkills($job, $jobData['skills']);
             }
 
             // Handle job tags if provided
-            if (!empty($jobData['tags'])) {
+            if (! empty($jobData['tags'])) {
                 $this->attachJobTags($job, $jobData['tags']);
             }
 
@@ -160,7 +160,7 @@ class UniversalJobService
             }
 
             // Update job slug if title changed
-            if (!empty($jobData['job_title']) && $jobData['job_title'] !== $job->job_title) {
+            if (! empty($jobData['job_title']) && $jobData['job_title'] !== $job->job_title) {
                 $jobData['job_slug'] = $this->generateJobSlug($jobData['job_title'], $job->company_id);
             }
 
@@ -229,15 +229,14 @@ class UniversalJobService
             $job = $this->jobRepository->findOrFail($jobId);
 
             // Validate job is still open
-            if (Job::STATUS_OPEN !== $job->status || $job->is_suspended) {
+            if ($job->status !== Job::STATUS_OPEN || $job->is_suspended) {
                 throw new \Exception('This job is no longer accepting applications');
             }
 
             // Check if already applied
             $existingApplication = JobApplication::where('job_id', $jobId)
                 ->where('candidate_id', Auth::id())
-                ->first()
-            ;
+                ->first();
 
             if ($existingApplication) {
                 throw new \Exception('You have already applied for this job');
@@ -288,9 +287,9 @@ class UniversalJobService
 
         $this->jobRepository->processInChunks(100, function ($jobs) use (&$expiredCount) {
             foreach ($jobs as $job) {
-                if ($job->job_expiry_date < now()->toDateString() && Job::STATUS_OPEN === $job->status) {
+                if ($job->job_expiry_date < now()->toDateString() && $job->status === Job::STATUS_OPEN) {
                     $this->jobRepository->markAsExpired($job->id);
-                    ++$expiredCount;
+                    $expiredCount++;
                 }
             }
         });
@@ -348,7 +347,7 @@ class UniversalJobService
             // Get candidate skills and preferences
             $candidate = Candidate::with(['candidateSkills', 'jobCategory'])->find($candidateId);
 
-            if (!$candidate) {
+            if (! $candidate) {
                 return collect();
             }
 
@@ -356,8 +355,7 @@ class UniversalJobService
                 ->with(['company', 'jobCategory', 'jobType'])
                 ->where('status', Job::STATUS_OPEN)
                 ->where('is_suspended', false)
-                ->where('job_expiry_date', '>=', now()->toDateString())
-            ;
+                ->where('job_expiry_date', '>=', now()->toDateString());
 
             // Match by job category
             if ($candidate->job_category_id) {
@@ -384,12 +382,11 @@ class UniversalJobService
         $cacheKey = "job_view_{$job->id}_".(Auth::id() ?? request()->ip());
 
         // Only track once per user/IP per day
-        if (!Cache::has($cacheKey)) {
+        if (! Cache::has($cacheKey)) {
             // Increment view count
             DB::table('jobs')
                 ->where('id', $job->id)
-                ->increment('views_count')
-            ;
+                ->increment('views_count');
 
             // Cache to prevent duplicate tracking
             Cache::put($cacheKey, true, now()->addDay());
@@ -413,7 +410,7 @@ class UniversalJobService
 
         while ($this->jobRepository->exists(['job_slug' => $slug, 'company_id' => $companyId])) {
             $slug = $baseSlug.'-'.$counter;
-            ++$counter;
+            $counter++;
         }
 
         return $slug;
@@ -424,7 +421,7 @@ class UniversalJobService
      */
     protected function attachJobSkills(Job $job, array $skillIds): void
     {
-        if (!empty($skillIds)) {
+        if (! empty($skillIds)) {
             $job->jobSkills()->attach($skillIds);
         }
     }
@@ -442,7 +439,7 @@ class UniversalJobService
      */
     protected function attachJobTags(Job $job, array $tagIds): void
     {
-        if (!empty($tagIds)) {
+        if (! empty($tagIds)) {
             $job->jobTags()->attach($tagIds);
         }
     }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tag;
-use App\Repositories\TagRepository;
 use App\Http\Requests\Tag\CreateTagRequest;
 use App\Http\Requests\Tag\UpdateTagRequest;
+use App\Models\Tag;
+use App\Repositories\TagRepository;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;

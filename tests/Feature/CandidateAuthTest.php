@@ -23,16 +23,15 @@ class CandidateAuthTest extends TestCase
     use WithFaker;
 
     /** @test */
-    public function candidateCanViewRegistrationForm()
+    public function candidate_can_view_registration_form()
     {
         $this->get(route('candidate.register'))
             ->assertStatus(200)
-            ->assertViewIs('candidate.auth.register')
-        ;
+            ->assertViewIs('candidate.auth.register');
     }
 
     /** @test */
-    public function candidateCanRegisterWithValidData()
+    public function candidate_can_register_with_valid_data()
     {
         $country = Country::factory()->create();
         $state = State::factory()->create(['country_id' => $country->id]);
@@ -52,8 +51,7 @@ class CandidateAuthTest extends TestCase
 
         $this->post(route('candidate.register'), $candidateData)
             ->assertRedirect(route('candidate.dashboard'))
-            ->assertSessionHas('success')
-        ;
+            ->assertSessionHas('success');
 
         $this->assertDatabaseHas('users', [
             'first_name' => 'John',
@@ -68,7 +66,7 @@ class CandidateAuthTest extends TestCase
     }
 
     /** @test */
-    public function candidateCannotRegisterWithInvalidEmail()
+    public function candidate_cannot_register_with_invalid_email()
     {
         $candidateData = [
             'first_name' => 'John',
@@ -80,12 +78,11 @@ class CandidateAuthTest extends TestCase
         ];
 
         $this->post(route('candidate.register'), $candidateData)
-            ->assertSessionHasErrors(['email'])
-        ;
+            ->assertSessionHasErrors(['email']);
     }
 
     /** @test */
-    public function candidateCannotRegisterWithExistingEmail()
+    public function candidate_cannot_register_with_existing_email()
     {
         User::factory()->create(['email' => 'existing@example.com']);
 
@@ -99,12 +96,11 @@ class CandidateAuthTest extends TestCase
         ];
 
         $this->post(route('candidate.register'), $candidateData)
-            ->assertSessionHasErrors(['email'])
-        ;
+            ->assertSessionHasErrors(['email']);
     }
 
     /** @test */
-    public function candidateCannotRegisterWithMismatchedPasswords()
+    public function candidate_cannot_register_with_mismatched_passwords()
     {
         $candidateData = [
             'first_name' => 'John',
@@ -116,21 +112,19 @@ class CandidateAuthTest extends TestCase
         ];
 
         $this->post(route('candidate.register'), $candidateData)
-            ->assertSessionHasErrors(['password'])
-        ;
+            ->assertSessionHasErrors(['password']);
     }
 
     /** @test */
-    public function candidateCanViewLoginForm()
+    public function candidate_can_view_login_form()
     {
         $this->get(route('candidate.login'))
             ->assertStatus(200)
-            ->assertViewIs('candidate.auth.login')
-        ;
+            ->assertViewIs('candidate.auth.login');
     }
 
     /** @test */
-    public function candidateCanLoginWithValidCredentials()
+    public function candidate_can_login_with_valid_credentials()
     {
         $user = User::factory()->create([
             'email' => 'candidate@example.com',
@@ -149,14 +143,13 @@ class CandidateAuthTest extends TestCase
             'password' => 'password123',
         ])
             ->assertRedirect(route('candidate.dashboard'))
-            ->assertSessionHas('success')
-        ;
+            ->assertSessionHas('success');
 
         $this->assertAuthenticatedAs($user);
     }
 
     /** @test */
-    public function candidateCannotLoginWithInvalidCredentials()
+    public function candidate_cannot_login_with_invalid_credentials()
     {
         $user = User::factory()->create([
             'email' => 'candidate@example.com',
@@ -167,14 +160,13 @@ class CandidateAuthTest extends TestCase
             'email' => 'candidate@example.com',
             'password' => 'wrong_password',
         ])
-            ->assertSessionHasErrors(['email'])
-        ;
+            ->assertSessionHasErrors(['email']);
 
         $this->assertGuest();
     }
 
     /** @test */
-    public function authenticatedCandidateCanLogout()
+    public function authenticated_candidate_can_logout()
     {
         $user = User::factory()->create([
             'owner_type' => 'App\Models\Candidate',
@@ -187,14 +179,13 @@ class CandidateAuthTest extends TestCase
         $this->actingAs($user)
             ->post(route('candidate.logout'))
             ->assertRedirect(route('front.home'))
-            ->assertSessionHas('success')
-        ;
+            ->assertSessionHas('success');
 
         $this->assertGuest();
     }
 
     /** @test */
-    public function authenticatedCandidateCanAccessDashboard()
+    public function authenticated_candidate_can_access_dashboard()
     {
         $user = User::factory()->create([
             'owner_type' => 'App\Models\Candidate',
@@ -207,20 +198,18 @@ class CandidateAuthTest extends TestCase
         $this->actingAs($user)
             ->get(route('candidate.dashboard'))
             ->assertStatus(200)
-            ->assertViewIs('candidate.dashboard.index')
-        ;
+            ->assertViewIs('candidate.dashboard.index');
     }
 
     /** @test */
-    public function unauthenticatedUserCannotAccessCandidateDashboard()
+    public function unauthenticated_user_cannot_access_candidate_dashboard()
     {
         $this->get(route('candidate.dashboard'))
-            ->assertRedirect(route('candidate.login'))
-        ;
+            ->assertRedirect(route('candidate.login'));
     }
 
     /** @test */
-    public function registrationRequiresAllRequiredFields()
+    public function registration_requires_all_required_fields()
     {
         $this->post(route('candidate.register'), [])
             ->assertSessionHasErrors([

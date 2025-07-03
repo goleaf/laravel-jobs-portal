@@ -6,16 +6,16 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * Audit Logging Trait
- * 
+ *
  * Provides comprehensive audit logging for validation events:
  * - Validation success/failure logging
  * - Security event logging
  * - Performance metrics logging
  * - Compliance audit trails
  * - Error tracking and monitoring
- * 
- * @package App\Http\Requests\Foundation\Traits
+ *
  * @version 1.0.0
+ *
  * @since 2024-12-28
  */
 trait AuditLoggingTrait
@@ -30,7 +30,7 @@ trait AuditLoggingTrait
      */
     protected array $auditLogLevels = [
         'info' => 'info',
-        'warning' => 'warning', 
+        'warning' => 'warning',
         'error' => 'error',
         'security' => 'warning',
         'performance' => 'info',
@@ -42,7 +42,7 @@ trait AuditLoggingTrait
      */
     protected function logValidationSuccess(): void
     {
-        if (!$this->auditLoggingEnabled) {
+        if (! $this->auditLoggingEnabled) {
             return;
         }
 
@@ -54,7 +54,7 @@ trait AuditLoggingTrait
      */
     protected function logValidationFailureAudit($validator): void
     {
-        if (!$this->auditLoggingEnabled) {
+        if (! $this->auditLoggingEnabled) {
             return;
         }
 
@@ -72,7 +72,7 @@ trait AuditLoggingTrait
      */
     protected function logSecurityEvent(string $event, array $details = []): void
     {
-        if (!$this->auditLoggingEnabled) {
+        if (! $this->auditLoggingEnabled) {
             return;
         }
 
@@ -90,7 +90,7 @@ trait AuditLoggingTrait
      */
     protected function logPerformanceMetrics(array $metrics): void
     {
-        if (!$this->auditLoggingEnabled) {
+        if (! $this->auditLoggingEnabled) {
             return;
         }
 
@@ -101,7 +101,7 @@ trait AuditLoggingTrait
 
         // Log as warning if performance thresholds exceeded
         $logLevel = $this->isPerformanceThresholdExceeded($metrics) ? 'warning' : 'info';
-        
+
         Log::log($logLevel, 'Validation performance metrics', $auditData);
     }
 
@@ -110,7 +110,7 @@ trait AuditLoggingTrait
      */
     protected function logComplianceEvent(string $event, array $data = []): void
     {
-        if (!$this->auditLoggingEnabled) {
+        if (! $this->auditLoggingEnabled) {
             return;
         }
 
@@ -128,7 +128,7 @@ trait AuditLoggingTrait
      */
     protected function logUserAction(string $action, array $context = []): void
     {
-        if (!$this->auditLoggingEnabled) {
+        if (! $this->auditLoggingEnabled) {
             return;
         }
 
@@ -167,7 +167,7 @@ trait AuditLoggingTrait
     protected function extractFailedRules($validator): array
     {
         $failedRules = [];
-        
+
         foreach ($validator->failed() as $field => $rules) {
             $failedRules[$field] = array_keys($rules);
         }
@@ -195,12 +195,12 @@ trait AuditLoggingTrait
         $thresholds = $this->getPerformanceThresholds();
 
         foreach ($metrics as $operation => $operationMetrics) {
-            if (isset($operationMetrics['execution_time_ms']) && 
+            if (isset($operationMetrics['execution_time_ms']) &&
                 $operationMetrics['execution_time_ms'] > $thresholds['execution_time_ms']) {
                 return true;
             }
 
-            if (isset($operationMetrics['memory_usage_mb']) && 
+            if (isset($operationMetrics['memory_usage_mb']) &&
                 $operationMetrics['memory_usage_mb'] > $thresholds['memory_usage_mb']) {
                 return true;
             }
@@ -214,7 +214,7 @@ trait AuditLoggingTrait
      */
     protected function logDataSanitization(array $originalData, array $sanitizedData): void
     {
-        if (!$this->auditLoggingEnabled) {
+        if (! $this->auditLoggingEnabled) {
             return;
         }
 
@@ -229,7 +229,7 @@ trait AuditLoggingTrait
             }
         }
 
-        if (!empty($changes)) {
+        if (! empty($changes)) {
             $auditData = array_merge($this->getBaseAuditData(), [
                 'sanitization_changes' => $changes,
                 'total_fields_changed' => count($changes),
@@ -244,7 +244,7 @@ trait AuditLoggingTrait
      */
     protected function logAuthorizationEvent(string $result, array $context = []): void
     {
-        if (!$this->auditLoggingEnabled) {
+        if (! $this->auditLoggingEnabled) {
             return;
         }
 
@@ -262,7 +262,7 @@ trait AuditLoggingTrait
      */
     protected function logRateLimitEvent(string $event, array $details = []): void
     {
-        if (!$this->auditLoggingEnabled) {
+        if (! $this->auditLoggingEnabled) {
             return;
         }
 
@@ -280,7 +280,7 @@ trait AuditLoggingTrait
      */
     protected function createAuditSummary(bool $success, array $metrics = []): void
     {
-        if (!$this->auditLoggingEnabled) {
+        if (! $this->auditLoggingEnabled) {
             return;
         }
 
@@ -320,4 +320,4 @@ trait AuditLoggingTrait
     {
         return $this->auditLoggingEnabled;
     }
-} 
+}

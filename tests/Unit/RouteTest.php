@@ -13,7 +13,7 @@ use Tests\TestCase;
 class RouteTest extends TestCase
 {
     /** @test */
-    public function itHasWelcomeRoute()
+    public function it_has_welcome_route()
     {
         $routes = Route::getRoutes();
         $routeNames = [];
@@ -32,7 +32,7 @@ class RouteTest extends TestCase
     }
 
     /** @test */
-    public function itHasAuthRoutes()
+    public function it_has_auth_routes()
     {
         $routes = Route::getRoutes();
         $routeNames = [];
@@ -50,7 +50,7 @@ class RouteTest extends TestCase
     }
 
     /** @test */
-    public function itHasCandidateRoutes()
+    public function it_has_candidate_routes()
     {
         $routes = Route::getRoutes();
         $routeNames = [];
@@ -70,7 +70,7 @@ class RouteTest extends TestCase
     }
 
     /** @test */
-    public function itHasEmployerRoutes()
+    public function it_has_employer_routes()
     {
         $routes = Route::getRoutes();
         $routeNames = [];

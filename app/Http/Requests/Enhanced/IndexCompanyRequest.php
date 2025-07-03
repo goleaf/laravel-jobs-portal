@@ -206,7 +206,7 @@ class IndexCompanyRequest extends FormRequest
                 'integer',
                 'exists:states,id',
                 function ($attribute, $value, $fail) {
-                    if ($this->input('country_id') && !$this->validateStateCountryRelation($value, $this->input('country_id'))) {
+                    if ($this->input('country_id') && ! $this->validateStateCountryRelation($value, $this->input('country_id'))) {
                         $fail(__('validation.state_country_mismatch'));
                     }
                 },
@@ -228,7 +228,7 @@ class IndexCompanyRequest extends FormRequest
                 'integer',
                 'exists:cities,id',
                 function ($attribute, $value, $fail) {
-                    if ($this->input('state_id') && !$this->validateCityStateRelation($value, $this->input('state_id'))) {
+                    if ($this->input('state_id') && ! $this->validateCityStateRelation($value, $this->input('state_id'))) {
                         $fail(__('validation.city_state_mismatch'));
                     }
                 },
@@ -716,42 +716,42 @@ class IndexCompanyRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Set default values
-        if (!$this->has('per_page')) {
+        if (! $this->has('per_page')) {
             $this->merge(['per_page' => 20]);
         }
 
-        if (!$this->has('sort_by')) {
+        if (! $this->has('sort_by')) {
             $this->merge(['sort_by' => 'company_name']);
         }
 
-        if (!$this->has('sort_direction')) {
+        if (! $this->has('sort_direction')) {
             $this->merge(['sort_direction' => 'asc']);
         }
 
-        if (!$this->has('search_type')) {
+        if (! $this->has('search_type')) {
             $this->merge(['search_type' => 'all']);
         }
 
-        if (!$this->has('response_format')) {
+        if (! $this->has('response_format')) {
             $this->merge(['response_format' => 'full']);
         }
 
-        if (!$this->has('recent_hiring_days')) {
+        if (! $this->has('recent_hiring_days')) {
             $this->merge(['recent_hiring_days' => 30]);
         }
 
-        if (!$this->has('cache_duration')) {
+        if (! $this->has('cache_duration')) {
             $this->merge(['cache_duration' => 1800]); // 30 minutes
         }
 
-        if (!$this->has('use_cache')) {
+        if (! $this->has('use_cache')) {
             $this->merge(['use_cache' => true]);
         }
 
         // Clean search input
         if ($this->has('search')) {
             $this->merge([
-                'search' => trim($this->input('search'))
+                'search' => trim($this->input('search')),
             ]);
         }
 
@@ -760,13 +760,13 @@ class IndexCompanyRequest extends FormRequest
             'is_active', 'is_verified', 'is_featured', 'has_logo', 'has_website',
             'has_description', 'has_active_jobs', 'hiring_actively', 'with_analytics',
             'minimal_data', 'include_statistics', 'use_cache', 'force_refresh',
-            'export_include_relationships', 'include_meta', 'include_debug'
+            'export_include_relationships', 'include_meta', 'include_debug',
         ];
 
         foreach ($booleanFields as $field) {
             if ($this->has($field)) {
                 $this->merge([
-                    $field => filter_var($this->input($field), FILTER_VALIDATE_BOOLEAN)
+                    $field => filter_var($this->input($field), FILTER_VALIDATE_BOOLEAN),
                 ]);
             }
         }
@@ -775,13 +775,13 @@ class IndexCompanyRequest extends FormRequest
         $arrayFields = [
             'search_fields', 'industries', 'functional_areas', 'company_sizes',
             'countries', 'states', 'cities', 'ownership_types', 'with_relationships',
-            'with_counts', 'export_fields', 'selected_companies'
+            'with_counts', 'export_fields', 'selected_companies',
         ];
 
         foreach ($arrayFields as $field) {
-            if ($this->has($field) && !is_array($this->input($field))) {
+            if ($this->has($field) && ! is_array($this->input($field))) {
                 $this->merge([
-                    $field => array_filter(explode(',', $this->input($field)))
+                    $field => array_filter(explode(',', $this->input($field))),
                 ]);
             }
         }
@@ -792,7 +792,7 @@ class IndexCompanyRequest extends FormRequest
                 'search_term' => $this->input('search'),
                 'search_type' => $this->input('search_type'),
                 'filters_applied' => count(array_filter($this->only([
-                    'status', 'industry_id', 'company_size_id', 'country_id'
+                    'status', 'industry_id', 'company_size_id', 'country_id',
                 ]))),
                 'ip_address' => $this->ip(),
                 'user_agent' => $this->userAgent(),
@@ -810,7 +810,7 @@ class IndexCompanyRequest extends FormRequest
         Log::info('Enhanced company index request validated', [
             'filters_applied' => count(array_filter($this->only([
                 'search', 'status', 'industry_id', 'company_size_id', 'country_id',
-                'state_id', 'city_id', 'is_featured', 'has_active_jobs'
+                'state_id', 'city_id', 'is_featured', 'has_active_jobs',
             ]))),
             'search_performed' => $this->has('search'),
             'export_requested' => $this->has('export_format'),
@@ -832,11 +832,11 @@ class IndexCompanyRequest extends FormRequest
         $inappropriateWords = [
             'spam', 'scam', 'fraud', 'fake', 'illegal', 'hack', 'virus',
             'malware', 'phishing', 'adult', 'xxx', 'porn', 'sex', 'drug',
-            'weapon', 'violence', 'hate', 'racist', 'terrorist'
+            'weapon', 'violence', 'hate', 'racist', 'terrorist',
         ];
 
         $lowercaseContent = strtolower($content);
-        
+
         foreach ($inappropriateWords as $word) {
             if (strpos($lowercaseContent, $word) !== false) {
                 return true;
@@ -847,7 +847,7 @@ class IndexCompanyRequest extends FormRequest
         $sqlPatterns = [
             '/(\bselect\b|\binsert\b|\bupdate\b|\bdelete\b|\bdrop\b|\bunion\b)/i',
             '/(\bor\s+1\s*=\s*1\b|\band\s+1\s*=\s*1\b)/i',
-            '/(--|\/\*|\*\/|;)/i'
+            '/(--|\/\*|\*\/|;)/i',
         ];
 
         foreach ($sqlPatterns as $pattern) {
@@ -880,4 +880,4 @@ class IndexCompanyRequest extends FormRequest
             ->where('state_id', $stateId)
             ->exists();
     }
-} 
+}

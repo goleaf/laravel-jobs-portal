@@ -3,8 +3,8 @@
 namespace App\Http\Requests\Enhanced;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Validation\Rule;
 
 class AnalyticsManagementRequest extends FormRequest
 {
@@ -22,7 +22,7 @@ class AnalyticsManagementRequest extends FormRequest
         $rules = array_merge($rules, $this->getPredictiveAnalyticsRules());
         $rules = array_merge($rules, $this->getVisualizationRules());
         $rules = array_merge($rules, $this->getAdvancedAnalyticsRules());
-        
+
         return $rules;
     }
 
@@ -38,7 +38,7 @@ class AnalyticsManagementRequest extends FormRequest
             'real_time_analytics' => ['nullable', 'boolean'],
             'historical_data_analysis' => ['nullable', 'boolean'],
             'cross_platform_tracking' => ['nullable', 'boolean'],
-            
+
             // Data Privacy and Compliance
             'gdpr_compliance_enabled' => ['nullable', 'boolean'],
             'ccpa_compliance_enabled' => ['nullable', 'boolean'],
@@ -48,7 +48,7 @@ class AnalyticsManagementRequest extends FormRequest
             'user_opt_out_enabled' => ['nullable', 'boolean'],
             'data_export_capabilities' => ['nullable', 'boolean'],
             'right_to_deletion_enabled' => ['nullable', 'boolean'],
-            
+
             // Sampling and Data Quality
             'sampling_enabled' => ['nullable', 'boolean'],
             'sampling_rate_percentage' => ['nullable', 'numeric', 'min:0.01', 'max:100'],
@@ -58,7 +58,7 @@ class AnalyticsManagementRequest extends FormRequest
             'data_cleansing_enabled' => ['nullable', 'boolean'],
             'outlier_detection_enabled' => ['nullable', 'boolean'],
             'data_enrichment_enabled' => ['nullable', 'boolean'],
-            
+
             // Performance Configuration
             'analytics_performance_optimization' => ['nullable', 'boolean'],
             'data_compression_enabled' => ['nullable', 'boolean'],
@@ -68,7 +68,7 @@ class AnalyticsManagementRequest extends FormRequest
             'query_optimization_enabled' => ['nullable', 'boolean'],
             'index_optimization_enabled' => ['nullable', 'boolean'],
             'parallel_processing_enabled' => ['nullable', 'boolean'],
-            
+
             // Security and Access Control
             'analytics_security_enabled' => ['nullable', 'boolean'],
             'role_based_access_control' => ['nullable', 'boolean'],
@@ -95,7 +95,7 @@ class AnalyticsManagementRequest extends FormRequest
             'session_recording_enabled' => ['nullable', 'boolean'],
             'heatmap_generation_enabled' => ['nullable', 'boolean'],
             'user_journey_mapping' => ['nullable', 'boolean'],
-            
+
             // E-commerce Tracking
             'ecommerce_tracking_enabled' => ['nullable', 'boolean'],
             'purchase_tracking_enabled' => ['nullable', 'boolean'],
@@ -105,7 +105,7 @@ class AnalyticsManagementRequest extends FormRequest
             'promotion_effectiveness_tracking' => ['nullable', 'boolean'],
             'customer_lifetime_value_tracking' => ['nullable', 'boolean'],
             'refund_and_return_tracking' => ['nullable', 'boolean'],
-            
+
             // Job Portal Specific Tracking
             'job_search_analytics' => ['nullable', 'boolean'],
             'application_funnel_tracking' => ['nullable', 'boolean'],
@@ -115,7 +115,7 @@ class AnalyticsManagementRequest extends FormRequest
             'skills_demand_analytics' => ['nullable', 'boolean'],
             'salary_trend_analytics' => ['nullable', 'boolean'],
             'industry_performance_tracking' => ['nullable', 'boolean'],
-            
+
             // Technical Performance Metrics
             'technical_performance_tracking' => ['nullable', 'boolean'],
             'page_load_time_tracking' => ['nullable', 'boolean'],
@@ -125,7 +125,7 @@ class AnalyticsManagementRequest extends FormRequest
             'resource_usage_tracking' => ['nullable', 'boolean'],
             'database_performance_tracking' => ['nullable', 'boolean'],
             'cdn_performance_tracking' => ['nullable', 'boolean'],
-            
+
             // Custom Events and Goals
             'custom_events_enabled' => ['nullable', 'boolean'],
             'custom_events' => ['nullable', 'array'],
@@ -137,7 +137,7 @@ class AnalyticsManagementRequest extends FormRequest
             'conversion_goals' => ['nullable', 'array'],
             'micro_conversion_tracking' => ['nullable', 'boolean'],
             'funnel_analysis_enabled' => ['nullable', 'boolean'],
-            
+
             // Attribution and Campaign Tracking
             'attribution_modeling_enabled' => ['nullable', 'boolean'],
             'attribution_model' => ['nullable', 'string', Rule::in(['first_click', 'last_click', 'linear', 'time_decay', 'position_based', 'data_driven'])],
@@ -162,7 +162,7 @@ class AnalyticsManagementRequest extends FormRequest
             'real_time_data_processing' => ['nullable', 'boolean'],
             'data_modeling_enabled' => ['nullable', 'boolean'],
             'dimensional_modeling' => ['nullable', 'boolean'],
-            
+
             // KPI and Metrics Management
             'kpi_management_enabled' => ['nullable', 'boolean'],
             'custom_kpis' => ['nullable', 'array'],
@@ -173,7 +173,7 @@ class AnalyticsManagementRequest extends FormRequest
             'kpi_benchmarking_enabled' => ['nullable', 'boolean'],
             'performance_scorecards' => ['nullable', 'boolean'],
             'balanced_scorecard_enabled' => ['nullable', 'boolean'],
-            
+
             // Executive Dashboards
             'executive_dashboard_enabled' => ['nullable', 'boolean'],
             'c_level_reporting_enabled' => ['nullable', 'boolean'],
@@ -183,7 +183,7 @@ class AnalyticsManagementRequest extends FormRequest
             'industry_benchmarking' => ['nullable', 'boolean'],
             'regulatory_reporting_enabled' => ['nullable', 'boolean'],
             'board_reporting_enabled' => ['nullable', 'boolean'],
-            
+
             // Financial Analytics
             'financial_analytics_enabled' => ['nullable', 'boolean'],
             'revenue_analytics' => ['nullable', 'boolean'],
@@ -193,7 +193,7 @@ class AnalyticsManagementRequest extends FormRequest
             'financial_forecasting' => ['nullable', 'boolean'],
             'cash_flow_analysis' => ['nullable', 'boolean'],
             'roi_analysis_enabled' => ['nullable', 'boolean'],
-            
+
             // Operations Analytics
             'operational_analytics_enabled' => ['nullable', 'boolean'],
             'process_optimization_analytics' => ['nullable', 'boolean'],
@@ -203,7 +203,7 @@ class AnalyticsManagementRequest extends FormRequest
             'supply_chain_analytics' => ['nullable', 'boolean'],
             'capacity_planning_analytics' => ['nullable', 'boolean'],
             'maintenance_analytics' => ['nullable', 'boolean'],
-            
+
             // Customer Analytics
             'customer_analytics_enabled' => ['nullable', 'boolean'],
             'customer_segmentation_analytics' => ['nullable', 'boolean'],
@@ -213,7 +213,7 @@ class AnalyticsManagementRequest extends FormRequest
             'nps_analytics_enabled' => ['nullable', 'boolean'],
             'customer_journey_analytics' => ['nullable', 'boolean'],
             'retention_analysis_enabled' => ['nullable', 'boolean'],
-            
+
             // HR and Talent Analytics
             'hr_analytics_enabled' => ['nullable', 'boolean'],
             'employee_performance_analytics' => ['nullable', 'boolean'],
@@ -238,7 +238,7 @@ class AnalyticsManagementRequest extends FormRequest
             'drag_drop_report_builder' => ['nullable', 'boolean'],
             'sql_based_reporting' => ['nullable', 'boolean'],
             'no_code_reporting' => ['nullable', 'boolean'],
-            
+
             // Report Types and Formats
             'standard_reports' => ['nullable', 'array'],
             'custom_reports' => ['nullable', 'array'],
@@ -248,7 +248,7 @@ class AnalyticsManagementRequest extends FormRequest
             'parameterized_reports' => ['nullable', 'boolean'],
             'drill_down_reports' => ['nullable', 'boolean'],
             'cross_tab_reports' => ['nullable', 'boolean'],
-            
+
             // Export and Distribution
             'report_export_formats' => ['nullable', 'array'],
             'report_export_formats.*' => ['string', Rule::in(['pdf', 'excel', 'csv', 'json', 'xml', 'html', 'powerpoint'])],
@@ -258,7 +258,7 @@ class AnalyticsManagementRequest extends FormRequest
             'teams_integration_enabled' => ['nullable', 'boolean'],
             'api_access_enabled' => ['nullable', 'boolean'],
             'webhook_notifications' => ['nullable', 'boolean'],
-            
+
             // Report Scheduling
             'report_scheduling_enabled' => ['nullable', 'boolean'],
             'schedule_frequencies' => ['nullable', 'array'],
@@ -268,7 +268,7 @@ class AnalyticsManagementRequest extends FormRequest
             'burst_reporting_enabled' => ['nullable', 'boolean'],
             'exception_reporting' => ['nullable', 'boolean'],
             'threshold_based_reporting' => ['nullable', 'boolean'],
-            
+
             // Report Security and Access
             'report_access_control' => ['nullable', 'boolean'],
             'row_level_security' => ['nullable', 'boolean'],
@@ -278,7 +278,7 @@ class AnalyticsManagementRequest extends FormRequest
             'digital_signatures' => ['nullable', 'boolean'],
             'report_versioning' => ['nullable', 'boolean'],
             'audit_trail_reporting' => ['nullable', 'boolean'],
-            
+
             // Performance and Optimization
             'report_caching_enabled' => ['nullable', 'boolean'],
             'incremental_refresh' => ['nullable', 'boolean'],
@@ -303,7 +303,7 @@ class AnalyticsManagementRequest extends FormRequest
             'hyperparameter_tuning' => ['nullable', 'boolean'],
             'cross_validation_enabled' => ['nullable', 'boolean'],
             'ensemble_methods_enabled' => ['nullable', 'boolean'],
-            
+
             // Forecasting and Prediction
             'demand_forecasting' => ['nullable', 'boolean'],
             'revenue_forecasting' => ['nullable', 'boolean'],
@@ -313,7 +313,7 @@ class AnalyticsManagementRequest extends FormRequest
             'anomaly_detection' => ['nullable', 'boolean'],
             'risk_prediction' => ['nullable', 'boolean'],
             'market_trend_prediction' => ['nullable', 'boolean'],
-            
+
             // Job Portal Specific Predictions
             'job_demand_forecasting' => ['nullable', 'boolean'],
             'skill_demand_prediction' => ['nullable', 'boolean'],
@@ -323,7 +323,7 @@ class AnalyticsManagementRequest extends FormRequest
             'job_matching_optimization' => ['nullable', 'boolean'],
             'career_path_prediction' => ['nullable', 'boolean'],
             'industry_growth_prediction' => ['nullable', 'boolean'],
-            
+
             // Advanced Analytics Models
             'clustering_analysis' => ['nullable', 'boolean'],
             'classification_models' => ['nullable', 'boolean'],
@@ -333,7 +333,7 @@ class AnalyticsManagementRequest extends FormRequest
             'association_rule_mining' => ['nullable', 'boolean'],
             'neural_network_models' => ['nullable', 'boolean'],
             'deep_learning_enabled' => ['nullable', 'boolean'],
-            
+
             // Model Management
             'model_versioning_enabled' => ['nullable', 'boolean'],
             'model_monitoring_enabled' => ['nullable', 'boolean'],
@@ -343,7 +343,7 @@ class AnalyticsManagementRequest extends FormRequest
             'feature_importance_analysis' => ['nullable', 'boolean'],
             'model_governance_enabled' => ['nullable', 'boolean'],
             'model_deployment_automation' => ['nullable', 'boolean'],
-            
+
             // Real-time Scoring
             'real_time_scoring_enabled' => ['nullable', 'boolean'],
             'batch_scoring_enabled' => ['nullable', 'boolean'],
@@ -368,7 +368,7 @@ class AnalyticsManagementRequest extends FormRequest
             'responsive_visualizations' => ['nullable', 'boolean'],
             'accessibility_compliant_charts' => ['nullable', 'boolean'],
             'export_chart_capabilities' => ['nullable', 'boolean'],
-            
+
             // Chart Types and Features
             'supported_chart_types' => ['nullable', 'array'],
             'supported_chart_types.*' => ['string', Rule::in(['bar', 'line', 'pie', 'scatter', 'heatmap', 'treemap', 'sankey', 'gantt', 'funnel', 'waterfall'])],
@@ -378,7 +378,7 @@ class AnalyticsManagementRequest extends FormRequest
             'crossfilter_enabled' => ['nullable', 'boolean'],
             'brush_selection_enabled' => ['nullable', 'boolean'],
             'annotation_capabilities' => ['nullable', 'boolean'],
-            
+
             // Dashboard Features
             'dashboard_builder_enabled' => ['nullable', 'boolean'],
             'drag_drop_dashboard' => ['nullable', 'boolean'],
@@ -388,7 +388,7 @@ class AnalyticsManagementRequest extends FormRequest
             'embedded_dashboards' => ['nullable', 'boolean'],
             'white_label_dashboards' => ['nullable', 'boolean'],
             'dashboard_versioning' => ['nullable', 'boolean'],
-            
+
             // Advanced Visualization
             'geospatial_visualization' => ['nullable', 'boolean'],
             'map_integration_enabled' => ['nullable', 'boolean'],
@@ -398,7 +398,7 @@ class AnalyticsManagementRequest extends FormRequest
             'correlation_matrices' => ['nullable', 'boolean'],
             'statistical_overlays' => ['nullable', 'boolean'],
             'trend_lines_enabled' => ['nullable', 'boolean'],
-            
+
             // Performance and Optimization
             'visualization_caching' => ['nullable', 'boolean'],
             'lazy_loading_charts' => ['nullable', 'boolean'],
@@ -423,7 +423,7 @@ class AnalyticsManagementRequest extends FormRequest
             'correlation_analysis' => ['nullable', 'boolean'],
             'causation_analysis' => ['nullable', 'boolean'],
             'recommendation_engine' => ['nullable', 'boolean'],
-            
+
             // Real-time Analytics
             'real_time_streaming_analytics' => ['nullable', 'boolean'],
             'event_stream_processing' => ['nullable', 'boolean'],
@@ -433,7 +433,7 @@ class AnalyticsManagementRequest extends FormRequest
             'live_data_feeds' => ['nullable', 'boolean'],
             'streaming_aggregations' => ['nullable', 'boolean'],
             'real_time_personalization' => ['nullable', 'boolean'],
-            
+
             // Big Data Analytics
             'big_data_processing' => ['nullable', 'boolean'],
             'distributed_computing' => ['nullable', 'boolean'],
@@ -443,7 +443,7 @@ class AnalyticsManagementRequest extends FormRequest
             'elastic_scaling' => ['nullable', 'boolean'],
             'petabyte_scale_processing' => ['nullable', 'boolean'],
             'data_lake_analytics' => ['nullable', 'boolean'],
-            
+
             // Advanced Statistical Analysis
             'statistical_modeling' => ['nullable', 'boolean'],
             'multivariate_analysis' => ['nullable', 'boolean'],
@@ -453,7 +453,7 @@ class AnalyticsManagementRequest extends FormRequest
             'regression_analysis_advanced' => ['nullable', 'boolean'],
             'factor_analysis' => ['nullable', 'boolean'],
             'principal_component_analysis' => ['nullable', 'boolean'],
-            
+
             // Graph Analytics
             'graph_database_integration' => ['nullable', 'boolean'],
             'network_analysis' => ['nullable', 'boolean'],
@@ -463,7 +463,7 @@ class AnalyticsManagementRequest extends FormRequest
             'path_analysis' => ['nullable', 'boolean'],
             'influence_propagation' => ['nullable', 'boolean'],
             'link_prediction' => ['nullable', 'boolean'],
-            
+
             // Text and Sentiment Analytics
             'text_analytics_enabled' => ['nullable', 'boolean'],
             'natural_language_processing' => ['nullable', 'boolean'],
@@ -473,7 +473,7 @@ class AnalyticsManagementRequest extends FormRequest
             'text_classification' => ['nullable', 'boolean'],
             'document_similarity' => ['nullable', 'boolean'],
             'content_analysis' => ['nullable', 'boolean'],
-            
+
             // Geospatial Analytics
             'geospatial_analytics_enabled' => ['nullable', 'boolean'],
             'location_intelligence' => ['nullable', 'boolean'],
@@ -483,7 +483,7 @@ class AnalyticsManagementRequest extends FormRequest
             'proximity_analysis' => ['nullable', 'boolean'],
             'heat_map_analysis' => ['nullable', 'boolean'],
             'demographic_overlay' => ['nullable', 'boolean'],
-            
+
             // Edge Analytics
             'edge_computing_analytics' => ['nullable', 'boolean'],
             'iot_analytics_enabled' => ['nullable', 'boolean'],
@@ -493,14 +493,14 @@ class AnalyticsManagementRequest extends FormRequest
             'real_time_monitoring' => ['nullable', 'boolean'],
             'anomaly_detection_edge' => ['nullable', 'boolean'],
             'local_model_inference' => ['nullable', 'boolean'],
-            
+
             // Quantum Analytics
             'quantum_computing_ready' => ['nullable', 'boolean'],
             'quantum_machine_learning' => ['nullable', 'boolean'],
             'quantum_optimization' => ['nullable', 'boolean'],
             'quantum_simulation' => ['nullable', 'boolean'],
             'quantum_cryptanalysis' => ['nullable', 'boolean'],
-            
+
             // Blockchain Analytics
             'blockchain_analytics_enabled' => ['nullable', 'boolean'],
             'cryptocurrency_analytics' => ['nullable', 'boolean'],
@@ -534,7 +534,7 @@ class AnalyticsManagementRequest extends FormRequest
     private function validateAnalyticsConfiguration(): void
     {
         // Validate sampling configuration
-        if ($this->sampling_enabled && (!$this->has('sampling_rate_percentage') || $this->sampling_rate_percentage <= 0)) {
+        if ($this->sampling_enabled && (! $this->has('sampling_rate_percentage') || $this->sampling_rate_percentage <= 0)) {
             throw new \InvalidArgumentException(__('validation.analytics_management.sampling_rate_required'));
         }
 
@@ -544,7 +544,7 @@ class AnalyticsManagementRequest extends FormRequest
         }
 
         // Validate ML platform consistency
-        if ($this->predictive_analytics_enabled && !$this->has('ml_platform')) {
+        if ($this->predictive_analytics_enabled && ! $this->has('ml_platform')) {
             throw new \InvalidArgumentException(__('validation.analytics_management.ml_platform_required'));
         }
 
@@ -558,17 +558,17 @@ class AnalyticsManagementRequest extends FormRequest
     {
         // Calculate optimal configuration based on analytics complexity
         $optimization = $this->calculateAnalyticsOptimization();
-        
+
         $this->merge([
             'recommended_sampling_rate' => $optimization['sampling_rate'],
             'suggested_caching_strategy' => $optimization['caching_strategy'],
             'optimal_batch_size' => $optimization['batch_size'],
-            'recommended_retention_days' => $optimization['retention_days']
+            'recommended_retention_days' => $optimization['retention_days'],
         ]);
 
         // Cache analytics configuration
         if ($this->has('analytics_id')) {
-            Cache::remember("analytics_config_{$this->analytics_id}", 3600, function() {
+            Cache::remember("analytics_config_{$this->analytics_id}", 3600, function () {
                 return $this->validated();
             });
         }
@@ -578,31 +578,31 @@ class AnalyticsManagementRequest extends FormRequest
     {
         $complexity = $this->calculateComplexityScore();
         $dataVolume = $this->estimateDataVolume();
-        
-        return match(true) {
+
+        return match (true) {
             $complexity >= 80 => [
                 'sampling_rate' => 25.0,
                 'caching_strategy' => 'intelligent',
                 'batch_size' => 10000,
-                'retention_days' => 365
+                'retention_days' => 365,
             ],
             $complexity >= 60 => [
                 'sampling_rate' => 50.0,
                 'caching_strategy' => 'advanced',
                 'batch_size' => 5000,
-                'retention_days' => 180
+                'retention_days' => 180,
             ],
             $complexity >= 40 => [
                 'sampling_rate' => 75.0,
                 'caching_strategy' => 'basic',
                 'batch_size' => 2000,
-                'retention_days' => 90
+                'retention_days' => 90,
             ],
             default => [
                 'sampling_rate' => 100.0,
                 'caching_strategy' => 'none',
                 'batch_size' => 1000,
-                'retention_days' => 30
+                'retention_days' => 30,
             ]
         };
     }
@@ -610,27 +610,47 @@ class AnalyticsManagementRequest extends FormRequest
     private function calculateComplexityScore(): int
     {
         $score = 0;
-        
-        if ($this->predictive_analytics_enabled) $score += 25;
-        if ($this->real_time_analytics) $score += 20;
-        if ($this->big_data_processing) $score += 20;
-        if ($this->artificial_intelligence_enabled) $score += 15;
-        if ($this->graph_database_integration) $score += 10;
-        if ($this->quantum_computing_ready) $score += 10;
-        
+
+        if ($this->predictive_analytics_enabled) {
+            $score += 25;
+        }
+        if ($this->real_time_analytics) {
+            $score += 20;
+        }
+        if ($this->big_data_processing) {
+            $score += 20;
+        }
+        if ($this->artificial_intelligence_enabled) {
+            $score += 15;
+        }
+        if ($this->graph_database_integration) {
+            $score += 10;
+        }
+        if ($this->quantum_computing_ready) {
+            $score += 10;
+        }
+
         return $score;
     }
 
     private function estimateDataVolume(): string
     {
         $indicators = 0;
-        
-        if ($this->cross_platform_tracking) $indicators++;
-        if ($this->session_recording_enabled) $indicators++;
-        if ($this->real_time_streaming_analytics) $indicators++;
-        if ($this->big_data_processing) $indicators++;
-        
-        return match(true) {
+
+        if ($this->cross_platform_tracking) {
+            $indicators++;
+        }
+        if ($this->session_recording_enabled) {
+            $indicators++;
+        }
+        if ($this->real_time_streaming_analytics) {
+            $indicators++;
+        }
+        if ($this->big_data_processing) {
+            $indicators++;
+        }
+
+        return match (true) {
             $indicators >= 3 => 'very_high',
             $indicators >= 2 => 'high',
             $indicators >= 1 => 'medium',
@@ -651,47 +671,83 @@ class AnalyticsManagementRequest extends FormRequest
             'user_agent' => request()->userAgent(),
             'ip_address' => request()->ip(),
             'timestamp' => now(),
-            'performance_optimizations' => $this->has('recommended_sampling_rate')
+            'performance_optimizations' => $this->has('recommended_sampling_rate'),
         ]);
     }
 
     private function getAnalyticsOperationType(): string
     {
-        if ($this->has('user_behavior_tracking')) return 'behavior_analytics';
-        if ($this->has('business_intelligence_enabled')) return 'business_intelligence';
-        if ($this->has('predictive_analytics_enabled')) return 'predictive_analytics';
-        if ($this->has('real_time_analytics')) return 'real_time_analytics';
-        if ($this->has('data_visualization_enabled')) return 'data_visualization';
-        if ($this->has('automated_reporting_enabled')) return 'reporting_system';
-        if ($this->has('artificial_intelligence_enabled')) return 'ai_analytics';
-        
+        if ($this->has('user_behavior_tracking')) {
+            return 'behavior_analytics';
+        }
+        if ($this->has('business_intelligence_enabled')) {
+            return 'business_intelligence';
+        }
+        if ($this->has('predictive_analytics_enabled')) {
+            return 'predictive_analytics';
+        }
+        if ($this->has('real_time_analytics')) {
+            return 'real_time_analytics';
+        }
+        if ($this->has('data_visualization_enabled')) {
+            return 'data_visualization';
+        }
+        if ($this->has('automated_reporting_enabled')) {
+            return 'reporting_system';
+        }
+        if ($this->has('artificial_intelligence_enabled')) {
+            return 'ai_analytics';
+        }
+
         return 'general_analytics_operation';
     }
 
     private function getEnabledFeatures(): array
     {
         $features = [];
-        
-        if ($this->real_time_analytics) $features[] = 'Real-time Analytics';
-        if ($this->predictive_analytics_enabled) $features[] = 'Predictive Analytics';
-        if ($this->artificial_intelligence_enabled) $features[] = 'AI Analytics';
-        if ($this->business_intelligence_enabled) $features[] = 'Business Intelligence';
-        if ($this->big_data_processing) $features[] = 'Big Data Processing';
-        if ($this->quantum_computing_ready) $features[] = 'Quantum Computing';
-        if ($this->blockchain_analytics_enabled) $features[] = 'Blockchain Analytics';
-        
+
+        if ($this->real_time_analytics) {
+            $features[] = 'Real-time Analytics';
+        }
+        if ($this->predictive_analytics_enabled) {
+            $features[] = 'Predictive Analytics';
+        }
+        if ($this->artificial_intelligence_enabled) {
+            $features[] = 'AI Analytics';
+        }
+        if ($this->business_intelligence_enabled) {
+            $features[] = 'Business Intelligence';
+        }
+        if ($this->big_data_processing) {
+            $features[] = 'Big Data Processing';
+        }
+        if ($this->quantum_computing_ready) {
+            $features[] = 'Quantum Computing';
+        }
+        if ($this->blockchain_analytics_enabled) {
+            $features[] = 'Blockchain Analytics';
+        }
+
         return $features;
     }
 
     private function getComplianceStatus(): array
     {
         $compliance = [];
-        
-        if ($this->gdpr_compliance_enabled) $compliance[] = 'GDPR';
-        if ($this->ccpa_compliance_enabled) $compliance[] = 'CCPA';
-        if ($this->data_anonymization_enabled) $compliance[] = 'Data Anonymization';
-        if ($this->audit_logging_enabled) $compliance[] = 'Audit Logging';
-        
+
+        if ($this->gdpr_compliance_enabled) {
+            $compliance[] = 'GDPR';
+        }
+        if ($this->ccpa_compliance_enabled) {
+            $compliance[] = 'CCPA';
+        }
+        if ($this->data_anonymization_enabled) {
+            $compliance[] = 'Data Anonymization';
+        }
+        if ($this->audit_logging_enabled) {
+            $compliance[] = 'Audit Logging';
+        }
+
         return $compliance;
     }
 }

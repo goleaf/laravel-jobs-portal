@@ -839,7 +839,7 @@ class CreateDefaultCurrencySeeder extends Seeder
         foreach ($input as $data) {
             if (in_array($data['currency_name'], $salaryCurrencies)) {
                 $salaryCurrency = SalaryCurrency::whereCurrencyName($data['currency_name'])->first();
-                if (null != $salaryCurrency) {
+                if ($salaryCurrency != null) {
                     $salaryCurrency->update([
                         'currency_icon' => $data['currency_icon'], 'currency_code' => $data['currency_code'],
                     ]);

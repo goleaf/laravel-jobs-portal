@@ -114,14 +114,14 @@ return [
         'enable_slug_generation' => true,
         'enable_api_key_management' => true,
         'enable_verification_tokens' => true,
-        
+
         'reference_formats' => [
             'short' => '{prefix}-{counter}',
             'standard' => '{prefix}-{year}-{counter}',
             'detailed' => '{prefix}-{year}-{month}-{counter}',
             'timestamped' => '{prefix}-{timestamp}-{counter}',
         ],
-        
+
         'slug_strategies' => [
             'simple' => 'base_slug_only',
             'incremental' => 'append_number',
@@ -167,4 +167,4 @@ return [
         'alert_on_high_attempts' => true,
         'high_attempts_threshold' => 8,
     ],
-]; 
+];

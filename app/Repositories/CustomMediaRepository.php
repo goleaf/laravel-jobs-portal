@@ -15,7 +15,6 @@ class CustomMediaRepository extends BaseRepository implements CustomMediaReposit
     /**
      * Get media by type.
      *
-     * @param string $type
      * @return mixed
      */
     public function getByType(string $type)
@@ -26,11 +25,10 @@ class CustomMediaRepository extends BaseRepository implements CustomMediaReposit
     /**
      * Get media by user ID.
      *
-     * @param int $userId
      * @return mixed
      */
     public function getByUserId(int $userId)
     {
         return $this->model->where('user_id', $userId)->get();
     }
-} 
+}

@@ -48,7 +48,7 @@ class AdvancedApiController extends Controller
     {
         $company = $this->getCompanyData($companyId);
 
-        if (!$company) {
+        if (! $company) {
             return response()->json(['error' => 'Company not found'], 404);
         }
 
@@ -183,11 +183,11 @@ class AdvancedApiController extends Controller
     /**
      * Apply role-based filtering using advanced forget() patterns.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     protected function applyRoleBasedFiltering(Collection $data, $user): Collection
     {
-        if (!$user) {
+        if (! $user) {
             // Guest user restrictions
             $guestRestrictedFields = [
                 'internal_notes', 'admin_data', 'private_contact_info',
@@ -236,11 +236,11 @@ class AdvancedApiController extends Controller
     /**
      * Apply subscription-based filtering.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     protected function applySubscriptionFiltering(Collection $data, $user): Collection
     {
-        if (!$user || !$user->hasActiveSubscription()) {
+        if (! $user || ! $user->hasActiveSubscription()) {
             $premiumFields = [
                 'premium_analytics', 'advanced_insights', 'detailed_reports',
                 'priority_data', 'enhanced_features', 'exclusive_content',
@@ -255,8 +255,8 @@ class AdvancedApiController extends Controller
     /**
      * Apply privacy-based filtering.
      *
-     * @param mixed $user
-     * @param mixed $resource
+     * @param  mixed  $user
+     * @param  mixed  $resource
      */
     protected function applyPrivacyFiltering(Collection $data, $user, $resource): Collection
     {
@@ -270,7 +270,7 @@ class AdvancedApiController extends Controller
         }
 
         // Resource ownership filtering
-        if (!$this->isResourceOwner($user, $resource) && !$user?->hasRole('admin')) {
+        if (! $this->isResourceOwner($user, $resource) && ! $user?->hasRole('admin')) {
             $ownerOnlyFields = [
                 'private_notes', 'internal_communications', 'financial_details',
                 'strategic_information', 'confidential_data', 'personal_settings',
@@ -323,7 +323,7 @@ class AdvancedApiController extends Controller
 
         // Remove incomplete data points
         $incompleteIndices = $data->filter(function ($point) {
-            return !isset($point['timestamp']) || !isset($point['value']);
+            return ! isset($point['timestamp']) || ! isset($point['value']);
         })->keys();
 
         $data->forget($incompleteIndices->toArray());

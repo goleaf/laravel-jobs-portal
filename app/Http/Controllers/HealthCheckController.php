@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Artisan;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Laravel Defibrillator Health Check Controller
@@ -19,8 +19,8 @@ class HealthCheckController extends Controller
     public function index(): JsonResponse
     {
         $healthStatus = Cache::get('defibrillator:last_health_check');
-        
-        if (!$healthStatus || Carbon::parse($healthStatus['timestamp'])->diffInMinutes(Carbon::now()) > 15) {
+
+        if (! $healthStatus || Carbon::parse($healthStatus['timestamp'])->diffInMinutes(Carbon::now()) > 15) {
             Artisan::call('defibrillator:check', ['--verbose' => true]);
             $healthStatus = Cache::get('defibrillator:last_health_check');
         }
@@ -73,7 +73,7 @@ class HealthCheckController extends Controller
         return response()->json([
             'status' => 'ok',
             'timestamp' => Carbon::now(),
-            'service' => 'job-portal'
+            'service' => 'job-portal',
         ]);
     }
 
@@ -84,7 +84,7 @@ class HealthCheckController extends Controller
     {
         $healthStatus = Cache::get('defibrillator:last_health_check');
         $lastCheckTime = $healthStatus['timestamp'] ?? null;
-        
+
         $heartbeat = [
             'alive' => true,
             'status' => $healthStatus['status'] ?? 'unknown',
@@ -102,18 +102,18 @@ class HealthCheckController extends Controller
     public function check(Request $request): JsonResponse
     {
         $options = [];
-        
+
         if ($request->boolean('verbose')) {
             $options['--verbose'] = true;
         }
-        
+
         if ($request->boolean('repair')) {
             $options['--repair'] = true;
         }
 
         $exitCode = Artisan::call('defibrillator:check', $options);
         $output = Artisan::output();
-        
+
         $healthStatus = Cache::get('defibrillator:last_health_check');
 
         return response()->json([
@@ -128,23 +128,24 @@ class HealthCheckController extends Controller
     protected function getSystemUptime(): string
     {
         $uptime = shell_exec('uptime');
+
         return $uptime ? trim($uptime) : 'Unknown';
     }
 
     protected function formatBytes(int $bytes): string
     {
         $units = ['B', 'KB', 'MB', 'GB'];
-        
+
         for ($i = 0; $bytes > 1024 && $i < count($units) - 1; $i++) {
             $bytes /= 1024;
         }
 
-        return round($bytes, 2) . ' ' . $units[$i];
+        return round($bytes, 2).' '.$units[$i];
     }
 
     protected function getSystemRhythm(?array $healthStatus): string
     {
-        if (!$healthStatus) {
+        if (! $healthStatus) {
             return 'unknown';
         }
 

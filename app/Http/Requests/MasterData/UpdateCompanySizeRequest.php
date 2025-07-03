@@ -74,13 +74,13 @@ class UpdateCompanySizeRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
             // Additional business logic validation
-            if ($this->is_default && false === $this->is_active) {
+            if ($this->is_default && $this->is_active === false) {
                 $validator->errors()->add('is_active', __('Default company sizes must be active'));
             }
         });

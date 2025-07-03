@@ -29,7 +29,7 @@ class CleanupRappasoftReferences extends Command
         $path = $this->option('path');
         $fixTranslations = (bool) $this->option('fix-translations');
 
-        if (!File::isDirectory($path)) {
+        if (! File::isDirectory($path)) {
             $this->error("Path {$path} is not a valid directory.");
 
             return 1;
@@ -47,10 +47,10 @@ class CleanupRappasoftReferences extends Command
             $originalContent = $content;
 
             // Check if file contains Rappasoft references
-            if (false !== strpos($content, 'rappasoft')
-                || false !== strpos($content, 'Rappasoft')
-                || false !== strpos($content, 'wire:sortable')
-                || false !== strpos($content, 'wire:sorted')) {
+            if (strpos($content, 'rappasoft') !== false
+                || strpos($content, 'Rappasoft') !== false
+                || strpos($content, 'wire:sortable') !== false
+                || strpos($content, 'wire:sorted') !== false) {
                 $this->info("Found Rappasoft references in: {$file}");
 
                 // Replace common Rappasoft classes with Tailwind equivalents
@@ -74,7 +74,7 @@ class CleanupRappasoftReferences extends Command
 
                 if ($content !== $originalContent) {
                     File::put($file, $content);
-                    ++$count;
+                    $count++;
                 }
             }
 
@@ -112,7 +112,7 @@ class CleanupRappasoftReferences extends Command
                 if ($content !== $originalContent) {
                     File::put($file, $content);
                     $this->info("Updated translation keys in: {$file}");
-                    ++$count;
+                    $count++;
                 }
             }
         }

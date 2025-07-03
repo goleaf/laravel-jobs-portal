@@ -3,14 +3,15 @@
 namespace App\Actions;
 
 use App\Models\JobApplication;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use LumoSolutions\Actionable\Concerns\IsDispatchable;
 use LumoSolutions\Actionable\Concerns\IsRunnable;
 
 class SendJobApplicationNotification
 {
-    use IsRunnable, IsDispatchable;
+    use IsDispatchable;
+    use IsRunnable;
 
     /**
      * Send job application notification to employer or candidate
@@ -18,7 +19,7 @@ class SendJobApplicationNotification
     public function handle(JobApplication $application, string $recipient = 'employer'): void
     {
         try {
-            match($recipient) {
+            match ($recipient) {
                 'employer' => $this->sendEmployerNotification($application),
                 'candidate' => $this->sendCandidateNotification($application),
                 default => throw new \InvalidArgumentException("Invalid recipient: {$recipient}")
@@ -27,16 +28,16 @@ class SendJobApplicationNotification
             Log::info('Job application notification sent', [
                 'application_id' => $application->id,
                 'recipient' => $recipient,
-                'job_title' => $application->job->job_title
+                'job_title' => $application->job->job_title,
             ]);
 
         } catch (\Exception $e) {
             Log::error('Failed to send job application notification', [
                 'application_id' => $application->id,
                 'recipient' => $recipient,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
-            
+
             throw $e;
         }
     }
@@ -51,29 +52,30 @@ class SendJobApplicationNotification
         $candidate = $application->candidate;
 
         // Get notification email (job contact or company default)
-        $notificationEmail = $job->contact_email ?? 
-                           $job->application_email ?? 
+        $notificationEmail = $job->contact_email ??
+                           $job->application_email ??
                            $company->email;
 
-        if (!$notificationEmail) {
+        if (! $notificationEmail) {
             Log::warning('No notification email found for employer', [
                 'job_id' => $job->id,
-                'company_id' => $company->id
+                'company_id' => $company->id,
             ]);
+
             return;
         }
 
         // Prepare notification data
         $notificationData = [
             'job_title' => $job->job_title,
-            'candidate_name' => $candidate->first_name . ' ' . $candidate->last_name,
+            'candidate_name' => $candidate->first_name.' '.$candidate->last_name,
             'candidate_email' => $candidate->email,
             'application_date' => $application->applied_at->format('M d, Y'),
             'cover_letter' => $application->cover_letter,
             'expected_salary' => $application->expected_salary,
             'company_name' => $company->name,
             'application_url' => route('employer.applications.show', $application->id),
-            'resume_url' => $application->resume_path ? asset($application->resume_path) : null
+            'resume_url' => $application->resume_path ? asset($application->resume_path) : null,
         ];
 
         // Send email using appropriate mail class
@@ -91,19 +93,19 @@ class SendJobApplicationNotification
         $candidate = $application->candidate;
 
         // Check if candidate wants to receive notifications
-        if (!$candidate->settings('notifications.application_updates', true)) {
+        if (! $candidate->settings('notifications.application_updates', true)) {
             return;
         }
 
         // Prepare notification data
         $notificationData = [
-            'candidate_name' => $candidate->first_name . ' ' . $candidate->last_name,
+            'candidate_name' => $candidate->first_name.' '.$candidate->last_name,
             'job_title' => $job->job_title,
             'company_name' => $company->name,
             'application_date' => $application->applied_at->format('M d, Y'),
             'application_status' => $application->getStatusDisplayName(),
             'job_url' => route('jobs.show', $job->slug ?? $job->id),
-            'application_tracking_url' => route('candidate.applications.show', $application->id)
+            'application_tracking_url' => route('candidate.applications.show', $application->id),
         ];
 
         // Send confirmation email
@@ -111,10 +113,10 @@ class SendJobApplicationNotification
             ->send(new \App\Mail\JobApplicationConfirmation($notificationData));
 
         // Send SMS notification if enabled and phone number available
-        if ($candidate->phone && 
+        if ($candidate->phone &&
             $candidate->settings('notifications.sms_enabled', false) &&
             $application->settings('notifications.candidate_notifications.application_received', true)) {
-            
+
             $this->sendSMSNotification($candidate->phone, $notificationData);
         }
     }
@@ -127,7 +129,7 @@ class SendJobApplicationNotification
         // Integrate with SMS service (Twilio, AWS SNS, etc.)
         Log::info('SMS notification queued', [
             'phone' => $phoneNumber,
-            'job_title' => $data['job_title']
+            'job_title' => $data['job_title'],
         ]);
     }
 }

@@ -35,7 +35,7 @@ class LocaleController extends Controller
             $locale = $request->input('locale', 'en');
 
             // Validate locale
-            if (!$this->isValidLocale($locale)) {
+            if (! $this->isValidLocale($locale)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid locale provided',
@@ -124,7 +124,7 @@ class LocaleController extends Controller
         try {
             $locale = $locale ?? $request->input('locale', App::getLocale());
 
-            if (!$this->isValidLocale($locale)) {
+            if (! $this->isValidLocale($locale)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid locale provided',
@@ -134,7 +134,7 @@ class LocaleController extends Controller
             // Get translation file path
             $translationPath = lang_path("{$locale}.json");
 
-            if (!file_exists($translationPath)) {
+            if (! file_exists($translationPath)) {
                 return response()->json([
                     'success' => false,
                     'message' => "Translation file not found for locale: {$locale}",
@@ -144,7 +144,7 @@ class LocaleController extends Controller
             // Load translations
             $translations = json_decode(file_get_contents($translationPath), true);
 
-            if (JSON_ERROR_NONE !== json_last_error()) {
+            if (json_last_error() !== JSON_ERROR_NONE) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid JSON in translation file',
@@ -189,7 +189,7 @@ class LocaleController extends Controller
                 $lang = trim($subparts[0]);
                 $quality = 1.0;
 
-                if (count($subparts) > 1 && 0 === strpos($subparts[1], 'q=')) {
+                if (count($subparts) > 1 && strpos($subparts[1], 'q=') === 0) {
                     $quality = floatval(substr($subparts[1], 2));
                 }
 
@@ -201,7 +201,7 @@ class LocaleController extends Controller
                 }
             }
 
-            if (!empty($languages)) {
+            if (! empty($languages)) {
                 // Sort by quality and get the highest one
                 arsort($languages);
                 $preferredLocale = array_key_first($languages);
@@ -212,7 +212,7 @@ class LocaleController extends Controller
             'success' => true,
             'browser_locale' => $preferredLocale,
             'locale_config' => self::AVAILABLE_LOCALES[$preferredLocale],
-            'fallback_used' => !$this->isValidLocale(substr($acceptLanguage, 0, 2)),
+            'fallback_used' => ! $this->isValidLocale(substr($acceptLanguage, 0, 2)),
         ]);
     }
 

@@ -107,7 +107,7 @@ class SkillShowResource extends JsonResource
         $jobCount = $this->jobs()->where('created_at', '>=', now()->subMonths(3))->count();
         $candidateCount = $this->candidates()->where('created_at', '>=', now()->subMonths(3))->count();
 
-        if (0 == $candidateCount) {
+        if ($candidateCount == 0) {
             return 100.0;
         }
 
@@ -119,7 +119,7 @@ class SkillShowResource extends JsonResource
         $recentJobs = $this->jobs()->where('created_at', '>=', now()->subMonth())->count();
         $previousJobs = $this->jobs()->whereBetween('created_at', [now()->subMonths(2), now()->subMonth()])->count();
 
-        if (0 == $previousJobs) {
+        if ($previousJobs == 0) {
             return $recentJobs > 0 ? 100.0 : 0.0;
         }
 
@@ -132,8 +132,7 @@ class SkillShowResource extends JsonResource
             ->whereNotNull('salary_from')
             ->whereNotNull('salary_to')
             ->selectRaw('AVG((salary_from + salary_to) / 2) as avg_salary')
-            ->value('avg_salary')
-        ;
+            ->value('avg_salary');
     }
 
     private function getSalaryRange(): array
@@ -142,8 +141,7 @@ class SkillShowResource extends JsonResource
             ->whereNotNull('salary_from')
             ->whereNotNull('salary_to')
             ->selectRaw('MIN(salary_from) as min_salary, MAX(salary_to) as max_salary')
-            ->first()
-        ;
+            ->first();
 
         return [
             'min' => $salaries->min_salary ?? null,
@@ -156,8 +154,7 @@ class SkillShowResource extends JsonResource
         return $this->jobs()
             ->whereNotNull('salary_from')
             ->whereNotNull('salary_to')
-            ->count()
-        ;
+            ->count();
     }
 
     private function getIncludedRelations(): array

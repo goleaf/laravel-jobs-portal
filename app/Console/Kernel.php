@@ -14,10 +14,10 @@ class Kernel extends ConsoleKernel
     {
         // Laravel Defibrillator Health Monitoring
         $schedule->command('defibrillator:check')->everyFiveMinutes()->withoutOverlapping();
-        
-        // Laravel Health package monitoring  
+
+        // Laravel Health package monitoring
         $schedule->command('health:check')->everyMinute()->withoutOverlapping();
-        
+
         // Original disabled commands (kept commented due to memory issues)
         // $schedule->command('cache:prune-stale-tags')->hourly();
         // $schedule->command('delete:expired-featured-company')->daily();

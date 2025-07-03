@@ -16,19 +16,19 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * FavouriteCompany Model - Enhanced with Enhanced patterns.
  *
- * @property int         $id
- * @property int         $user_id
- * @property int         $company_id
- * @property bool        $is_active
- * @property bool        $is_featured
+ * @property int $id
+ * @property int $user_id
+ * @property int $company_id
+ * @property bool $is_active
+ * @property bool $is_featured
  * @property null|string $notes
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|Carbon $deleted_at
- * @property User        $user
- * @property Company     $company
- * @property bool        $is_recent
- * @property string      $status_label
+ * @property User $user
+ * @property Company $company
+ * @property bool $is_recent
+ * @property string $status_label
  *
  * Enhanced Enhanced Scopes:
  *
@@ -55,8 +55,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class FavouriteCompany extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     /**
      * Validation rules.
@@ -112,8 +112,7 @@ class FavouriteCompany extends Model
             ->logOnly(['user_id', 'company_id', 'is_active', 'is_featured'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn (string $eventName) => "Favourite company has been {$eventName}")
-        ;
+            ->setDescriptionForEvent(fn (string $eventName) => "Favourite company has been {$eventName}");
     }
 
     // =============================================
@@ -214,8 +213,7 @@ class FavouriteCompany extends Model
     public function scopeThisMonth(Builder $query): Builder
     {
         return $query->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
-        ;
+            ->whereYear('created_at', now()->year);
     }
 
     // =============================================
@@ -258,8 +256,7 @@ class FavouriteCompany extends Model
         return $query->select('company_id')
             ->selectRaw('COUNT(*) as favourites_count')
             ->groupBy('company_id')
-            ->orderByDesc('favourites_count')
-        ;
+            ->orderByDesc('favourites_count');
     }
 
     // =============================================
@@ -275,16 +272,13 @@ class FavouriteCompany extends Model
             ->orWhereHas('company', function ($companyQuery) use ($term) {
                 $companyQuery->where('name', 'like', '%'.$term.'%')
                     ->orWhere('slug', 'like', '%'.$term.'%')
-                    ->orWhere('industry', 'like', '%'.$term.'%')
-                ;
+                    ->orWhere('industry', 'like', '%'.$term.'%');
             })
             ->orWhereHas('user', function ($userQuery) use ($term) {
                 $userQuery->where('first_name', 'like', '%'.$term.'%')
                     ->orWhere('last_name', 'like', '%'.$term.'%')
-                    ->orWhere('email', 'like', '%'.$term.'%')
-                ;
-            })
-        ;
+                    ->orWhere('email', 'like', '%'.$term.'%');
+            });
     }
 
     /**
@@ -328,7 +322,7 @@ class FavouriteCompany extends Model
      */
     public function getStatusLabelAttribute(): string
     {
-        if (!$this->is_active) {
+        if (! $this->is_active) {
             return 'Inactive';
         }
 
@@ -360,7 +354,7 @@ class FavouriteCompany extends Model
      */
     public function toggleActive(): bool
     {
-        return $this->update(['is_active' => !$this->is_active]);
+        return $this->update(['is_active' => ! $this->is_active]);
     }
 
     /**
@@ -368,7 +362,7 @@ class FavouriteCompany extends Model
      */
     public function toggleFeatured(): bool
     {
-        return $this->update(['is_featured' => !$this->is_featured]);
+        return $this->update(['is_featured' => ! $this->is_featured]);
     }
 
     /**
@@ -380,8 +374,7 @@ class FavouriteCompany extends Model
             return self::where('user_id', $userId)
                 ->where('company_id', $companyId)
                 ->active()
-                ->exists()
-            ;
+                ->exists();
         });
     }
 
@@ -418,8 +411,7 @@ class FavouriteCompany extends Model
                 ->orderByDesc('favourites_count')
                 ->limit($limit)
                 ->with('company')
-                ->get()
-            ;
+                ->get();
         });
     }
 
@@ -451,8 +443,7 @@ class FavouriteCompany extends Model
     {
         $result = self::where('user_id', $userId)
             ->where('company_id', $companyId)
-            ->delete()
-        ;
+            ->delete();
 
         // Clear related caches
         Cache::forget("user.{$userId}.company.{$companyId}.favourited");

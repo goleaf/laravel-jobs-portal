@@ -14,7 +14,7 @@ class UpdateSalaryCurrencyRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
 

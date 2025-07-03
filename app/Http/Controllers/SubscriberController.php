@@ -22,7 +22,7 @@ class SubscriberController extends AppBaseController
     /**
      * Remove the specified subscriber from storage.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function destroy($id): JsonResponse
     {

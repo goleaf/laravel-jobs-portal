@@ -16,7 +16,7 @@ class FAQTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function itCanBeCreated()
+    public function it_can_be_created()
     {
         $model = FAQ::factory()->create();
 
@@ -27,9 +27,9 @@ class FAQTest extends TestCase
     }
 
     /** @test */
-    public function itHasFillableAttributes()
+    public function it_has_fillable_attributes()
     {
-        $model = new FAQ();
+        $model = new FAQ;
         $fillable = $model->getFillable();
 
         $this->assertIsArray($fillable);
@@ -37,9 +37,9 @@ class FAQTest extends TestCase
     }
 
     /** @test */
-    public function itHasProperCasts()
+    public function it_has_proper_casts()
     {
-        $model = new FAQ();
+        $model = new FAQ;
         $casts = $model->getCasts();
 
         $this->assertIsArray($casts);
@@ -47,18 +47,18 @@ class FAQTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeUpdated()
+    public function it_can_be_updated()
     {
         $model = FAQ::factory()->create();
 
         // Update with only database fields, not computed properties
         $updateData = [
             'title' => 'Updated FAQ Title',
-            'description' => 'Updated FAQ Description', 
+            'description' => 'Updated FAQ Description',
             'category' => 'updated',
             'is_active' => true,
         ];
-        
+
         $model->update($updateData);
 
         $this->assertDatabaseHas('faqs', [
@@ -68,7 +68,7 @@ class FAQTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeDeleted()
+    public function it_can_be_deleted()
     {
         $model = FAQ::factory()->create();
         $modelId = $model->id;

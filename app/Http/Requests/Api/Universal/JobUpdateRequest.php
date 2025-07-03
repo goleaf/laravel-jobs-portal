@@ -96,7 +96,7 @@ class JobUpdateRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        if ($this->has('title') && !$this->has('slug')) {
+        if ($this->has('title') && ! $this->has('slug')) {
             $this->merge(['slug' => \Str::slug($this->title)]);
         }
 

@@ -23,26 +23,26 @@ class EnhancedAuthorization
      */
     public function handle(Request $request, \Closure $next, ...$permissions): SymfonyResponse
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect()->route('login');
         }
 
         $user = Auth::user();
 
         // Check account status
-        if (!$this->isAccountActive($user)) {
+        if (! $this->isAccountActive($user)) {
             Auth::logout();
 
             return redirect()->route('login')->withErrors(['email' => 'Account inactive']);
         }
 
         // Check permissions
-        if (!empty($permissions) && !$this->hasPermissions($user, $permissions)) {
+        if (! empty($permissions) && ! $this->hasPermissions($user, $permissions)) {
             return abort(403, 'Unauthorized access');
         }
 
         // Check route access
-        if (!$this->hasRouteAccess($request, $user)) {
+        if (! $this->hasRouteAccess($request, $user)) {
             return abort(403, 'Unauthorized access');
         }
 
@@ -52,12 +52,12 @@ class EnhancedAuthorization
     /**
      * Check if user account is active.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     protected function isAccountActive($user): bool
     {
         // Check basic account status
-        if (method_exists($user, 'isActive') && !$user->isActive()) {
+        if (method_exists($user, 'isActive') && ! $user->isActive()) {
             return false;
         }
 
@@ -72,10 +72,10 @@ class EnhancedAuthorization
         }
 
         // Check email verification for sensitive operations
-        if (method_exists($user, 'hasVerifiedEmail') && !$user->hasVerifiedEmail()) {
+        if (method_exists($user, 'hasVerifiedEmail') && ! $user->hasVerifiedEmail()) {
             // Allow access to email verification routes
             $allowedRoutes = ['verification.notice', 'verification.send', 'verification.verify'];
-            if (!request()->routeIs($allowedRoutes)) {
+            if (! request()->routeIs($allowedRoutes)) {
                 return false;
             }
         }
@@ -86,7 +86,7 @@ class EnhancedAuthorization
     /**
      * Check if user has required permissions.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     protected function hasPermissions($user, array $permissions): bool
     {
@@ -97,7 +97,7 @@ class EnhancedAuthorization
         });
 
         foreach ($permissions as $permission) {
-            if (!in_array($permission, $userPermissions)) {
+            if (! in_array($permission, $userPermissions)) {
                 return false;
             }
         }
@@ -108,7 +108,7 @@ class EnhancedAuthorization
     /**
      * Get user permissions based on roles.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     protected function getUserPermissions($user): array
     {
@@ -141,7 +141,7 @@ class EnhancedAuthorization
     /**
      * Check route-based access control.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     protected function hasRouteAccess(Request $request, $user): bool
     {
@@ -170,7 +170,7 @@ class EnhancedAuthorization
     /**
      * Log authorization events.
      *
-     * @param null|mixed $user
+     * @param  null|mixed  $user
      */
     protected function logAuthorizationEvent(string $event, Request $request, $user = null, array $context = []): void
     {

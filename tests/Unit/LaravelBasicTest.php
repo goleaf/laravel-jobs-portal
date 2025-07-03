@@ -14,7 +14,7 @@ use Tests\TestCase;
 class LaravelBasicTest extends TestCase
 {
     /** @test */
-    public function itCanAccessConfig()
+    public function it_can_access_config()
     {
         $appName = Config::get('app.name');
         $this->assertNotNull($appName);
@@ -22,13 +22,13 @@ class LaravelBasicTest extends TestCase
     }
 
     /** @test */
-    public function itHasTestingEnvironment()
+    public function it_has_testing_environment()
     {
         $this->assertEquals('testing', app()->environment());
     }
 
     /** @test */
-    public function itCanUseHelperFunctions()
+    public function it_can_use_helper_functions()
     {
         $this->assertTrue(function_exists('config'));
         $this->assertTrue(function_exists('app'));
@@ -36,7 +36,7 @@ class LaravelBasicTest extends TestCase
     }
 
     /** @test */
-    public function itCanCreateBasicObjects()
+    public function it_can_create_basic_objects()
     {
         $user = new User([
             'first_name' => 'Test',

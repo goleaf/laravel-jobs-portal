@@ -15,11 +15,10 @@ class FavouriteJobRepository extends BaseRepository implements FavouriteJobRepos
     /**
      * Get favourite jobs by user ID.
      *
-     * @param int $userId
      * @return mixed
      */
     public function getByUserId(int $userId)
     {
         return $this->model->where('user_id', $userId)->get();
     }
-} 
+}

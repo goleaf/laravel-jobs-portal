@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 
 /**
  * Settings Version Model
- * 
+ *
  * Tracks all changes to model settings with complete audit trails,
  * enabling rollback, comparison, and compliance reporting.
  */
@@ -20,7 +20,7 @@ class SettingsVersion extends Model
     protected $fillable = [
         'version_id',
         'model_type',
-        'model_id', 
+        'model_id',
         'version_number',
         'change_type',
         'change_reason',
@@ -62,7 +62,7 @@ class SettingsVersion extends Model
             if (empty($model->version_id)) {
                 $model->version_id = (string) Str::uuid();
             }
-            
+
             if (empty($model->created_at)) {
                 $model->created_at = now();
             }
@@ -92,7 +92,7 @@ class SettingsVersion extends Model
     public function scopeForModel($query, string $modelType, string|int $modelId)
     {
         return $query->where('model_type', $modelType)
-                    ->where('model_id', $modelId);
+            ->where('model_id', $modelId);
     }
 
     public function scopeByUser($query, int $userId)
@@ -131,25 +131,25 @@ class SettingsVersion extends Model
     public function getPreviousVersion(): ?self
     {
         return self::forModel($this->model_type, $this->model_id)
-                  ->where('version_number', '<', $this->version_number)
-                  ->orderBy('version_number', 'desc')
-                  ->first();
+            ->where('version_number', '<', $this->version_number)
+            ->orderBy('version_number', 'desc')
+            ->first();
     }
 
     public function getNextVersion(): ?self
     {
         return self::forModel($this->model_type, $this->model_id)
-                  ->where('version_number', '>', $this->version_number)
-                  ->orderBy('version_number', 'asc')
-                  ->first();
+            ->where('version_number', '>', $this->version_number)
+            ->orderBy('version_number', 'asc')
+            ->first();
     }
 
     public function isLatestVersion(): bool
     {
         $latestVersion = self::forModel($this->model_type, $this->model_id)
-                            ->orderBy('version_number', 'desc')
-                            ->first();
-                            
+            ->orderBy('version_number', 'desc')
+            ->first();
+
         return $latestVersion && $latestVersion->id === $this->id;
     }
 
@@ -171,6 +171,7 @@ class SettingsVersion extends Model
     public function verifyChecksum(): bool
     {
         $currentChecksum = hash('sha256', json_encode($this->settings_data));
+
         return $currentChecksum === $this->checksum;
     }
 
@@ -179,7 +180,7 @@ class SettingsVersion extends Model
      */
     public function generateChangeSummary(): array
     {
-        if (!$this->previous_settings || !$this->settings_data) {
+        if (! $this->previous_settings || ! $this->settings_data) {
             return [
                 'type' => 'initial',
                 'message' => 'Initial settings version',
@@ -208,7 +209,7 @@ class SettingsVersion extends Model
             'privacy' => [],
             'notifications' => [],
             'workflow' => [],
-            'other' => []
+            'other' => [],
         ];
 
         foreach ($this->changed_keys ?? [] as $key) {
@@ -224,12 +225,22 @@ class SettingsVersion extends Model
      */
     private function determineKeyCategory(string $key): string
     {
-        if (str_contains($key, 'profile')) return 'profile';
-        if (str_contains($key, 'preference')) return 'preferences';
-        if (str_contains($key, 'privacy')) return 'privacy';
-        if (str_contains($key, 'notification')) return 'notifications';
-        if (str_contains($key, 'workflow')) return 'workflow';
-        
+        if (str_contains($key, 'profile')) {
+            return 'profile';
+        }
+        if (str_contains($key, 'preference')) {
+            return 'preferences';
+        }
+        if (str_contains($key, 'privacy')) {
+            return 'privacy';
+        }
+        if (str_contains($key, 'notification')) {
+            return 'notifications';
+        }
+        if (str_contains($key, 'workflow')) {
+            return 'workflow';
+        }
+
         return 'other';
     }
 
@@ -239,18 +250,24 @@ class SettingsVersion extends Model
     private function assessImpactLevel(): string
     {
         $changeCount = count($this->changed_keys ?? []);
-        
-        if ($changeCount === 0) return 'none';
-        if ($changeCount <= 2) return 'low';
-        if ($changeCount <= 5) return 'medium';
-        
+
+        if ($changeCount === 0) {
+            return 'none';
+        }
+        if ($changeCount <= 2) {
+            return 'low';
+        }
+        if ($changeCount <= 5) {
+            return 'medium';
+        }
+
         return 'high';
     }
 
     /**
      * Create a rollback version
      */
-    public function createRollback(int $userId = null, string $reason = null): self
+    public function createRollback(?int $userId = null, ?string $reason = null): self
     {
         $rollbackVersion = new self([
             'model_type' => $this->model_type,
@@ -264,6 +281,7 @@ class SettingsVersion extends Model
         ]);
 
         $rollbackVersion->save();
+
         return $rollbackVersion;
     }
 
@@ -273,8 +291,8 @@ class SettingsVersion extends Model
     public static function getNextVersionNumber(string $modelType, string|int $modelId): int
     {
         $latestVersion = self::forModel($modelType, $modelId)
-                            ->orderBy('version_number', 'desc')
-                            ->first();
+            ->orderBy('version_number', 'desc')
+            ->first();
 
         return $latestVersion ? $latestVersion->version_number + 1 : 1;
     }
@@ -285,7 +303,7 @@ class SettingsVersion extends Model
     public static function cleanupExpiredVersions(): int
     {
         return self::where('expires_at', '<', now())
-                  ->where('is_active', true)
-                  ->update(['is_active' => false]);
+            ->where('is_active', true)
+            ->update(['is_active' => false]);
     }
 }

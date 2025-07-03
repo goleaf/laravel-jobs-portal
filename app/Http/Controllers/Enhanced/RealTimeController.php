@@ -48,7 +48,7 @@ class RealTimeController extends AppBaseController
         try {
             $user = Auth::user();
 
-            if (!$user) {
+            if (! $user) {
                 return $this->sendError('Unauthorized access', 401);
             }
 
@@ -108,12 +108,12 @@ class RealTimeController extends AppBaseController
             $newStatus = $request->status;
 
             // Enhanced authorization check
-            if (!$this->canUpdateStatus($jobApplication, $newStatus, $user)) {
+            if (! $this->canUpdateStatus($jobApplication, $newStatus, $user)) {
                 return $this->sendError('Unauthorized to update this status', 403);
             }
 
             // Validate status transition
-            if (!$this->isValidStatusTransition($oldStatus, $newStatus)) {
+            if (! $this->isValidStatusTransition($oldStatus, $newStatus)) {
                 return $this->sendError('Invalid status transition', 400);
             }
 
@@ -195,7 +195,7 @@ class RealTimeController extends AppBaseController
         try {
             $user = Auth::user();
 
-            if (!$user) {
+            if (! $user) {
                 return $this->sendError('Unauthorized access', 401);
             }
 
@@ -282,11 +282,11 @@ class RealTimeController extends AppBaseController
             $data = Cache::remember($cacheKey, self::CACHE_TTL, function () use ($user, $limit, $offset, $filter) {
                 $activities = collect();
 
-                if ('candidate' === $user->user_type) {
+                if ($user->user_type === 'candidate') {
                     $activities = $this->getCandidateActivities($user, $limit, $offset, $filter);
-                } elseif ('employer' === $user->user_type) {
+                } elseif ($user->user_type === 'employer') {
                     $activities = $this->getEmployerActivities($user, $limit, $offset, $filter);
-                } elseif ('admin' === $user->user_type) {
+                } elseif ($user->user_type === 'admin') {
                     $activities = $this->getAdminActivities($user, $limit, $offset, $filter);
                 }
 
@@ -400,7 +400,7 @@ class RealTimeController extends AppBaseController
             $user = Auth::user();
 
             // Check if user has permission to broadcast
-            if (!$this->canBroadcast($user, $request->channel)) {
+            if (! $this->canBroadcast($user, $request->channel)) {
                 return $this->sendError('Unauthorized to broadcast to this channel', 403);
             }
 
@@ -444,17 +444,17 @@ class RealTimeController extends AppBaseController
     private function canUpdateStatus(JobApplication $jobApplication, string $newStatus, User $user): bool
     {
         // Candidates can only withdraw their applications
-        if ('candidate' === $user->user_type) {
-            return $user->id === $jobApplication->candidate_id && 'withdrawn' === $newStatus;
+        if ($user->user_type === 'candidate') {
+            return $user->id === $jobApplication->candidate_id && $newStatus === 'withdrawn';
         }
 
         // Employers can update applications for their jobs
-        if ('employer' === $user->user_type) {
+        if ($user->user_type === 'employer') {
             return $jobApplication->job->company_id === $user->company?->id;
         }
 
         // Admins can update any application
-        if ('admin' === $user->user_type) {
+        if ($user->user_type === 'admin') {
             return true;
         }
 
@@ -495,10 +495,9 @@ class RealTimeController extends AppBaseController
     {
         $query = JobApplication::where('candidate_id', $user->id)
             ->with(['job.company'])
-            ->latest()
-        ;
+            ->latest();
 
-        if ('all' !== $filter) {
+        if ($filter !== 'all') {
             $query->where('status', $filter);
         }
 
@@ -524,7 +523,7 @@ class RealTimeController extends AppBaseController
      */
     private function getEmployerActivities(User $user, int $limit, int $offset, string $filter): Collection
     {
-        if (!$user->company) {
+        if (! $user->company) {
             return collect();
         }
 
@@ -532,10 +531,9 @@ class RealTimeController extends AppBaseController
             $q->where('company_id', $user->company->id);
         })
             ->with(['job', 'candidate.user'])
-            ->latest()
-        ;
+            ->latest();
 
-        if ('all' !== $filter) {
+        if ($filter !== 'all') {
             $query->where('status', $filter);
         }
 
@@ -564,10 +562,9 @@ class RealTimeController extends AppBaseController
     {
         // Admin sees system-wide activities
         $query = JobApplication::with(['job.company', 'candidate.user'])
-            ->latest()
-        ;
+            ->latest();
 
-        if ('all' !== $filter) {
+        if ($filter !== 'all') {
             $query->where('status', $filter);
         }
 
@@ -607,14 +604,14 @@ class RealTimeController extends AppBaseController
         switch ($type) {
             case 'status_change':
                 $stats['status_changes']++;
-                if ('reviewed' === $value) {
-                    ++$stats['applications_reviewed'];
+                if ($value === 'reviewed') {
+                    $stats['applications_reviewed']++;
                 }
-                if ('interview_scheduled' === $value) {
-                    ++$stats['interviews_scheduled'];
+                if ($value === 'interview_scheduled') {
+                    $stats['interviews_scheduled']++;
                 }
-                if ('hired' === $value) {
-                    ++$stats['hires_made'];
+                if ($value === 'hired') {
+                    $stats['hires_made']++;
                 }
 
                 break;
@@ -788,6 +785,6 @@ class RealTimeController extends AppBaseController
 
     private function canBroadcast($user, $channel): bool
     {
-        return 'admin' === $user->user_type;
+        return $user->user_type === 'admin';
     }
 }

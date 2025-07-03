@@ -19,7 +19,7 @@ class CareerLevelTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function itCanBeCreated()
+    public function it_can_be_created()
     {
         $model = CareerLevel::factory()->create();
 
@@ -30,9 +30,9 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function itHasFillableAttributes()
+    public function it_has_fillable_attributes()
     {
-        $model = new CareerLevel();
+        $model = new CareerLevel;
         $fillable = $model->getFillable();
 
         $expectedFillable = ['level_name', 'description', 'is_default', 'is_active'];
@@ -45,9 +45,9 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function itHasProperCasts()
+    public function it_has_proper_casts()
     {
-        $model = new CareerLevel();
+        $model = new CareerLevel;
         $casts = $model->getCasts();
 
         $this->assertIsArray($casts);
@@ -66,7 +66,7 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeUpdated()
+    public function it_can_be_updated()
     {
         $model = CareerLevel::factory()->create();
 
@@ -80,7 +80,7 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeDeleted()
+    public function it_can_be_deleted()
     {
         $model = CareerLevel::factory()->create();
         $modelId = $model->id;
@@ -93,7 +93,7 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function itHasJobsRelationship()
+    public function it_has_jobs_relationship()
     {
         $careerLevel = CareerLevel::factory()->create();
         $jobs = Job::factory()->count(3)->create(['career_level_id' => $careerLevel->id]);
@@ -104,7 +104,7 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function itHasCandidatesRelationship()
+    public function it_has_candidates_relationship()
     {
         $careerLevel = CareerLevel::factory()->create();
         $candidates = Candidate::factory()->count(2)->create(['career_level_id' => $careerLevel->id]);
@@ -115,7 +115,7 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function scopeActiveReturnsActiveCareerLevels()
+    public function scope_active_returns_active_career_levels()
     {
         // Get initial count of active career levels
         $initialActiveCount = CareerLevel::active()->count();
@@ -136,7 +136,7 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function scopeInactiveReturnsInactiveCareerLevels()
+    public function scope_inactive_returns_inactive_career_levels()
     {
         // Get initial count of inactive career levels
         $initialInactiveCount = CareerLevel::inactive()->count();
@@ -154,7 +154,7 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function scopeDefaultReturnsDefaultCareerLevels()
+    public function scope_default_returns_default_career_levels()
     {
         // Get initial count of default career levels
         $initialDefaultCount = CareerLevel::default()->count();
@@ -170,7 +170,7 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function scopeCustomReturnsCustomCareerLevels()
+    public function scope_custom_returns_custom_career_levels()
     {
         // Get initial count of custom career levels
         $initialCustomCount = CareerLevel::custom()->count();
@@ -188,7 +188,7 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function scopeSearchFindsCareerLevelsByLevelName()
+    public function scope_search_finds_career_levels_by_level_name()
     {
         $uniqueTestLevel = CareerLevel::factory()->create(['level_name' => 'TestUniqueEntry Level']);
         CareerLevel::factory()->create(['level_name' => 'Senior Management']);
@@ -202,7 +202,7 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function scopeRecentReturnsRecentlyCreatedCareerLevels()
+    public function scope_recent_returns_recently_created_career_levels()
     {
         // Ensure clean state by truncating table
         CareerLevel::truncate();
@@ -219,7 +219,7 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function scopeOldReturnsOldCareerLevels()
+    public function scope_old_returns_old_career_levels()
     {
         // Create old career levels
         CareerLevel::factory()->count(2)->create(['created_at' => now()->subDays(400)]);
@@ -233,7 +233,7 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function scopeWithJobsReturnsCareerLevelsThatHaveJobs()
+    public function scope_with_jobs_returns_career_levels_that_have_jobs()
     {
         $careerLevelWithJobs = CareerLevel::factory()->create();
         $careerLevelWithoutJobs = CareerLevel::factory()->create();
@@ -247,7 +247,7 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function scopeWithCandidatesReturnsCareerLevelsThatHaveCandidates()
+    public function scope_with_candidates_returns_career_levels_that_have_candidates()
     {
         // Get initial count of career levels with candidates
         $initialWithCandidatesCount = CareerLevel::withCandidates()->count();
@@ -270,7 +270,7 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function scopeAlphabeticalOrdersCareerLevelsByLevelName()
+    public function scope_alphabetical_orders_career_levels_by_level_name()
     {
         $zebraLevel = CareerLevel::factory()->create(['level_name' => 'Zebra Level']);
         $alphaLevel = CareerLevel::factory()->create(['level_name' => 'Alpha Level']);
@@ -295,7 +295,7 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function scopePopularReturnsMostUsedCareerLevels()
+    public function scope_popular_returns_most_used_career_levels()
     {
         $popularCareerLevel = CareerLevel::factory()->create();
         $lessPopularCareerLevel = CareerLevel::factory()->create();
@@ -311,7 +311,7 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function scopeEntryReturnsEntryLevelCareerLevels()
+    public function scope_entry_returns_entry_level_career_levels()
     {
         // Get initial count to work with existing data
         $initialEntryCount = CareerLevel::entry()->count();
@@ -331,7 +331,7 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function scopeSeniorReturnsSeniorLevelCareerLevels()
+    public function scope_senior_returns_senior_level_career_levels()
     {
         // Get initial count to work with existing data
         $initialSeniorCount = CareerLevel::senior()->count();
@@ -351,7 +351,7 @@ class CareerLevelTest extends TestCase
     }
 
     /** @test */
-    public function scopeManagementReturnsManagementCareerLevels()
+    public function scope_management_returns_management_career_levels()
     {
         // Get initial count to work with existing data
         $initialManagementCount = CareerLevel::management()->count();

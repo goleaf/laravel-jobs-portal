@@ -2,20 +2,20 @@
 
 namespace Tests\Feature\Universal;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Message;
 use App\Models\Conversation;
+use App\Models\Message;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Storage;
+use Tests\TestCase;
 
 class UniversalMessagingControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     protected $user;
     protected $recipient;
@@ -24,18 +24,18 @@ class UniversalMessagingControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         $this->user = User::factory()->create([
-            'email' => 'sender@test.com'
+            'email' => 'sender@test.com',
         ]);
-        
+
         $this->recipient = User::factory()->create([
-            'email' => 'recipient@test.com'
+            'email' => 'recipient@test.com',
         ]);
-        
+
         $this->conversation = Conversation::factory()->create([
             'user_id' => $this->user->id,
-            'recipient_id' => $this->recipient->id
+            'recipient_id' => $this->recipient->id,
         ]);
 
         $this->actingAs($this->user);
@@ -47,8 +47,8 @@ class UniversalMessagingControllerTest extends TestCase
         $response = $this->get('/messaging');
 
         $response->assertStatus(200)
-                ->assertViewIs('messaging.index')
-                ->assertViewHas(['conversations', 'unreadCount']);
+            ->assertViewIs('messaging.index')
+            ->assertViewHas(['conversations', 'unreadCount']);
     }
 
     /** @test */
@@ -60,20 +60,20 @@ class UniversalMessagingControllerTest extends TestCase
         $response = $this->getJson('/api/messaging/conversations');
 
         $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        '*' => [
-                            'id',
-                            'subject',
-                            'participant',
-                            'last_message',
-                            'unread_count',
-                            'created_at'
-                        ]
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    '*' => [
+                        'id',
+                        'subject',
+                        'participant',
+                        'last_message',
+                        'unread_count',
+                        'created_at',
                     ],
-                    'pagination'
-                ]);
+                ],
+                'pagination',
+            ]);
     }
 
     /** @test */
@@ -84,31 +84,31 @@ class UniversalMessagingControllerTest extends TestCase
         $conversationData = [
             'recipient_id' => $newRecipient->id,
             'subject' => 'Test Conversation',
-            'message' => 'This is a test message'
+            'message' => 'This is a test message',
         ];
 
         $response = $this->postJson('/api/messaging/conversations', $conversationData);
 
         $response->assertStatus(201)
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        'id',
-                        'subject',
-                        'participants',
-                        'created_at'
-                    ]
-                ]);
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    'id',
+                    'subject',
+                    'participants',
+                    'created_at',
+                ],
+            ]);
 
         $this->assertDatabaseHas('conversations', [
             'user_id' => $this->user->id,
             'recipient_id' => $newRecipient->id,
-            'subject' => 'Test Conversation'
+            'subject' => 'Test Conversation',
         ]);
 
         $this->assertDatabaseHas('messages', [
             'sender_id' => $this->user->id,
-            'content' => 'This is a test message'
+            'content' => 'This is a test message',
         ]);
     }
 
@@ -118,31 +118,31 @@ class UniversalMessagingControllerTest extends TestCase
         // Create messages in the conversation
         Message::factory(10)->create([
             'conversation_id' => $this->conversation->id,
-            'sender_id' => $this->user->id
+            'sender_id' => $this->user->id,
         ]);
 
         Message::factory(5)->create([
             'conversation_id' => $this->conversation->id,
-            'sender_id' => $this->recipient->id
+            'sender_id' => $this->recipient->id,
         ]);
 
         $response = $this->getJson("/api/messaging/conversations/{$this->conversation->id}/messages");
 
         $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        '*' => [
-                            'id',
-                            'content',
-                            'sender',
-                            'attachments',
-                            'read_at',
-                            'created_at'
-                        ]
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    '*' => [
+                        'id',
+                        'content',
+                        'sender',
+                        'attachments',
+                        'read_at',
+                        'created_at',
                     ],
-                    'pagination'
-                ]);
+                ],
+                'pagination',
+            ]);
     }
 
     /** @test */
@@ -150,26 +150,26 @@ class UniversalMessagingControllerTest extends TestCase
     {
         $messageData = [
             'content' => 'This is a test message',
-            'message_type' => 'text'
+            'message_type' => 'text',
         ];
 
         $response = $this->postJson("/api/messaging/conversations/{$this->conversation->id}/messages", $messageData);
 
         $response->assertStatus(201)
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        'id',
-                        'content',
-                        'sender',
-                        'created_at'
-                    ]
-                ]);
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    'id',
+                    'content',
+                    'sender',
+                    'created_at',
+                ],
+            ]);
 
         $this->assertDatabaseHas('messages', [
             'conversation_id' => $this->conversation->id,
             'sender_id' => $this->user->id,
-            'content' => 'This is a test message'
+            'content' => 'This is a test message',
         ]);
     }
 
@@ -183,27 +183,27 @@ class UniversalMessagingControllerTest extends TestCase
         $messageData = [
             'content' => 'Message with attachment',
             'message_type' => 'file',
-            'attachment' => $file
+            'attachment' => $file,
         ];
 
         $response = $this->postJson("/api/messaging/conversations/{$this->conversation->id}/messages", $messageData);
 
         $response->assertStatus(201)
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        'id',
-                        'content',
-                        'attachments',
-                        'sender'
-                    ]
-                ]);
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    'id',
+                    'content',
+                    'attachments',
+                    'sender',
+                ],
+            ]);
 
-        Storage::disk('public')->assertExists('messages/' . $file->hashName());
+        Storage::disk('public')->assertExists('messages/'.$file->hashName());
 
         $this->assertDatabaseHas('message_attachments', [
             'original_name' => 'test.jpg',
-            'mime_type' => 'image/jpeg'
+            'mime_type' => 'image/jpeg',
         ]);
     }
 
@@ -213,20 +213,20 @@ class UniversalMessagingControllerTest extends TestCase
         $messages = Message::factory(3)->create([
             'conversation_id' => $this->conversation->id,
             'sender_id' => $this->recipient->id,
-            'read_at' => null
+            'read_at' => null,
         ]);
 
         $messageIds = $messages->pluck('id')->toArray();
 
         $response = $this->patchJson('/api/messaging/messages/mark-read', [
-            'message_ids' => $messageIds
+            'message_ids' => $messageIds,
         ]);
 
         $response->assertStatus(200)
-                ->assertJson([
-                    'success' => true,
-                    'message' => 'Messages marked as read'
-                ]);
+            ->assertJson([
+                'success' => true,
+                'message' => 'Messages marked as read',
+            ]);
 
         foreach ($messages as $message) {
             $this->assertNotNull($message->fresh()->read_at);
@@ -239,23 +239,23 @@ class UniversalMessagingControllerTest extends TestCase
         // Create conversations with different subjects
         Conversation::factory()->create([
             'user_id' => $this->user->id,
-            'subject' => 'Job Application Discussion'
+            'subject' => 'Job Application Discussion',
         ]);
 
         Conversation::factory()->create([
             'user_id' => $this->user->id,
-            'subject' => 'Interview Scheduling'
+            'subject' => 'Interview Scheduling',
         ]);
 
         $response = $this->getJson('/api/messaging/conversations?search=Job');
 
         $response->assertStatus(200)
-                ->assertJsonCount(1, 'data');
+            ->assertJsonCount(1, 'data');
 
         $response = $this->getJson('/api/messaging/conversations?search=Interview');
 
         $response->assertStatus(200)
-                ->assertJsonCount(1, 'data');
+            ->assertJsonCount(1, 'data');
     }
 
     /** @test */
@@ -264,18 +264,18 @@ class UniversalMessagingControllerTest extends TestCase
         // Create read and unread conversations
         $readConversation = Conversation::factory()->create([
             'user_id' => $this->user->id,
-            'status' => 'read'
+            'status' => 'read',
         ]);
 
         $unreadConversation = Conversation::factory()->create([
             'user_id' => $this->user->id,
-            'status' => 'unread'
+            'status' => 'unread',
         ]);
 
         $response = $this->getJson('/api/messaging/conversations?status=unread');
 
         $response->assertStatus(200);
-        
+
         $conversationIds = collect($response->json('data'))->pluck('id');
         $this->assertTrue($conversationIds->contains($unreadConversation->id));
         $this->assertFalse($conversationIds->contains($readConversation->id));
@@ -287,13 +287,13 @@ class UniversalMessagingControllerTest extends TestCase
         $response = $this->deleteJson("/api/messaging/conversations/{$this->conversation->id}");
 
         $response->assertStatus(200)
-                ->assertJson([
-                    'success' => true,
-                    'message' => 'Conversation deleted successfully'
-                ]);
+            ->assertJson([
+                'success' => true,
+                'message' => 'Conversation deleted successfully',
+            ]);
 
         $this->assertSoftDeleted('conversations', [
-            'id' => $this->conversation->id
+            'id' => $this->conversation->id,
         ]);
     }
 
@@ -303,14 +303,14 @@ class UniversalMessagingControllerTest extends TestCase
         $response = $this->patchJson("/api/messaging/conversations/{$this->conversation->id}/archive");
 
         $response->assertStatus(200)
-                ->assertJson([
-                    'success' => true,
-                    'message' => 'Conversation archived successfully'
-                ]);
+            ->assertJson([
+                'success' => true,
+                'message' => 'Conversation archived successfully',
+            ]);
 
         $this->assertDatabaseHas('conversations', [
             'id' => $this->conversation->id,
-            'archived_at' => now()
+            'archived_at' => now(),
         ]);
     }
 
@@ -324,17 +324,17 @@ class UniversalMessagingControllerTest extends TestCase
         $response = $this->getJson('/api/messaging/statistics');
 
         $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        'total_conversations',
-                        'unread_count',
-                        'messages_sent_today',
-                        'messages_received_today',
-                        'average_response_time',
-                        'conversation_trends'
-                    ]
-                ]);
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    'total_conversations',
+                    'unread_count',
+                    'messages_sent_today',
+                    'messages_received_today',
+                    'average_response_time',
+                    'conversation_trends',
+                ],
+            ]);
     }
 
     /** @test */
@@ -342,16 +342,16 @@ class UniversalMessagingControllerTest extends TestCase
     {
         $otherUser = User::factory()->create();
         $otherConversation = Conversation::factory()->create([
-            'user_id' => $otherUser->id
+            'user_id' => $otherUser->id,
         ]);
 
         $response = $this->getJson("/api/messaging/conversations/{$otherConversation->id}/messages");
 
         $response->assertStatus(403)
-                ->assertJson([
-                    'success' => false,
-                    'message' => 'Unauthorized access to conversation'
-                ]);
+            ->assertJson([
+                'success' => false,
+                'message' => 'Unauthorized access to conversation',
+            ]);
     }
 
     /** @test */
@@ -360,7 +360,7 @@ class UniversalMessagingControllerTest extends TestCase
         $response = $this->postJson('/api/messaging/conversations', []);
 
         $response->assertStatus(422)
-                ->assertJsonValidationErrors(['recipient_id', 'subject', 'message']);
+            ->assertJsonValidationErrors(['recipient_id', 'subject', 'message']);
     }
 
     /** @test */
@@ -368,11 +368,11 @@ class UniversalMessagingControllerTest extends TestCase
     {
         $response = $this->postJson("/api/messaging/conversations/{$this->conversation->id}/messages", [
             'content' => '', // Empty content
-            'message_type' => 'text'
+            'message_type' => 'text',
         ]);
 
         $response->assertStatus(422)
-                ->assertJsonValidationErrors(['content']);
+            ->assertJsonValidationErrors(['content']);
     }
 
     /** @test */
@@ -386,11 +386,11 @@ class UniversalMessagingControllerTest extends TestCase
         $response = $this->postJson("/api/messaging/conversations/{$this->conversation->id}/messages", [
             'content' => 'Large file',
             'message_type' => 'file',
-            'attachment' => $largeFile
+            'attachment' => $largeFile,
         ]);
 
         $response->assertStatus(422)
-                ->assertJsonValidationErrors(['attachment']);
+            ->assertJsonValidationErrors(['attachment']);
     }
 
     /** @test */
@@ -399,19 +399,19 @@ class UniversalMessagingControllerTest extends TestCase
         $response = $this->getJson("/api/messaging/conversations/{$this->conversation->id}/participants");
 
         $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        '*' => [
-                            'id',
-                            'name',
-                            'email',
-                            'avatar',
-                            'last_seen_at',
-                            'is_online'
-                        ]
-                    ]
-                ]);
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    '*' => [
+                        'id',
+                        'name',
+                        'email',
+                        'avatar',
+                        'last_seen_at',
+                        'is_online',
+                    ],
+                ],
+            ]);
     }
 
     /** @test */
@@ -421,7 +421,7 @@ class UniversalMessagingControllerTest extends TestCase
 
         $messageData = [
             'content' => 'Real-time test message',
-            'message_type' => 'text'
+            'message_type' => 'text',
         ];
 
         $this->postJson("/api/messaging/conversations/{$this->conversation->id}/messages", $messageData);
@@ -433,14 +433,14 @@ class UniversalMessagingControllerTest extends TestCase
     public function test_can_update_typing_status()
     {
         $response = $this->postJson("/api/messaging/conversations/{$this->conversation->id}/typing", [
-            'is_typing' => true
+            'is_typing' => true,
         ]);
 
         $response->assertStatus(200)
-                ->assertJson([
-                    'success' => true,
-                    'message' => 'Typing status updated'
-                ]);
+            ->assertJson([
+                'success' => true,
+                'message' => 'Typing status updated',
+            ]);
     }
 
     /** @test */
@@ -449,27 +449,27 @@ class UniversalMessagingControllerTest extends TestCase
         // Create messages for export
         Message::factory(5)->create([
             'conversation_id' => $this->conversation->id,
-            'sender_id' => $this->user->id
+            'sender_id' => $this->user->id,
         ]);
 
         $response = $this->getJson("/api/messaging/conversations/{$this->conversation->id}/export");
 
         $response->assertStatus(200)
-                ->assertHeader('Content-Type', 'application/json')
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        'conversation_info',
-                        'messages' => [
-                            '*' => [
-                                'content',
-                                'sender',
-                                'timestamp',
-                                'attachments'
-                            ]
-                        ]
-                    ]
-                ]);
+            ->assertHeader('Content-Type', 'application/json')
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    'conversation_info',
+                    'messages' => [
+                        '*' => [
+                            'content',
+                            'sender',
+                            'timestamp',
+                            'attachments',
+                        ],
+                    ],
+                ],
+            ]);
     }
 
     /** @test */
@@ -478,21 +478,21 @@ class UniversalMessagingControllerTest extends TestCase
         // Create many messages
         Message::factory(50)->create([
             'conversation_id' => $this->conversation->id,
-            'sender_id' => $this->user->id
+            'sender_id' => $this->user->id,
         ]);
 
         $response = $this->getJson("/api/messaging/conversations/{$this->conversation->id}/messages?per_page=10");
 
         $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'data',
-                    'pagination' => [
-                        'current_page',
-                        'total_pages',
-                        'per_page',
-                        'total_items'
-                    ]
-                ]);
+            ->assertJsonStructure([
+                'data',
+                'pagination' => [
+                    'current_page',
+                    'total_pages',
+                    'per_page',
+                    'total_items',
+                ],
+            ]);
 
         $this->assertEquals(10, count($response->json('data')));
     }
@@ -503,25 +503,25 @@ class UniversalMessagingControllerTest extends TestCase
         Storage::fake('public');
 
         $file = UploadedFile::fake()->create('document.pdf', 100);
-        
+
         // Create message with attachment
         $message = Message::factory()->create([
             'conversation_id' => $this->conversation->id,
-            'sender_id' => $this->user->id
+            'sender_id' => $this->user->id,
         ]);
 
         $attachment = $message->attachments()->create([
             'original_name' => 'document.pdf',
             'stored_name' => $file->hashName(),
-            'path' => 'messages/' . $file->hashName(),
+            'path' => 'messages/'.$file->hashName(),
             'mime_type' => 'application/pdf',
-            'size' => 100
+            'size' => 100,
         ]);
 
         $response = $this->get("/api/messaging/attachments/{$attachment->id}/download");
 
         $response->assertStatus(200)
-                ->assertHeader('Content-Type', 'application/pdf');
+            ->assertHeader('Content-Type', 'application/pdf');
     }
 
     /** @test */
@@ -530,7 +530,7 @@ class UniversalMessagingControllerTest extends TestCase
         // Mock a conversation that's been inactive for 30 days
         $oldConversation = Conversation::factory()->create([
             'user_id' => $this->user->id,
-            'updated_at' => now()->subDays(31)
+            'updated_at' => now()->subDays(31),
         ]);
 
         // Run the auto-archive command
@@ -538,7 +538,7 @@ class UniversalMessagingControllerTest extends TestCase
 
         $this->assertDatabaseHas('conversations', [
             'id' => $oldConversation->id,
-            'archived_at' => now()
+            'archived_at' => now(),
         ]);
     }
-} 
+}

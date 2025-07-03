@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Builder;
 
 class ProfessionTranslation extends Model
 {
@@ -89,7 +89,7 @@ class ProfessionTranslation extends Model
      */
     public function isComplete(): bool
     {
-        return !empty($this->name) && !empty($this->description);
+        return ! empty($this->name) && ! empty($this->description);
     }
 
     /**
@@ -101,7 +101,7 @@ class ProfessionTranslation extends Model
         $completed = 0;
 
         foreach ($fields as $field) {
-            if (!empty($this->{$field})) {
+            if (! empty($this->{$field})) {
                 $completed++;
             }
         }
@@ -125,4 +125,4 @@ class ProfessionTranslation extends Model
             $translation->locale = strtolower($translation->locale);
         });
     }
-} 
+}

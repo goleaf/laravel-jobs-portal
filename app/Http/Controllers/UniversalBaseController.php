@@ -18,7 +18,7 @@ class UniversalBaseController extends AppBaseController
     /**
      * Universal response wrapper with metadata.
      *
-     * @param mixed $data
+     * @param  mixed  $data
      */
     protected function universalResponse($data, string $message = 'Success', array $meta = []): JsonResponse
     {
@@ -70,7 +70,7 @@ class UniversalBaseController extends AppBaseController
     /**
      * Universal model query with common filters.
      *
-     * @param mixed $model
+     * @param  mixed  $model
      */
     protected function universalQuery($model, Request $request)
     {
@@ -105,7 +105,7 @@ class UniversalBaseController extends AppBaseController
     /**
      * Universal search functionality.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     protected function universalSearch($query, string $search, array $fields = ['name', 'title', 'description'])
     {
@@ -119,7 +119,7 @@ class UniversalBaseController extends AppBaseController
     /**
      * Universal sorting.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     protected function universalSort($query, Request $request, string $defaultSort = 'created_at')
     {
@@ -127,7 +127,7 @@ class UniversalBaseController extends AppBaseController
         $sortDirection = $request->get('sort_direction', 'desc');
 
         // Validate sort direction
-        if (!in_array(strtolower($sortDirection), ['asc', 'desc'])) {
+        if (! in_array(strtolower($sortDirection), ['asc', 'desc'])) {
             $sortDirection = 'desc';
         }
 
@@ -137,8 +137,8 @@ class UniversalBaseController extends AppBaseController
     /**
      * Universal pagination with metadata.
      *
-     * @param mixed      $query
-     * @param null|mixed $transformer
+     * @param  mixed  $query
+     * @param  null|mixed  $transformer
      */
     protected function universalPaginate($query, Request $request, $transformer = null)
     {
@@ -211,7 +211,7 @@ class UniversalBaseController extends AppBaseController
     /**
      * Universal model operations with logging.
      *
-     * @param mixed $model
+     * @param  mixed  $model
      */
     protected function universalCreate($model, array $data, string $action = 'create'): JsonResponse
     {
@@ -240,7 +240,7 @@ class UniversalBaseController extends AppBaseController
     /**
      * Universal model update with logging.
      *
-     * @param mixed $instance
+     * @param  mixed  $instance
      */
     protected function universalUpdate($instance, array $data, string $action = 'update'): JsonResponse
     {
@@ -269,7 +269,7 @@ class UniversalBaseController extends AppBaseController
     /**
      * Universal model deletion with logging.
      *
-     * @param mixed $instance
+     * @param  mixed  $instance
      */
     protected function universalDelete($instance, string $action = 'delete'): JsonResponse
     {
@@ -312,9 +312,9 @@ class UniversalBaseController extends AppBaseController
         foreach ($ids as $id) {
             try {
                 $operation($id);
-                ++$successful;
+                $successful++;
             } catch (\Exception $e) {
-                ++$failed;
+                $failed++;
                 $errors[] = "ID {$id}: ".$e->getMessage();
             }
         }
@@ -350,7 +350,7 @@ class UniversalBaseController extends AppBaseController
     {
         if ($pattern) {
             $keys = Cache::store()->keys("universal_{$pattern}*");
-            if (!empty($keys)) {
+            if (! empty($keys)) {
                 Cache::store()->deleteMultiple($keys);
             }
         } else {

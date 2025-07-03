@@ -99,7 +99,7 @@ class HeaderSliderController extends AppBaseController
     public function changeIsActive(HeaderSlider $headerSlider)
     {
         $isActive = $headerSlider->is_active;
-        $headerSlider->update(['is_active' => !$isActive]);
+        $headerSlider->update(['is_active' => ! $isActive]);
 
         return $this->sendsuccess(__('messages.flash.status_change'));
     }
@@ -109,7 +109,7 @@ class HeaderSliderController extends AppBaseController
     {
         /** @var Setting $setting */
         $setting = Setting::where('key', 'slider_is_active')->first();
-        $setting->update(['value' => !$setting->value]);
+        $setting->update(['value' => ! $setting->value]);
 
         return $this->sendSuccess(__('messages.flash.status_change'));
         //        return $this->sendSuccess('This functionality not allowed in demo.');

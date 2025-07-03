@@ -35,7 +35,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itHasFillableAttributes()
+    public function it_has_fillable_attributes()
     {
         $fillable = [
             'name', 'description', 'is_default', 'is_active',
@@ -46,7 +46,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCastsAttributesCorrectly()
+    public function it_casts_attributes_correctly()
     {
         $this->assertIsBool($this->category->is_default);
         $this->assertIsBool($this->category->is_active);
@@ -56,7 +56,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanScopeActiveCategories()
+    public function it_can_scope_active_categories()
     {
         PostCategory::factory()->create(['is_active' => false]);
 
@@ -67,7 +67,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanScopeInactiveCategories()
+    public function it_can_scope_inactive_categories()
     {
         $inactiveCategory = PostCategory::factory()->create(['is_active' => false]);
 
@@ -78,7 +78,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanScopeDefaultCategories()
+    public function it_can_scope_default_categories()
     {
         $defaultCategory = PostCategory::factory()->create(['is_default' => true]);
 
@@ -89,7 +89,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanScopeCustomCategories()
+    public function it_can_scope_custom_categories()
     {
         $customCategories = PostCategory::custom()->get();
 
@@ -98,7 +98,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanSearchCategories()
+    public function it_can_search_categories()
     {
         PostCategory::factory()->create(['name' => 'Technology', 'description' => 'Tech posts']);
         PostCategory::factory()->create(['name' => 'Sports', 'description' => 'Sport articles']);
@@ -111,7 +111,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanScopeRecentCategories()
+    public function it_can_scope_recent_categories()
     {
         PostCategory::factory()->create(['created_at' => now()->subDays(40)]);
 
@@ -121,7 +121,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanScopePopularCategories()
+    public function it_can_scope_popular_categories()
     {
         $post1 = Post::factory()->create(['is_active' => true]);
         $post2 = Post::factory()->create(['is_active' => true]);
@@ -134,7 +134,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanScopeAlphabeticalCategories()
+    public function it_can_scope_alphabetical_categories()
     {
         PostCategory::factory()->create(['name' => 'Alpha Category']);
         PostCategory::factory()->create(['name' => 'Beta Category']);
@@ -145,7 +145,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanScopeOrderedCategories()
+    public function it_can_scope_ordered_categories()
     {
         PostCategory::factory()->create(['sort_order' => 2, 'name' => 'Second']);
         PostCategory::factory()->create(['sort_order' => 0, 'name' => 'First']);
@@ -156,7 +156,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanScopeCategoriesWithPosts()
+    public function it_can_scope_categories_with_posts()
     {
         $post = Post::factory()->create();
         $this->category->posts()->attach($post->id);
@@ -167,7 +167,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanScopeCategoriesWithoutPosts()
+    public function it_can_scope_categories_without_posts()
     {
         $categoriesWithoutPosts = PostCategory::withoutPosts()->get();
 
@@ -175,7 +175,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanScopeEmptyCategories()
+    public function it_can_scope_empty_categories()
     {
         $emptyCategories = PostCategory::empty()->get();
 
@@ -183,7 +183,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itHasPostsRelationship()
+    public function it_has_posts_relationship()
     {
         $post = Post::factory()->create();
         $this->category->posts()->attach($post->id);
@@ -193,7 +193,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itHasActivePostsRelationship()
+    public function it_has_active_posts_relationship()
     {
         $activePost = Post::factory()->create(['is_active' => true]);
         $inactivePost = Post::factory()->create(['is_active' => false]);
@@ -204,7 +204,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanCheckIfDefault()
+    public function it_can_check_if_default()
     {
         $this->assertFalse($this->category->isDefault());
 
@@ -213,7 +213,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanCheckIfCustom()
+    public function it_can_check_if_custom()
     {
         $this->assertTrue($this->category->isCustom());
 
@@ -222,7 +222,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanCheckIfActive()
+    public function it_can_check_if_active()
     {
         $this->assertTrue($this->category->isActive());
 
@@ -231,7 +231,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itGeneratesDisplayNameAttribute()
+    public function it_generates_display_name_attribute()
     {
         $displayName = $this->category->display_name;
 
@@ -239,7 +239,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itGeneratesBadgeHtmlAttribute()
+    public function it_generates_badge_html_attribute()
     {
         $badgeHtml = $this->category->badge_html;
 
@@ -249,7 +249,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itGeneratesIconHtmlAttribute()
+    public function it_generates_icon_html_attribute()
     {
         $iconHtml = $this->category->icon_html;
 
@@ -257,7 +257,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itGeneratesSlugAttribute()
+    public function it_generates_slug_attribute()
     {
         $slug = $this->category->slug;
 
@@ -265,7 +265,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanCheckIfHasPosts()
+    public function it_can_check_if_has_posts()
     {
         $this->assertFalse($this->category->hasPosts());
 
@@ -276,7 +276,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanCheckIfHasActivePosts()
+    public function it_can_check_if_has_active_posts()
     {
         $this->assertFalse($this->category->hasActivePosts());
 
@@ -287,7 +287,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanCheckIfHasIcon()
+    public function it_can_check_if_has_icon()
     {
         $this->assertTrue($this->category->hasIcon());
 
@@ -296,7 +296,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCanCheckIfHasColor()
+    public function it_can_check_if_has_color()
     {
         $this->assertTrue($this->category->hasColor());
 
@@ -305,7 +305,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itGeneratesStatsAttribute()
+    public function it_generates_stats_attribute()
     {
         $stats = $this->category->stats;
 
@@ -317,13 +317,12 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCachesActiveCategories()
+    public function it_caches_active_categories()
     {
         Cache::shouldReceive('remember')
             ->once()
             ->with('post_categories.active', \Mockery::any(), \Mockery::any())
-            ->andReturn(collect([$this->category]))
-        ;
+            ->andReturn(collect([$this->category]));
 
         $result = PostCategory::getCachedActive();
 
@@ -331,13 +330,12 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCachesDefaultCategories()
+    public function it_caches_default_categories()
     {
         Cache::shouldReceive('remember')
             ->once()
             ->with('post_categories.default', \Mockery::any(), \Mockery::any())
-            ->andReturn(collect())
-        ;
+            ->andReturn(collect());
 
         $result = PostCategory::getCachedDefault();
 
@@ -345,13 +343,12 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itCachesPopularCategories()
+    public function it_caches_popular_categories()
     {
         Cache::shouldReceive('remember')
             ->once()
             ->with('post_categories.popular.10', \Mockery::any(), \Mockery::any())
-            ->andReturn(collect([$this->category]))
-        ;
+            ->andReturn(collect([$this->category]));
 
         $result = PostCategory::getCachedPopular(10);
 
@@ -359,7 +356,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itClearsCachesWhenModelChanges()
+    public function it_clears_caches_when_model_changes()
     {
         Cache::shouldReceive('forget')->times(8);
 
@@ -369,7 +366,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itUsesSoftDeletes()
+    public function it_uses_soft_deletes()
     {
         $this->category->delete();
 
@@ -378,7 +375,7 @@ class PostCategoryTest extends TestCase
     }
 
     /** @test */
-    public function itLogsActivity()
+    public function it_logs_activity()
     {
         $this->category->update(['name' => 'Updated Name']);
 

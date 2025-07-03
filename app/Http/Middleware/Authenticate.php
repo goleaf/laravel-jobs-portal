@@ -13,8 +13,8 @@ class Authenticate extends Middleware
     /**
      * Handle an incoming request.
      *
-     * @param string[] ...$guards
-     * @param mixed    $request
+     * @param  string[]  ...$guards
+     * @param  mixed  $request
      *
      * @throws AuthenticationException
      */
@@ -33,11 +33,11 @@ class Authenticate extends Middleware
     /**
      * Get the path the user should be redirected to when they are not authenticated.
      *
-     * @param mixed $request
+     * @param  mixed  $request
      */
     protected function redirectTo($request)
     {
-        if (!$request->expectsJson()) {
+        if (! $request->expectsJson()) {
             return route('login');
         }
     }

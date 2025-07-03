@@ -59,10 +59,9 @@ class CompanySizeCollection extends ResourceCollection
     {
         $mostPopular = $this->collection
             ->sortByDesc('companies_count')
-            ->first()
-        ;
+            ->first();
 
-        if (!$mostPopular) {
+        if (! $mostPopular) {
             return null;
         }
 
@@ -84,10 +83,9 @@ class CompanySizeCollection extends ResourceCollection
     {
         $leastPopular = $this->collection
             ->sortBy('companies_count')
-            ->first()
-        ;
+            ->first();
 
-        if (!$leastPopular) {
+        if (! $leastPopular) {
             return null;
         }
 
@@ -109,10 +107,9 @@ class CompanySizeCollection extends ResourceCollection
     {
         $newest = $this->collection
             ->sortByDesc('created_at')
-            ->first()
-        ;
+            ->first();
 
-        if (!$newest) {
+        if (! $newest) {
             return null;
         }
 
@@ -134,10 +131,9 @@ class CompanySizeCollection extends ResourceCollection
     {
         $oldest = $this->collection
             ->sortBy('created_at')
-            ->first()
-        ;
+            ->first();
 
-        if (!$oldest) {
+        if (! $oldest) {
             return null;
         }
 

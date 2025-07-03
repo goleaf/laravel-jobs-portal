@@ -17,13 +17,12 @@ class BasicFunctionalityTest extends DuskTestCase
      *
      * @test
      */
-    public function applicationLoadsWithoutFatalErrors()
+    public function application_loads_without_fatal_errors()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
                 ->waitFor('body', 30)  // Increased timeout for CI
-                ->assertPresent('body')
-            ;
+                ->assertPresent('body');
 
             // Enhanced pattern: Verify basic page structure
             $pageSource = $browser->driver->getPageSource();
@@ -39,26 +38,23 @@ class BasicFunctionalityTest extends DuskTestCase
      *
      * @test
      */
-    public function essentialRoutesAreAccessible()
+    public function essential_routes_are_accessible()
     {
         $this->browse(function (Browser $browser) {
             // Test homepage
             $browser->visit('/')
                 ->waitFor('body', 20)
-                ->assertPresent('body')
-            ;
+                ->assertPresent('body');
 
             // Test login page
             $browser->visit('/login')
                 ->waitFor('body', 20)
-                ->assertPresent('body')
-            ;
+                ->assertPresent('body');
 
             // Test register page
             $browser->visit('/register')
                 ->waitFor('body', 20)
-                ->assertPresent('body')
-            ;
+                ->assertPresent('body');
         });
     }
 
@@ -67,15 +63,14 @@ class BasicFunctionalityTest extends DuskTestCase
      *
      * @test
      */
-    public function pagesReturnValidHttpResponses()
+    public function pages_return_valid_http_responses()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
                 ->waitFor('body', 20)
                 ->assertDontSee('500')
                 ->assertDontSee('404')
-                ->assertDontSee('403')
-            ;
+                ->assertDontSee('403');
         });
     }
 
@@ -84,25 +79,22 @@ class BasicFunctionalityTest extends DuskTestCase
      *
      * @test
      */
-    public function browserNavigationFunctions()
+    public function browser_navigation_functions()
     {
         $this->browse(function (Browser $browser) {
             // Start at homepage
             $browser->visit('/')
-                ->waitFor('body', 20)
-            ;
+                ->waitFor('body', 20);
 
             // Navigate to another page
             $browser->visit('/login')
                 ->waitFor('body', 15)
-                ->assertPresent('body')
-            ;
+                ->assertPresent('body');
 
             // Test browser back
             $browser->back()
                 ->waitFor('body', 10)
-                ->assertPresent('body')
-            ;
+                ->assertPresent('body');
         });
     }
 
@@ -111,12 +103,11 @@ class BasicFunctionalityTest extends DuskTestCase
      *
      * @test
      */
-    public function javascriptEnvironmentIsFunctional()
+    public function javascript_environment_is_functional()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
-                ->waitFor('body', 20)
-            ;
+                ->waitFor('body', 20);
 
             // Test basic JavaScript functionality
             $windowExists = $browser->script('return typeof window !== "undefined";');

@@ -36,4 +36,4 @@ class GetCategoryStatsRequest extends FormRequest
     {
         return [];
     }
-} 
+}

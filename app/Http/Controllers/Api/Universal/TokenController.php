@@ -14,9 +14,9 @@ use App\Http\Resources\Universal\LogoutResource;
 use App\Http\Resources\Universal\TokenCollection;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Cache;
 
 /**
  * Universal Token Authentication Controller
@@ -31,7 +31,7 @@ class TokenController extends UniversalBaseController
     {
         try {
             // Check rate limiting
-            $attemptsKey = 'login_attempts:' . $request->ip();
+            $attemptsKey = 'login_attempts:'.$request->ip();
             $attempts = Cache::get($attemptsKey, 0);
             if ($attempts >= 5) {
                 return $this->errorResponse('Too many login attempts. Please try again later.', 429);
@@ -40,7 +40,7 @@ class TokenController extends UniversalBaseController
 
             $user = User::where('email', $request->email)->first();
 
-            if (!$user || !Hash::check($request->password, $user->password)) {
+            if (! $user || ! Hash::check($request->password, $user->password)) {
                 throw ValidationException::withMessages([
                     'email' => ['The provided credentials are incorrect.'],
                 ]);
@@ -84,7 +84,7 @@ class TokenController extends UniversalBaseController
     public function user(UserRequest $request): JsonResponse
     {
         try {
-            if (!$request->user()) {
+            if (! $request->user()) {
                 return $this->errorResponse('Unauthenticated', 401);
             }
             $user = $request->user();
@@ -118,8 +118,7 @@ class TokenController extends UniversalBaseController
             ];
 
             return response()->json((new LogoutResource($data))->toArray($request))
-                ->setStatusCode(200)
-            ;
+                ->setStatusCode(200);
         } catch (\Exception $e) {
             return $this->errorResponse('Logout failed', 500, [], [
                 'exception' => $e->getMessage(),
@@ -177,8 +176,7 @@ class TokenController extends UniversalBaseController
             });
 
             return response()->json((new TokenCollection($tokens))->toArray($request))
-                ->setStatusCode(200)
-            ;
+                ->setStatusCode(200);
         } catch (\Exception $e) {
             return $this->errorResponse('Failed to retrieve tokens', 500, [], [
                 'exception' => $e->getMessage(),

@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Arr;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -18,41 +18,41 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * CustomMedia Model - Enhanced with Enhanced patterns.
  *
- * @property int         $id
- * @property string      $name
- * @property string      $file_name
+ * @property int $id
+ * @property string $name
+ * @property string $file_name
  * @property null|string $title
  * @property null|string $description
- * @property string      $mime_type
+ * @property string $mime_type
  * @property null|string $disk
- * @property string      $collection_name
- * @property int         $size
- * @property null|array  $manipulations
- * @property null|array  $custom_properties
- * @property null|array  $generated_conversions
- * @property null|int    $responsive_images
- * @property null|int    $order_column
+ * @property string $collection_name
+ * @property int $size
+ * @property null|array $manipulations
+ * @property null|array $custom_properties
+ * @property null|array $generated_conversions
+ * @property null|int $responsive_images
+ * @property null|int $order_column
  * @property null|string $uuid
  * @property null|string $conversions_disk
- * @property bool        $is_active
- * @property bool        $is_featured
- * @property bool        $is_processed
+ * @property bool $is_active
+ * @property bool $is_featured
+ * @property bool $is_processed
  * @property null|string $alt_text
  * @property null|string $caption
  * @property null|string $copyright
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|Carbon $deleted_at
- * @property string      $url
- * @property string      $full_url
- * @property string      $path
- * @property string      $extension
- * @property string      $human_readable_size
- * @property bool        $is_image
- * @property bool        $is_video
- * @property bool        $is_audio
- * @property bool        $is_document
- * @property array       $meta_data
+ * @property string $url
+ * @property string $full_url
+ * @property string $path
+ * @property string $extension
+ * @property string $human_readable_size
+ * @property bool $is_image
+ * @property bool $is_video
+ * @property bool $is_audio
+ * @property bool $is_document
+ * @property array $meta_data
  *
  * Enhanced Enhanced Scopes:
  *
@@ -84,8 +84,8 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class CustomMedia extends Media
 {
     use HasFactory;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     /**
      * Media type constants.
@@ -203,8 +203,7 @@ class CustomMedia extends Media
         return LogOptions::defaults()
             ->logOnly(['name', 'file_name', 'title', 'description', 'is_active', 'is_featured'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -246,7 +245,7 @@ class CustomMedia extends Media
     /**
      * Scope to only include active media.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -256,7 +255,7 @@ class CustomMedia extends Media
     /**
      * Scope to only include inactive media.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -266,7 +265,7 @@ class CustomMedia extends Media
     /**
      * Scope to only include featured media.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFeatured($query)
     {
@@ -276,7 +275,7 @@ class CustomMedia extends Media
     /**
      * Scope to only include non-featured media.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNonFeatured($query)
     {
@@ -286,7 +285,7 @@ class CustomMedia extends Media
     /**
      * Scope to only include processed media.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeProcessed($query)
     {
@@ -296,7 +295,7 @@ class CustomMedia extends Media
     /**
      * Scope to only include unprocessed media.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeUnprocessed($query)
     {
@@ -310,7 +309,7 @@ class CustomMedia extends Media
     /**
      * Scope to get media by collection.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByCollection($query, string $collection)
     {
@@ -320,7 +319,7 @@ class CustomMedia extends Media
     /**
      * Scope to get media by MIME type.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByMimeType($query, string $mimeType)
     {
@@ -330,7 +329,7 @@ class CustomMedia extends Media
     /**
      * Scope to get only image files.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeImages($query)
     {
@@ -340,7 +339,7 @@ class CustomMedia extends Media
     /**
      * Scope to get only video files.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeVideos($query)
     {
@@ -350,7 +349,7 @@ class CustomMedia extends Media
     /**
      * Scope to get only audio files.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAudio($query)
     {
@@ -360,7 +359,7 @@ class CustomMedia extends Media
     /**
      * Scope to get only document files.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeDocuments($query)
     {
@@ -378,7 +377,7 @@ class CustomMedia extends Media
     /**
      * Scope to get archive files.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeArchives($query)
     {
@@ -397,7 +396,7 @@ class CustomMedia extends Media
     /**
      * Scope to search media by name, title, or description.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
@@ -407,15 +406,14 @@ class CustomMedia extends Media
                 ->orWhere('title', 'like', '%'.$term.'%')
                 ->orWhere('description', 'like', '%'.$term.'%')
                 ->orWhere('alt_text', 'like', '%'.$term.'%')
-                ->orWhere('caption', 'like', '%'.$term.'%')
-            ;
+                ->orWhere('caption', 'like', '%'.$term.'%');
         });
     }
 
     /**
      * Scope to get media created within specified days.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -425,7 +423,7 @@ class CustomMedia extends Media
     /**
      * Scope to get old media created before specified days.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -439,7 +437,7 @@ class CustomMedia extends Media
     /**
      * Scope to get large files above specified size.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeLarge($query, int $bytes = 1048576) // 1MB default
     {
@@ -449,7 +447,7 @@ class CustomMedia extends Media
     /**
      * Scope to get small files below specified size.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSmall($query, int $bytes = 102400) // 100KB default
     {
@@ -459,7 +457,7 @@ class CustomMedia extends Media
     /**
      * Scope to get media by storage disk.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByDisk($query, string $disk)
     {
@@ -469,7 +467,7 @@ class CustomMedia extends Media
     /**
      * Scope to get media with conversions.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithConversions($query)
     {
@@ -479,7 +477,7 @@ class CustomMedia extends Media
     /**
      * Scope to get media without conversions.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithoutConversions($query)
     {
@@ -493,7 +491,7 @@ class CustomMedia extends Media
     /**
      * Scope to order media alphabetically by name.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
@@ -506,14 +504,13 @@ class CustomMedia extends Media
     public function scopeOrdered(Builder $query): Builder
     {
         return $query->orderBy('order_column', 'asc')
-            ->orderBy('created_at', 'desc')
-        ;
+            ->orderBy('created_at', 'desc');
     }
 
     /**
      * Scope to order media by size (largest first).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeBySize($query, string $direction = 'desc')
     {
@@ -607,7 +604,7 @@ class CustomMedia extends Media
      */
     public function getIsImageAttribute(): bool
     {
-        return 0 === strpos($this->mime_type, 'image/');
+        return strpos($this->mime_type, 'image/') === 0;
     }
 
     /**
@@ -615,7 +612,7 @@ class CustomMedia extends Media
      */
     public function getIsVideoAttribute(): bool
     {
-        return 0 === strpos($this->mime_type, 'video/');
+        return strpos($this->mime_type, 'video/') === 0;
     }
 
     /**
@@ -623,7 +620,7 @@ class CustomMedia extends Media
      */
     public function getIsAudioAttribute(): bool
     {
-        return 0 === strpos($this->mime_type, 'audio/');
+        return strpos($this->mime_type, 'audio/') === 0;
     }
 
     /**
@@ -837,45 +834,36 @@ class CustomMedia extends Media
 
     /**
      * Validate that all required fields are present using Laravel 12.16 Arr::hasAll()
-     *
-     * @param array $data
-     * @return bool
      */
     public static function validateRequiredFields(array $data): bool
     {
         $requiredFields = ['name', 'file_name', 'mime_type', 'collection_name', 'size'];
-        
+
         return Arr::hasAll($data, $requiredFields);
     }
 
     /**
      * Validate nested media properties using Arr::hasAll() with dot notation
-     *
-     * @param array $data
-     * @return bool
      */
     public static function validateNestedProperties(array $data): bool
     {
         $nestedChecks = [
             'custom_properties.alt_text',
-            'custom_properties.caption'
+            'custom_properties.caption',
         ];
-        
+
         // Check if data has nested structure and required nested fields
-        return Arr::hasAll($data, ['custom_properties']) && 
+        return Arr::hasAll($data, ['custom_properties']) &&
                Arr::hasAll($data, $nestedChecks);
     }
 
     /**
      * Enhanced factory validation using modern Laravel techniques
-     *
-     * @param array $attributes
-     * @return array
      */
     public static function validateFactoryData(array $attributes): array
     {
         // Use Arr::hasAll() to ensure core fields exist
-        if (!self::validateRequiredFields($attributes)) {
+        if (! self::validateRequiredFields($attributes)) {
             throw new \InvalidArgumentException('Missing required fields for CustomMedia creation');
         }
 

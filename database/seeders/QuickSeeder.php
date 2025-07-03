@@ -64,7 +64,7 @@ class QuickSeeder extends Seeder
         $this->command->info('📍 Seeding essential data...');
 
         // Countries (5 only)
-        if (0 == Country::count()) {
+        if (Country::count() == 0) {
             $countries = ['United States', 'Canada', 'United Kingdom', 'Germany', 'Australia'];
             foreach ($countries as $name) {
                 Country::create(['name' => $name]);
@@ -72,9 +72,9 @@ class QuickSeeder extends Seeder
         }
 
         // States (2 per country)
-        if (0 == State::count()) {
+        if (State::count() == 0) {
             Country::all()->each(function ($country) {
-                for ($i = 1; $i <= 2; ++$i) {
+                for ($i = 1; $i <= 2; $i++) {
                     State::create([
                         'name' => $country->name." State {$i}",
                         'country_id' => $country->id,
@@ -84,9 +84,9 @@ class QuickSeeder extends Seeder
         }
 
         // Cities (2 per state)
-        if (0 == City::count()) {
+        if (City::count() == 0) {
             State::all()->each(function ($state) {
-                for ($i = 1; $i <= 2; ++$i) {
+                for ($i = 1; $i <= 2; $i++) {
                     City::create([
                         'name' => $state->name." City {$i}",
                         'state_id' => $state->id,
@@ -96,59 +96,59 @@ class QuickSeeder extends Seeder
         }
 
         // Master data (minimal)
-        if (0 == Industry::count()) {
+        if (Industry::count() == 0) {
             $industries = ['Technology', 'Healthcare', 'Finance', 'Education', 'Manufacturing'];
             foreach ($industries as $name) {
                 Industry::create(['name' => $name, 'description' => "Industry: {$name}"]);
             }
         }
 
-        if (0 == CompanySize::count()) {
+        if (CompanySize::count() == 0) {
             CompanySize::factory(3)->create();
         }
 
-        if (0 == FunctionalArea::count()) {
+        if (FunctionalArea::count() == 0) {
             FunctionalArea::factory(5)->create();
         }
 
-        if (0 == CareerLevel::count()) {
+        if (CareerLevel::count() == 0) {
             CareerLevel::factory(4)->create();
         }
 
-        if (0 == SalaryCurrency::count()) {
+        if (SalaryCurrency::count() == 0) {
             SalaryCurrency::factory(3)->create();
         }
 
-        if (0 == SalaryPeriod::count()) {
+        if (SalaryPeriod::count() == 0) {
             SalaryPeriod::factory(3)->create();
         }
 
-        if (0 == JobType::count()) {
+        if (JobType::count() == 0) {
             JobType::factory(3)->create();
         }
 
-        if (0 == JobShift::count()) {
+        if (JobShift::count() == 0) {
             JobShift::factory(3)->create();
         }
 
-        if (0 == RequiredDegreeLevel::count()) {
+        if (RequiredDegreeLevel::count() == 0) {
             RequiredDegreeLevel::factory(4)->create();
         }
 
-        if (0 == MaritalStatus::count()) {
+        if (MaritalStatus::count() == 0) {
             MaritalStatus::factory(3)->create();
         }
 
-        if (0 == Language::count()) {
+        if (Language::count() == 0) {
             Language::factory(5)->create();
         }
 
-        if (0 == OwnerShipType::count()) {
+        if (OwnerShipType::count() == 0) {
             OwnerShipType::factory(3)->create();
         }
 
         // Job Categories
-        if (0 == JobCategory::count()) {
+        if (JobCategory::count() == 0) {
             $categories = ['Software Development', 'Marketing', 'Sales', 'HR', 'Finance'];
             foreach ($categories as $name) {
                 JobCategory::create([
@@ -160,7 +160,7 @@ class QuickSeeder extends Seeder
         }
 
         // Skills
-        if (0 == Skill::count()) {
+        if (Skill::count() == 0) {
             $skills = ['PHP', 'JavaScript', 'Python', 'Marketing', 'Sales', 'Communication', 'Leadership', 'Problem Solving'];
             foreach ($skills as $name) {
                 Skill::create([
@@ -177,7 +177,7 @@ class QuickSeeder extends Seeder
     {
         $this->command->info('👥 Seeding small user base...');
 
-        if (0 == User::count()) {
+        if (User::count() == 0) {
             // Create 1 admin
             User::factory(1)->create([
                 'user_type' => 1,
@@ -198,7 +198,7 @@ class QuickSeeder extends Seeder
         }
 
         // Companies (3 only)
-        if (0 == Company::count()) {
+        if (Company::count() == 0) {
             $employers = User::where('user_type', 2)->take(3)->get();
             $industries = Industry::all();
             $companySizes = CompanySize::all();
@@ -215,7 +215,7 @@ class QuickSeeder extends Seeder
         }
 
         // Candidates (5 only)
-        if (0 == Candidate::count()) {
+        if (Candidate::count() == 0) {
             $candidateUsers = User::where('user_type', 3)->take(5)->get();
             $skills = Skill::all();
 
@@ -238,12 +238,12 @@ class QuickSeeder extends Seeder
         $this->command->info('💼 Seeding basic content...');
 
         // Jobs (10 only)
-        if (0 == Job::count()) {
+        if (Job::count() == 0) {
             $companies = Company::all();
             $jobCategories = JobCategory::all();
             $skills = Skill::all();
 
-            for ($i = 0; $i < 10; ++$i) {
+            for ($i = 0; $i < 10; $i++) {
                 $job = Job::factory()->create([
                     'company_id' => $companies->random()->id,
                     'job_category_id' => $jobCategories->random()->id,
@@ -258,21 +258,20 @@ class QuickSeeder extends Seeder
         }
 
         // Job Applications (15 only)
-        if (0 == JobApplication::count()) {
+        if (JobApplication::count() == 0) {
             $candidates = Candidate::all();
             $jobs = Job::where('status', 1)->get();
 
-            for ($i = 0; $i < 15; ++$i) {
+            for ($i = 0; $i < 15; $i++) {
                 $candidate = $candidates->random();
                 $job = $jobs->random();
 
                 // Check for existing application
                 $exists = JobApplication::where('candidate_id', $candidate->id)
                     ->where('job_id', $job->id)
-                    ->exists()
-                ;
+                    ->exists();
 
-                if (!$exists) {
+                if (! $exists) {
                     JobApplication::factory()->create([
                         'candidate_id' => $candidate->id,
                         'job_id' => $job->id,
@@ -283,7 +282,7 @@ class QuickSeeder extends Seeder
         }
 
         // Plans (2 only)
-        if (0 == Plan::count()) {
+        if (Plan::count() == 0) {
             Plan::factory(2)->create();
         }
 

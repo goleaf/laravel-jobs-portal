@@ -6,7 +6,7 @@ use App\Http\Requests\Foundation\AbstractBaseRequest;
 
 /**
  * Business Logic Request - Base class for business logic validation
- * 
+ *
  * Handles validation for:
  * - Company management operations
  * - Job posting and management
@@ -14,9 +14,9 @@ use App\Http\Requests\Foundation\AbstractBaseRequest;
  * - Employer operations
  * - Candidate profile management
  * - Business process validations
- * 
- * @package App\Http\Requests\BusinessLogic
+ *
  * @version 1.0.0
+ *
  * @since 2024-12-28
  */
 abstract class BusinessLogicRequest extends AbstractBaseRequest
@@ -79,7 +79,7 @@ abstract class BusinessLogicRequest extends AbstractBaseRequest
             'company_size_id' => ['required', 'exists:company_sizes,id'],
             'industry_id' => ['required', 'exists:industries,id'],
             'ownership_type_id' => ['sometimes', 'exists:ownership_types,id'],
-            'established_year' => ['sometimes', 'integer', 'min:1800', 'max:' . date('Y')],
+            'established_year' => ['sometimes', 'integer', 'min:1800', 'max:'.date('Y')],
             'no_of_offices' => ['sometimes', 'integer', 'min:1', 'max:1000'],
         ];
     }
@@ -174,13 +174,13 @@ abstract class BusinessLogicRequest extends AbstractBaseRequest
     {
         // Validate business rules
         $this->validateBusinessRules($validator);
-        
+
         // Validate workflow states
         $this->validateWorkflowStates($validator);
-        
+
         // Validate permissions and access control
         $this->validatePermissions($validator);
-        
+
         // Validate data integrity
         $this->validateDataIntegrity($validator);
     }
@@ -246,4 +246,4 @@ abstract class BusinessLogicRequest extends AbstractBaseRequest
 
         return $sanitized;
     }
-} 
+}

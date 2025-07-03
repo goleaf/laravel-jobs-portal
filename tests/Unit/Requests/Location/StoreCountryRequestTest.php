@@ -46,9 +46,9 @@ class StoreCountryRequestTest extends TestCase
     }
 
     /** @test */
-    public function adminIsAuthorized(): void
+    public function admin_is_authorized(): void
     {
-        $request = new StoreCountryRequest();
+        $request = new StoreCountryRequest;
         $request->setUserResolver(function () {
             return $this->admin;
         });
@@ -57,9 +57,9 @@ class StoreCountryRequestTest extends TestCase
     }
 
     /** @test */
-    public function employerIsAuthorized(): void
+    public function employer_is_authorized(): void
     {
-        $request = new StoreCountryRequest();
+        $request = new StoreCountryRequest;
         $request->setUserResolver(function () {
             return $this->employer;
         });
@@ -68,9 +68,9 @@ class StoreCountryRequestTest extends TestCase
     }
 
     /** @test */
-    public function candidateIsNotAuthorized(): void
+    public function candidate_is_not_authorized(): void
     {
-        $request = new StoreCountryRequest();
+        $request = new StoreCountryRequest;
         $request->setUserResolver(function () {
             return $this->candidate;
         });
@@ -79,9 +79,9 @@ class StoreCountryRequestTest extends TestCase
     }
 
     /** @test */
-    public function validationPassesWithValidData(): void
+    public function validation_passes_with_valid_data(): void
     {
-        $request = new StoreCountryRequest();
+        $request = new StoreCountryRequest;
         $data = [
             'name' => 'United States',
             'code' => 'US',
@@ -95,9 +95,9 @@ class StoreCountryRequestTest extends TestCase
     }
 
     /** @test */
-    public function validationFailsWithInvalidData(): void
+    public function validation_fails_with_invalid_data(): void
     {
-        $request = new StoreCountryRequest();
+        $request = new StoreCountryRequest;
         $data = [
             'name' => '', // Empty name should fail
         ];
@@ -109,9 +109,9 @@ class StoreCountryRequestTest extends TestCase
     }
 
     /** @test */
-    public function validationSanitizesData(): void
+    public function validation_sanitizes_data(): void
     {
-        $request = new StoreCountryRequest();
+        $request = new StoreCountryRequest;
         $request->merge([
             'name' => '  Test Name  ',
             'is_active' => 'true',
@@ -124,9 +124,9 @@ class StoreCountryRequestTest extends TestCase
     }
 
     /** @test */
-    public function hasProperErrorMessages(): void
+    public function has_proper_error_messages(): void
     {
-        $request = new StoreCountryRequest();
+        $request = new StoreCountryRequest;
         $messages = $request->messages();
 
         $this->assertIsArray($messages);
@@ -134,9 +134,9 @@ class StoreCountryRequestTest extends TestCase
     }
 
     /** @test */
-    public function hasProperFieldAttributes(): void
+    public function has_proper_field_attributes(): void
     {
-        $request = new StoreCountryRequest();
+        $request = new StoreCountryRequest;
         $attributes = $request->attributes();
 
         $this->assertIsArray($attributes);

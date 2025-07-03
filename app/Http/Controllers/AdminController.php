@@ -16,8 +16,7 @@ class AdminController extends Controller
         // Get admin users (users without owner_type or with specific role)
         $admins = User::whereNull('owner_type')
             ->orWhere('is_super_admin', true)
-            ->paginate(15)
-        ;
+            ->paginate(15);
 
         return view('admins.index', compact('admins'));
     }
@@ -52,8 +51,7 @@ class AdminController extends Controller
         ]);
 
         return redirect()->route('admin.admin.index')
-            ->with('success', 'Admin user created successfully.')
-        ;
+            ->with('success', 'Admin user created successfully.');
     }
 
     /**
@@ -86,8 +84,7 @@ class AdminController extends Controller
         $admin->update($validatedData);
 
         return redirect()->route('admin.admin.index')
-            ->with('success', 'Admin user updated successfully.')
-        ;
+            ->with('success', 'Admin user updated successfully.');
     }
 
     /**
@@ -97,8 +94,7 @@ class AdminController extends Controller
     {
         if ($admin->id === auth()->id()) {
             return redirect()->route('admin.admin.index')
-                ->with('error', 'You cannot delete your own account.')
-            ;
+                ->with('error', 'You cannot delete your own account.');
         }
 
         $admin->delete();

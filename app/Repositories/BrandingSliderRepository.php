@@ -36,7 +36,7 @@ class BrandingSliderRepository extends BaseRepository
             /** @var BrandingSliders $brandingSlider */
             $brandingSlider = $this->create($input);
 
-            if (isset($input['branding_slider']) && !empty($input['branding_slider'])) {
+            if (isset($input['branding_slider']) && ! empty($input['branding_slider'])) {
                 $brandingSlider->addMedia($input['branding_slider'])->toMediaCollection(
                     BrandingSliders::PATH,
                     config('app.media_disc')
@@ -55,7 +55,7 @@ class BrandingSliderRepository extends BaseRepository
             /** @var BrandingSliders $brandingSlider */
             $brandingSlider = $this->update($input, $brandingSliderId);
 
-            if (isset($input['branding_slider']) && !empty($input['branding_slider'])) {
+            if (isset($input['branding_slider']) && ! empty($input['branding_slider'])) {
                 $brandingSlider->clearMediaCollection(BrandingSliders::PATH);
                 $brandingSlider->addMedia($input['branding_slider'])->toMediaCollection(
                     BrandingSliders::PATH,

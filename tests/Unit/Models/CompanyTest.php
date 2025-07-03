@@ -37,7 +37,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function itHasCorrectFillableAttributes(): void
+    public function it_has_correct_fillable_attributes(): void
     {
         $expectedFillable = [
             'user_id', 'name', 'slug', 'email', 'phone', 'website',
@@ -62,7 +62,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function itHasCorrectCasts(): void
+    public function it_has_correct_casts(): void
     {
         $expectedCasts = [
             'id' => 'int',
@@ -93,14 +93,14 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function itBelongsToUser(): void
+    public function it_belongs_to_user(): void
     {
         $this->assertInstanceOf(User::class, $this->company->user);
         $this->assertEquals($this->user->id, $this->company->user->id);
     }
 
     /** @test */
-    public function itBelongsToLocationModels(): void
+    public function it_belongs_to_location_models(): void
     {
         $country = Country::factory()->create();
         $state = State::factory()->create(['country_id' => $country->id]);
@@ -122,7 +122,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function itBelongsToIndustry(): void
+    public function it_belongs_to_industry(): void
     {
         $industry = Industry::factory()->create();
         $company = Company::factory()->create(['industry_id' => $industry->id]);
@@ -132,7 +132,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function itBelongsToOwnershipType(): void
+    public function it_belongs_to_ownership_type(): void
     {
         $ownershipType = OwnershipType::factory()->create();
         $company = Company::factory()->create(['ownership_type_id' => $ownershipType->id]);
@@ -142,7 +142,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function itBelongsToCompanySize(): void
+    public function it_belongs_to_company_size(): void
     {
         $companySize = CompanySize::factory()->create();
         $company = Company::factory()->create(['company_size_id' => $companySize->id]);
@@ -152,7 +152,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function itHasManyJobs(): void
+    public function it_has_many_jobs(): void
     {
         $jobs = Job::factory()->count(3)->create(['company_id' => $this->company->id]);
 
@@ -165,7 +165,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function activeScopeReturnsOnlyActiveCompanies(): void
+    public function active_scope_returns_only_active_companies(): void
     {
         Company::factory()->create(['is_active' => true]);
         Company::factory()->create(['is_active' => false]);
@@ -178,7 +178,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function inactiveScopeReturnsOnlyInactiveCompanies(): void
+    public function inactive_scope_returns_only_inactive_companies(): void
     {
         Company::factory()->create(['is_active' => true]);
         Company::factory()->create(['is_active' => false]);
@@ -191,7 +191,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function featuredScopeReturnsOnlyFeaturedCompanies(): void
+    public function featured_scope_returns_only_featured_companies(): void
     {
         Company::factory()->create(['is_featured' => true]);
         Company::factory()->create(['is_featured' => false]);
@@ -204,7 +204,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function verifiedScopeReturnsOnlyVerifiedCompanies(): void
+    public function verified_scope_returns_only_verified_companies(): void
     {
         Company::factory()->create(['is_verified' => true]);
         Company::factory()->create(['is_verified' => false]);
@@ -217,7 +217,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function byIndustryScopeFiltersByIndustry(): void
+    public function by_industry_scope_filters_by_industry(): void
     {
         $industry = Industry::factory()->create();
         Company::factory()->create(['industry_id' => $industry->id]);
@@ -230,7 +230,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function byLocationScopeFiltersByLocation(): void
+    public function by_location_scope_filters_by_location(): void
     {
         $country = Country::factory()->create();
         $state = State::factory()->create(['country_id' => $country->id]);
@@ -252,7 +252,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function bySizeScopeFiltersByCompanySize(): void
+    public function by_size_scope_filters_by_company_size(): void
     {
         $companySize = CompanySize::factory()->create();
         Company::factory()->create(['company_size_id' => $companySize->id]);
@@ -265,7 +265,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function searchScopeSearchesInNameAndDetails(): void
+    public function search_scope_searches_in_name_and_details(): void
     {
         Company::factory()->create(['name' => 'Tech Corporation', 'details' => 'Software development']);
         Company::factory()->create(['name' => 'Marketing Agency', 'details' => 'Digital marketing']);
@@ -277,7 +277,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function recentScopeReturnsCompaniesFromLast30Days(): void
+    public function recent_scope_returns_companies_from_last30_days(): void
     {
         Company::factory()->create(['created_at' => now()->subDays(10)]);
         Company::factory()->create(['created_at' => now()->subDays(40)]);
@@ -290,7 +290,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function establishedBetweenScopeFiltersByEstablishmentYear(): void
+    public function established_between_scope_filters_by_establishment_year(): void
     {
         Company::factory()->create(['established_in' => 2010]);
         Company::factory()->create(['established_in' => 2020]);
@@ -303,7 +303,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function withJobsScopeReturnsCompaniesWithJobs(): void
+    public function with_jobs_scope_returns_companies_with_jobs(): void
     {
         $companyWithJobs = Company::factory()->create();
         Job::factory()->create(['company_id' => $companyWithJobs->id]);
@@ -317,7 +317,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetFullLocationString(): void
+    public function it_can_get_full_location_string(): void
     {
         $country = Country::factory()->create(['name' => 'United States']);
         $state = State::factory()->create(['name' => 'California', 'country_id' => $country->id]);
@@ -338,7 +338,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetJobsCount(): void
+    public function it_can_get_jobs_count(): void
     {
         Job::factory()->count(5)->create(['company_id' => $this->company->id]);
 
@@ -346,7 +346,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetActiveJobsCount(): void
+    public function it_can_get_active_jobs_count(): void
     {
         Job::factory()->count(3)->create([
             'company_id' => $this->company->id,
@@ -361,7 +361,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function itCanCheckIfCompanyHasSocialLinks(): void
+    public function it_can_check_if_company_has_social_links(): void
     {
         $companyWithSocial = Company::factory()->create([
             'facebook_url' => 'https://facebook.com/company',
@@ -379,7 +379,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetCompanyAge(): void
+    public function it_can_get_company_age(): void
     {
         $company = Company::factory()->create(['established_in' => 2020]);
 
@@ -388,7 +388,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function itReturnsNullAgeForCompaniesWithoutEstablishmentYear(): void
+    public function it_returns_null_age_for_companies_without_establishment_year(): void
     {
         $company = Company::factory()->create(['established_in' => null]);
 
@@ -396,7 +396,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function itCanGetEmployeeRangeDescription(): void
+    public function it_can_get_employee_range_description(): void
     {
         $companySize = CompanySize::factory()->create(['size' => '50-100 employees']);
         $company = Company::factory()->create(['company_size_id' => $companySize->id]);
@@ -405,7 +405,7 @@ class CompanyTest extends TestCase
     }
 
     /** @test */
-    public function itReturnsEmployeeCountWhenNoSizeCategory(): void
+    public function it_returns_employee_count_when_no_size_category(): void
     {
         $company = Company::factory()->create([
             'company_size_id' => null,

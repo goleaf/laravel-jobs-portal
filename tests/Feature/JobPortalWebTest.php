@@ -19,7 +19,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test that homepage loads successfully.
      */
-    public function testHomepageLoadsSuccessfully()
+    public function test_homepage_loads_successfully()
     {
         $response = $this->get('/');
 
@@ -33,7 +33,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test homepage contains expected sections.
      */
-    public function testHomepageContainsExpectedSections()
+    public function test_homepage_contains_expected_sections()
     {
         $response = $this->get('/');
 
@@ -56,7 +56,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test jobs index page loads.
      */
-    public function testJobsIndexPageLoads()
+    public function test_jobs_index_page_loads()
     {
         $response = $this->get('/jobs');
 
@@ -70,7 +70,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test jobs search functionality.
      */
-    public function testJobsSearchFunctionality()
+    public function test_jobs_search_functionality()
     {
         $response = $this->get('/jobs?keyword=developer&location=New+York&category=technology');
 
@@ -85,7 +85,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test job detail page loads.
      */
-    public function testJobDetailPageLoads()
+    public function test_job_detail_page_loads()
     {
         $response = $this->get('/jobs/1');
 
@@ -102,7 +102,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test companies index page loads.
      */
-    public function testCompaniesIndexPageLoads()
+    public function test_companies_index_page_loads()
     {
         $response = $this->get('/companies');
 
@@ -116,7 +116,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test company detail page loads.
      */
-    public function testCompanyDetailPageLoads()
+    public function test_company_detail_page_loads()
     {
         $response = $this->get('/company/1');
 
@@ -127,7 +127,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test about us page loads.
      */
-    public function testAboutUsPageLoads()
+    public function test_about_us_page_loads()
     {
         $response = $this->get('/about-us');
 
@@ -143,7 +143,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test contact page loads.
      */
-    public function testContactPageLoads()
+    public function test_contact_page_loads()
     {
         $response = $this->get('/contact');
 
@@ -158,7 +158,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test navigation menu is present.
      */
-    public function testNavigationMenuIsPresent()
+    public function test_navigation_menu_is_present()
     {
         $response = $this->get('/');
 
@@ -175,7 +175,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test footer is present on pages.
      */
-    public function testFooterIsPresent()
+    public function test_footer_is_present()
     {
         $response = $this->get('/');
 
@@ -190,7 +190,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test login and register routes exist.
      */
-    public function testAuthRoutesExist()
+    public function test_auth_routes_exist()
     {
         $loginResponse = $this->get('/login');
         $registerResponse = $this->get('/register');
@@ -204,7 +204,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test API test route works.
      */
-    public function testApiTestRouteWorks()
+    public function test_api_test_route_works()
     {
         $response = $this->get('/test');
 
@@ -224,7 +224,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test responsive design elements are present.
      */
-    public function testResponsiveDesignElements()
+    public function test_responsive_design_elements()
     {
         $response = $this->get('/');
 
@@ -239,7 +239,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test error handling for non-existent pages.
      */
-    public function test404ErrorHandling()
+    public function test404_error_handling()
     {
         $response = $this->get('/non-existent-page');
 
@@ -249,7 +249,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test search form submission.
      */
-    public function testSearchFormSubmission()
+    public function test_search_form_submission()
     {
         $searchData = [
             'keyword' => 'Software Developer',
@@ -266,7 +266,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test that CSS and JS assets are referenced.
      */
-    public function testAssetsAreReferenced()
+    public function test_assets_are_referenced()
     {
         $response = $this->get('/');
 
@@ -282,7 +282,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test job filtering functionality.
      */
-    public function testJobFilteringFunctionality()
+    public function test_job_filtering_functionality()
     {
         $response = $this->get('/jobs');
 
@@ -300,7 +300,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test company search functionality.
      */
-    public function testCompanySearchFunctionality()
+    public function test_company_search_functionality()
     {
         $response = $this->get('/companies?search=tech&industry=technology');
 
@@ -311,7 +311,7 @@ class JobPortalWebTest extends TestCase
     /**
      * Test social media and sharing elements.
      */
-    public function testSocialMediaElements()
+    public function test_social_media_elements()
     {
         $response = $this->get('/jobs/1');
 

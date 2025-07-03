@@ -31,7 +31,7 @@ class SEOService
     {
         $siteName = config('app.name', 'Job Portal');
 
-        if ($includeSiteName && !str_contains($title, $siteName)) {
+        if ($includeSiteName && ! str_contains($title, $siteName)) {
             return $title.' | '.$siteName;
         }
 

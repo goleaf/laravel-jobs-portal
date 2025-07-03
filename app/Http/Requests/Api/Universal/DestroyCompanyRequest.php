@@ -73,14 +73,14 @@ class DestroyCompanyRequest extends FormRequest
             $company = Company::find($companyId);
 
             if ($company && $company->jobs()->where('status', 'active')->count() > 0) {
-                if (!$this->has('transfer_data_to')) {
+                if (! $this->has('transfer_data_to')) {
                     $validator->errors()->add('transfer_data_to', __('validation.required_when_active_jobs'));
                 }
             }
 
             // Check if user owns the company (for non-admins)
-            if ($this->user() && !$this->user()->hasRole('admin')) {
-                if (!$this->userOwnsCompany()) {
+            if ($this->user() && ! $this->user()->hasRole('admin')) {
+                if (! $this->userOwnsCompany()) {
                     $validator->errors()->add('authorization', __('auth.forbidden'));
                 }
             }
@@ -148,7 +148,7 @@ class DestroyCompanyRequest extends FormRequest
         $companyId = $this->route('id');
         $user = $this->user();
 
-        if (!$user || !$companyId) {
+        if (! $user || ! $companyId) {
             return false;
         }
 

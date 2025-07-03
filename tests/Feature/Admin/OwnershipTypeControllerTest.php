@@ -33,11 +33,10 @@ class OwnershipTypeControllerTest extends TestCase
     /**
      * Universal Pattern: Test index/home functionality.
      */
-    public function testIndexDisplaysCorrectly(): void
+    public function test_index_displays_correctly(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('ownershiptype.index'))
-        ;
+            ->get(route('ownershiptype.index'));
 
         $response->assertStatus(200);
         $response->assertViewIs('ownershiptype.index');
@@ -46,7 +45,7 @@ class OwnershipTypeControllerTest extends TestCase
     /**
      * Universal Pattern: Test guest access when appropriate.
      */
-    public function testGuestCanAccessPublicPages(): void
+    public function test_guest_can_access_public_pages(): void
     {
         $response = $this->get(route('ownershiptype.index'));
 
@@ -57,11 +56,10 @@ class OwnershipTypeControllerTest extends TestCase
     /**
      * Universal Pattern: Test authenticated access.
      */
-    public function testAuthenticatedUserAccess(): void
+    public function test_authenticated_user_access(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('ownershiptype.index'))
-        ;
+            ->get(route('ownershiptype.index'));
 
         $response->assertStatus(200);
         $this->assertAuthenticated();
@@ -70,11 +68,10 @@ class OwnershipTypeControllerTest extends TestCase
     /**
      * Universal Pattern: Test create form display (if applicable).
      */
-    public function testCreateDisplaysForm(): void
+    public function test_create_displays_form(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('ownershiptype.create'))
-        ;
+            ->get(route('ownershiptype.create'));
 
         // Adjust expectation based on whether route exists
         $response->assertStatus(200);
@@ -83,7 +80,7 @@ class OwnershipTypeControllerTest extends TestCase
     /**
      * Universal Pattern: Test store functionality (if applicable).
      */
-    public function testStoreCreatesNewRecord(): void
+    public function test_store_creates_new_record(): void
     {
         $data = [
             'name' => $this->faker->name,
@@ -92,8 +89,7 @@ class OwnershipTypeControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->post(route('ownershiptype.store'), $data)
-        ;
+            ->post(route('ownershiptype.store'), $data);
 
         // Adjust based on actual controller behavior
         $response->assertRedirect();
@@ -103,11 +99,10 @@ class OwnershipTypeControllerTest extends TestCase
     /**
      * Universal Pattern: Test validation requirements.
      */
-    public function testStoreValidatesRequiredFields(): void
+    public function test_store_validates_required_fields(): void
     {
         $response = $this->actingAs($this->user)
-            ->post(route('ownershiptype.store'), [])
-        ;
+            ->post(route('ownershiptype.store'), []);
 
         // Adjust based on actual validation requirements
         $response->assertSessionHasErrors();
@@ -116,14 +111,13 @@ class OwnershipTypeControllerTest extends TestCase
     /**
      * Universal Pattern: Test show functionality (if applicable).
      */
-    public function testShowDisplaysRecord(): void
+    public function test_show_displays_record(): void
     {
         // Create test record or use factory
         $record = (object) ['id' => 1, 'name' => 'Test Record'];
 
         $response = $this->actingAs($this->user)
-            ->get(route('ownershiptype.show', 1))
-        ;
+            ->get(route('ownershiptype.show', 1));
 
         $response->assertStatus(200);
     }
@@ -131,11 +125,10 @@ class OwnershipTypeControllerTest extends TestCase
     /**
      * Universal Pattern: Test edit form display (if applicable).
      */
-    public function testEditDisplaysForm(): void
+    public function test_edit_displays_form(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('ownershiptype.edit', 1))
-        ;
+            ->get(route('ownershiptype.edit', 1));
 
         $response->assertStatus(200);
     }
@@ -143,7 +136,7 @@ class OwnershipTypeControllerTest extends TestCase
     /**
      * Universal Pattern: Test update functionality (if applicable).
      */
-    public function testUpdateModifiesRecord(): void
+    public function test_update_modifies_record(): void
     {
         $newData = [
             'name' => 'Updated Name',
@@ -151,8 +144,7 @@ class OwnershipTypeControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->put(route('ownershiptype.update', 1), $newData)
-        ;
+            ->put(route('ownershiptype.update', 1), $newData);
 
         $response->assertRedirect();
         // $this->assertDatabaseHas('ownershiptypes', ['id' => 1, 'name' => 'Updated Name']);
@@ -161,11 +153,10 @@ class OwnershipTypeControllerTest extends TestCase
     /**
      * Universal Pattern: Test delete functionality (if applicable).
      */
-    public function testDestroyDeletesRecord(): void
+    public function test_destroy_deletes_record(): void
     {
         $response = $this->actingAs($this->user)
-            ->delete(route('ownershiptype.destroy', 1))
-        ;
+            ->delete(route('ownershiptype.destroy', 1));
 
         $response->assertRedirect();
         // $this->assertSoftDeleted('ownershiptypes', ['id' => 1]);
@@ -174,7 +165,7 @@ class OwnershipTypeControllerTest extends TestCase
     /**
      * Universal Pattern: Test authorization middleware.
      */
-    public function testUnauthorizedAccessIsPrevented(): void
+    public function test_unauthorized_access_is_prevented(): void
     {
         $response = $this->get(route('ownershiptype.create'));
 
@@ -185,7 +176,7 @@ class OwnershipTypeControllerTest extends TestCase
     /**
      * Universal Pattern: Test with invalid data.
      */
-    public function testHandlesInvalidInputGracefully(): void
+    public function test_handles_invalid_input_gracefully(): void
     {
         $invalidData = [
             'name' => '', // Invalid empty name
@@ -194,8 +185,7 @@ class OwnershipTypeControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->post(route('ownershiptype.store'), $invalidData)
-        ;
+            ->post(route('ownershiptype.store'), $invalidData);
 
         $response->assertSessionHasErrors();
     }
@@ -203,13 +193,12 @@ class OwnershipTypeControllerTest extends TestCase
     /**
      * Universal Pattern: Test search functionality (if applicable).
      */
-    public function testSearchFunctionality(): void
+    public function test_search_functionality(): void
     {
         $searchTerm = 'test search';
 
         $response = $this->actingAs($this->user)
-            ->get(route('ownershiptype.index', ['search' => $searchTerm]))
-        ;
+            ->get(route('ownershiptype.index', ['search' => $searchTerm]));
 
         $response->assertStatus(200);
         $response->assertViewHas('searchTerm', $searchTerm);
@@ -218,11 +207,10 @@ class OwnershipTypeControllerTest extends TestCase
     /**
      * Universal Pattern: Test pagination (if applicable).
      */
-    public function testPaginationWorksCorrectly(): void
+    public function test_pagination_works_correctly(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('ownershiptype.index', ['page' => 2]))
-        ;
+            ->get(route('ownershiptype.index', ['page' => 2]));
 
         $response->assertStatus(200);
     }
@@ -230,7 +218,7 @@ class OwnershipTypeControllerTest extends TestCase
     /**
      * Universal Pattern: Test CSRF protection.
      */
-    public function testCsrfProtectionIsEnforced(): void
+    public function test_csrf_protection_is_enforced(): void
     {
         $data = ['name' => 'Test'];
 
@@ -242,13 +230,12 @@ class OwnershipTypeControllerTest extends TestCase
     /**
      * Universal Pattern: Test rate limiting (if applicable).
      */
-    public function testRateLimitingPreventsAbuse(): void
+    public function test_rate_limiting_prevents_abuse(): void
     {
         // Make multiple requests quickly
-        for ($i = 0; $i < 10; ++$i) {
+        for ($i = 0; $i < 10; $i++) {
             $this->actingAs($this->user)
-                ->post(route('ownershiptype.store'), ['name' => 'Test '.$i])
-            ;
+                ->post(route('ownershiptype.store'), ['name' => 'Test '.$i]);
         }
 
         // This test may need adjustment based on actual rate limiting
@@ -258,7 +245,7 @@ class OwnershipTypeControllerTest extends TestCase
     /**
      * Universal Pattern: Test error handling.
      */
-    public function testHandlesServerErrorsGracefully(): void
+    public function test_handles_server_errors_gracefully(): void
     {
         // Test with malformed data that might cause server errors
         $response = $this->actingAs($this->user)

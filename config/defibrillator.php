@@ -169,4 +169,4 @@ return [
         'performance_tracking' => true,
         'trend_analysis' => true,
     ],
-]; 
+];

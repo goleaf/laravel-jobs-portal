@@ -25,8 +25,7 @@ class LocaleMiddleware
     /**
      * Handle an incoming request and set the application locale.
      *
-     * @param \Closure(Request): (RedirectResponse|Response) $next
-     *
+     * @param  \Closure(Request): (RedirectResponse|Response)  $next
      * @return RedirectResponse|Response
      */
     public function handle(Request $request, \Closure $next)
@@ -92,7 +91,7 @@ class LocaleMiddleware
     {
         $acceptLanguage = $request->header('Accept-Language');
 
-        if (!$acceptLanguage) {
+        if (! $acceptLanguage) {
             return null;
         }
 
@@ -104,7 +103,7 @@ class LocaleMiddleware
             $lang = trim($part);
             $priority = 1.0;
 
-            if (false !== strpos($lang, ';q=')) {
+            if (strpos($lang, ';q=') !== false) {
                 [$lang, $q] = explode(';q=', $lang);
                 $priority = (float) $q;
             }

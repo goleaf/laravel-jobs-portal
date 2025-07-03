@@ -42,7 +42,7 @@ class CompanySizeControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanCreateCompanysize(): void
+    public function admin_can_create_companysize(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -58,8 +58,7 @@ class CompanySizeControllerTest extends TestCase
         $response->assertStatus(201)
             ->assertJsonStructure([
                 'data' => ['size', 'from_range', 'to_range', 'is_active', 'id', 'created_at', 'updated_at'],
-            ])
-        ;
+            ]);
 
         $this->assertDatabaseHas('company_sizes', [
             'name' => $data['name'] ?? $data[array_key_first($data)],
@@ -67,7 +66,7 @@ class CompanySizeControllerTest extends TestCase
     }
 
     /** @test */
-    public function employerCanCreateCompanysize(): void
+    public function employer_can_create_companysize(): void
     {
         Sanctum::actingAs($this->employer);
 
@@ -84,7 +83,7 @@ class CompanySizeControllerTest extends TestCase
     }
 
     /** @test */
-    public function candidateCannotCreateCompanysize(): void
+    public function candidate_cannot_create_companysize(): void
     {
         Sanctum::actingAs($this->candidate);
 
@@ -101,7 +100,7 @@ class CompanySizeControllerTest extends TestCase
     }
 
     /** @test */
-    public function unauthenticatedUserCannotCreateCompanysize(): void
+    public function unauthenticated_user_cannot_create_companysize(): void
     {
         $data = [
             'size' => 'Medium',
@@ -116,7 +115,7 @@ class CompanySizeControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanUpdateCompanysize(): void
+    public function admin_can_update_companysize(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -139,7 +138,7 @@ class CompanySizeControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanDeleteCompanysize(): void
+    public function admin_can_delete_companysize(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -155,7 +154,7 @@ class CompanySizeControllerTest extends TestCase
     }
 
     /** @test */
-    public function validationFailsWithInvalidData(): void
+    public function validation_fails_with_invalid_data(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -166,12 +165,11 @@ class CompanySizeControllerTest extends TestCase
         $response = $this->postJson('/api/companysize', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function validationFailsWithDuplicateName(): void
+    public function validation_fails_with_duplicate_name(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -188,12 +186,11 @@ class CompanySizeControllerTest extends TestCase
         $response = $this->postJson('/api/companysize', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function canListCompanysizes(): void
+    public function can_list_companysizes(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -206,12 +203,11 @@ class CompanySizeControllerTest extends TestCase
                 'data' => [
                     '*' => ['size', 'from_range', 'to_range', 'is_active', 'id', 'created_at', 'updated_at'],
                 ],
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function canShowSingleCompanysize(): void
+    public function can_show_single_companysize(): void
     {
         Sanctum::actingAs($this->admin);
 

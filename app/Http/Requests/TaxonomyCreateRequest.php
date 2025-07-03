@@ -139,13 +139,13 @@ class TaxonomyCreateRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
             // Custom validation for taxonomy type and hierarchical flag
-            if ('tag' === $this->type && $this->is_hierarchical) {
+            if ($this->type === 'tag' && $this->is_hierarchical) {
                 $validator->errors()->add(
                     'is_hierarchical',
                     __('taxonomy.validation.tags_cannot_be_hierarchical')
@@ -165,7 +165,7 @@ class TaxonomyCreateRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Auto-generate slug if not provided
-        if (empty($this->slug) && !empty($this->name)) {
+        if (empty($this->slug) && ! empty($this->name)) {
             $this->merge([
                 'slug' => Str::slug($this->name, '_'),
             ]);
@@ -183,7 +183,7 @@ class TaxonomyCreateRequest extends FormRequest
     /**
      * Validate meta data based on taxonomy type.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     private function validateMetaByType($validator): void
     {
@@ -208,7 +208,7 @@ class TaxonomyCreateRequest extends FormRequest
     /**
      * Validate skill-specific meta data.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     private function validateSkillMeta($validator): void
     {
@@ -219,7 +219,7 @@ class TaxonomyCreateRequest extends FormRequest
     /**
      * Validate job category-specific meta data.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     private function validateJobCategoryMeta($validator): void
     {
@@ -230,7 +230,7 @@ class TaxonomyCreateRequest extends FormRequest
     /**
      * Validate industry-specific meta data.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     private function validateIndustryMeta($validator): void
     {
@@ -241,13 +241,13 @@ class TaxonomyCreateRequest extends FormRequest
     /**
      * Validate meta fields for a specific type.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     private function validateMetaFields($validator, array $allowedFields, string $type): void
     {
         $invalidFields = array_diff(array_keys($this->meta), $allowedFields);
 
-        if (!empty($invalidFields)) {
+        if (! empty($invalidFields)) {
             $validator->errors()->add(
                 'meta',
                 __('taxonomy.validation.invalid_meta_fields', [

@@ -112,7 +112,7 @@ class SQLiteOptimizedSeeder extends Seeder
         ];
 
         foreach ($directories as $directory) {
-            if (!Storage::exists($directory)) {
+            if (! Storage::exists($directory)) {
                 Storage::makeDirectory($directory);
                 $this->command->info("✅ Created directory: {$directory}");
             }
@@ -126,7 +126,7 @@ class SQLiteOptimizedSeeder extends Seeder
     {
         $this->command->info('🌍 Seeding location data...');
 
-        if (0 == Country::count()) {
+        if (Country::count() == 0) {
             // Create 20 countries for SQLite optimization
             $countries = Country::factory(20)->create();
             $this->seedingProgress['countries'] = $countries->count();
@@ -167,14 +167,14 @@ class SQLiteOptimizedSeeder extends Seeder
     {
         $this->command->info('⚙️ Seeding system settings...');
 
-        if (0 == Setting::count()) {
+        if (Setting::count() == 0) {
             $settings = Setting::factory(15)->create();
             $this->seedingProgress['settings'] = $settings->count();
         } else {
             $this->seedingProgress['settings'] = Setting::count();
         }
 
-        if (0 == FrontSetting::count()) {
+        if (FrontSetting::count() == 0) {
             $frontSettings = FrontSetting::factory(10)->create();
             $this->seedingProgress['front_settings'] = $frontSettings->count();
         } else {
@@ -209,7 +209,7 @@ class SQLiteOptimizedSeeder extends Seeder
 
         foreach ($masterDataConfig as $table => $count) {
             $modelClass = $this->getModelClass($table);
-            if ($modelClass && 0 == $modelClass::count()) {
+            if ($modelClass && $modelClass::count() == 0) {
                 $modelClass::factory($count)->create();
                 $this->seedingProgress[$table] = $count;
                 $this->command->info("✅ {$table}: {$count}");
@@ -251,7 +251,7 @@ class SQLiteOptimizedSeeder extends Seeder
     {
         $this->command->info('👥 Seeding users...');
 
-        if (0 == User::count()) {
+        if (User::count() == 0) {
             // Optimized counts for SQLite
             $admins = User::factory(3)->create([
                 'user_type' => 'admin',
@@ -287,7 +287,7 @@ class SQLiteOptimizedSeeder extends Seeder
     {
         $this->command->info('🏢 Seeding companies...');
 
-        if (0 == Company::count()) {
+        if (Company::count() == 0) {
             $employers = User::where('user_type', 'employer')->get();
             $cities = $this->generatedData['cities'] ?? City::with('state.country')->get();
             $industries = Industry::all();
@@ -326,7 +326,7 @@ class SQLiteOptimizedSeeder extends Seeder
     {
         $this->command->info('📂 Seeding job categories...');
 
-        if (0 == JobCategory::count()) {
+        if (JobCategory::count() == 0) {
             $categories = [
                 'Software Development', 'Data Science', 'Marketing', 'Sales', 'HR',
                 'Finance', 'Operations', 'Design', 'Engineering', 'Healthcare',
@@ -352,7 +352,7 @@ class SQLiteOptimizedSeeder extends Seeder
     {
         $this->command->info('🛠️ Seeding skills...');
 
-        if (0 == Skill::count()) {
+        if (Skill::count() == 0) {
             $skills = [
                 'PHP', 'JavaScript', 'Python', 'Java', 'Laravel', 'React', 'Vue.js',
                 'MySQL', 'PostgreSQL', 'SQLite', 'AWS', 'Docker', 'Git', 'Agile',
@@ -382,7 +382,7 @@ class SQLiteOptimizedSeeder extends Seeder
     {
         $this->command->info('💼 Seeding jobs...');
 
-        if (0 == Job::count()) {
+        if (Job::count() == 0) {
             $companies = $this->generatedData['companies'] ?? Company::all();
             $jobCategories = JobCategory::all();
             $skills = Skill::all();
@@ -390,7 +390,7 @@ class SQLiteOptimizedSeeder extends Seeder
             $jobs = collect();
 
             // Create 200 jobs for SQLite optimization
-            for ($i = 0; $i < 200; ++$i) {
+            for ($i = 0; $i < 200; $i++) {
                 $company = $companies->random();
 
                 $job = Job::factory()->create([
@@ -428,7 +428,7 @@ class SQLiteOptimizedSeeder extends Seeder
     {
         $this->command->info('👨‍💼 Seeding candidates...');
 
-        if (0 == Candidate::count()) {
+        if (Candidate::count() == 0) {
             $candidateUsers = User::where('user_type', 'candidate')->get();
             $skills = Skill::all();
 
@@ -480,24 +480,23 @@ class SQLiteOptimizedSeeder extends Seeder
     {
         $this->command->info('📝 Seeding job applications...');
 
-        if (0 == Application::count()) {
+        if (Application::count() == 0) {
             $candidates = $this->generatedData['candidates'] ?? Candidate::all();
             $jobs = $this->generatedData['jobs'] ?? Job::where('status', 1)->get();
 
             $applications = collect();
 
             // Create 300 applications for SQLite optimization
-            for ($i = 0; $i < 300; ++$i) {
+            for ($i = 0; $i < 300; $i++) {
                 $candidate = $candidates->random();
                 $job = $jobs->random();
 
                 // Avoid duplicates
                 $exists = Application::where('candidate_id', $candidate->id)
                     ->where('job_id', $job->id)
-                    ->exists()
-                ;
+                    ->exists();
 
-                if (!$exists) {
+                if (! $exists) {
                     $application = Application::create([
                         'candidate_id' => $candidate->id,
                         'job_id' => $job->id,
@@ -526,7 +525,7 @@ class SQLiteOptimizedSeeder extends Seeder
     {
         $this->command->info('💳 Seeding subscription plans...');
 
-        if (0 == Plan::count()) {
+        if (Plan::count() == 0) {
             $plans = Plan::factory(3)->create();
             $this->seedingProgress['plans'] = $plans->count();
             $this->command->info("✅ Plans: {$plans->count()}");

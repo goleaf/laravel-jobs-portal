@@ -16,7 +16,7 @@ class UserModelOptimizedTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function testUserCanBeCreated(): void
+    public function test_user_can_be_created(): void
     {
         $user = TestHelpers::createUserWithUniqueEmail([
             'name' => 'John Doe',
@@ -28,9 +28,9 @@ class UserModelOptimizedTest extends TestCase
         $this->assertEquals('john@example.com', $user->email);
     }
 
-    public function testUserHasCorrectFillableAttributes(): void
+    public function test_user_has_correct_fillable_attributes(): void
     {
-        $user = new User();
+        $user = new User;
         $fillable = $user->getFillable();
 
         $expectedFillable = [
@@ -43,16 +43,16 @@ class UserModelOptimizedTest extends TestCase
         }
     }
 
-    public function testUserHasCorrectHiddenAttributes(): void
+    public function test_user_has_correct_hidden_attributes(): void
     {
-        $user = new User();
+        $user = new User;
         $hidden = $user->getHidden();
 
         $this->assertContains('password', $hidden);
         $this->assertContains('remember_token', $hidden);
     }
 
-    public function testPasswordIsHashed(): void
+    public function test_password_is_hashed(): void
     {
         $user = TestHelpers::createUserWithUniqueEmail([
             'password' => 'plaintext',
@@ -62,7 +62,7 @@ class UserModelOptimizedTest extends TestCase
         $this->assertTrue(\Hash::check('plaintext', $user->password));
     }
 
-    public function testUserRelationships(): void
+    public function test_user_relationships(): void
     {
         $user = TestHelpers::createUserWithUniqueEmail();
 

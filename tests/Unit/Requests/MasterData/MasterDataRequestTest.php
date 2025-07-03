@@ -2,13 +2,13 @@
 
 namespace Tests\Unit\Requests\MasterData;
 
-use Tests\TestCase;
 use App\Http\Requests\MasterData\MasterDataRequest;
 use Illuminate\Support\Facades\Validator;
+use Tests\TestCase;
 
 /**
  * MasterDataRequest Test Suite
- * 
+ *
  * Tests the master data validation domain
  */
 class MasterDataRequestTest extends TestCase
@@ -18,9 +18,10 @@ class MasterDataRequestTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create anonymous test request for testing
-        $this->testRequest = new class extends MasterDataRequest {
+        $this->testRequest = new class extends MasterDataRequest
+        {
             public function rules(): array
             {
                 return $this->buildValidationRules();
@@ -43,7 +44,7 @@ class MasterDataRequestTest extends TestCase
         $reflection = new \ReflectionClass($this->testRequest);
         $property = $reflection->getProperty('securityLevel');
         $property->setAccessible(true);
-        
+
         $this->assertEquals('low', $property->getValue($this->testRequest));
     }
 
@@ -53,7 +54,7 @@ class MasterDataRequestTest extends TestCase
         $reflection = new \ReflectionClass($this->testRequest);
         $property = $reflection->getProperty('performanceTracking');
         $property->setAccessible(true);
-        
+
         $this->assertTrue($property->getValue($this->testRequest));
     }
 
@@ -63,9 +64,9 @@ class MasterDataRequestTest extends TestCase
         // Test that the master data request has the appropriate domain rules
         $method = new \ReflectionMethod($this->testRequest, 'getDomainRules');
         $method->setAccessible(true);
-        
+
         $rules = $method->invoke($this->testRequest);
-        
+
         $this->assertArrayHasKey('name', $rules);
         $this->assertArrayHasKey('status', $rules);
         $this->assertContains('required', $rules['name']);
@@ -77,9 +78,9 @@ class MasterDataRequestTest extends TestCase
     {
         $method = new \ReflectionMethod($this->testRequest, 'getLocationRules');
         $method->setAccessible(true);
-        
+
         $rules = $method->invoke($this->testRequest);
-        
+
         $this->assertArrayHasKey('country_id', $rules);
         $this->assertArrayHasKey('state_id', $rules);
         $this->assertArrayHasKey('city_id', $rules);
@@ -92,9 +93,9 @@ class MasterDataRequestTest extends TestCase
     {
         $method = new \ReflectionMethod($this->testRequest, 'getCompanyClassificationRules');
         $method->setAccessible(true);
-        
+
         $rules = $method->invoke($this->testRequest);
-        
+
         $this->assertArrayHasKey('company_size_id', $rules);
         $this->assertArrayHasKey('industry_id', $rules);
         $this->assertArrayHasKey('ownership_type_id', $rules);
@@ -106,9 +107,9 @@ class MasterDataRequestTest extends TestCase
     {
         $method = new \ReflectionMethod($this->testRequest, 'getJobClassificationRules');
         $method->setAccessible(true);
-        
+
         $rules = $method->invoke($this->testRequest);
-        
+
         $this->assertArrayHasKey('job_category_id', $rules);
         $this->assertArrayHasKey('salary_currency_id', $rules);
         $this->assertArrayHasKey('salary_period_id', $rules);
@@ -122,7 +123,7 @@ class MasterDataRequestTest extends TestCase
     {
         $data = [
             'latitude' => 40.7128,
-            'longitude' => -74.0060
+            'longitude' => -74.0060,
         ];
 
         // Use database-independent rules for testing
@@ -132,7 +133,7 @@ class MasterDataRequestTest extends TestCase
         ];
 
         $validator = Validator::make($data, $rules);
-        
+
         $this->assertTrue($validator->passes());
     }
 
@@ -141,7 +142,7 @@ class MasterDataRequestTest extends TestCase
     {
         $data = [
             'latitude' => 95.0, // Should be between -90 and 90
-            'longitude' => -74.0060
+            'longitude' => -74.0060,
         ];
 
         // Use database-independent rules for testing
@@ -151,7 +152,7 @@ class MasterDataRequestTest extends TestCase
         ];
 
         $validator = Validator::make($data, $rules);
-        
+
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('latitude', $validator->errors()->toArray());
     }
@@ -161,7 +162,7 @@ class MasterDataRequestTest extends TestCase
     {
         $data = [
             'experience_min' => 2,
-            'experience_max' => 5
+            'experience_max' => 5,
         ];
 
         // Use database-independent rules for testing
@@ -171,7 +172,7 @@ class MasterDataRequestTest extends TestCase
         ];
 
         $validator = Validator::make($data, $rules);
-        
+
         $this->assertTrue($validator->passes());
     }
 
@@ -180,7 +181,7 @@ class MasterDataRequestTest extends TestCase
     {
         $data = [
             'experience_min' => 10,
-            'experience_max' => 5  // Max should be greater than or equal to min
+            'experience_max' => 5,  // Max should be greater than or equal to min
         ];
 
         // Use database-independent rules for testing
@@ -190,7 +191,7 @@ class MasterDataRequestTest extends TestCase
         ];
 
         $validator = Validator::make($data, $rules);
-        
+
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('experience_max', $validator->errors()->toArray());
     }
@@ -200,7 +201,7 @@ class MasterDataRequestTest extends TestCase
     {
         $data = [
             'experience_min' => 2,
-            'experience_max' => 8
+            'experience_max' => 8,
         ];
 
         // Use database-independent rules for testing
@@ -210,7 +211,7 @@ class MasterDataRequestTest extends TestCase
         ];
 
         $validator = Validator::make($data, $rules);
-        
+
         $this->assertTrue($validator->passes());
     }
 
@@ -219,14 +220,14 @@ class MasterDataRequestTest extends TestCase
     {
         $data = [
             'name' => '  test name  ',
-            'description' => '  some description  '
+            'description' => '  some description  ',
         ];
 
         $method = new \ReflectionMethod($this->testRequest, 'applySanitization');
         $method->setAccessible(true);
-        
+
         $sanitized = $method->invoke($this->testRequest, $data);
-        
+
         $this->assertEquals('Test Name', $sanitized['name']);
         $this->assertEquals('some description', $sanitized['description']);
     }
@@ -236,9 +237,9 @@ class MasterDataRequestTest extends TestCase
     {
         $method = new \ReflectionMethod($this->testRequest, 'getDomainMessages');
         $method->setAccessible(true);
-        
+
         $messages = $method->invoke($this->testRequest);
-        
+
         $this->assertIsArray($messages);
         $this->assertArrayHasKey('name.required', $messages);
         $this->assertArrayHasKey('name.string', $messages);
@@ -250,12 +251,12 @@ class MasterDataRequestTest extends TestCase
     {
         $method = new \ReflectionMethod($this->testRequest, 'getDomainAttributes');
         $method->setAccessible(true);
-        
+
         $attributes = $method->invoke($this->testRequest);
-        
+
         $this->assertIsArray($attributes);
         $this->assertArrayHasKey('name', $attributes);
         $this->assertArrayHasKey('status', $attributes);
         $this->assertArrayHasKey('sort_order', $attributes);
     }
-} 
+}

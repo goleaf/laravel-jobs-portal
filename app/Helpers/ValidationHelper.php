@@ -7,7 +7,7 @@ use Illuminate\Support\Collection;
 
 /**
  * ValidationHelper - Modern Laravel validation utilities
- * 
+ *
  * Integrates Laravel 12.16+ features including Arr::hasAll()
  * for enhanced data validation and integrity checks
  */
@@ -15,17 +15,14 @@ class ValidationHelper
 {
     /**
      * Validate job application data using Arr::hasAll()
-     *
-     * @param array $data
-     * @return bool
      */
     public static function validateJobApplicationData(array $data): bool
     {
         $requiredFields = [
             'user_id',
-            'job_id', 
+            'job_id',
             'resume',
-            'cover_letter'
+            'cover_letter',
         ];
 
         return Arr::hasAll($data, $requiredFields);
@@ -33,9 +30,6 @@ class ValidationHelper
 
     /**
      * Validate nested user profile data with dot notation
-     *
-     * @param array $data
-     * @return bool
      */
     public static function validateUserProfileData(array $data): bool
     {
@@ -44,18 +38,15 @@ class ValidationHelper
             'personal.last_name',
             'personal.email',
             'contact.phone',
-            'contact.address'
+            'contact.address',
         ];
 
-        return Arr::hasAll($data, ['personal', 'contact']) && 
+        return Arr::hasAll($data, ['personal', 'contact']) &&
                Arr::hasAll($data, $nestedRequiredFields);
     }
 
     /**
      * Validate company registration data
-     *
-     * @param array $data
-     * @return bool
      */
     public static function validateCompanyData(array $data): bool
     {
@@ -64,7 +55,7 @@ class ValidationHelper
             'email',
             'industry_id',
             'company_size_id',
-            'location'
+            'location',
         ];
 
         return Arr::hasAll($data, $requiredFields);
@@ -72,17 +63,14 @@ class ValidationHelper
 
     /**
      * Validate job posting data with comprehensive checks
-     *
-     * @param array $data
-     * @return bool
      */
     public static function validateJobPostingData(array $data): bool
     {
         $coreFields = ['title', 'description', 'company_id', 'job_category_id'];
         $detailFields = ['requirements', 'benefits', 'salary_range'];
-        
+
         // Check core fields exist
-        if (!Arr::hasAll($data, $coreFields)) {
+        if (! Arr::hasAll($data, $coreFields)) {
             return false;
         }
 
@@ -92,20 +80,17 @@ class ValidationHelper
 
     /**
      * Enhanced email template validation
-     *
-     * @param array $data
-     * @return array
      */
     public static function validateEmailTemplateData(array $data): array
     {
         $requiredFields = ['template_name', 'subject', 'body', 'variables'];
-        
-        if (!Arr::hasAll($data, $requiredFields)) {
-            throw new \InvalidArgumentException('Email template missing required fields: ' . implode(', ', $requiredFields));
+
+        if (! Arr::hasAll($data, $requiredFields)) {
+            throw new \InvalidArgumentException('Email template missing required fields: '.implode(', ', $requiredFields));
         }
 
         // Validate variables is valid JSON
-        if (isset($data['variables']) && !is_array(json_decode($data['variables'], true))) {
+        if (isset($data['variables']) && ! is_array(json_decode($data['variables'], true))) {
             throw new \InvalidArgumentException('Variables field must contain valid JSON');
         }
 
@@ -114,9 +99,6 @@ class ValidationHelper
 
     /**
      * Validate media upload data using modern techniques
-     *
-     * @param array $data
-     * @return bool
      */
     public static function validateMediaUploadData(array $data): bool
     {
@@ -124,16 +106,16 @@ class ValidationHelper
         $optionalFields = ['alt_text', 'caption', 'description'];
 
         // Must have all required fields
-        if (!Arr::hasAll($data, $requiredFields)) {
+        if (! Arr::hasAll($data, $requiredFields)) {
             return false;
         }
 
         // If custom_properties exists, validate its structure
         if (isset($data['custom_properties'])) {
-            $customProps = is_string($data['custom_properties']) 
-                ? json_decode($data['custom_properties'], true) 
+            $customProps = is_string($data['custom_properties'])
+                ? json_decode($data['custom_properties'], true)
                 : $data['custom_properties'];
-                
+
             return is_array($customProps);
         }
 
@@ -143,10 +125,6 @@ class ValidationHelper
     /**
      * Group validation results for batch processing
      * Inspired by Laravel collection groupBy techniques
-     *
-     * @param array $items
-     * @param callable $validator
-     * @return Collection
      */
     public static function groupValidationResults(array $items, callable $validator): Collection
     {
@@ -157,30 +135,23 @@ class ValidationHelper
 
     /**
      * Validate API request data with comprehensive checks
-     *
-     * @param array $data
-     * @param array $requiredFields
-     * @param array $optionalFields
-     * @return array
      */
     public static function validateApiRequestData(array $data, array $requiredFields, array $optionalFields = []): array
     {
         // Check all required fields exist
-        if (!Arr::hasAll($data, $requiredFields)) {
+        if (! Arr::hasAll($data, $requiredFields)) {
             $missing = array_diff($requiredFields, array_keys($data));
-            throw new \InvalidArgumentException('Missing required fields: ' . implode(', ', $missing));
+            throw new \InvalidArgumentException('Missing required fields: '.implode(', ', $missing));
         }
 
         // Filter to only allowed fields
         $allowedFields = array_merge($requiredFields, $optionalFields);
+
         return Arr::only($data, $allowedFields);
     }
 
     /**
      * Validate search filters with modern Laravel techniques
-     *
-     * @param array $filters
-     * @return bool
      */
     public static function validateSearchFilters(array $filters): bool
     {
@@ -192,7 +163,7 @@ class ValidationHelper
             'salary_min',
             'salary_max',
             'experience_level',
-            'job_type'
+            'job_type',
         ];
 
         // At least one filter must be provided
@@ -203,4 +174,4 @@ class ValidationHelper
         // All provided filters must be in allowed list
         return empty(array_diff(array_keys($filters), $allowedFilters));
     }
-} 
+}

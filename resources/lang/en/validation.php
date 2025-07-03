@@ -194,13 +194,13 @@ return [
         'first_name_min' => 'First name must be at least 2 characters',
         'last_name_format' => 'Last name must contain only letters and spaces',
         'name_required' => 'Full name is required',
-        
+
         'email_required' => 'Email address is required',
         'email_format' => 'Please enter a valid email address',
         'email_unique' => 'This email address is already registered',
         'email_unique_update' => 'This email address is already taken by another admin',
         'email_domain_not_allowed' => 'Email domain is not allowed for admin accounts',
-        
+
         'password_required' => 'Password is required',
         'password_min' => 'Password must be at least 12 characters long',
         'password_complexity' => 'Password must contain uppercase, lowercase, numbers and special characters',
@@ -208,19 +208,19 @@ return [
         'password_confirmation_required' => 'Password confirmation is required',
         'password_match' => 'Password confirmation must match the password',
         'password_too_common' => 'This password is too common, please choose a more secure one',
-        
+
         'role_required' => 'Role is required',
         'role_invalid' => 'Selected role is invalid',
         'role_not_allowed' => 'You are not allowed to assign this role',
         'max_super_admins' => 'Maximum number of super administrators reached',
-        
+
         'phone_format' => 'Phone number format is invalid',
         'status_boolean' => 'Status must be active or inactive',
-        
+
         'dob_before_today' => 'Date of birth must be before today',
         'dob_after_1900' => 'Date of birth must be after 1900',
         'gender_invalid' => 'Please select a valid gender option',
-        
+
         'cannot_deactivate_self' => 'You cannot deactivate your own account',
     ],
 

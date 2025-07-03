@@ -30,17 +30,17 @@ class StoreCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAuthorizationReturnsTrue()
+    public function test_authorization_returns_true()
     {
-        $request = new StoreCategoriesRequest();
+        $request = new StoreCategoriesRequest;
 
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function testValidationRulesAreDefined()
+    public function test_validation_rules_are_defined()
     {
-        $request = new StoreCategoriesRequest();
+        $request = new StoreCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertIsArray($rules);
@@ -48,9 +48,9 @@ class StoreCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationMessagesAreDefined()
+    public function test_validation_messages_are_defined()
     {
-        $request = new StoreCategoriesRequest();
+        $request = new StoreCategoriesRequest;
 
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
@@ -61,9 +61,9 @@ class StoreCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationAttributesAreDefined()
+    public function test_validation_attributes_are_defined()
     {
-        $request = new StoreCategoriesRequest();
+        $request = new StoreCategoriesRequest;
 
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
@@ -74,9 +74,9 @@ class StoreCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testNameValidation()
+    public function test_name_validation()
     {
-        $request = new StoreCategoriesRequest();
+        $request = new StoreCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('name', $rules);
@@ -87,9 +87,9 @@ class StoreCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testRequiredValidation()
+    public function test_required_validation()
     {
-        $request = new StoreCategoriesRequest();
+        $request = new StoreCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('required', $rules);
@@ -100,9 +100,9 @@ class StoreCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testStringValidation()
+    public function test_string_validation()
     {
-        $request = new StoreCategoriesRequest();
+        $request = new StoreCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('string', $rules);
@@ -113,9 +113,9 @@ class StoreCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testEmailValidation()
+    public function test_email_validation()
     {
-        $request = new StoreCategoriesRequest();
+        $request = new StoreCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('email', $rules);
@@ -126,9 +126,9 @@ class StoreCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testNullableValidation()
+    public function test_nullable_validation()
     {
-        $request = new StoreCategoriesRequest();
+        $request = new StoreCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('nullable', $rules);
@@ -139,9 +139,9 @@ class StoreCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testDescriptionValidation()
+    public function test_description_validation()
     {
-        $request = new StoreCategoriesRequest();
+        $request = new StoreCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('description', $rules);
@@ -152,9 +152,9 @@ class StoreCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testStatusValidation()
+    public function test_status_validation()
     {
-        $request = new StoreCategoriesRequest();
+        $request = new StoreCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('status', $rules);
@@ -165,9 +165,9 @@ class StoreCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testBooleanValidation()
+    public function test_boolean_validation()
     {
-        $request = new StoreCategoriesRequest();
+        $request = new StoreCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('boolean', $rules);
@@ -178,9 +178,9 @@ class StoreCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAppRecaptchaEnabledValidation()
+    public function test_app_recaptcha_enabled_validation()
     {
-        $request = new StoreCategoriesRequest();
+        $request = new StoreCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('app.recaptcha_enabled', $rules);
@@ -191,9 +191,9 @@ class StoreCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationRecaptchaRequiredValidation()
+    public function test_validation_recaptcha_required_validation()
     {
-        $request = new StoreCategoriesRequest();
+        $request = new StoreCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('validation.recaptcha_required', $rules);
@@ -204,7 +204,7 @@ class StoreCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidDataPassesValidation()
+    public function test_valid_data_passes_validation()
     {
         $validData = [
             'name' => 'Test Value',
@@ -219,18 +219,18 @@ class StoreCategoriesRequestTest extends TestCase
             'validation.recaptcha_required' => 1,
         ];
 
-        $request = new StoreCategoriesRequest();
+        $request = new StoreCategoriesRequest;
         $validator = validator($validData, $request->rules());
 
         $this->assertFalse($validator->fails());
     }
 
     /** @test */
-    public function testRequestHandlesEmptyDataCorrectly()
+    public function test_request_handles_empty_data_correctly()
     {
         $emptyData = [];
 
-        $request = new StoreCategoriesRequest();
+        $request = new StoreCategoriesRequest;
         $validator = validator($emptyData, $request->rules());
 
         // Should handle empty data according to rules
@@ -238,7 +238,7 @@ class StoreCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSecurityValidationPreventsXss()
+    public function test_security_validation_prevents_xss()
     {
         $maliciousData = [
             'name' => '<script>alert("xss")</script>',
@@ -246,7 +246,7 @@ class StoreCategoriesRequestTest extends TestCase
             'content' => '<img src=x onerror=alert("xss")>',
         ];
 
-        $request = new StoreCategoriesRequest();
+        $request = new StoreCategoriesRequest;
         $validator = validator($maliciousData, $request->rules());
 
         // XSS data should either fail validation or be properly sanitized
@@ -261,7 +261,7 @@ class StoreCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSqlInjectionPrevention()
+    public function test_sql_injection_prevention()
     {
         $sqlInjectionData = [
             'name' => "'; DROP TABLE users; --",
@@ -269,7 +269,7 @@ class StoreCategoriesRequestTest extends TestCase
             'filter' => 'UNION SELECT * FROM passwords',
         ];
 
-        $request = new StoreCategoriesRequest();
+        $request = new StoreCategoriesRequest;
         $validator = validator($sqlInjectionData, $request->rules());
 
         // SQL injection patterns should be handled safely

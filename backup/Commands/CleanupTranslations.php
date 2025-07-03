@@ -37,7 +37,7 @@ class CleanupTranslations extends Command
         }
 
         // Determine locales to process
-        if ('all' === $localeOption) {
+        if ($localeOption === 'all') {
             $locales = array_keys(config('app.available_locales', []));
         } else {
             $locales = [$localeOption];
@@ -53,7 +53,7 @@ class CleanupTranslations extends Command
             $this->info("Processing locale: {$locale}");
 
             $localePath = resource_path("lang/{$locale}");
-            if (!File::exists($localePath)) {
+            if (! File::exists($localePath)) {
                 $this->error("Locale directory not found: {$localePath}");
 
                 continue;
@@ -65,7 +65,7 @@ class CleanupTranslations extends Command
                 $filename = $file->getFilename();
                 $fileBaseName = $file->getBasename('.php');
 
-                if ('php' !== $file->getExtension()) {
+                if ($file->getExtension() !== 'php') {
                     continue;
                 }
 
@@ -81,9 +81,9 @@ class CleanupTranslations extends Command
                 foreach ($flatTranslations as $key => $value) {
                     $fullKey = "{$fileBaseName}.{$key}";
 
-                    if (!in_array($fullKey, $usedKeys)) {
+                    if (! in_array($fullKey, $usedKeys)) {
                         $unusedKeys[$key] = $value;
-                        ++$keysRemoved;
+                        $keysRemoved++;
                     }
                 }
 
@@ -103,7 +103,7 @@ class CleanupTranslations extends Command
                     }
 
                     // Remove unused keys if not in dry-run mode
-                    if (!$isDryRun) {
+                    if (! $isDryRun) {
                         $updatedTranslations = $translations;
 
                         foreach ($unusedKeys as $key => $value) {
@@ -189,7 +189,7 @@ class CleanupTranslations extends Command
             }
 
             // Only process PHP and Blade files
-            if (!in_array($file->getExtension(), ['php', 'blade.php'])) {
+            if (! in_array($file->getExtension(), ['php', 'blade.php'])) {
                 continue;
             }
 

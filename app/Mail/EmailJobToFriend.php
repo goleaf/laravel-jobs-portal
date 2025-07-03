@@ -16,7 +16,7 @@ class EmailJobToFriend extends Mailable
     /**
      * Create a new message instance.
      *
-     * @param mixed $data
+     * @param  mixed  $data
      */
     public function __construct($data)
     {
@@ -30,7 +30,6 @@ class EmailJobToFriend extends Mailable
     {
         return $this->from(config('mail.from.address'))
             ->subject('Email for Job Details')
-            ->markdown('emails.jobs.email_job')
-        ;
+            ->markdown('emails.jobs.email_job');
     }
 }

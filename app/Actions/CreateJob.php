@@ -3,8 +3,8 @@
 namespace App\Actions;
 
 use App\Dtos\JobData;
-use App\Models\Job;
 use App\Models\Company;
+use App\Models\Job;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -17,13 +17,13 @@ class CreateJob
     /**
      * Create a new job with comprehensive setup
      */
-    public function handle(JobData $jobData, int $userId = null): Job
+    public function handle(JobData $jobData, ?int $userId = null): Job
     {
         return DB::transaction(function () use ($jobData, $userId) {
             // 1. Validate company exists and user has permission
             $company = Company::findOrFail($jobData->companyId);
-            
-            if ($userId && !$company->hasUser($userId)) {
+
+            if ($userId && ! $company->hasUser($userId)) {
                 throw new \Exception('You do not have permission to post jobs for this company');
             }
 
@@ -72,7 +72,7 @@ class CreateJob
                 'contact_phone' => $jobData->contactPhone,
                 'slug' => $this->generateSlug($jobData->jobTitle, $company->name),
                 'created_by' => $userId,
-                'reference_id' => $this->generateReferenceId()
+                'reference_id' => $this->generateReferenceId(),
             ]);
 
             // 4. Set comprehensive job settings using Laravel Model Settings
@@ -81,44 +81,44 @@ class CreateJob
                     'public' => true,
                     'searchable' => true,
                     'featured' => $jobData->isFeatured,
-                    'urgent' => $jobData->isUrgent
+                    'urgent' => $jobData->isUrgent,
                 ],
                 'application' => [
                     'require_cover_letter' => $jobData->requireCoverLetter,
                     'max_applications' => 100,
                     'auto_accept' => false,
                     'send_confirmation_email' => true,
-                    'screening_questions' => $jobData->screeningQuestions
+                    'screening_questions' => $jobData->screeningQuestions,
                 ],
                 'notifications' => [
                     'new_application' => true,
                     'job_expiry_reminder' => true,
-                    'weekly_summary' => true
+                    'weekly_summary' => true,
                 ],
                 'workflow' => [
                     'auto_publish' => $jobData->autoPublish,
-                    'require_approval' => !$company->isVerified(),
-                    'auto_close_on_expiry' => true
+                    'require_approval' => ! $company->isVerified(),
+                    'auto_close_on_expiry' => true,
                 ],
                 'seo' => [
                     'robots_index' => true,
                     'robots_follow' => true,
-                    'structured_data_enabled' => true
+                    'structured_data_enabled' => true,
                 ],
                 'analytics' => [
                     'track_views' => true,
                     'track_applications' => true,
-                    'track_shares' => true
-                ]
+                    'track_shares' => true,
+                ],
             ]);
 
             // 5. Attach skills to the job
-            if (!empty($jobData->skillIds)) {
+            if (! empty($jobData->skillIds)) {
                 $job->jobsSkill()->attach($jobData->skillIds);
             }
 
             // 6. Attach tags to the job
-            if (!empty($jobData->tags)) {
+            if (! empty($jobData->tags)) {
                 $this->attachTags($job, $jobData->tags);
             }
 
@@ -145,7 +145,7 @@ class CreateJob
                     'job_title' => $job->job_title,
                     'company_name' => $company->name,
                     'status' => $job->status,
-                    'is_featured' => $job->is_featured
+                    'is_featured' => $job->is_featured,
                 ])
                 ->log('job_created');
 
@@ -153,7 +153,7 @@ class CreateJob
                 'job_id' => $job->id,
                 'company_id' => $company->id,
                 'title' => $job->job_title,
-                'status' => $job->status
+                'status' => $job->status,
             ]);
 
             return $job->fresh(['company', 'jobCategory', 'jobType', 'jobsSkill']);
@@ -166,13 +166,13 @@ class CreateJob
     private function validateJobPostingLimits(Company $company): void
     {
         $plan = $company->activePlan;
-        
-        if (!$plan) {
+
+        if (! $plan) {
             throw new \Exception('Company must have an active plan to post jobs');
         }
 
         $currentActiveJobs = $company->jobs()->active()->count();
-        
+
         if ($currentActiveJobs >= $plan->job_limit) {
             throw new \Exception("Job posting limit reached. Current plan allows {$plan->job_limit} active jobs.");
         }
@@ -192,6 +192,7 @@ class CreateJob
     private function generateMetaDescription(JobData $jobData): string
     {
         $description = strip_tags($jobData->description);
+
         return Str::limit("Apply for {$jobData->jobTitle}. {$description}", 160);
     }
 
@@ -217,7 +218,7 @@ class CreateJob
      */
     private function generateReferenceId(): string
     {
-        return 'JOB-' . now()->format('Ymd') . '-' . strtoupper(Str::random(6));
+        return 'JOB-'.now()->format('Ymd').'-'.strtoupper(Str::random(6));
     }
 
     /**
@@ -226,12 +227,12 @@ class CreateJob
     private function attachTags(Job $job, array $tags): void
     {
         $tagIds = [];
-        
+
         foreach ($tags as $tagName) {
             $tag = \App\Models\Tag::firstOrCreate(['name' => $tagName]);
             $tagIds[] = $tag->id;
         }
-        
+
         $job->jobsTag()->attach($tagIds);
     }
 
@@ -246,7 +247,7 @@ class CreateJob
             'applications_count' => 0,
             'shares_count' => 0,
             'conversion_rate' => 0,
-            'created_at' => now()
+            'created_at' => now(),
         ]);
     }
 
@@ -276,7 +277,7 @@ class CreateJob
             AdminNotification::dispatch('featured_job_created', [
                 'job_id' => $job->id,
                 'job_title' => $job->job_title,
-                'company' => $job->company->name
+                'company' => $job->company->name,
             ]);
         }
     }

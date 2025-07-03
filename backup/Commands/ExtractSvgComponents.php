@@ -34,7 +34,7 @@ class ExtractSvgComponents extends Command
     public function handle()
     {
         // Create components directory if it doesn't exist
-        if (!File::isDirectory($this->componentsDir)) {
+        if (! File::isDirectory($this->componentsDir)) {
             File::makeDirectory($this->componentsDir, 0755, true);
             $this->info("Created SVG components directory: {$this->componentsDir}");
         }
@@ -55,7 +55,7 @@ class ExtractSvgComponents extends Command
         $searchDir = $this->option('dir');
         $chunkSize = (int) $this->option('chunk-size');
 
-        if (!File::isDirectory($searchDir)) {
+        if (! File::isDirectory($searchDir)) {
             $this->error("Directory not found: {$searchDir}");
 
             return Command::FAILURE;
@@ -77,7 +77,7 @@ class ExtractSvgComponents extends Command
     protected function processDirectoryInChunks(string $directory, int $chunkSize): void
     {
         $pattern = $directory.'/**/*.blade.php';
-        $finder = new Finder();
+        $finder = new Finder;
         $finder->files()->name('*.blade.php')->in($directory);
 
         $totalFiles = iterator_count($finder);
@@ -89,10 +89,10 @@ class ExtractSvgComponents extends Command
 
         foreach ($finder as $file) {
             $currentChunk[] = $file->getPathname();
-            ++$processedFiles;
+            $processedFiles++;
 
             if (count($currentChunk) >= $chunkSize || $processedFiles === $totalFiles) {
-                ++$chunkCount;
+                $chunkCount++;
                 $this->info("Processing chunk {$chunkCount} ({$processedFiles}/{$totalFiles} files)...");
 
                 foreach ($currentChunk as $filePath) {
@@ -224,7 +224,7 @@ class ExtractSvgComponents extends Command
 
         // Check if component already exists
         if (File::exists($componentPath)) {
-            if (!$this->option('force') && !$this->confirm("Component {$filename} already exists. Overwrite?", false)) {
+            if (! $this->option('force') && ! $this->confirm("Component {$filename} already exists. Overwrite?", false)) {
                 return;
             }
         }

@@ -6,13 +6,13 @@ namespace App\Repositories;
 
 use App\Models\Company;
 use App\Models\Job;
+use App\Repositories\Contracts\JobRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use App\Repositories\Contracts\JobRepositoryInterface;
 
 /**
  * Enhanced Job Repository.
@@ -105,8 +105,7 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
             $query = $this->model->newQuery()
                 ->with(['company', 'jobType', 'jobCategory', 'skills', 'salaryPeriod', 'requiredDegreeLevel'])
                 ->where('is_active', true)
-                ->where('is_suspended', false)
-            ;
+                ->where('is_suspended', false);
 
             // Apply search filters
             $this->applySearchFilters($query, $filters);
@@ -163,8 +162,7 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
                 ->orderBy('popularity_score', 'desc')
                 ->orderBy('created_at', 'desc')
                 ->limit($limit)
-                ->get()
-            ;
+                ->get();
         });
     }
 
@@ -185,8 +183,7 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
                 ->orderBy('featured_until', 'desc')
                 ->orderBy('created_at', 'desc')
                 ->limit($limit)
-                ->get()
-            ;
+                ->get();
         });
     }
 
@@ -205,8 +202,7 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
                 ->where('id', '!=', $job->id)
                 ->where('is_active', true)
                 ->where('is_suspended', false)
-                ->where('expire_date', '>=', now())
-            ;
+                ->where('expire_date', '>=', now());
 
             // Score by relevance
             $query->select([
@@ -240,8 +236,7 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
                 ->orderBy('relevance_score', 'desc')
                 ->orderBy('created_at', 'desc')
                 ->limit($limit)
-                ->get()
-            ;
+                ->get();
         });
     }
 
@@ -257,8 +252,7 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
             ->where('is_suspended', false)
             ->where('expire_date', '>=', now())
             ->orderBy('created_at', 'desc')
-            ->paginate($perPage)
-        ;
+            ->paginate($perPage);
     }
 
     /**
@@ -273,29 +267,24 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
             $activeJobs = $this->model->where('is_active', true)
                 ->where('is_suspended', false)
                 ->where('expire_date', '>=', now())
-                ->count()
-            ;
+                ->count();
 
             $featuredJobs = $this->model->where('is_active', true)
                 ->where('is_featured', true)
                 ->where('expire_date', '>=', now())
-                ->count()
-            ;
+                ->count();
 
             $expiredJobs = $this->model->where('is_active', true)
                 ->where('expire_date', '<', now())
-                ->count()
-            ;
+                ->count();
 
             $todayJobs = $this->model->where('is_active', true)
                 ->whereDate('created_at', today())
-                ->count()
-            ;
+                ->count();
 
             $weekJobs = $this->model->where('is_active', true)
                 ->where('created_at', '>=', now()->subDays(7))
-                ->count()
-            ;
+                ->count();
 
             return [
                 'total_jobs' => $totalJobs,
@@ -321,8 +310,7 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
             ->where('expire_date', '>=', now())
             ->where('expire_date', '<=', now()->addDays($days))
             ->orderBy('expire_date', 'asc')
-            ->get()
-        ;
+            ->get();
     }
 
     /**
@@ -365,8 +353,7 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
                 ->having('relevance_score', '>', 0)
                 ->orderBy('relevance_score', 'desc')
                 ->orderBy('created_at', 'desc')
-                ->paginate($perPage)
-            ;
+                ->paginate($perPage);
         });
     }
 
@@ -377,8 +364,7 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
     {
         try {
             $updated = $this->model->where('id', $jobId)
-                ->increment('views_count', 1, ['last_viewed_at' => now()])
-            ;
+                ->increment('views_count', 1, ['last_viewed_at' => now()]);
 
             // Clear related caches
             $this->clearJobCaches($jobId);
@@ -428,15 +414,14 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
     {
         try {
             $job = $this->findById($jobId);
-            if (!$job) {
+            if (! $job) {
                 return false;
             }
 
             $newExpiryDate = Carbon::parse($job->expire_date)->addDays($days);
 
             $updated = $this->model->where('id', $jobId)
-                ->update(['expire_date' => $newExpiryDate])
-            ;
+                ->update(['expire_date' => $newExpiryDate]);
 
             $this->clearJobCaches($jobId);
 
@@ -458,7 +443,7 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
     public function findJobsByIds(array $jobIds): Collection
     {
         if (empty($jobIds)) {
-            return new Collection();
+            return new Collection;
         }
 
         $cacheKey = 'jobs:multiple:'.md5(implode(',', $jobIds));
@@ -469,8 +454,7 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
                 ->whereIn('id', $jobIds)
                 ->where('is_active', true)
                 ->get()
-                ->keyBy('id')
-            ;
+                ->keyBy('id');
         });
     }
 
@@ -484,8 +468,7 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
                 ->update([
                     'is_active' => $isActive,
                     'updated_at' => now(),
-                ])
-            ;
+                ]);
 
             // Clear all job caches after bulk update
             Cache::tags(['jobs'])->flush();
@@ -513,7 +496,7 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
      */
     private function applySearchFilters(Builder $query, array $filters): void
     {
-        if (!empty($filters['keyword'])) {
+        if (! empty($filters['keyword'])) {
             $keyword = '%'.$filters['keyword'].'%';
             $query->where(function ($q) use ($keyword) {
                 $q->where('title', 'like', $keyword)
@@ -524,12 +507,11 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
                     })
                     ->orWhereHas('company', function ($companyQuery) use ($keyword) {
                         $companyQuery->where('name', 'like', $keyword);
-                    })
-                ;
+                    });
             });
         }
 
-        if (!empty($filters['skills'])) {
+        if (! empty($filters['skills'])) {
             $skillIds = is_array($filters['skills']) ? $filters['skills'] : [$filters['skills']];
             $query->whereHas('skills', function ($skillQuery) use ($skillIds) {
                 $skillQuery->whereIn('skill_id', $skillIds);
@@ -542,19 +524,19 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
      */
     private function applyLocationFilters(Builder $query, array $filters): void
     {
-        if (!empty($filters['country'])) {
+        if (! empty($filters['country'])) {
             $query->where('country', $filters['country']);
         }
 
-        if (!empty($filters['state'])) {
+        if (! empty($filters['state'])) {
             $query->where('state', $filters['state']);
         }
 
-        if (!empty($filters['city'])) {
+        if (! empty($filters['city'])) {
             $query->where('city', $filters['city']);
         }
 
-        if (!empty($filters['remote'])) {
+        if (! empty($filters['remote'])) {
             $query->where('is_remote', true);
         }
     }
@@ -564,37 +546,37 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
      */
     private function applyJobAttributeFilters(Builder $query, array $filters): void
     {
-        if (!empty($filters['job_category_id'])) {
+        if (! empty($filters['job_category_id'])) {
             $categoryIds = is_array($filters['job_category_id'])
                 ? $filters['job_category_id']
                 : [$filters['job_category_id']];
             $query->whereIn('job_category_id', $categoryIds);
         }
 
-        if (!empty($filters['job_type_id'])) {
+        if (! empty($filters['job_type_id'])) {
             $typeIds = is_array($filters['job_type_id'])
                 ? $filters['job_type_id']
                 : [$filters['job_type_id']];
             $query->whereIn('job_type_id', $typeIds);
         }
 
-        if (!empty($filters['career_level_id'])) {
+        if (! empty($filters['career_level_id'])) {
             $query->where('career_level_id', $filters['career_level_id']);
         }
 
-        if (!empty($filters['functional_area_id'])) {
+        if (! empty($filters['functional_area_id'])) {
             $query->where('functional_area_id', $filters['functional_area_id']);
         }
 
-        if (!empty($filters['experience_min'])) {
+        if (! empty($filters['experience_min'])) {
             $query->where('experience', '>=', (int) $filters['experience_min']);
         }
 
-        if (!empty($filters['experience_max'])) {
+        if (! empty($filters['experience_max'])) {
             $query->where('experience', '<=', (int) $filters['experience_max']);
         }
 
-        if (!empty($filters['is_featured'])) {
+        if (! empty($filters['is_featured'])) {
             $query->where('is_featured', (bool) $filters['is_featured']);
         }
     }
@@ -604,19 +586,19 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
      */
     private function applySalaryFilters(Builder $query, array $filters): void
     {
-        if (!empty($filters['salary_from'])) {
+        if (! empty($filters['salary_from'])) {
             $query->where('salary_from', '>=', (float) $filters['salary_from']);
         }
 
-        if (!empty($filters['salary_to'])) {
+        if (! empty($filters['salary_to'])) {
             $query->where('salary_to', '<=', (float) $filters['salary_to']);
         }
 
-        if (!empty($filters['salary_currency_id'])) {
+        if (! empty($filters['salary_currency_id'])) {
             $query->where('salary_currency_id', $filters['salary_currency_id']);
         }
 
-        if (!empty($filters['hide_salary']) && false === $filters['hide_salary']) {
+        if (! empty($filters['hide_salary']) && $filters['hide_salary'] === false) {
             $query->where('hide_salary', false);
         }
     }
@@ -626,20 +608,20 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
      */
     private function applyCompanyFilters(Builder $query, array $filters): void
     {
-        if (!empty($filters['company_id'])) {
+        if (! empty($filters['company_id'])) {
             $companyIds = is_array($filters['company_id'])
                 ? $filters['company_id']
                 : [$filters['company_id']];
             $query->whereIn('company_id', $companyIds);
         }
 
-        if (!empty($filters['company_size_id'])) {
+        if (! empty($filters['company_size_id'])) {
             $query->whereHas('company', function ($companyQuery) use ($filters) {
                 $companyQuery->where('company_size_id', $filters['company_size_id']);
             });
         }
 
-        if (!empty($filters['industry_id'])) {
+        if (! empty($filters['industry_id'])) {
             $query->whereHas('company', function ($companyQuery) use ($filters) {
                 $companyQuery->where('industry_id', $filters['industry_id']);
             });
@@ -651,22 +633,22 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
      */
     private function applyDateFilters(Builder $query, array $filters): void
     {
-        if (!empty($filters['posted_since'])) {
+        if (! empty($filters['posted_since'])) {
             $days = (int) $filters['posted_since'];
             $query->where('created_at', '>=', now()->subDays($days));
         }
 
-        if (!empty($filters['expire_after'])) {
+        if (! empty($filters['expire_after'])) {
             $date = Carbon::parse($filters['expire_after']);
             $query->where('expire_date', '>=', $date);
         }
 
-        if (!empty($filters['created_from'])) {
+        if (! empty($filters['created_from'])) {
             $date = Carbon::parse($filters['created_from']);
             $query->where('created_at', '>=', $date);
         }
 
-        if (!empty($filters['created_to'])) {
+        if (! empty($filters['created_to'])) {
             $date = Carbon::parse($filters['created_to']);
             $query->where('created_at', '<=', $date);
         }
@@ -711,8 +693,7 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
             case 'company':
                 $query->join('companies', 'jobs.company_id', '=', 'companies.id')
                     ->orderBy('companies.name', 'asc')
-                    ->select('jobs.*')
-                ;
+                    ->select('jobs.*');
 
                 break;
 
@@ -729,8 +710,7 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
             case 'relevance':
             default:
                 $query->orderBy('is_featured', 'desc')
-                    ->orderBy('created_at', 'desc')
-                ;
+                    ->orderBy('created_at', 'desc');
 
                 break;
         }
@@ -758,7 +738,6 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
     /**
      * Get jobs by status.
      *
-     * @param string $status
      * @return mixed
      */
     public function getByStatus(string $status)
@@ -769,7 +748,6 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
     /**
      * Get jobs by category.
      *
-     * @param int $categoryId
      * @return mixed
      */
     public function getByCategory(int $categoryId)
@@ -780,7 +758,6 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
     /**
      * Get jobs by company.
      *
-     * @param int $companyId
      * @return mixed
      */
     public function getByCompany(int $companyId)
@@ -811,7 +788,6 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
     /**
      * Get recent jobs.
      *
-     * @param int $limit
      * @return mixed
      */
     public function getRecent(int $limit = 10)
@@ -822,7 +798,6 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
     /**
      * Get popular jobs.
      *
-     * @param int $limit
      * @return mixed
      */
     public function getPopular(int $limit = 10)
@@ -833,7 +808,6 @@ class JobRepository extends BaseRepository implements JobRepositoryInterface
     /**
      * Search jobs by title or description.
      *
-     * @param string $query
      * @return mixed
      */
     public function search(string $query)

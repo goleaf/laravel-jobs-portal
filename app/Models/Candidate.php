@@ -22,45 +22,45 @@ use Spatie\Activitylog\Traits\LogsActivity;
  *
  * @version July 20, 2020, 5:48 am UTC
  *
- * @property int                              $id
- * @property int                              $user_id
- * @property string                           $unique_id
- * @property null|string                      $father_name
- * @property null|int                         $marital_status_id
- * @property null|string                      $nationality
- * @property null|string                      $national_id_card
- * @property null|string                      $experience
- * @property null|int                         $career_level_id
- * @property null|int                         $industry_id
- * @property null|int                         $functional_area_id
- * @property null|string                      $current_salary
- * @property null|string                      $expected_salary
- * @property null|string                      $image_path
- * @property null|string                      $resume_path
- * @property null|Carbon                      $available_at
- * @property null|int                         $immediate_available
- * @property null|int                         $is_active
- * @property int                              $job_alert
- * @property null|Carbon                      $created_at
- * @property null|Carbon                      $updated_at
- * @property CandidateEducation[]|Collection  $candidateEducation
+ * @property int $id
+ * @property int $user_id
+ * @property string $unique_id
+ * @property null|string $father_name
+ * @property null|int $marital_status_id
+ * @property null|string $nationality
+ * @property null|string $national_id_card
+ * @property null|string $experience
+ * @property null|int $career_level_id
+ * @property null|int $industry_id
+ * @property null|int $functional_area_id
+ * @property null|string $current_salary
+ * @property null|string $expected_salary
+ * @property null|string $image_path
+ * @property null|string $resume_path
+ * @property null|Carbon $available_at
+ * @property null|int $immediate_available
+ * @property null|int $is_active
+ * @property int $job_alert
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property CandidateEducation[]|Collection $candidateEducation
  * @property CandidateExperience[]|Collection $candidateExperience
- * @property User                             $user
- * @property mixed                            $candidate_url
- * @property mixed                            $city_name
- * @property mixed                            $country_name
- * @property string                           $full_location
- * @property mixed                            $state_name
- * @property Collection|JobType[]             $jobAlerts
- * @property null|int                         $job_alerts_count
- * @property Collection|JobApplication[]      $jobApplications
- * @property null|int                         $job_applications_count
- * @property Collection|JobApplication[]      $penddingJobApplications
- * @property null|int                         $pendding_job_applications_count
- * @property mixed                            $profile_completion_percentage
- * @property mixed                            $formatted_current_salary
- * @property mixed                            $formatted_expected_salary
- * @property mixed                            $experience_level
+ * @property User $user
+ * @property mixed $candidate_url
+ * @property mixed $city_name
+ * @property mixed $country_name
+ * @property string $full_location
+ * @property mixed $state_name
+ * @property Collection|JobType[] $jobAlerts
+ * @property null|int $job_alerts_count
+ * @property Collection|JobApplication[] $jobApplications
+ * @property null|int $job_applications_count
+ * @property Collection|JobApplication[] $penddingJobApplications
+ * @property null|int $pendding_job_applications_count
+ * @property mixed $profile_completion_percentage
+ * @property mixed $formatted_current_salary
+ * @property mixed $formatted_expected_salary
+ * @property mixed $experience_level
  *
  * @method static Builder|Candidate newModelQuery()
  * @method static Builder|Candidate newQuery()
@@ -115,9 +115,9 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Candidate extends Model
 {
     use HasFactory;
-    use LogsActivity;
-    use HasTaxonomy;
     use HasSettingsField;
+    use HasTaxonomy;
+    use LogsActivity;
 
     public const RESUME_PATH = 'candidates/resumes';
     public const IMAGE_PATH = 'candidates/images';
@@ -217,8 +217,7 @@ class Candidate extends Model
         return LogOptions::defaults()
             ->logOnly(['career_level_id', 'industry_id', 'functional_area_id', 'current_salary', 'expected_salary', 'is_active'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     public function getCountryNameAttribute()
@@ -284,8 +283,8 @@ class Candidate extends Model
 
             $filledFields = 0;
             foreach ($fields as $field) {
-                if (!empty($this->{$field})) {
-                    ++$filledFields;
+                if (! empty($this->{$field})) {
+                    $filledFields++;
                 }
             }
 
@@ -293,8 +292,8 @@ class Candidate extends Model
             if ($this->user) {
                 $userFields = ['phone', 'dob', 'gender'];
                 foreach ($userFields as $field) {
-                    if (!empty($this->user->{$field})) {
-                        ++$filledFields;
+                    if (! empty($this->user->{$field})) {
+                        $filledFields++;
                     }
                 }
             }
@@ -308,7 +307,7 @@ class Candidate extends Model
      */
     public function getFormattedCurrentSalaryAttribute(): string
     {
-        if (!$this->current_salary) {
+        if (! $this->current_salary) {
             return __('common.not_specified');
         }
 
@@ -320,7 +319,7 @@ class Candidate extends Model
      */
     public function getFormattedExpectedSalaryAttribute(): string
     {
-        if (!$this->expected_salary) {
+        if (! $this->expected_salary) {
             return __('common.not_specified');
         }
 
@@ -332,7 +331,7 @@ class Candidate extends Model
      */
     public function getExperienceLevelAttribute(): string
     {
-        if (!$this->experience) {
+        if (! $this->experience) {
             return __('candidate.fresh_graduate');
         }
 
@@ -393,8 +392,7 @@ class Candidate extends Model
     public function penddingJobApplications(): HasMany
     {
         return $this->hasMany(JobApplication::class, 'candidate_id')
-            ->where('status', JobApplication::STATUS_APPLIED)
-        ;
+            ->where('status', JobApplication::STATUS_APPLIED);
     }
 
     public function getResumeUrl(): ?string
@@ -453,7 +451,7 @@ class Candidate extends Model
     /**
      * Scope for active candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -463,7 +461,7 @@ class Candidate extends Model
     /**
      * Scope for inactive candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -473,7 +471,7 @@ class Candidate extends Model
     /**
      * Scope for verified candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeVerified($query)
     {
@@ -483,7 +481,7 @@ class Candidate extends Model
     /**
      * Scope for unverified candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeUnverified($query)
     {
@@ -493,7 +491,7 @@ class Candidate extends Model
     /**
      * Scope for featured candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFeatured($query)
     {
@@ -503,7 +501,7 @@ class Candidate extends Model
     /**
      * Scope for non-featured candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNotFeatured($query)
     {
@@ -513,7 +511,7 @@ class Candidate extends Model
     /**
      * Scope for available candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAvailable($query)
     {
@@ -523,7 +521,7 @@ class Candidate extends Model
     /**
      * Scope for unavailable candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeUnavailable($query)
     {
@@ -533,7 +531,7 @@ class Candidate extends Model
     /**
      * Scope for immediately available candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeImmediatelyAvailable($query)
     {
@@ -543,7 +541,7 @@ class Candidate extends Model
     /**
      * Scope for candidates by country.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByCountry($query, int $countryId)
     {
@@ -553,7 +551,7 @@ class Candidate extends Model
     /**
      * Scope for candidates by state.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByState($query, int $stateId)
     {
@@ -563,7 +561,7 @@ class Candidate extends Model
     /**
      * Scope for candidates by city.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByCity($query, int $cityId)
     {
@@ -573,7 +571,7 @@ class Candidate extends Model
     /**
      * Scope for candidates by career level.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByCareerLevel($query, int $careerLevelId)
     {
@@ -583,7 +581,7 @@ class Candidate extends Model
     /**
      * Scope for candidates by functional area.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByFunctionalArea($query, int $functionalAreaId)
     {
@@ -593,7 +591,7 @@ class Candidate extends Model
     /**
      * Scope for candidates by marital status.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByMaritalStatus($query, int $maritalStatusId)
     {
@@ -603,21 +601,20 @@ class Candidate extends Model
     /**
      * Scope for searching candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where('first_name', 'like', "%{$term}%")
             ->orWhere('last_name', 'like', "%{$term}%")
             ->orWhere('email', 'like', "%{$term}%")
-            ->orWhere('phone', 'like', "%{$term}%")
-        ;
+            ->orWhere('phone', 'like', "%{$term}%");
     }
 
     /**
      * Scope for recent candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -627,7 +624,7 @@ class Candidate extends Model
     /**
      * Scope for old candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -637,7 +634,7 @@ class Candidate extends Model
     /**
      * Scope for candidates by experience range.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByExperienceRange($query, int $min, int $max)
     {
@@ -647,7 +644,7 @@ class Candidate extends Model
     /**
      * Scope for entry level candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeEntryLevel($query)
     {
@@ -657,7 +654,7 @@ class Candidate extends Model
     /**
      * Scope for experienced candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeExperienced($query)
     {
@@ -667,7 +664,7 @@ class Candidate extends Model
     /**
      * Scope for senior candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSenior($query)
     {
@@ -677,7 +674,7 @@ class Candidate extends Model
     /**
      * Scope for candidates by salary range.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeBySalaryRange($query, float $min, float $max)
     {
@@ -687,7 +684,7 @@ class Candidate extends Model
     /**
      * Scope for candidates by gender.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByGender($query, string $gender)
     {
@@ -697,7 +694,7 @@ class Candidate extends Model
     /**
      * Scope for male candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeMale($query)
     {
@@ -707,7 +704,7 @@ class Candidate extends Model
     /**
      * Scope for female candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFemale($query)
     {
@@ -717,7 +714,7 @@ class Candidate extends Model
     /**
      * Scope for candidates with resumes.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithResumes($query)
     {
@@ -727,7 +724,7 @@ class Candidate extends Model
     /**
      * Scope for candidates without resumes.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithoutResumes($query)
     {
@@ -737,7 +734,7 @@ class Candidate extends Model
     /**
      * Scope for candidates with job applications.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithApplications($query)
     {
@@ -747,7 +744,7 @@ class Candidate extends Model
     /**
      * Scope for candidates with skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithSkills($query)
     {
@@ -757,7 +754,7 @@ class Candidate extends Model
     /**
      * Scope for candidates by age range.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByAgeRange($query, int $minAge, int $maxAge)
     {
@@ -770,7 +767,7 @@ class Candidate extends Model
     /**
      * Scope for young candidates (under 30).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeYoung($query)
     {
@@ -780,26 +777,24 @@ class Candidate extends Model
     /**
      * Scope for alphabetical ordering.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
         return $query->orderBy('first_name', 'asc')
-            ->orderBy('last_name', 'asc')
-        ;
+            ->orderBy('last_name', 'asc');
     }
 
     /**
      * Scope for popular candidates (with most applications).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopular($query, int $limit = 10)
     {
         return $query->withCount('jobApplications')
             ->orderBy('job_applications_count', 'desc')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     /**
@@ -867,7 +862,7 @@ class Candidate extends Model
 
         // Generate unique ID
         static::creating(function ($candidate) {
-            if (!$candidate->unique_id) {
+            if (! $candidate->unique_id) {
                 $candidate->unique_id = 'CAND-'.strtoupper(uniqid());
             }
         });
@@ -983,7 +978,7 @@ class Candidate extends Model
         'profile.show_resume' => 'boolean',
         'profile.show_profile_image' => 'boolean',
         'profile.searchable' => 'boolean',
-        
+
         'privacy.allow_recruiter_contact' => 'boolean',
         'privacy.allow_company_contact' => 'boolean',
         'privacy.show_current_company' => 'boolean',
@@ -991,7 +986,7 @@ class Candidate extends Model
         'privacy.hide_from_current_employer' => 'boolean',
         'privacy.block_specific_companies' => 'array',
         'privacy.allow_profile_download' => 'boolean',
-        
+
         'job_preferences.job_alerts_enabled' => 'boolean',
         'job_preferences.preferred_job_types' => 'array',
         'job_preferences.preferred_industries' => 'array',
@@ -1002,7 +997,7 @@ class Candidate extends Model
         'job_preferences.travel_percentage' => 'integer|min:0|max:100',
         'job_preferences.notice_period_days' => 'integer|min:0|max:365',
         'job_preferences.immediate_availability' => 'boolean',
-        
+
         'notifications.job_matches' => 'boolean',
         'notifications.application_updates' => 'boolean',
         'notifications.recruiter_messages' => 'boolean',
@@ -1012,7 +1007,7 @@ class Candidate extends Model
         'notifications.email_notifications' => 'boolean',
         'notifications.sms_notifications' => 'boolean',
         'notifications.push_notifications' => 'boolean',
-        
+
         'dashboard.default_view' => 'string|in:overview,jobs,applications,profile',
         'dashboard.show_profile_completion' => 'boolean',
         'dashboard.show_recent_applications' => 'boolean',
@@ -1021,21 +1016,21 @@ class Candidate extends Model
         'dashboard.show_saved_jobs' => 'boolean',
         'dashboard.items_per_page' => 'integer|min:5|max:100',
         'dashboard.auto_refresh' => 'boolean',
-        
+
         'search.save_search_history' => 'boolean',
         'search.default_sort' => 'string|in:relevance,date,salary',
         'search.results_per_page' => 'integer|min:10|max:100',
         'search.location_radius' => 'integer|min:1|max:500',
         'search.include_remote_jobs' => 'boolean',
         'search.auto_apply_filters' => 'boolean',
-        
+
         'career.career_goals' => 'string|max:1000',
         'career.preferred_work_culture' => 'string|max:255',
         'career.skills_to_develop' => 'array',
         'career.certifications_pursuing' => 'array',
         'career.languages_spoken' => 'array',
         'career.availability_status' => 'string|in:open,passive,not_looking',
-        
+
         'social.linkedin_profile' => 'url|nullable',
         'social.github_profile' => 'url|nullable',
         'social.portfolio_website' => 'url|nullable',

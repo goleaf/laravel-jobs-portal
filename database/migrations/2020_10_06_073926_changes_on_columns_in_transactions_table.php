@@ -5,14 +5,15 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up(): void
     {
         // Skip this migration for SQLite to avoid foreign key issues
-        if ('sqlite' === DB::getDriverName()) {
+        if (DB::getDriverName() === 'sqlite') {
             return;
         }
 
@@ -31,11 +32,11 @@ return new class extends Migration {
             }
 
             // Add new columns if they don't exist
-            if (!Schema::hasColumn('transactions', 'owner_id')) {
+            if (! Schema::hasColumn('transactions', 'owner_id')) {
                 $table->unsignedInteger('owner_id');
             }
 
-            if (!Schema::hasColumn('transactions', 'owner_type')) {
+            if (! Schema::hasColumn('transactions', 'owner_type')) {
                 $table->string('owner_type');
             }
         });
@@ -57,7 +58,7 @@ return new class extends Migration {
             }
 
             // Add back subscription_id column
-            if (!Schema::hasColumn('transactions', 'subscription_id')) {
+            if (! Schema::hasColumn('transactions', 'subscription_id')) {
                 $table->unsignedBigInteger('subscription_id')->nullable();
             }
         });

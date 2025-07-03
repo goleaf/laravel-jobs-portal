@@ -39,8 +39,7 @@ class WebHomeRepository
     {
         return Testimonial::orderBy('created_at', 'desc')
             ->take(5)
-            ->get()
-        ;
+            ->get();
     }
 
     /**
@@ -58,8 +57,7 @@ class WebHomeRepository
         $data['resumes'] = Candidate::whereNotNull('resume_path')
             ->join('users', 'candidates.user_id', '=', 'users.id')
             ->where('users.is_active', true)
-            ->count()
-        ;
+            ->count();
         $data['companies'] = Company::with('user')->whereHas('user', function (Builder $query) {
             $query->where('is_active', '=', true);
         })->count();
@@ -79,8 +77,7 @@ class WebHomeRepository
             ->orderBy('created_at', 'desc')
             ->limit(6)
             ->get()
-            ->append('full_location')
-        ;
+            ->append('full_location');
     }
 
     /**
@@ -98,8 +95,7 @@ class WebHomeRepository
             ->orderBy('jobs_count', 'desc')
             ->toBase()
             ->take(8)
-            ->get()
-        ;
+            ->get();
 
         return $categories;
     }
@@ -111,8 +107,7 @@ class WebHomeRepository
                 $q->whereStatus(Job::STATUS_OPEN)
                     ->where('status', '!=', Job::STATUS_DRAFT)
                     ->whereIsSuspended(Job::NOT_SUSPENDED)
-                    ->whereDate('job_expiry_date', '>=', Carbon::now()->toDateString())
-                ;
+                    ->whereDate('job_expiry_date', '>=', Carbon::now()->toDateString());
             },
         ])->get();
     }
@@ -134,8 +129,7 @@ class WebHomeRepository
                 $q->where('status', '!=', Job::STATUS_CLOSED);
             }])
             ->orderBy('created_at', 'desc')
-            ->get()
-        ;
+            ->get();
     }
 
     public function getAllCompanies()
@@ -157,8 +151,7 @@ class WebHomeRepository
             ->where('is_suspended', '=', Job::NOT_SUSPENDED)
             ->with(['company', 'jobCategory', 'jobsSkill'])
             ->orderBy('created_at', 'desc')
-            ->get()
-        ;
+            ->get();
     }
 
     /**
@@ -201,12 +194,10 @@ class WebHomeRepository
     {
         $imageSliders = ImageSlider::where('is_active', '=', 1)
             ->orderBy('created_at', 'desc')
-            ->get()
-        ;
+            ->get();
         $headerSliders = HeaderSlider::where('is_active', '=', 1)
             ->orderBy('created_at', 'desc')
-            ->get()
-        ;
+            ->get();
         $settings = Setting::where('key', 'slider_is_active')->toBase()->first();
         $slider = Setting::where('key', 'is_full_slider')->toBase()->first();
         $imageSliderActive = Setting::where('key', 'is_slider_active')->toBase()->first();
@@ -237,8 +228,7 @@ class WebHomeRepository
     {
         return $branding = BrandingSliders::where('is_active', '=', 1)
             ->orderBy('created_at', 'desc')
-            ->get()
-        ;
+            ->get();
     }
 
     /**
@@ -255,8 +245,7 @@ class WebHomeRepository
             ]
         )->withCount('comments')
             ->orderBy('created_at', 'desc')->limit(3)
-            ->get()
-        ;
+            ->get();
     }
 
     public function jobSearch($searchTerm): array
@@ -271,8 +260,7 @@ class WebHomeRepository
                     '!=',
                     Job::STATUS_DRAFT
                 )->whereIsSuspended(Job::NOT_SUSPENDED)
-                ->whereDate('job_expiry_date', '>=', Carbon::tomorrow()->toDateString())->get()
-            ;
+                ->whereDate('job_expiry_date', '>=', Carbon::tomorrow()->toDateString())->get();
             $skills = Skill::where('name', 'LIKE', '%'.$searchTerm.'%')->get();
             $companies = Company::whereHas(
                 'user',
@@ -288,7 +276,7 @@ class WebHomeRepository
             $jobTitle = [];
             $skillName = [];
             $companyName = [];
-            if (!$jobSearchResult->isEmpty() || !$skills->isEmpty() || !$companies->isEmpty()) {
+            if (! $jobSearchResult->isEmpty() || ! $skills->isEmpty() || ! $companies->isEmpty()) {
                 foreach ($jobSearchResult as $jobSearch) {
                     $jobTitle[] = $jobSearch->job_title;
                 }

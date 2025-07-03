@@ -15,30 +15,30 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * SalaryCurrency Model - Enhanced with Enhanced patterns.
  *
- * @property int              $id
- * @property string           $currency_name
- * @property string           $currency_code
- * @property string           $currency_symbol
- * @property null|float       $exchange_rate
- * @property null|string      $base_currency
- * @property bool             $is_active
- * @property bool             $is_default
- * @property bool             $is_crypto
- * @property null|array       $supported_countries
- * @property int              $decimal_places
- * @property null|string      $number_format
- * @property null|Carbon      $last_rate_update
- * @property null|Carbon      $created_at
- * @property null|Carbon      $updated_at
+ * @property int $id
+ * @property string $currency_name
+ * @property string $currency_code
+ * @property string $currency_symbol
+ * @property null|float $exchange_rate
+ * @property null|string $base_currency
+ * @property bool $is_active
+ * @property bool $is_default
+ * @property bool $is_crypto
+ * @property null|array $supported_countries
+ * @property int $decimal_places
+ * @property null|string $number_format
+ * @property null|Carbon $last_rate_update
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
  * @property Collection|Job[] $jobs
- * @property null|int         $jobs_count
- * @property mixed            $usage_statistics
- * @property mixed            $formatted_symbol
- * @property mixed            $exchange_info
- * @property mixed            $market_value
- * @property mixed            $currency_trend
- * @property mixed            $conversion_data
- * @property mixed            $regional_info
+ * @property null|int $jobs_count
+ * @property mixed $usage_statistics
+ * @property mixed $formatted_symbol
+ * @property mixed $exchange_info
+ * @property mixed $market_value
+ * @property mixed $currency_trend
+ * @property mixed $conversion_data
+ * @property mixed $regional_info
  *
  * Enhanced Enhanced Scopes:
  *
@@ -139,8 +139,7 @@ class SalaryCurrency extends Model
                 'decimal_places',
             ])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -249,8 +248,7 @@ class SalaryCurrency extends Model
         return $query->where(function ($q) use ($term) {
             $q->where('currency_name', 'like', '%'.$term.'%')
                 ->orWhere('currency_code', 'like', '%'.$term.'%')
-                ->orWhere('currency_symbol', 'like', '%'.$term.'%')
-            ;
+                ->orWhere('currency_symbol', 'like', '%'.$term.'%');
         });
     }
 
@@ -298,8 +296,7 @@ class SalaryCurrency extends Model
     public function scopeStable(Builder $query): Builder
     {
         return $query->where('is_crypto', false)
-            ->whereIn('currency_code', ['USD', 'EUR', 'CHF', 'JPY'])
-        ;
+            ->whereIn('currency_code', ['USD', 'EUR', 'CHF', 'JPY']);
     }
 
     /**
@@ -308,8 +305,7 @@ class SalaryCurrency extends Model
     public function scopeVolatile(Builder $query): Builder
     {
         return $query->where('is_crypto', true)
-            ->orWhereNotIn('currency_code', ['USD', 'EUR', 'CHF', 'JPY'])
-        ;
+            ->orWhereNotIn('currency_code', ['USD', 'EUR', 'CHF', 'JPY']);
     }
 
     /**
@@ -327,8 +323,7 @@ class SalaryCurrency extends Model
     {
         return $query->where(function ($q) use ($hours) {
             $q->whereNull('last_rate_update')
-                ->orWhere('last_rate_update', '<', now()->subHours($hours))
-            ;
+                ->orWhere('last_rate_update', '<', now()->subHours($hours));
         });
     }
 
@@ -517,7 +512,7 @@ class SalaryCurrency extends Model
             return $amount;
         }
 
-        if (!$this->exchange_rate || !$fromCurrency->exchange_rate) {
+        if (! $this->exchange_rate || ! $fromCurrency->exchange_rate) {
             throw new \InvalidArgumentException('Exchange rates not available for conversion');
         }
 
@@ -554,7 +549,7 @@ class SalaryCurrency extends Model
      */
     public function isExchangeRateStale(): bool
     {
-        if (!$this->last_rate_update) {
+        if (! $this->last_rate_update) {
             return true;
         }
 
@@ -569,7 +564,7 @@ class SalaryCurrency extends Model
     public function calculateUsagePercentage(): float
     {
         $totalJobs = Job::count();
-        if (0 === $totalJobs) {
+        if ($totalJobs === 0) {
             return 0;
         }
 
@@ -586,8 +581,7 @@ class SalaryCurrency extends Model
         return static::withCount('jobs')
             ->orderBy('jobs_count', 'desc')
             ->pluck('id')
-            ->search($this->id) + 1
-        ;
+            ->search($this->id) + 1;
     }
 
     /**
@@ -598,8 +592,7 @@ class SalaryCurrency extends Model
         $recentJobs = $this->jobs()->where('created_at', '>=', now()->subDays(30))->count();
         $previousJobs = $this->jobs()
             ->whereBetween('created_at', [now()->subDays(60), now()->subDays(30)])
-            ->count()
-        ;
+            ->count();
 
         if ($recentJobs > $previousJobs) {
             return 'up';
@@ -617,7 +610,7 @@ class SalaryCurrency extends Model
     public function calculateAdoptionRate(): float
     {
         $activeJobs = Job::active()->count();
-        if (0 === $activeJobs) {
+        if ($activeJobs === 0) {
             return 0;
         }
 
@@ -656,7 +649,7 @@ class SalaryCurrency extends Model
      */
     public function getConfidenceScore(): float
     {
-        if (!$this->last_rate_update) {
+        if (! $this->last_rate_update) {
             return 0;
         }
 
@@ -745,7 +738,7 @@ class SalaryCurrency extends Model
     {
         $factors = [
             'usage' => $this->calculateUsagePercentage(),
-            'stability' => 'stable' === $this->getStabilityRating() ? 100 : 50,
+            'stability' => $this->getStabilityRating() === 'stable' ? 100 : 50,
             'liquidity' => $this->getLiquidityScore(),
             'adoption' => count($this->supported_countries ?? []) * 2,
         ];
@@ -785,7 +778,7 @@ class SalaryCurrency extends Model
      */
     protected function getCryptoRank(): ?int
     {
-        if (!$this->is_crypto) {
+        if (! $this->is_crypto) {
             return null;
         }
 
@@ -966,7 +959,7 @@ class SalaryCurrency extends Model
         if (method_exists(Cache::getStore(), 'flush')) {
             // For stores that support pattern clearing
             $keys = Cache::getStore()->getRedis()->keys($pattern);
-            if (!empty($keys)) {
+            if (! empty($keys)) {
                 Cache::getStore()->getRedis()->del($keys);
             }
         }

@@ -31,7 +31,7 @@ class ComprehensiveRouteTest extends TestCase
     }
 
     /** @test */
-    public function allPublicRoutesAreAccessible()
+    public function all_public_routes_are_accessible()
     {
         $publicRoutes = [
             '/',
@@ -49,7 +49,7 @@ class ComprehensiveRouteTest extends TestCase
     }
 
     /** @test */
-    public function adminRoutesRequireAuthentication()
+    public function admin_routes_require_authentication()
     {
         $adminRoutes = [
             '/admin',
@@ -68,7 +68,7 @@ class ComprehensiveRouteTest extends TestCase
     }
 
     /** @test */
-    public function adminRoutesWorkWithAdminUser()
+    public function admin_routes_work_with_admin_user()
     {
         $adminRoutes = [
             '/admin' => 200,
@@ -86,7 +86,7 @@ class ComprehensiveRouteTest extends TestCase
     }
 
     /** @test */
-    public function apiRoutesReturnJson()
+    public function api_routes_return_json()
     {
         $apiRoutes = [
             '/api/jobs',
@@ -96,7 +96,7 @@ class ComprehensiveRouteTest extends TestCase
 
         foreach ($apiRoutes as $route) {
             $response = $this->get($route);
-            if (404 !== $response->status()) {
+            if ($response->status() !== 404) {
                 $this->assertJson(
                     $response->content(),
                     "API route {$route} should return JSON"
@@ -106,7 +106,7 @@ class ComprehensiveRouteTest extends TestCase
     }
 
     /** @test */
-    public function protectedRoutesRedirectUnauthenticatedUsers()
+    public function protected_routes_redirect_unauthenticated_users()
     {
         $protectedRoutes = [
             '/dashboard',
@@ -125,7 +125,7 @@ class ComprehensiveRouteTest extends TestCase
     }
 
     /** @test */
-    public function allNamedRoutesExist()
+    public function all_named_routes_exist()
     {
         $namedRoutes = [
             'home',

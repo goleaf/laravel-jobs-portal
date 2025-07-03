@@ -489,7 +489,7 @@ class GetJobsRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     public function withValidator($validator): void
     {
@@ -543,7 +543,7 @@ class GetJobsRequest extends FormRequest
             'exclude_expired' => $this->exclude_expired,
             'only_new_jobs' => $this->only_new_jobs,
         ], function ($value) {
-            return null !== $value;
+            return $value !== null;
         });
     }
 
@@ -588,7 +588,7 @@ class GetJobsRequest extends FormRequest
         ]);
 
         // Clean and validate search query
-        if ($this->has('search') && !empty($this->search)) {
+        if ($this->has('search') && ! empty($this->search)) {
             $cleanSearch = trim($this->search);
             $cleanSearch = preg_replace('/\s+/', ' ', $cleanSearch); // Remove extra spaces
             $this->merge(['search' => $cleanSearch]);
@@ -597,7 +597,7 @@ class GetJobsRequest extends FormRequest
         // Clean keywords array
         if ($this->has('keywords') && is_array($this->keywords)) {
             $cleanKeywords = array_filter(array_map('trim', $this->keywords), function ($keyword) {
-                return !empty($keyword);
+                return ! empty($keyword);
             });
             $this->merge(['keywords' => array_values($cleanKeywords)]);
         }
@@ -611,7 +611,7 @@ class GetJobsRequest extends FormRequest
         ];
 
         foreach ($numericFields as $field) {
-            if ($this->has($field) && !empty($this->{$field})) {
+            if ($this->has($field) && ! empty($this->{$field})) {
                 $this->merge([$field => (int) $this->{$field}]);
             }
         }
@@ -634,16 +634,16 @@ class GetJobsRequest extends FormRequest
     /**
      * Validate advanced filter combinations.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     protected function validateAdvancedFilters($validator): void
     {
         // Validate location hierarchy
-        if ($this->city_id && !$this->state_id) {
+        if ($this->city_id && ! $this->state_id) {
             $validator->errors()->add('state_id', __('validation.job_search.state_required_for_city'));
         }
 
-        if ($this->state_id && !$this->country_id) {
+        if ($this->state_id && ! $this->country_id) {
             $validator->errors()->add('country_id', __('validation.job_search.country_required_for_state'));
         }
 
@@ -657,7 +657,7 @@ class GetJobsRequest extends FormRequest
         }
 
         // Validate reasonable search parameters
-        if ($this->per_page > 50 && !auth()->check()) {
+        if ($this->per_page > 50 && ! auth()->check()) {
             $validator->errors()->add('per_page', __('validation.job_search.per_page_limit_guest'));
         }
     }
@@ -665,7 +665,7 @@ class GetJobsRequest extends FormRequest
     /**
      * Validate user-specific filters.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     protected function validateUserSpecificFilters($validator): void
     {
@@ -677,13 +677,13 @@ class GetJobsRequest extends FormRequest
         ];
 
         foreach ($userSpecificFilters as $filter) {
-            if ($this->has($filter) && $this->{$filter} && !$user) {
+            if ($this->has($filter) && $this->{$filter} && ! $user) {
                 $validator->errors()->add($filter, __('validation.job_search.authentication_required'));
             }
         }
 
         // Check if user has candidate profile for certain filters
-        if ($user && !$user->candidate) {
+        if ($user && ! $user->candidate) {
             $candidateFilters = ['exclude_applied', 'only_applied'];
             foreach ($candidateFilters as $filter) {
                 if ($this->has($filter) && $this->{$filter}) {

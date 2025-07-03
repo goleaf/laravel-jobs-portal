@@ -17,8 +17,7 @@ class UserService
     {
         return User::with(['roles'])
             ->latest()
-            ->paginate($perPage)
-        ;
+            ->paginate($perPage);
     }
 
     /**
@@ -129,13 +128,11 @@ class UserService
             ->where(function ($q) use ($query) {
                 $q->where('first_name', 'like', "%{$query}%")
                     ->orWhere('last_name', 'like', "%{$query}%")
-                    ->orWhere('email', 'like', "%{$query}%")
-                ;
+                    ->orWhere('email', 'like', "%{$query}%");
             })
             ->when($role, fn ($q) => $q->whereHas('roles', fn ($r) => $r->where('name', $role)))
             ->with(['roles'])
-            ->get()
-        ;
+            ->get();
 
         return $users;
     }
@@ -147,8 +144,7 @@ class UserService
     {
         $query = User::whereHas('roles', fn ($q) => $q->where('name', $role))
             ->active()
-            ->with(['roles'])
-        ;
+            ->with(['roles']);
 
         if ($limit) {
             $query->limit($limit);
@@ -162,7 +158,7 @@ class UserService
      */
     public function toggleActiveStatus(User $user): User
     {
-        $user->update(['is_active' => !$user->is_active]);
+        $user->update(['is_active' => ! $user->is_active]);
 
         return $user->fresh();
     }
@@ -176,8 +172,7 @@ class UserService
             ->whereHas('company')
             ->active()
             ->with(['company', 'company.industry'])
-            ->get()
-        ;
+            ->get();
     }
 
     /**

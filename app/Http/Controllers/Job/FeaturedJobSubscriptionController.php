@@ -40,7 +40,7 @@ class FeaturedJobSubscriptionController extends AppBaseController
             $companyId = getLoggedInUser()->company->id;
             $companyJobsId = Job::whereCompanyId($companyId)->pluck('id')->toArray();
 
-            if (!in_array($jobId, $companyJobsId)) {
+            if (! in_array($jobId, $companyJobsId)) {
                 return $this->sendError(__('messages.common.seems_message'));
             }
             $job = Job::findOrFail($jobId);
@@ -113,10 +113,10 @@ class FeaturedJobSubscriptionController extends AppBaseController
         ];
         FeaturedRecord::create($featuredRecord);
         $loggedInUser = getLoggedInUser();
-        1 == NotificationSetting::where('key', 'MARK_JOB_FEATURED')->where(
+        NotificationSetting::where('key', 'MARK_JOB_FEATURED')->where(
             'type',
             'employer'
-        )->first()->value
+        )->first()->value == 1
             ? addNotification([
                 Notification::MARK_JOB_FEATURED,
                 $adminId,

@@ -15,11 +15,10 @@ class EmailJobRepository extends BaseRepository implements EmailJobRepositoryInt
     /**
      * Get email jobs by status.
      *
-     * @param string $status
      * @return mixed
      */
     public function getByStatus(string $status)
     {
         return $this->model->where('status', $status)->get();
     }
-} 
+}

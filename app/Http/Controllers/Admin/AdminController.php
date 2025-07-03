@@ -20,8 +20,7 @@ class AdminController extends Controller
         $admins = User::where('role', 'admin')
             ->with(['profile'])
             ->latest()
-            ->paginate(15)
-        ;
+            ->paginate(15);
 
         if (request()->expectsJson()) {
             return response()->json([
@@ -75,8 +74,7 @@ class AdminController extends Controller
             }
 
             return redirect()->route('admin.admin.index')
-                ->with('success', __('messages.admin.created_successfully'))
-            ;
+                ->with('success', __('messages.admin.created_successfully'));
         } catch (\Exception $e) {
             if (request()->expectsJson()) {
                 return response()->json([
@@ -87,8 +85,7 @@ class AdminController extends Controller
 
             return redirect()->back()
                 ->withInput()
-                ->with('error', __('messages.admin.creation_failed'))
-            ;
+                ->with('error', __('messages.admin.creation_failed'));
         }
     }
 
@@ -157,8 +154,7 @@ class AdminController extends Controller
             }
 
             return redirect()->route('admin.admin.index')
-                ->with('success', __('messages.admin.updated_successfully'))
-            ;
+                ->with('success', __('messages.admin.updated_successfully'));
         } catch (\Exception $e) {
             if (request()->expectsJson()) {
                 return response()->json([
@@ -169,8 +165,7 @@ class AdminController extends Controller
 
             return redirect()->back()
                 ->withInput()
-                ->with('error', __('messages.admin.update_failed'))
-            ;
+                ->with('error', __('messages.admin.update_failed'));
         }
     }
 
@@ -190,12 +185,11 @@ class AdminController extends Controller
                 }
 
                 return redirect()->back()
-                    ->with('error', __('messages.admin.cannot_delete_self'))
-                ;
+                    ->with('error', __('messages.admin.cannot_delete_self'));
             }
 
             // Prevent deletion of super admin (if you have such logic)
-            if ('admin@admin.com' === $admin->email || $admin->hasRole('super-admin')) {
+            if ($admin->email === 'admin@admin.com' || $admin->hasRole('super-admin')) {
                 if (request()->expectsJson()) {
                     return response()->json([
                         'success' => false,
@@ -204,8 +198,7 @@ class AdminController extends Controller
                 }
 
                 return redirect()->back()
-                    ->with('error', __('messages.admin.cannot_delete_super_admin'))
-                ;
+                    ->with('error', __('messages.admin.cannot_delete_super_admin'));
             }
 
             $admin->delete();
@@ -218,8 +211,7 @@ class AdminController extends Controller
             }
 
             return redirect()->route('admin.admin.index')
-                ->with('success', __('messages.admin.deleted_successfully'))
-            ;
+                ->with('success', __('messages.admin.deleted_successfully'));
         } catch (\Exception $e) {
             if (request()->expectsJson()) {
                 return response()->json([
@@ -229,8 +221,7 @@ class AdminController extends Controller
             }
 
             return redirect()->back()
-                ->with('error', __('messages.admin.deletion_failed'))
-            ;
+                ->with('error', __('messages.admin.deletion_failed'));
         }
     }
 
@@ -240,7 +231,7 @@ class AdminController extends Controller
     public function toggleStatus(User $admin): JsonResponse
     {
         try {
-            $admin->update(['is_active' => !$admin->is_active]);
+            $admin->update(['is_active' => ! $admin->is_active]);
 
             return response()->json([
                 'success' => true,

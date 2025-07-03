@@ -15,11 +15,10 @@ class NewsLetterRepository extends BaseRepository implements NewsLetterRepositor
     /**
      * Get newsletters by status.
      *
-     * @param string $status
      * @return mixed
      */
     public function getByStatus(string $status)
     {
         return $this->model->where('status', $status)->get();
     }
-} 
+}

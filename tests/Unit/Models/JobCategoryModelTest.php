@@ -13,16 +13,16 @@ use PHPUnit\Framework\TestCase;
 class JobCategoryModelTest extends TestCase
 {
     /** @test */
-    public function itHasCorrectTableName()
+    public function it_has_correct_table_name()
     {
-        $jobCategory = new JobCategory();
+        $jobCategory = new JobCategory;
         $this->assertEquals('job_categories', $jobCategory->getTable());
     }
 
     /** @test */
-    public function itHasCorrectFillableAttributes()
+    public function it_has_correct_fillable_attributes()
     {
-        $jobCategory = new JobCategory();
+        $jobCategory = new JobCategory;
         $fillable = $jobCategory->getFillable();
 
         $expectedFillable = [
@@ -37,9 +37,9 @@ class JobCategoryModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasCorrectCasts()
+    public function it_has_correct_casts()
     {
-        $jobCategory = new JobCategory();
+        $jobCategory = new JobCategory;
         $casts = $jobCategory->getCasts();
 
         $expectedCasts = [
@@ -56,7 +56,7 @@ class JobCategoryModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasFeaturedConstants()
+    public function it_has_featured_constants()
     {
         $expectedFeatured = [
             2 => 'All',
@@ -68,7 +68,7 @@ class JobCategoryModelTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeInstantiatedWithAttributes()
+    public function it_can_be_instantiated_with_attributes()
     {
         $jobCategory = new JobCategory([
             'name' => 'Technology',
@@ -82,16 +82,16 @@ class JobCategoryModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasRelationshipMethods()
+    public function it_has_relationship_methods()
     {
-        $jobCategory = new JobCategory();
+        $jobCategory = new JobCategory;
 
         // Test that relationship methods exist
         $this->assertTrue(method_exists($jobCategory, 'jobs'));
     }
 
     /** @test */
-    public function itHasValidationRules()
+    public function it_has_validation_rules()
     {
         $expectedRules = [
             'name' => 'required|max:160|unique:job_categories,name',
@@ -102,7 +102,7 @@ class JobCategoryModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasStatusConstants()
+    public function it_has_status_constants()
     {
         $this->assertEquals(2, JobCategory::ALL);
         $this->assertEquals(1, JobCategory::IS_FEATURED);
@@ -110,7 +110,7 @@ class JobCategoryModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasPathConstant()
+    public function it_has_path_constant()
     {
         $this->assertEquals('job_category', JobCategory::PATH);
     }

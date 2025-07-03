@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasTaxonomy;
+use Glorand\Model\Settings\Traits\HasSettingsField;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,58 +19,56 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
-use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
-use Glorand\Model\Settings\Traits\HasSettingsField;
 
 /**
  * Class Company.
  *
  * @version June 22, 2020, 12:34 pm UTC
  *
- * @property int                 $id
- * @property string              $ceo
- * @property int                 $no_of_offices
- * @property int                 $industry_id
- * @property int                 $ownership_type_id
- * @property int                 $company_size_id
- * @property int                 $established_in
- * @property null|string         $details
- * @property string              $website
- * @property string              $unique_id
- * @property string              $location
- * @property string              $location2
- * @property null|string         $fax
- * @property null|string         $facebook_url
- * @property null|string         $twitter_url
- * @property null|string         $linkedin_url
- * @property null|string         $google_plus_url
- * @property null|string         $pinterest_url
- * @property bool                $is_active
- * @property bool                $is_featured
- * @property null|Carbon         $created_at
- * @property null|Carbon         $updated_at
- * @property CompanySize         $companySize
- * @property Industry            $industry
- * @property OwnerShipType       $ownerShipType
- * @property null|User           $user
- * @property mixed               $company_url
- * @property Collection|Job[]    $jobs
- * @property null|int            $jobs_count
+ * @property int $id
+ * @property string $ceo
+ * @property int $no_of_offices
+ * @property int $industry_id
+ * @property int $ownership_type_id
+ * @property int $company_size_id
+ * @property int $established_in
+ * @property null|string $details
+ * @property string $website
+ * @property string $unique_id
+ * @property string $location
+ * @property string $location2
+ * @property null|string $fax
+ * @property null|string $facebook_url
+ * @property null|string $twitter_url
+ * @property null|string $linkedin_url
+ * @property null|string $google_plus_url
+ * @property null|string $pinterest_url
+ * @property bool $is_active
+ * @property bool $is_featured
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property CompanySize $companySize
+ * @property Industry $industry
+ * @property OwnerShipType $ownerShipType
+ * @property null|User $user
+ * @property mixed $company_url
+ * @property Collection|Job[] $jobs
+ * @property null|int $jobs_count
  * @property null|FeaturedRecord $activeFeatured
  * @property null|FeaturedRecord $featured
- * @property mixed               $city_name
- * @property mixed               $country_name
- * @property mixed               $state_name
+ * @property mixed $city_name
+ * @property mixed $country_name
+ * @property mixed $state_name
  */
 class Company extends Model implements HasMedia
 {
     use HasFactory;
-    use LogsActivity;
-    use SoftDeletes;
-    use InteractsWithMedia;
+    use HasSettingsField;
     use HasSlug;
     use HasTaxonomy;
-    use HasSettingsField;
+    use InteractsWithMedia;
+    use LogsActivity;
+    use SoftDeletes;
 
     public const COMPANY_LOGIN_TYPE = 0;
     public const ISACTIVE = 1;
@@ -129,8 +128,7 @@ class Company extends Model implements HasMedia
     /**
      * Scope a query to only include verified companies.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeVerified($query)
@@ -141,8 +139,7 @@ class Company extends Model implements HasMedia
     /**
      * Scope a query to only include unverified companies.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeUnverified($query)
@@ -153,24 +150,21 @@ class Company extends Model implements HasMedia
     /**
      * Scope a query to only include active companies.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeActive($query)
     {
         return $query->where(function ($query) {
             $query->where('is_active', true)
-                ->orWhere('status', 'active')
-            ;
+                ->orWhere('status', 'active');
         });
     }
 
     /**
      * Scope a query to only include inactive companies.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeInactive($query)
@@ -181,9 +175,8 @@ class Company extends Model implements HasMedia
     /**
      * Scope a query to only include companies in a specific industry.
      *
-     * @param Builder $query
-     * @param int     $industryId
-     *
+     * @param  Builder  $query
+     * @param  int  $industryId
      * @return Builder
      */
     public function scopeInIndustry($query, $industryId)
@@ -194,9 +187,8 @@ class Company extends Model implements HasMedia
     /**
      * Scope a query to only include companies of a specific size.
      *
-     * @param Builder $query
-     * @param int     $sizeId
-     *
+     * @param  Builder  $query
+     * @param  int  $sizeId
      * @return Builder
      */
     public function scopeOfSize($query, $sizeId)
@@ -207,25 +199,22 @@ class Company extends Model implements HasMedia
     /**
      * Scope a query to only include companies in a specific location.
      *
-     * @param Builder $query
-     * @param string  $location
-     *
+     * @param  Builder  $query
+     * @param  string  $location
      * @return Builder
      */
     public function scopeInLocation($query, $location)
     {
         return $query->where('location', 'like', '%'.$location.'%')
             ->orWhere('location2', 'like', '%'.$location.'%')
-            ->orWhere('address', 'like', '%'.$location.'%')
-        ;
+            ->orWhere('address', 'like', '%'.$location.'%');
     }
 
     /**
      * Scope a query to search companies by name or description.
      *
-     * @param Builder $query
-     * @param string  $search
-     *
+     * @param  Builder  $query
+     * @param  string  $search
      * @return Builder
      */
     public function scopeSearch($query, $search)
@@ -233,16 +222,14 @@ class Company extends Model implements HasMedia
         return $query->where('name', 'like', '%'.$search.'%')
             ->orWhere('description', 'like', '%'.$search.'%')
             ->orWhere('short_description', 'like', '%'.$search.'%')
-            ->orWhere('details', 'like', '%'.$search.'%')
-        ;
+            ->orWhere('details', 'like', '%'.$search.'%');
     }
 
     /**
      * Scope a query to order companies by creation date.
      *
-     * @param Builder $query
-     * @param string  $direction
-     *
+     * @param  Builder  $query
+     * @param  string  $direction
      * @return Builder
      */
     public function scopeOrderByCreated($query, $direction = 'desc')
@@ -253,9 +240,8 @@ class Company extends Model implements HasMedia
     /**
      * Scope a query to order companies by founding date.
      *
-     * @param Builder $query
-     * @param string  $direction
-     *
+     * @param  Builder  $query
+     * @param  string  $direction
      * @return Builder
      */
     public function scopeOrderByFounded($query, $direction = 'desc')
@@ -266,10 +252,9 @@ class Company extends Model implements HasMedia
     /**
      * Scope a query to only include companies founded within a date range.
      *
-     * @param Builder        $query
-     * @param \Carbon\Carbon $start
-     * @param \Carbon\Carbon $end
-     *
+     * @param  Builder  $query
+     * @param  \Carbon\Carbon  $start
+     * @param  \Carbon\Carbon  $end
      * @return Builder
      */
     public function scopeFoundedBetween($query, $start, $end)
@@ -280,9 +265,8 @@ class Company extends Model implements HasMedia
     /**
      * Scope a query to only include companies with a specific status.
      *
-     * @param Builder $query
-     * @param string  $status
-     *
+     * @param  Builder  $query
+     * @param  string  $status
      * @return Builder
      */
     public function scopeWithStatus($query, $status)
@@ -293,8 +277,7 @@ class Company extends Model implements HasMedia
     /**
      * Scope a query to only include featured companies.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeFeatured($query)
@@ -305,8 +288,7 @@ class Company extends Model implements HasMedia
     /**
      * Scope a query to only include recent companies.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeRecent($query, int $days = 30)
@@ -353,8 +335,7 @@ class Company extends Model implements HasMedia
             ->groupBy('job_type_id')
             ->orderByRaw('COUNT(*) DESC')
             ->limit(1)
-            ->pluck('job_type_id')
-        ;
+            ->pluck('job_type_id');
 
         return $jobTypes->first();
     }
@@ -368,8 +349,7 @@ class Company extends Model implements HasMedia
             ->logOnly(['name', 'email', 'phone', 'website', 'is_active', 'is_featured', 'is_verified'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn (string $eventName) => "Company has been {$eventName}")
-        ;
+            ->setDescriptionForEvent(fn (string $eventName) => "Company has been {$eventName}");
     }
 
     /**
@@ -381,8 +361,7 @@ class Company extends Model implements HasMedia
             ->generateSlugsFrom('name')
             ->saveSlugsTo('slug')
             ->doNotGenerateSlugsOnUpdate()
-            ->slugsShouldBeNoLongerThan(255)
-        ;
+            ->slugsShouldBeNoLongerThan(255);
     }
 
     /**
@@ -427,8 +406,7 @@ class Company extends Model implements HasMedia
         return $this->morphOne(FeaturedRecord::class, 'owner')
             ->where('start_time', '<=', now())
             ->where('end_time', '>=', now())
-            ->where('is_active', true)
-        ;
+            ->where('is_active', true);
     }
 
     /**
@@ -482,9 +460,8 @@ class Company extends Model implements HasMedia
     /**
      * Scope a query to filter by industry.
      *
-     * @param Builder $query
-     * @param int     $industryId
-     *
+     * @param  Builder  $query
+     * @param  int  $industryId
      * @return Builder
      */
     public function scopeByIndustry($query, $industryId)
@@ -495,9 +472,8 @@ class Company extends Model implements HasMedia
     /**
      * Scope a query to filter by location.
      *
-     * @param Builder $query
-     * @param string  $location
-     *
+     * @param  Builder  $query
+     * @param  string  $location
      * @return Builder
      */
     public function scopeByLocation($query, $location)
@@ -506,17 +482,15 @@ class Company extends Model implements HasMedia
             $q->where('city_id', $location)
                 ->orWhere('state_id', $location)
                 ->orWhere('country_id', $location)
-                ->orWhere('address', 'like', "%{$location}%")
-            ;
+                ->orWhere('address', 'like', "%{$location}%");
         });
     }
 
     /**
      * Scope a query to filter by company size.
      *
-     * @param Builder $query
-     * @param int     $sizeId
-     *
+     * @param  Builder  $query
+     * @param  int  $sizeId
      * @return Builder
      */
     public function scopeBySize($query, $sizeId)
@@ -527,10 +501,9 @@ class Company extends Model implements HasMedia
     /**
      * Scope a query to filter by establishment year range.
      *
-     * @param Builder $query
-     * @param int     $startYear
-     * @param int     $endYear
-     *
+     * @param  Builder  $query
+     * @param  int  $startYear
+     * @param  int  $endYear
      * @return Builder
      */
     public function scopeEstablishedBetween($query, $startYear, $endYear)
@@ -541,8 +514,7 @@ class Company extends Model implements HasMedia
     /**
      * Scope a query to include only companies with jobs.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeWithJobs($query)
@@ -592,8 +564,7 @@ class Company extends Model implements HasMedia
         return $this->jobs()->where(function ($query) {
             $query->where('is_active', true)
                 ->orWhere('status', 'active')
-                ->orWhere('status', 1) // Job::STATUS_OPEN
-            ;
+                ->orWhere('status', 1); // Job::STATUS_OPEN
         })->count();
     }
 
@@ -604,13 +575,13 @@ class Company extends Model implements HasMedia
      */
     public function hasSocialLinks()
     {
-        return !empty($this->social_facebook)
-               || !empty($this->social_twitter)
-               || !empty($this->social_linkedin)
-               || !empty($this->social_instagram)
-               || !empty($this->facebook_url)
-               || !empty($this->twitter_url)
-               || !empty($this->linkedin_url);
+        return ! empty($this->social_facebook)
+               || ! empty($this->social_twitter)
+               || ! empty($this->social_linkedin)
+               || ! empty($this->social_instagram)
+               || ! empty($this->facebook_url)
+               || ! empty($this->twitter_url)
+               || ! empty($this->linkedin_url);
     }
 
     /**
@@ -620,7 +591,7 @@ class Company extends Model implements HasMedia
      */
     public function getCompanyAge()
     {
-        if (!$this->established_in && !$this->founded_year) {
+        if (! $this->established_in && ! $this->founded_year) {
             return null;
         }
 
@@ -692,23 +663,23 @@ class Company extends Model implements HasMedia
 
     /**
      * ELOQUENT HAS MANY DEEP INTEGRATION
-     * 
+     *
      * Package: staudenmeir/eloquent-has-many-deep v1.21
      * Source: https://github.com/staudenmeir/eloquent-has-many-deep
      * Reference: https://madewithlaravel.com/eloquent-has-many-deep
-     * 
+     *
      * Deep relationships for advanced company analytics and querying.
      */
 
     /**
      * Get all candidates who applied to company jobs.
-     * 
+     *
      * Path: Company -> Jobs -> JobApplications -> Users (Candidates)
-     * 
+     *
      * This replaces multiple queries with a single optimized relationship.
-     * 
+     *
      * Usage: $company->jobApplicants()->with('candidate')->get()
-     * 
+     *
      * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
      */
     public function jobApplicants()
@@ -719,25 +690,25 @@ class Company extends Model implements HasMedia
             [
                 'company_id',  // Company.id = Job.company_id
                 'job_id',      // Job.id = JobApplication.job_id
-                'candidate_id' // JobApplication.candidate_id = User.id
+                'candidate_id', // JobApplication.candidate_id = User.id
             ],
             [
                 'id',          // Company.id
                 'id',          // Job.id
-                'id'           // User.id
+                'id',           // User.id
             ]
         )->distinct();
     }
 
     /**
      * Get all skills required across company jobs.
-     * 
+     *
      * Path: Company -> Jobs -> JobSkills -> Skills
-     * 
+     *
      * Shows all skills the company is hiring for.
-     * 
+     *
      * Usage: $company->requiredSkills()->orderBy('name')->get()
-     * 
+     *
      * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
      */
     public function requiredSkills()
@@ -748,25 +719,25 @@ class Company extends Model implements HasMedia
             [
                 'company_id', // Company.id = Job.company_id
                 'job_id',     // Job.id = job_skill.job_id
-                'skill_id'    // job_skill.skill_id = Skill.id
+                'skill_id',    // job_skill.skill_id = Skill.id
             ],
             [
                 'id',         // Company.id
                 'id',         // Job.id
-                'id'          // Skill.id
+                'id',          // Skill.id
             ]
         )->distinct();
     }
 
     /**
      * Get companies in same industry and location.
-     * 
+     *
      * Path: Company -> Industry -> Companies (in same city)
-     * 
+     *
      * Find local competitors in the same industry.
-     * 
+     *
      * Usage: $company->localCompetitors()->active()->get()
-     * 
+     *
      * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
      */
     public function localCompetitors()
@@ -776,25 +747,25 @@ class Company extends Model implements HasMedia
             [\App\Models\Industry::class],
             [
                 'industry_id', // Company.industry_id = Industry.id
-                'id'          // Industry.id = Company.industry_id
+                'id',          // Industry.id = Company.industry_id
             ],
             [
                 'id',         // Company.id
-                'industry_id' // Industry.industry_id
+                'industry_id', // Industry.industry_id
             ]
         )->where('companies.city_id', $this->city_id)
-         ->where('companies.id', '!=', $this->id);
+            ->where('companies.id', '!=', $this->id);
     }
 
     /**
      * Get all regions where company has received applications.
-     * 
+     *
      * Path: Company -> Jobs -> JobApplications -> Users -> Cities
-     * 
+     *
      * Shows geographic reach of company's talent attraction.
-     * 
+     *
      * Usage: $company->applicantRegions()->get()
-     * 
+     *
      * @return \Staudenmeir\EloquentHasManyDeep\HasManyDeep
      */
     public function applicantRegions()
@@ -806,23 +777,23 @@ class Company extends Model implements HasMedia
                 'company_id',  // Company.id = Job.company_id
                 'job_id',      // Job.id = JobApplication.job_id
                 'candidate_id', // JobApplication.candidate_id = User.id
-                'city_id'      // User.city_id = City.id
+                'city_id',      // User.city_id = City.id
             ],
             [
                 'id',          // Company.id
                 'id',          // Job.id
                 'id',          // User.id
-                'id'           // City.id
+                'id',           // City.id
             ]
         )->distinct();
     }
 
     /**
      * Default settings for Company model.
-     * 
+     *
      * These settings provide company-specific configuration options
      * for branding, recruitment preferences, and operational settings.
-     * 
+     *
      * @var array
      */
     public $defaultSettings = [
@@ -862,12 +833,12 @@ class Company extends Model implements HasMedia
             'bulk_messaging' => false,
             'custom_application_forms' => false,
             'integration_ats' => false,
-        ]
+        ],
     ];
 
     /**
      * Validation rules for company settings data.
-     * 
+     *
      * @var array
      */
     public $settingsRules = [
@@ -875,7 +846,7 @@ class Company extends Model implements HasMedia
         'branding.secondary_color' => 'string|regex:/^#[0-9A-Fa-f]{6}$/',
         'branding.logo_style' => 'string|in:standard,minimal,modern,classic',
         'branding.brand_voice' => 'string|in:professional,casual,friendly,corporate',
-        
+
         'recruitment.auto_publish_jobs' => 'boolean',
         'recruitment.application_deadline_days' => 'integer|min:1|max:365',
         'recruitment.require_cover_letter' => 'boolean',
@@ -883,19 +854,19 @@ class Company extends Model implements HasMedia
         'recruitment.screening_questions_enabled' => 'boolean',
         'recruitment.interview_scheduling_enabled' => 'boolean',
         'recruitment.candidate_rating_system' => 'boolean',
-        
+
         'notifications.new_applications' => 'boolean',
         'notifications.application_status_updates' => 'boolean',
         'notifications.job_expiry_reminders' => 'boolean',
         'notifications.weekly_analytics' => 'boolean',
         'notifications.candidate_recommendations' => 'boolean',
-        
+
         'privacy.company_profile_public' => 'boolean',
         'privacy.show_employee_count' => 'boolean',
         'privacy.show_salary_ranges' => 'boolean',
         'privacy.allow_anonymous_reviews' => 'boolean',
         'privacy.data_retention_months' => 'integer|min:1|max:120',
-        
+
         'features.job_analytics' => 'boolean',
         'features.candidate_search' => 'boolean',
         'features.bulk_messaging' => 'boolean',

@@ -13,13 +13,13 @@ class DestroyCandidateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
 
         $candidate = $this->route('candidate');
 
-        if (!$candidate) {
+        if (! $candidate) {
             return false;
         }
 
@@ -89,14 +89,14 @@ class DestroyCandidateRequest extends FormRequest
         $validator->after(function ($validator) {
             $candidate = $this->route('candidate');
 
-            if (!$candidate) {
+            if (! $candidate) {
                 $validator->errors()->add('candidate', 'Candidate not found.');
 
                 return;
             }
 
             // Check for active applications if preserve_applications is false
-            if (!$this->preserve_applications) {
+            if (! $this->preserve_applications) {
                 $activeApplications = $candidate->jobApplications()->whereIn('status', ['pending', 'interviewing', 'shortlisted'])->count();
                 if ($activeApplications > 0) {
                     $validator->errors()->add('preserve_applications', "Cannot delete applications while {$activeApplications} are still active. Set preserve_applications to true.");
@@ -104,19 +104,19 @@ class DestroyCandidateRequest extends FormRequest
             }
 
             // Force delete requires admin role
-            if ($this->force_delete && !auth()->user()->hasRole('admin')) {
+            if ($this->force_delete && ! auth()->user()->hasRole('admin')) {
                 $validator->errors()->add('force_delete', 'Only administrators can perform force deletion.');
             }
 
             // Validate reason is required for force delete
-            if ($this->force_delete && !$this->filled('reason')) {
+            if ($this->force_delete && ! $this->filled('reason')) {
                 $validator->errors()->add('reason', 'Deletion reason is required for force deletion.');
             }
 
             // Check for dependencies that cannot be preserved
             if ($this->cleanup_data) {
                 $hasLinkedData = $this->checkLinkedData($candidate);
-                if ($hasLinkedData && !$this->force_delete) {
+                if ($hasLinkedData && ! $this->force_delete) {
                     $validator->errors()->add('force_delete', 'Candidate has linked data that requires force deletion or data preservation.');
                 }
             }
@@ -152,7 +152,7 @@ class DestroyCandidateRequest extends FormRequest
         ];
 
         foreach ($defaults as $key => $default) {
-            if (!$this->has($key)) {
+            if (! $this->has($key)) {
                 $this->merge([$key => $default]);
             }
         }
@@ -184,7 +184,7 @@ class DestroyCandidateRequest extends FormRequest
     /**
      * Check for linked data that might prevent deletion.
      *
-     * @param mixed $candidate
+     * @param  mixed  $candidate
      */
     private function checkLinkedData($candidate): bool
     {

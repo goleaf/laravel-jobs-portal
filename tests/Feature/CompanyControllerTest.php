@@ -25,7 +25,7 @@ class CompanyControllerTest extends TestCase
     }
 
     /** @test */
-    public function itCanDisplayIndexPage()
+    public function it_can_display_index_page()
     {
         $response = $this->actingAs($this->user)->get('/company');
 
@@ -34,7 +34,7 @@ class CompanyControllerTest extends TestCase
     }
 
     /** @test */
-    public function itCanCreateCompany()
+    public function it_can_create_company()
     {
         $data = Company::factory()->make()->toArray();
 
@@ -45,7 +45,7 @@ class CompanyControllerTest extends TestCase
     }
 
     /** @test */
-    public function itCanUpdateCompany()
+    public function it_can_update_company()
     {
         $company = Company::factory()->create();
         $data = Company::factory()->make()->toArray();
@@ -57,7 +57,7 @@ class CompanyControllerTest extends TestCase
     }
 
     /** @test */
-    public function itCanDeleteCompany()
+    public function it_can_delete_company()
     {
         $company = Company::factory()->create();
 

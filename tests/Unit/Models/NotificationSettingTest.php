@@ -16,7 +16,7 @@ class NotificationSettingTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function itCanBeCreated()
+    public function it_can_be_created()
     {
         $model = NotificationSetting::factory()->create();
 
@@ -27,9 +27,9 @@ class NotificationSettingTest extends TestCase
     }
 
     /** @test */
-    public function itHasFillableAttributes()
+    public function it_has_fillable_attributes()
     {
-        $model = new NotificationSetting();
+        $model = new NotificationSetting;
         $fillable = $model->getFillable();
 
         $this->assertIsArray($fillable);
@@ -37,9 +37,9 @@ class NotificationSettingTest extends TestCase
     }
 
     /** @test */
-    public function itHasProperCasts()
+    public function it_has_proper_casts()
     {
-        $model = new NotificationSetting();
+        $model = new NotificationSetting;
         $casts = $model->getCasts();
 
         $this->assertIsArray($casts);
@@ -47,7 +47,7 @@ class NotificationSettingTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeUpdated()
+    public function it_can_be_updated()
     {
         $model = NotificationSetting::factory()->create();
         $originalData = $model->toArray();
@@ -62,7 +62,7 @@ class NotificationSettingTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeDeleted()
+    public function it_can_be_deleted()
     {
         $model = NotificationSetting::factory()->create();
         $modelId = $model->id;

@@ -4,7 +4,7 @@ namespace App\Views;
 
 /**
  * Job List Template Model
- * 
+ *
  * Based on Habr article patterns for model-oriented templating
  * Handles collections of jobs with pagination and filtering
  */
@@ -28,12 +28,12 @@ class JobListTemplateModel extends BaseTemplateModel
      */
     public function pagination(): array
     {
-        if (!$this->showPagination) {
+        if (! $this->showPagination) {
             return [];
         }
 
         $totalPages = ceil($this->totalCount / $this->perPage);
-        
+
         return [
             'current_page' => $this->currentPage,
             'per_page' => $this->perPage,
@@ -84,7 +84,7 @@ class JobListTemplateModel extends BaseTemplateModel
         $featured = count($this->featuredJobs());
         $urgent = count($this->urgentJobs());
         $expired = count($this->jobsByStatus('expired'));
-        
+
         return [
             'total' => $this->totalCount,
             'showing' => count($this->jobs),
@@ -101,23 +101,23 @@ class JobListTemplateModel extends BaseTemplateModel
     public function filterSummary(): string
     {
         $parts = [];
-        
-        if (!empty($this->filters['category'])) {
-            $parts[] = 'Category: ' . $this->filters['category'];
+
+        if (! empty($this->filters['category'])) {
+            $parts[] = 'Category: '.$this->filters['category'];
         }
-        
-        if (!empty($this->filters['location'])) {
-            $parts[] = 'Location: ' . $this->filters['location'];
+
+        if (! empty($this->filters['location'])) {
+            $parts[] = 'Location: '.$this->filters['location'];
         }
-        
-        if (!empty($this->filters['salary_range'])) {
-            $parts[] = 'Salary: ' . $this->filters['salary_range'];
+
+        if (! empty($this->filters['salary_range'])) {
+            $parts[] = 'Salary: '.$this->filters['salary_range'];
         }
-        
-        if (!empty($this->filters['experience'])) {
-            $parts[] = 'Experience: ' . $this->filters['experience'];
+
+        if (! empty($this->filters['experience'])) {
+            $parts[] = 'Experience: '.$this->filters['experience'];
         }
-        
+
         return empty($parts) ? 'All jobs' : implode(' • ', $parts);
     }
 
@@ -126,10 +126,10 @@ class JobListTemplateModel extends BaseTemplateModel
      */
     public function viewTypeClass(): string
     {
-        return match($this->viewType) {
+        return match ($this->viewType) {
             'grid' => 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6',
             'table' => 'overflow-x-auto',
             default => 'space-y-4',
         };
     }
-} 
+}

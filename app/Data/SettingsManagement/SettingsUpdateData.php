@@ -2,15 +2,15 @@
 
 namespace App\Data\SettingsManagement;
 
-use LumoSolutions\Actionable\Traits\ArrayConvertible;
 use LumoSolutions\Actionable\Attributes\ArrayOf;
 use LumoSolutions\Actionable\Attributes\DateFormat;
 use LumoSolutions\Actionable\Attributes\FieldName;
 use LumoSolutions\Actionable\Attributes\Ignore;
+use LumoSolutions\Actionable\Traits\ArrayConvertible;
 
 /**
  * Settings Update Data Transfer Object
- * 
+ *
  * Specialized DTO for tracking settings updates with change history,
  * validation, and rollback capabilities.
  */
@@ -21,59 +21,47 @@ class SettingsUpdateData
     public function __construct(
         #[FieldName('model_type')]
         public string $modelType,
-        
         #[FieldName('model_id')]
         public int|string $modelId,
-        
         #[ArrayOf('mixed')]
         #[FieldName('new_settings')]
         public array $newSettings,
-        
         #[ArrayOf('mixed')]
         #[FieldName('previous_settings')]
         public ?array $previousSettings = null,
-        
         #[ArrayOf('string')]
         #[FieldName('changed_keys')]
         public ?array $changedKeys = null,
-        
         #[FieldName('update_strategy')]
         public string $updateStrategy = 'merge', // merge, replace, append, remove
-        
+
         #[FieldName('user_id')]
         public ?int $userId = null,
-        
         #[DateFormat('Y-m-d H:i:s')]
         #[FieldName('updated_at')]
         public ?\DateTime $updatedAt = null,
-        
         #[FieldName('update_reason')]
         public ?string $updateReason = null,
-        
         #[FieldName('source')]
         public string $source = 'api', // api, admin, system, migration
-        
+
         #[FieldName('validation_enabled')]
         public bool $validationEnabled = true,
-        
         #[FieldName('backup_enabled')]
         public bool $backupEnabled = true,
-        
         #[ArrayOf('string')]
         #[FieldName('affected_features')]
         public ?array $affectedFeatures = null,
-        
         #[ArrayOf('mixed')]
         #[FieldName('validation_context')]
         public ?array $validationContext = null,
-        
         #[Ignore]
         public ?array $changeAnalysis = null, // Internal change analysis
-        
+
         #[Ignore]
         public ?array $rollbackData = null, // For rollback operations
     ) {
-        $this->updatedAt = $this->updatedAt ?? new \DateTime();
+        $this->updatedAt = $this->updatedAt ?? new \DateTime;
         $this->analyzeChanges();
     }
 
@@ -86,7 +74,7 @@ class SettingsUpdateData
         array $currentSettings,
         array $newSettings,
         ?int $userId = null,
-        string $updateReason = null
+        ?string $updateReason = null
     ): self {
         $instance = new self(
             modelType: $modelType,
@@ -98,6 +86,7 @@ class SettingsUpdateData
         );
 
         $instance->detectChanges();
+
         return $instance;
     }
 
@@ -132,7 +121,7 @@ class SettingsUpdateData
         ?int $userId = null
     ): array {
         return array_map(
-            fn($id) => new self(
+            fn ($id) => new self(
                 modelType: $modelType,
                 modelId: $id,
                 newSettings: $newSettings,
@@ -149,19 +138,20 @@ class SettingsUpdateData
      */
     public function detectChanges(): void
     {
-        if (!$this->previousSettings) {
+        if (! $this->previousSettings) {
             $this->changedKeys = array_keys($this->flattenArray($this->newSettings));
+
             return;
         }
 
         $previousFlat = $this->flattenArray($this->previousSettings);
         $newFlat = $this->flattenArray($this->newSettings);
-        
+
         $this->changedKeys = [];
 
         // Find changed and new keys
         foreach ($newFlat as $key => $value) {
-            if (!array_key_exists($key, $previousFlat) || $previousFlat[$key] !== $value) {
+            if (! array_key_exists($key, $previousFlat) || $previousFlat[$key] !== $value) {
                 $this->changedKeys[] = $key;
             }
         }
@@ -169,7 +159,7 @@ class SettingsUpdateData
         // Find removed keys (when using replace strategy)
         if ($this->updateStrategy === 'replace') {
             foreach ($previousFlat as $key => $value) {
-                if (!array_key_exists($key, $newFlat)) {
+                if (! array_key_exists($key, $newFlat)) {
                     $this->changedKeys[] = $key;
                 }
             }
@@ -183,7 +173,7 @@ class SettingsUpdateData
      */
     public function analyzeChanges(): void
     {
-        if (!$this->changedKeys) {
+        if (! $this->changedKeys) {
             return;
         }
 
@@ -208,7 +198,7 @@ class SettingsUpdateData
             'notifications' => [],
             'workflow' => [],
             'analytics' => [],
-            'other' => []
+            'other' => [],
         ];
 
         foreach ($this->changedKeys as $key) {
@@ -224,7 +214,7 @@ class SettingsUpdateData
      */
     public function assessImpactLevel(): string
     {
-        if (!$this->changedKeys) {
+        if (! $this->changedKeys) {
             return 'none';
         }
 
@@ -232,7 +222,7 @@ class SettingsUpdateData
             'workflow.',
             'security.',
             'privacy.public_visibility',
-            'notifications.system_alerts'
+            'notifications.system_alerts',
         ];
 
         foreach ($this->changedKeys as $key) {
@@ -255,7 +245,7 @@ class SettingsUpdateData
             'system.',
             'cache.driver',
             'database.',
-            'queue.driver'
+            'queue.driver',
         ];
 
         foreach ($this->changedKeys as $key) {
@@ -278,7 +268,7 @@ class SettingsUpdateData
             'display.',
             'analytics.',
             'matching.',
-            'workflow.auto_'
+            'workflow.auto_',
         ];
 
         foreach ($this->changedKeys as $key) {
@@ -302,7 +292,7 @@ class SettingsUpdateData
             'security.',
             'access.',
             'permissions.',
-            'verification.'
+            'verification.',
         ];
 
         foreach ($this->changedKeys as $key) {
@@ -321,7 +311,7 @@ class SettingsUpdateData
      */
     public function getRollbackData(): array
     {
-        if (!$this->previousSettings) {
+        if (! $this->previousSettings) {
             return [];
         }
 
@@ -332,7 +322,7 @@ class SettingsUpdateData
             'rollback_keys' => $this->changedKeys,
             'original_update_time' => $this->updatedAt,
             'rollback_reason' => 'Manual rollback requested',
-            'user_id' => $this->userId
+            'user_id' => $this->userId,
         ];
 
         return $this->rollbackData;
@@ -343,7 +333,7 @@ class SettingsUpdateData
      */
     public function getChangeSummary(): string
     {
-        if (!$this->changedKeys) {
+        if (! $this->changedKeys) {
             return 'No changes detected';
         }
 
@@ -379,7 +369,7 @@ class SettingsUpdateData
             'privacy' => ['privacy.', 'visibility', 'anonymous', 'public'],
             'notifications' => ['notifications.', 'alerts', 'email', 'sms'],
             'workflow' => ['workflow.', 'auto_', 'approval', 'process'],
-            'analytics' => ['analytics.', 'tracking', 'metrics', 'score']
+            'analytics' => ['analytics.', 'tracking', 'metrics', 'score'],
         ];
 
         foreach ($categoryMapping as $category => $patterns) {
@@ -401,7 +391,7 @@ class SettingsUpdateData
         $flattened = [];
 
         foreach ($array as $key => $value) {
-            $newKey = $prefix === '' ? $key : $prefix . '.' . $key;
+            $newKey = $prefix === '' ? $key : $prefix.'.'.$key;
 
             if (is_array($value)) {
                 $flattened = array_merge($flattened, $this->flattenArray($value, $newKey));
@@ -420,7 +410,7 @@ class SettingsUpdateData
     {
         $data = $this->toArray();
         $data['version'] = $versionInfo;
-        
+
         return new self(
             $data['model_type'],
             $data['model_id'],
@@ -439,4 +429,4 @@ class SettingsUpdateData
             $versionInfo
         );
     }
-} 
+}

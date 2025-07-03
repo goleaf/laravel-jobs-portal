@@ -3,20 +3,19 @@
 namespace App\Http\Requests\Foundation\Traits;
 
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\File;
 
 /**
  * Multilingual Validation Trait
- * 
+ *
  * Provides multilingual validation support across all request types:
  * - Dynamic error message translation
  * - Locale-specific validation rules
  * - Fallback language support
  * - Translation key generation
  * - Smart contextual error messages
- * 
- * @package App\Http\Requests\Foundation\Traits
+ *
  * @version 1.0.0
+ *
  * @since 2024-12-28
  */
 trait MultilingualValidationTrait
@@ -26,7 +25,7 @@ trait MultilingualValidationTrait
      */
     protected array $supportedLocales = [
         'en' => 'English',
-        'lt' => 'Lithuanian', 
+        'lt' => 'Lithuanian',
         'de' => 'German',
         'fr' => 'French',
         'es' => 'Spanish',
@@ -58,7 +57,7 @@ trait MultilingualValidationTrait
 
         foreach ($multilingualFields as $field) {
             foreach ($supportedLocales as $localeCode) {
-                $fieldKey = $field . '_' . $localeCode;
+                $fieldKey = $field.'_'.$localeCode;
                 if (array_key_exists($fieldKey, $this->all())) {
                     $rules[$fieldKey] = $this->getFieldValidationRules($field, $localeCode);
                 }
@@ -74,7 +73,7 @@ trait MultilingualValidationTrait
     protected function getMultilingualValidationMessages(): array
     {
         $locale = app()->getLocale();
-        
+
         return [
             'required' => __('validation.required', [], $locale),
             'string' => __('validation.string', [], $locale),
@@ -92,7 +91,7 @@ trait MultilingualValidationTrait
     protected function getMultilingualValidationAttributes(): array
     {
         $locale = app()->getLocale();
-        
+
         return [
             'name' => __('validation.attributes.name', [], $locale),
             'title' => __('validation.attributes.title', [], $locale),
@@ -109,12 +108,12 @@ trait MultilingualValidationTrait
     protected function getCurrentLocale(): string
     {
         $locale = App::getLocale();
-        
+
         // Check if locale is supported
-        if (!array_key_exists($locale, $this->supportedLocales)) {
+        if (! array_key_exists($locale, $this->supportedLocales)) {
             return $this->fallbackLocale;
         }
-        
+
         return $locale;
     }
 
@@ -156,7 +155,7 @@ trait MultilingualValidationTrait
 
         foreach ($multilingualFields as $field) {
             foreach ($supportedLocales as $locale) {
-                $fieldKey = $field . '_' . $locale;
+                $fieldKey = $field.'_'.$locale;
                 if (array_key_exists($fieldKey, $this->all())) {
                     $rules[$fieldKey] = $this->getFieldValidationRules($field, $locale);
                 }
@@ -184,7 +183,7 @@ trait MultilingualValidationTrait
         return [
             'required',
             'string',
-            'regex:' . $pattern
+            'regex:'.$pattern,
         ];
     }
 
@@ -206,7 +205,7 @@ trait MultilingualValidationTrait
         return [
             'required',
             'date',
-            'date_format:' . $format
+            'date_format:'.$format,
         ];
     }
 
@@ -227,7 +226,7 @@ trait MultilingualValidationTrait
 
         $rules = [];
         if (isset($this->all()['currency'])) {
-            $rules['currency'] = ['required', 'string', 'in:' . implode(',', $allowedCurrencies)];
+            $rules['currency'] = ['required', 'string', 'in:'.implode(',', $allowedCurrencies)];
         }
 
         return $rules;
@@ -298,7 +297,7 @@ trait MultilingualValidationTrait
     protected function getDomainSpecificMessages(string $locale): array
     {
         $domain = $this->getValidationDomain();
-        
+
         return [
             'job_title.required' => __("validation.{$domain}.job_title_required", [], $locale),
             'company_name.required' => __("validation.{$domain}.company_name_required", [], $locale),
@@ -314,7 +313,7 @@ trait MultilingualValidationTrait
     protected function getContextualMessages(string $locale): array
     {
         $requestContext = $this->getRequestContext();
-        
+
         return [
             'name.required' => __("validation.contextual.{$requestContext}.name_required", [], $locale),
             'description.max' => __("validation.contextual.{$requestContext}.description_max", [], $locale),
@@ -327,7 +326,7 @@ trait MultilingualValidationTrait
     protected function getValidationDomain(): string
     {
         $class = get_class($this);
-        
+
         if (str_contains($class, 'MasterData')) {
             return 'master_data';
         } elseif (str_contains($class, 'BusinessLogic')) {
@@ -339,7 +338,7 @@ trait MultilingualValidationTrait
         } elseif (str_contains($class, 'Api')) {
             return 'api';
         }
-        
+
         return 'general';
     }
 
@@ -349,7 +348,7 @@ trait MultilingualValidationTrait
     protected function getRequestContext(): string
     {
         $class = get_class($this);
-        
+
         if (str_contains($class, 'Store') || str_contains($class, 'Create')) {
             return 'create';
         } elseif (str_contains($class, 'Update')) {
@@ -357,7 +356,7 @@ trait MultilingualValidationTrait
         } elseif (str_contains($class, 'Delete') || str_contains($class, 'Destroy')) {
             return 'delete';
         }
-        
+
         return 'general';
     }
 
@@ -368,30 +367,30 @@ trait MultilingualValidationTrait
     {
         $domain = $this->getValidationDomain();
         $context = $this->getRequestContext();
-        
+
         return "validation.{$domain}.{$context}.{$field}.{$rule}";
     }
 
     /**
      * Get translation with fallback
      */
-    protected function getTranslationWithFallback(string $key, array $replace = [], string $locale = null): string
+    protected function getTranslationWithFallback(string $key, array $replace = [], ?string $locale = null): string
     {
         $locale = $locale ?? $this->getCurrentLocale();
-        
+
         // Try specific locale
         $translation = __($key, $replace, $locale);
-        
+
         // Fallback to default locale if translation not found
         if ($translation === $key && $locale !== $this->fallbackLocale) {
             $translation = __($key, $replace, $this->fallbackLocale);
         }
-        
+
         // Final fallback to generic message
         if ($translation === $key) {
             return __('validation.general_error', $replace, $this->fallbackLocale);
         }
-        
+
         return $translation;
     }
-} 
+}

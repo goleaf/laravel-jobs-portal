@@ -16,27 +16,27 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Skill Model - Enhanced with Enhanced patterns.
  *
- * @property int                    $id
- * @property string                 $name
- * @property null|string            $description
- * @property null|string            $category
- * @property null|string            $level
- * @property bool                   $is_active
- * @property bool                   $is_default
- * @property bool                   $is_featured
- * @property bool                   $is_technical
- * @property null|int               $sort_order
- * @property null|Carbon            $created_at
- * @property null|Carbon            $updated_at
- * @property null|Carbon            $deleted_at
+ * @property int $id
+ * @property string $name
+ * @property null|string $description
+ * @property null|string $category
+ * @property null|string $level
+ * @property bool $is_active
+ * @property bool $is_default
+ * @property bool $is_featured
+ * @property bool $is_technical
+ * @property null|int $sort_order
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
  * @property Candidate[]|Collection $candidates
- * @property Collection|Job[]       $jobs
- * @property string                 $display_name
- * @property string                 $category_label
- * @property string                 $level_label
- * @property int                    $candidates_count
- * @property int                    $jobs_count
- * @property int                    $usage_count
+ * @property Collection|Job[] $jobs
+ * @property string $display_name
+ * @property string $category_label
+ * @property string $level_label
+ * @property int $candidates_count
+ * @property int $jobs_count
+ * @property int $usage_count
  *
  * Enhanced Enhanced Scopes:
  *
@@ -74,9 +74,9 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Skill extends Model
 {
     use HasFactory;
-    use SoftDeletes;
-    use LogsActivity;
     use HasSettingsField;
+    use LogsActivity;
+    use SoftDeletes;
 
     // =============================================
     // CONSTANTS
@@ -169,38 +169,38 @@ class Skill extends Model
         'display.featured_placement' => 'boolean',
         'display.color_scheme' => 'string|in:default,blue,green,red,purple,orange',
         'display.icon_display' => 'boolean',
-        
+
         'endorsement.enable_endorsements' => 'boolean',
         'endorsement.require_verification' => 'boolean',
         'endorsement.auto_approve_endorsements' => 'boolean',
         'endorsement.max_endorsements_per_user' => 'integer|min:1|max:20',
         'endorsement.endorsement_weight_system' => 'boolean',
         'endorsement.show_endorser_details' => 'boolean',
-        
+
         'filtering.enable_skill_search' => 'boolean',
         'filtering.group_by_category' => 'boolean',
         'filtering.show_related_skills' => 'boolean',
         'filtering.min_endorsements_to_show' => 'integer|min:0|max:100',
         'filtering.hide_inactive_skills' => 'boolean',
         'filtering.sort_by_popularity' => 'boolean',
-        
+
         'analytics.track_skill_views' => 'boolean',
         'analytics.track_endorsements' => 'boolean',
         'analytics.track_job_matches' => 'boolean',
         'analytics.popularity_metrics' => 'boolean',
         'analytics.trend_analysis' => 'boolean',
-        
+
         'matching.enable_skill_matching' => 'boolean',
         'matching.fuzzy_matching' => 'boolean',
         'matching.synonym_matching' => 'boolean',
         'matching.weight_by_level' => 'boolean',
         'matching.boost_verified_skills' => 'boolean',
-        
+
         'notifications.new_endorsement' => 'boolean',
         'notifications.skill_trending' => 'boolean',
         'notifications.skill_in_demand' => 'boolean',
         'notifications.related_opportunities' => 'boolean',
-        
+
         'privacy.public_endorsements' => 'boolean',
         'privacy.show_skill_level' => 'boolean',
         'privacy.hide_from_search' => 'boolean',
@@ -268,8 +268,7 @@ class Skill extends Model
                 'sort_order',
             ])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -303,8 +302,7 @@ class Skill extends Model
     {
         return $this->belongsToMany(Candidate::class, 'candidate_skills')
             ->withPivot(['level', 'years_of_experience'])
-            ->withTimestamps()
-        ;
+            ->withTimestamps();
     }
 
     /**
@@ -314,8 +312,7 @@ class Skill extends Model
     {
         return $this->belongsToMany(Job::class, 'job_skills')
             ->withPivot(['level', 'is_required'])
-            ->withTimestamps()
-        ;
+            ->withTimestamps();
     }
 
     // =============================================
@@ -325,7 +322,7 @@ class Skill extends Model
     /**
      * Scope a query to only include active skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -335,7 +332,7 @@ class Skill extends Model
     /**
      * Scope a query to only include inactive skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -345,7 +342,7 @@ class Skill extends Model
     /**
      * Scope a query to only include default skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeDefault($query)
     {
@@ -355,7 +352,7 @@ class Skill extends Model
     /**
      * Scope a query to only include custom skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeCustom($query)
     {
@@ -365,7 +362,7 @@ class Skill extends Model
     /**
      * Scope a query to only include featured skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFeatured($query)
     {
@@ -375,7 +372,7 @@ class Skill extends Model
     /**
      * Scope a query to only include non-featured skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNonFeatured($query)
     {
@@ -385,7 +382,7 @@ class Skill extends Model
     /**
      * Scope a query to only include technical skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeTechnical($query)
     {
@@ -395,7 +392,7 @@ class Skill extends Model
     /**
      * Scope a query to only include non-technical skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNonTechnical($query)
     {
@@ -409,7 +406,7 @@ class Skill extends Model
     /**
      * Scope for skills by category.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByCategory($query, string $category)
     {
@@ -419,7 +416,7 @@ class Skill extends Model
     /**
      * Scope for skills by level.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByLevel($query, string $level)
     {
@@ -429,22 +426,21 @@ class Skill extends Model
     /**
      * Scope for searching skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
             $q->where('name', 'like', "%{$term}%")
                 ->orWhere('description', 'like', "%{$term}%")
-                ->orWhere('category', 'like', "%{$term}%")
-            ;
+                ->orWhere('category', 'like', "%{$term}%");
         });
     }
 
     /**
      * Scope for recent skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -454,7 +450,7 @@ class Skill extends Model
     /**
      * Scope for old skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -464,19 +460,18 @@ class Skill extends Model
     /**
      * Scope for popular skills (most used).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopular($query)
     {
         return $query->withCount(['candidates', 'jobs'])
-            ->orderByRaw('(candidates_count + jobs_count) DESC')
-        ;
+            ->orderByRaw('(candidates_count + jobs_count) DESC');
     }
 
     /**
      * Scope for alphabetical ordering.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
@@ -486,13 +481,12 @@ class Skill extends Model
     /**
      * Scope for ordering by sort order.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeBySortOrder($query)
     {
         return $query->orderBy('sort_order', 'asc')
-            ->orderBy('name', 'asc')
-        ;
+            ->orderBy('name', 'asc');
     }
 
     // =============================================
@@ -502,7 +496,7 @@ class Skill extends Model
     /**
      * Scope for skills with candidates.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithCandidates($query)
     {
@@ -512,7 +506,7 @@ class Skill extends Model
     /**
      * Scope for skills with jobs.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithJobs($query)
     {
@@ -522,7 +516,7 @@ class Skill extends Model
     /**
      * Scope for trending skills (recently added to jobs).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeTrending($query)
     {
@@ -536,14 +530,13 @@ class Skill extends Model
     /**
      * Scope for in-demand skills (high job count).
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInDemand($query)
     {
         return $query->withCount('jobs')
             ->having('jobs_count', '>', 5)
-            ->orderBy('jobs_count', 'desc')
-        ;
+            ->orderBy('jobs_count', 'desc');
     }
 
     // =============================================
@@ -553,7 +546,7 @@ class Skill extends Model
     /**
      * Scope for programming skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeProgramming($query)
     {
@@ -563,7 +556,7 @@ class Skill extends Model
     /**
      * Scope for design skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeDesign($query)
     {
@@ -573,7 +566,7 @@ class Skill extends Model
     /**
      * Scope for management skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeManagement($query)
     {
@@ -583,7 +576,7 @@ class Skill extends Model
     /**
      * Scope for communication skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeCommunication($query)
     {
@@ -597,7 +590,7 @@ class Skill extends Model
     /**
      * Scope for beginner level skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeBeginner($query)
     {
@@ -607,7 +600,7 @@ class Skill extends Model
     /**
      * Scope for intermediate level skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeIntermediate($query)
     {
@@ -617,7 +610,7 @@ class Skill extends Model
     /**
      * Scope for advanced level skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAdvanced($query)
     {
@@ -627,7 +620,7 @@ class Skill extends Model
     /**
      * Scope for expert level skills.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeExpert($query)
     {
@@ -772,8 +765,7 @@ class Skill extends Model
     {
         $recentJobsCount = $this->jobs()
             ->where('created_at', '>=', now()->subDays(30))
-            ->count()
-        ;
+            ->count();
 
         return $recentJobsCount > 2;
     }

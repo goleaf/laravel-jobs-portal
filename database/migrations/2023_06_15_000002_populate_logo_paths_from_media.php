@@ -7,22 +7,23 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up()
     {
         // Check if companies table exists and has required columns
-        if (!Schema::hasTable('companies')) {
+        if (! Schema::hasTable('companies')) {
             return;
         }
 
-        if (!Schema::hasColumn('companies', 'deleted_at')) {
+        if (! Schema::hasColumn('companies', 'deleted_at')) {
             return;
         }
 
-        if (!Schema::hasColumn('companies', 'logo_path')) {
+        if (! Schema::hasColumn('companies', 'logo_path')) {
             return;
         }
 
@@ -30,17 +31,16 @@ return new class extends Migration {
             $companies = Company::all();
 
             foreach ($companies as $company) {
-                if (!$company->user) {
+                if (! $company->user) {
                     continue;
                 }
 
                 $media = Media::where('model_type', User::class)
                     ->where('model_id', $company->user->id)
                     ->where('collection_name', User::PROFILE)
-                    ->first()
-                ;
+                    ->first();
 
-                if (!$media) {
+                if (! $media) {
                     continue;
                 }
 

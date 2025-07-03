@@ -16,7 +16,7 @@ class JobNotification extends Mailable
     /**
      * JobNotification constructor.
      *
-     * @param mixed $data
+     * @param  mixed  $data
      */
     public function __construct($data)
     {
@@ -29,7 +29,6 @@ class JobNotification extends Mailable
     public function build(): self
     {
         return $this->from(config('mail.from.address'))
-            ->subject('New Job Notification')->markdown('emails.jobs.notification')
-        ;
+            ->subject('New Job Notification')->markdown('emails.jobs.notification');
     }
 }

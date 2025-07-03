@@ -229,7 +229,7 @@ class JobTypeSeeder extends Seeder
             // Check if job type already exists
             $existingJobType = JobType::where('slug', $jobTypeData['slug'])->first();
 
-            if (!$existingJobType) {
+            if (! $existingJobType) {
                 JobType::create($jobTypeData);
 
                 $this->command->info("Created job type: {$jobTypeData['name']}");

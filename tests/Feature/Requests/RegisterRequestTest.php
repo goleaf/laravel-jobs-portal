@@ -30,17 +30,17 @@ class RegisterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAuthorizationReturnsTrue()
+    public function test_authorization_returns_true()
     {
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
 
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function testValidationRulesAreDefined()
+    public function test_validation_rules_are_defined()
     {
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
         $rules = $request->rules();
 
         $this->assertIsArray($rules);
@@ -48,9 +48,9 @@ class RegisterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationMessagesAreDefined()
+    public function test_validation_messages_are_defined()
     {
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
 
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
@@ -61,9 +61,9 @@ class RegisterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationAttributesAreDefined()
+    public function test_validation_attributes_are_defined()
     {
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
 
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
@@ -74,9 +74,9 @@ class RegisterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testFirstNameValidation()
+    public function test_first_name_validation()
     {
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('first_name', $rules);
@@ -87,9 +87,9 @@ class RegisterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testRequiredValidation()
+    public function test_required_validation()
     {
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('required', $rules);
@@ -100,9 +100,9 @@ class RegisterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testStringValidation()
+    public function test_string_validation()
     {
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('string', $rules);
@@ -113,9 +113,9 @@ class RegisterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testLastNameValidation()
+    public function test_last_name_validation()
     {
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('last_name', $rules);
@@ -126,9 +126,9 @@ class RegisterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testEmailValidation()
+    public function test_email_validation()
     {
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('email', $rules);
@@ -139,9 +139,9 @@ class RegisterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testPasswordValidation()
+    public function test_password_validation()
     {
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('password', $rules);
@@ -152,9 +152,9 @@ class RegisterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testConfirmedValidation()
+    public function test_confirmed_validation()
     {
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('confirmed', $rules);
@@ -165,9 +165,9 @@ class RegisterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSecurityAuthenticationPasswordMinLengthValidation()
+    public function test_security_authentication_password_min_length_validation()
     {
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('security.authentication.password_min_length', $rules);
@@ -178,9 +178,9 @@ class RegisterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testPhoneValidation()
+    public function test_phone_validation()
     {
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('phone', $rules);
@@ -191,9 +191,9 @@ class RegisterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testNullableValidation()
+    public function test_nullable_validation()
     {
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('nullable', $rules);
@@ -204,9 +204,9 @@ class RegisterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testTermsValidation()
+    public function test_terms_validation()
     {
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('terms', $rules);
@@ -217,9 +217,9 @@ class RegisterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAcceptedValidation()
+    public function test_accepted_validation()
     {
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('accepted', $rules);
@@ -230,7 +230,7 @@ class RegisterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidDataPassesValidation()
+    public function test_valid_data_passes_validation()
     {
         $validData = [
             'first_name' => 'Test Value',
@@ -247,18 +247,18 @@ class RegisterRequestTest extends TestCase
             'accepted' => 'Test Value',
         ];
 
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
         $validator = validator($validData, $request->rules());
 
         $this->assertFalse($validator->fails());
     }
 
     /** @test */
-    public function testRequestHandlesEmptyDataCorrectly()
+    public function test_request_handles_empty_data_correctly()
     {
         $emptyData = [];
 
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
         $validator = validator($emptyData, $request->rules());
 
         // Should handle empty data according to rules
@@ -266,7 +266,7 @@ class RegisterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSecurityValidationPreventsXss()
+    public function test_security_validation_prevents_xss()
     {
         $maliciousData = [
             'name' => '<script>alert("xss")</script>',
@@ -274,7 +274,7 @@ class RegisterRequestTest extends TestCase
             'content' => '<img src=x onerror=alert("xss")>',
         ];
 
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
         $validator = validator($maliciousData, $request->rules());
 
         // XSS data should either fail validation or be properly sanitized
@@ -289,7 +289,7 @@ class RegisterRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSqlInjectionPrevention()
+    public function test_sql_injection_prevention()
     {
         $sqlInjectionData = [
             'name' => "'; DROP TABLE users; --",
@@ -297,7 +297,7 @@ class RegisterRequestTest extends TestCase
             'filter' => 'UNION SELECT * FROM passwords',
         ];
 
-        $request = new RegisterRequest();
+        $request = new RegisterRequest;
         $validator = validator($sqlInjectionData, $request->rules());
 
         // SQL injection patterns should be handled safely

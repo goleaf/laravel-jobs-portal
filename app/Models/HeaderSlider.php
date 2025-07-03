@@ -17,35 +17,35 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * HeaderSlider Model - Enhanced with Enhanced patterns.
  *
- * @property int                $id
- * @property null|string        $title
- * @property null|string        $sub_title
- * @property null|string        $description
- * @property null|string        $button_text
- * @property null|string        $button_url
- * @property null|string        $image_url
- * @property bool               $is_active
- * @property bool               $is_featured
- * @property int                $sort_order
- * @property null|string        $target
- * @property null|string        $css_class
- * @property null|array         $metadata
- * @property null|Carbon        $published_at
- * @property null|Carbon        $expires_at
- * @property null|Carbon        $created_at
- * @property null|Carbon        $updated_at
- * @property null|Carbon        $deleted_at
- * @property string             $header_slider_url
- * @property string             $display_title
- * @property string             $display_description
- * @property bool               $has_button
- * @property bool               $has_image
- * @property bool               $is_expired
- * @property bool               $is_published
- * @property bool               $is_recent
- * @property string             $status_label
+ * @property int $id
+ * @property null|string $title
+ * @property null|string $sub_title
+ * @property null|string $description
+ * @property null|string $button_text
+ * @property null|string $button_url
+ * @property null|string $image_url
+ * @property bool $is_active
+ * @property bool $is_featured
+ * @property int $sort_order
+ * @property null|string $target
+ * @property null|string $css_class
+ * @property null|array $metadata
+ * @property null|Carbon $published_at
+ * @property null|Carbon $expires_at
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
+ * @property string $header_slider_url
+ * @property string $display_title
+ * @property string $display_description
+ * @property bool $has_button
+ * @property bool $has_image
+ * @property bool $is_expired
+ * @property bool $is_published
+ * @property bool $is_recent
+ * @property string $status_label
  * @property Collection|Media[] $media
- * @property null|int           $media_count
+ * @property null|int $media_count
  *
  * Enhanced Enhanced Scopes:
  *
@@ -181,8 +181,7 @@ class HeaderSlider extends Model implements HasMedia
             ->logOnly(['title', 'description', 'is_active', 'is_featured', 'sort_order'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn (string $eventName) => "Header slider has been {$eventName}")
-        ;
+            ->setDescriptionForEvent(fn (string $eventName) => "Header slider has been {$eventName}");
     }
 
     // =============================================
@@ -228,8 +227,7 @@ class HeaderSlider extends Model implements HasMedia
     {
         return $query->where(function ($q) {
             $q->whereNull('published_at')
-                ->orWhere('published_at', '<=', now())
-            ;
+                ->orWhere('published_at', '<=', now());
         });
     }
 
@@ -248,8 +246,7 @@ class HeaderSlider extends Model implements HasMedia
     {
         return $query->where(function ($q) {
             $q->whereNull('expires_at')
-                ->orWhere('expires_at', '>=', now())
-            ;
+                ->orWhere('expires_at', '>=', now());
         });
     }
 
@@ -259,8 +256,7 @@ class HeaderSlider extends Model implements HasMedia
     public function scopeExpired(Builder $query): Builder
     {
         return $query->whereNotNull('expires_at')
-            ->where('expires_at', '<', now())
-        ;
+            ->where('expires_at', '<', now());
     }
 
     // =============================================
@@ -308,8 +304,7 @@ class HeaderSlider extends Model implements HasMedia
     public function scopeThisMonth(Builder $query): Builder
     {
         return $query->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
-        ;
+            ->whereYear('created_at', now()->year);
     }
 
     // =============================================
@@ -324,8 +319,7 @@ class HeaderSlider extends Model implements HasMedia
         return $query->where(function ($q) {
             $q->whereNotNull('image_url')
                 ->where('image_url', '!=', '')
-                ->orWhereHas('media')
-            ;
+                ->orWhereHas('media');
         });
     }
 
@@ -336,8 +330,7 @@ class HeaderSlider extends Model implements HasMedia
     {
         return $query->where(function ($q) {
             $q->whereNull('image_url')
-                ->orWhere('image_url', '')
-            ;
+                ->orWhere('image_url', '');
         })->whereDoesntHave('media');
     }
 
@@ -349,8 +342,7 @@ class HeaderSlider extends Model implements HasMedia
         return $query->whereNotNull('button_text')
             ->where('button_text', '!=', '')
             ->whereNotNull('button_url')
-            ->where('button_url', '!=', '')
-        ;
+            ->where('button_url', '!=', '');
     }
 
     /**
@@ -362,8 +354,7 @@ class HeaderSlider extends Model implements HasMedia
             $q->whereNull('button_text')
                 ->orWhere('button_text', '')
                 ->orWhereNull('button_url')
-                ->orWhere('button_url', '')
-            ;
+                ->orWhere('button_url', '');
         });
     }
 
@@ -373,8 +364,7 @@ class HeaderSlider extends Model implements HasMedia
     public function scopeWithSubtitles(Builder $query): Builder
     {
         return $query->whereNotNull('sub_title')
-            ->where('sub_title', '!=', '')
-        ;
+            ->where('sub_title', '!=', '');
     }
 
     /**
@@ -384,8 +374,7 @@ class HeaderSlider extends Model implements HasMedia
     {
         return $query->where(function ($q) {
             $q->whereNull('sub_title')
-                ->orWhere('sub_title', '')
-            ;
+                ->orWhere('sub_title', '');
         });
     }
 
@@ -410,8 +399,7 @@ class HeaderSlider extends Model implements HasMedia
             $q->where('title', 'like', "%{$term}%")
                 ->orWhere('sub_title', 'like', "%{$term}%")
                 ->orWhere('description', 'like', "%{$term}%")
-                ->orWhere('button_text', 'like', "%{$term}%")
-            ;
+                ->orWhere('button_text', 'like', "%{$term}%");
         });
     }
 
@@ -441,8 +429,7 @@ class HeaderSlider extends Model implements HasMedia
     public function scopeOrdered(Builder $query): Builder
     {
         return $query->orderBy('sort_order', 'asc')
-            ->orderBy('created_at', 'desc')
-        ;
+            ->orderBy('created_at', 'desc');
     }
 
     /**
@@ -452,8 +439,7 @@ class HeaderSlider extends Model implements HasMedia
     {
         return $query->orderBy('is_active', 'desc')
             ->orderBy('sort_order', 'asc')
-            ->orderBy('created_at', 'desc')
-        ;
+            ->orderBy('created_at', 'desc');
     }
 
     /**
@@ -462,8 +448,7 @@ class HeaderSlider extends Model implements HasMedia
     public function scopePriority(Builder $query): Builder
     {
         return $query->orderBy('is_featured', 'desc')
-            ->orderBy('sort_order', 'asc')
-        ;
+            ->orderBy('sort_order', 'asc');
     }
 
     /**
@@ -514,7 +499,7 @@ class HeaderSlider extends Model implements HasMedia
         }
 
         // Fallback to image_url field
-        if (!empty($this->image_url)) {
+        if (! empty($this->image_url)) {
             return $this->image_url;
         }
 
@@ -543,7 +528,7 @@ class HeaderSlider extends Model implements HasMedia
      */
     public function getHasButtonAttribute(): bool
     {
-        return !empty($this->button_text) && !empty($this->button_url);
+        return ! empty($this->button_text) && ! empty($this->button_url);
     }
 
     /**
@@ -551,7 +536,7 @@ class HeaderSlider extends Model implements HasMedia
      */
     public function getHasImageAttribute(): bool
     {
-        return !empty($this->image_url) || $this->hasMedia();
+        return ! empty($this->image_url) || $this->hasMedia();
     }
 
     /**
@@ -567,7 +552,7 @@ class HeaderSlider extends Model implements HasMedia
      */
     public function getIsPublishedAttribute(): bool
     {
-        return !$this->published_at || $this->published_at->isPast();
+        return ! $this->published_at || $this->published_at->isPast();
     }
 
     /**
@@ -583,7 +568,7 @@ class HeaderSlider extends Model implements HasMedia
      */
     public function getStatusLabelAttribute(): string
     {
-        if (!$this->is_active) {
+        if (! $this->is_active) {
             return 'Inactive';
         }
 
@@ -591,7 +576,7 @@ class HeaderSlider extends Model implements HasMedia
             return 'Expired';
         }
 
-        if (!$this->is_published) {
+        if (! $this->is_published) {
             return 'Scheduled';
         }
 
@@ -625,7 +610,7 @@ class HeaderSlider extends Model implements HasMedia
     {
         return $this->is_active
                && $this->is_published
-               && !$this->is_expired;
+               && ! $this->is_expired;
     }
 
     /**
@@ -707,7 +692,7 @@ class HeaderSlider extends Model implements HasMedia
         parent::boot();
 
         static::creating(function ($model) {
-            if (!$model->sort_order) {
+            if (! $model->sort_order) {
                 $model->sort_order = static::getNextSortOrder();
             }
         });

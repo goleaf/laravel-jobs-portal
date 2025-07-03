@@ -150,7 +150,7 @@ class SecurityComplianceService
 
         // Remove resources user doesn't have read access to
         $noReadAccessIndices = $data->filter(function ($resource, $index) use ($userPermissions) {
-            return !$this->hasReadPermission($resource, $userPermissions);
+            return ! $this->hasReadPermission($resource, $userPermissions);
         })->keys();
         $data->forget($noReadAccessIndices->toArray());
         $accessLog['read_access_denials'] = count($noReadAccessIndices);
@@ -200,7 +200,7 @@ class SecurityComplianceService
 
         // Remove unencrypted sensitive data in production
         $unencryptedSensitiveIndices = $data->filter(function ($item) {
-            return ($item['is_sensitive'] ?? false) && !($item['is_encrypted'] ?? false);
+            return ($item['is_sensitive'] ?? false) && ! ($item['is_encrypted'] ?? false);
         })->keys();
         $data->forget($unencryptedSensitiveIndices->toArray());
         $encryptionLog['unencrypted_sensitive_removed'] = count($unencryptedSensitiveIndices);
@@ -266,8 +266,8 @@ class SecurityComplianceService
             $userId = $record['user_id'] ?? null;
             $dataType = $record['data_type'] ?? 'unknown';
 
-            return !isset($consentSettings[$userId][$dataType])
-                   || !$consentSettings[$userId][$dataType];
+            return ! isset($consentSettings[$userId][$dataType])
+                   || ! $consentSettings[$userId][$dataType];
         })->keys()->toArray();
     }
 

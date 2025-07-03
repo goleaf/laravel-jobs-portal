@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
-use JustBetter\UniqueValues\Support\UniqueValue;
-use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
+use JustBetter\UniqueValues\Support\UniqueValue;
 
 /**
  * Job Portal Unique Value Service
- * 
+ *
  * Handles generation of unique identifiers for various job portal entities
  * using the Laravel Unique Values package with concurrency support
  */
@@ -21,12 +21,13 @@ class UniqueValueService
     {
         $prefix = $companyPrefix ? strtoupper(substr($companyPrefix, 0, 3)) : 'JOB';
         $year = Carbon::now()->format('Y');
-        
+
         return UniqueValue::make()
             ->scope('job-references')
             ->attempts(10)
             ->generator(function (int $attempt) use ($prefix, $year): string {
                 $baseNumber = str_pad((string) (1000 + $attempt), 4, '0', STR_PAD_LEFT);
+
                 return "{$prefix}-{$year}-{$baseNumber}";
             })
             ->generate();
@@ -44,6 +45,7 @@ class UniqueValueService
             ->generator(function (int $attempt) use ($jobId, $candidateId): string {
                 $timestamp = Carbon::now()->format('ymd');
                 $suffix = $attempt > 0 ? "-{$attempt}" : '';
+
                 return "APP-{$timestamp}-{$jobId}-{$candidateId}{$suffix}";
             })
             ->generate();
@@ -56,10 +58,10 @@ class UniqueValueService
     {
         $baseSlug = Str::slug($companyName);
         $subject = $companyId ? "company-{$companyId}" : null;
-        
+
         return UniqueValue::make()
             ->scope('company-slugs')
-            ->when($subject, fn($builder) => $builder->subject($subject))
+            ->when($subject, fn ($builder) => $builder->subject($subject))
             ->attempts(20)
             ->generator(function (int $attempt) use ($baseSlug): string {
                 return $attempt === 0 ? $baseSlug : "{$baseSlug}-{$attempt}";
@@ -77,7 +79,7 @@ class UniqueValueService
             'admin' => 'ADM',
             default => 'CAN',
         };
-        
+
         return UniqueValue::make()
             ->scope("user-references-{$userType}")
             ->attempts(15)
@@ -85,6 +87,7 @@ class UniqueValueService
                 $timestamp = Carbon::now()->format('ymd');
                 $random = strtoupper(Str::random(3));
                 $counter = str_pad((string) $attempt, 3, '0', STR_PAD_LEFT);
+
                 return "{$prefix}-{$timestamp}-{$random}-{$counter}";
             })
             ->generate();
@@ -102,6 +105,7 @@ class UniqueValueService
                 $year = Carbon::now()->format('Y');
                 $month = Carbon::now()->format('m');
                 $counter = str_pad((string) (1000 + $attempt), 4, '0', STR_PAD_LEFT);
+
                 return "INV-{$year}{$month}-{$companyId}-{$counter}";
             })
             ->generate();
@@ -114,7 +118,7 @@ class UniqueValueService
     {
         $extension = pathinfo($originalName, PATHINFO_EXTENSION);
         $baseName = Str::slug(pathinfo($originalName, PATHINFO_FILENAME));
-        
+
         return UniqueValue::make()
             ->scope('resume-filenames')
             ->subject("candidate-{$candidateId}")
@@ -122,6 +126,7 @@ class UniqueValueService
             ->generator(function (int $attempt) use ($candidateId, $baseName, $extension): string {
                 $timestamp = Carbon::now()->format('YmdHis');
                 $suffix = $attempt > 0 ? "-{$attempt}" : '';
+
                 return "resume-{$candidateId}-{$baseName}-{$timestamp}{$suffix}.{$extension}";
             })
             ->generate();
@@ -133,7 +138,7 @@ class UniqueValueService
     public function generateJobSlug(string $jobTitle, int $companyId): string
     {
         $baseSlug = Str::slug($jobTitle);
-        
+
         return UniqueValue::make()
             ->scope('job-slugs')
             ->attempts(15)
@@ -141,7 +146,7 @@ class UniqueValueService
                 if ($attempt === 0) {
                     return $baseSlug;
                 }
-                
+
                 return "{$baseSlug}-{$companyId}-{$attempt}";
             })
             ->generate();
@@ -153,7 +158,7 @@ class UniqueValueService
     public function generateSubscriptionCode(string $planType): string
     {
         $prefix = strtoupper(substr($planType, 0, 3));
-        
+
         return UniqueValue::make()
             ->scope('subscription-codes')
             ->attempts(10)
@@ -162,6 +167,7 @@ class UniqueValueService
                 $month = Carbon::now()->format('m');
                 $random = strtoupper(Str::random(4));
                 $counter = str_pad((string) $attempt, 3, '0', STR_PAD_LEFT);
+
                 return "{$prefix}-{$year}{$month}-{$random}-{$counter}";
             })
             ->generate();
@@ -181,6 +187,7 @@ class UniqueValueService
                 $timestamp = Carbon::now()->format('ymdH');
                 $random = Str::random(32);
                 $suffix = $attempt > 0 ? $attempt : '';
+
                 return "{$prefix}_{$timestamp}_{$companyId}_{$random}{$suffix}";
             })
             ->generate();
@@ -200,6 +207,7 @@ class UniqueValueService
                 $timestamp = Carbon::now()->format('ymdHis');
                 $random = Str::random(16);
                 $suffix = $attempt > 0 ? "-{$attempt}" : '';
+
                 return "{$prefix}-{$timestamp}-{$userId}-{$random}{$suffix}";
             })
             ->generate();
@@ -218,6 +226,7 @@ class UniqueValueService
                 $planCode = strtoupper(substr($planType, 0, 3));
                 $timestamp = Carbon::now()->format('ymdHi');
                 $counter = str_pad((string) $attempt, 3, '0', STR_PAD_LEFT);
+
                 return "{$prefix}-{$planCode}-{$timestamp}-{$companyId}-{$counter}";
             })
             ->generate();
@@ -236,6 +245,7 @@ class UniqueValueService
                 $date = Carbon::now()->format('md');
                 $random = strtoupper(Str::random(6));
                 $suffix = $attempt > 0 ? "-{$attempt}" : '';
+
                 return "INT-{$date}-{$applicationId}-{$random}{$suffix}";
             })
             ->generate();
@@ -250,11 +260,11 @@ class UniqueValueService
             ->scope($scope)
             ->attempts($attempts)
             ->generator($generator);
-            
+
         if ($subject) {
             $builder->subject($subject);
         }
-        
+
         return $builder->generate();
     }
-} 
+}

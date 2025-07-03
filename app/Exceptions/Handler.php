@@ -36,8 +36,7 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @throws \Throwable
@@ -66,7 +65,7 @@ class Handler extends ExceptionHandler
             $message = $validator->errors()->first();
             $code = \Illuminate\Http\Response::HTTP_UNPROCESSABLE_ENTITY;
 
-            if (!$request->expectsJson() and !$request->isXmlHttpRequest()) {
+            if (! $request->expectsJson() and ! $request->isXmlHttpRequest()) {
                 return Redirect::back()->withInput()->withErrors($message);
             }
         }

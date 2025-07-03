@@ -40,7 +40,7 @@ class ConvertRappasoftTables extends Command
             $content = File::get($file);
 
             // Check if file is a Rappasoft livewire datatable
-            if (false !== strpos($content, 'Rappasoft\LaravelLivewireTables')) {
+            if (strpos($content, 'Rappasoft\LaravelLivewireTables') !== false) {
                 $this->info("Found Rappasoft datatable: {$file}");
 
                 // Replace the namespace and base class
@@ -96,7 +96,7 @@ class ConvertRappasoftTables extends Command
                 // Save the updated file
                 File::put($file, $content);
                 $this->info("Updated file: {$file}");
-                ++$count;
+                $count++;
             }
         }
 
@@ -125,7 +125,7 @@ class ConvertRappasoftTables extends Command
         preg_match('/use\s+App\\\Models\\\([^;]+);/', $content, $modelMatches);
         $modelName = $modelMatches[1] ?? null;
 
-        if (!$modelName) {
+        if (! $modelName) {
             preg_match('/protected\s+\$model\s*=\s*([^:]+)::class/', $content, $propertyMatches);
             if (isset($propertyMatches[1])) {
                 $parts = explode('\\', $propertyMatches[1]);
@@ -133,7 +133,7 @@ class ConvertRappasoftTables extends Command
             }
         }
 
-        if (!$modelName) {
+        if (! $modelName) {
             $this->error("Could not detect model for {$className}. Please convert manually.");
 
             return;

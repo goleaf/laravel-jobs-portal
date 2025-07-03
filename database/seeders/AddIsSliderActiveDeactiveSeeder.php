@@ -16,7 +16,7 @@ class AddIsSliderActiveDeactiveSeeder extends Seeder
     public function run(): void
     {
         $exist = Setting::where('key', 'is_slider_active')->exists();
-        if (!$exist) {
+        if (! $exist) {
             Setting::create(['key' => 'is_slider_active', 'value' => '1']);
         }
     }

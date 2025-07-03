@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Gate;
 
 class GetSkillsForSelectRequest extends FormRequest
 {
@@ -41,4 +40,4 @@ class GetSkillsForSelectRequest extends FormRequest
             'limit.max' => __('validation.max.numeric', ['attribute' => 'limit', 'max' => 100]),
         ];
     }
-} 
+}

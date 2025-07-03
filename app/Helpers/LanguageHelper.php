@@ -44,7 +44,7 @@ class LanguageHelper
         $value = $translations;
 
         foreach ($keys as $k) {
-            if (!isset($value[$k])) {
+            if (! isset($value[$k])) {
                 return $key; // Return key if translation not found
             }
             $value = $value[$k];

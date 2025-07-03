@@ -180,8 +180,7 @@ class CareerLevelResource extends JsonResource
                 ->whereNotNull('salary_from')
                 ->whereNotNull('salary_to')
                 ->selectRaw('AVG((salary_from + salary_to) / 2) as avg_salary')
-                ->value('avg_salary')
-            ;
+                ->value('avg_salary');
         });
     }
 
@@ -208,8 +207,7 @@ class CareerLevelResource extends JsonResource
                 ->groupBy('industries.name')
                 ->selectRaw('industries.name, COUNT(*) as job_count')
                 ->pluck('job_count', 'name')
-                ->toArray()
-            ;
+                ->toArray();
         });
     }
 
@@ -236,8 +234,7 @@ class CareerLevelResource extends JsonResource
                 ];
             })
             ->values()
-            ->toArray()
-        ;
+            ->toArray();
     }
 
     /**

@@ -32,7 +32,7 @@ class LocaleController extends Controller
         $locale = $request->input('locale');
         $availableLocales = array_keys(Config::get('app.available_locales', []));
 
-        if (!in_array($locale, $availableLocales)) {
+        if (! in_array($locale, $availableLocales)) {
             if ($request->expectsJson()) {
                 return response()->json([
                     'success' => false,
@@ -116,7 +116,7 @@ class LocaleController extends Controller
         $locale = $locale ?: App::getLocale();
         $availableLocales = array_keys(Config::get('app.available_locales', []));
 
-        if (!in_array($locale, $availableLocales)) {
+        if (! in_array($locale, $availableLocales)) {
             return response()->json([
                 'error' => __('locale.invalid_locale'),
             ], 400);

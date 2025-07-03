@@ -22,19 +22,19 @@ class QueryOptimizer
         $query->with(['company:id,name,logo', 'category:id,name']);
 
         // Apply filters efficiently
-        if (!empty($filters['location'])) {
+        if (! empty($filters['location'])) {
             $query->where('location', 'like', '%'.$filters['location'].'%');
         }
 
-        if (!empty($filters['category_id'])) {
+        if (! empty($filters['category_id'])) {
             $query->where('job_category_id', $filters['category_id']);
         }
 
-        if (!empty($filters['job_type'])) {
+        if (! empty($filters['job_type'])) {
             $query->where('job_type', $filters['job_type']);
         }
 
-        if (!empty($filters['salary_min'])) {
+        if (! empty($filters['salary_min'])) {
             $query->where('salary_min', '>=', $filters['salary_min']);
         }
 
@@ -47,14 +47,14 @@ class QueryOptimizer
     /**
      * Optimize user dashboard queries.
      *
-     * @param mixed $userId
-     * @param mixed $userType
+     * @param  mixed  $userId
+     * @param  mixed  $userType
      */
     public static function optimizeUserDashboard($userId, $userType): array
     {
         $stats = [];
 
-        if ('candidate' === $userType) {
+        if ($userType === 'candidate') {
             $stats = DB::select("
                 SELECT 
                     COUNT(CASE WHEN status = 'applied' THEN 1 END) as applications_sent,
@@ -84,14 +84,13 @@ class QueryOptimizer
     public static function optimizeCompanySearch(Builder $query, array $filters = []): Builder
     {
         $query->select(['id', 'name', 'logo', 'location', 'industry_id', 'created_at'])
-            ->where('is_active', true)
-        ;
+            ->where('is_active', true);
 
-        if (!empty($filters['industry_id'])) {
+        if (! empty($filters['industry_id'])) {
             $query->where('industry_id', $filters['industry_id']);
         }
 
-        if (!empty($filters['location'])) {
+        if (! empty($filters['location'])) {
             $query->where('location', 'like', '%'.$filters['location'].'%');
         }
 

@@ -14,7 +14,7 @@ class UpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
 
@@ -26,7 +26,7 @@ class UpdateRequest extends FormRequest
         // Try to get the resource from the route
         $resource = $this->getRouteResource();
 
-        if (!$resource) {
+        if (! $resource) {
             return false;
         }
 
@@ -126,10 +126,10 @@ class UpdateRequest extends FormRequest
 
                 // Validate metadata values
                 foreach ($this->metadata as $key => $value) {
-                    if (!is_string($key) || strlen($key) > 50) {
+                    if (! is_string($key) || strlen($key) > 50) {
                         $validator->errors()->add('metadata', 'Metadata keys must be strings with maximum 50 characters.');
                     }
-                    if (!is_scalar($value) && !is_null($value)) {
+                    if (! is_scalar($value) && ! is_null($value)) {
                         $validator->errors()->add('metadata', 'Metadata values must be scalar or null.');
                     }
                 }
@@ -165,7 +165,7 @@ class UpdateRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Update slug if name or title is being updated
-        if (($this->has('name') || $this->has('title')) && !$this->has('slug')) {
+        if (($this->has('name') || $this->has('title')) && ! $this->has('slug')) {
             $this->merge([
                 'slug' => \Str::slug($this->name ?: $this->title),
             ]);
@@ -222,7 +222,7 @@ class UpdateRequest extends FormRequest
     /**
      * Check if the authenticated user owns the resource.
      *
-     * @param mixed $resource
+     * @param  mixed  $resource
      */
     private function userOwnsResource($resource): bool
     {

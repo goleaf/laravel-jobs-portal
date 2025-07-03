@@ -40,4 +40,4 @@ class ShowJobRequest extends FormRequest
             'id.exists' => __('validation.exists', ['attribute' => 'job ID']),
         ];
     }
-} 
+}

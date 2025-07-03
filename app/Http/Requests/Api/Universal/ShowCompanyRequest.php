@@ -62,7 +62,7 @@ class ShowCompanyRequest extends FormRequest
             if ($this->has('include') && is_array($this->include)) {
                 $allowedIncludes = ['user', 'jobs', 'employees', 'industry', 'size', 'location'];
                 foreach ($this->include as $include) {
-                    if (!in_array($include, $allowedIncludes)) {
+                    if (! in_array($include, $allowedIncludes)) {
                         $validator->errors()->add('include', __('validation.in', ['attribute' => __('validation.attributes.include')]));
                     }
                 }
@@ -72,7 +72,7 @@ class ShowCompanyRequest extends FormRequest
             if ($this->has('fields') && is_array($this->fields)) {
                 $allowedFields = ['id', 'name', 'description', 'website', 'logo', 'industry', 'size', 'location', 'founded_year', 'created_at', 'updated_at'];
                 foreach ($this->fields as $field) {
-                    if (!in_array($field, $allowedFields)) {
+                    if (! in_array($field, $allowedFields)) {
                         $validator->errors()->add('fields', __('validation.in', ['attribute' => __('validation.attributes.fields')]));
                     }
                 }

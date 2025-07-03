@@ -101,8 +101,7 @@ class AdminController extends AppBaseController
             }
 
             return redirect()->route('admin.admin.index')
-                ->with('success', 'Admin created successfully')
-            ;
+                ->with('success', 'Admin created successfully');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -118,8 +117,7 @@ class AdminController extends AppBaseController
 
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Failed to create admin')
-            ;
+                ->with('error', 'Failed to create admin');
         }
     }
 
@@ -166,8 +164,7 @@ class AdminController extends AppBaseController
             }
 
             return redirect()->route('admin.admin.index')
-                ->with('success', 'Admin updated successfully')
-            ;
+                ->with('success', 'Admin updated successfully');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -183,8 +180,7 @@ class AdminController extends AppBaseController
 
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Failed to update admin')
-            ;
+                ->with('error', 'Failed to update admin');
         }
     }
 
@@ -205,7 +201,7 @@ class AdminController extends AppBaseController
             }
 
             // Prevent deletion of super admin
-            if ('admin@admin.com' === $admin->email) {
+            if ($admin->email === 'admin@admin.com') {
                 $message = 'Cannot delete super admin account';
                 if ($this->isApiRequest(request())) {
                     return $this->sendError($message, 403);
@@ -240,8 +236,7 @@ class AdminController extends AppBaseController
             }
 
             return redirect()->route('admin.admin.index')
-                ->with('success', 'Admin deleted successfully')
-            ;
+                ->with('success', 'Admin deleted successfully');
         } catch (\Exception $e) {
             DB::rollBack();
 
@@ -271,7 +266,7 @@ class AdminController extends AppBaseController
 
             DB::beginTransaction();
 
-            $newStatus = !$admin->is_active;
+            $newStatus = ! $admin->is_active;
             $admin->update([
                 'is_active' => $newStatus,
                 'status_changed_by' => auth()->id(),
@@ -400,8 +395,7 @@ class AdminController extends AppBaseController
                     $q->where('name', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%")
                         ->orWhere('first_name', 'like', "%{$search}%")
-                        ->orWhere('last_name', 'like', "%{$search}%")
-                    ;
+                        ->orWhere('last_name', 'like', "%{$search}%");
                 });
             }
 
@@ -450,16 +444,14 @@ class AdminController extends AppBaseController
                         $q->where('name', 'like', "%{$search}%")
                             ->orWhere('email', 'like', "%{$search}%")
                             ->orWhere('first_name', 'like', "%{$search}%")
-                            ->orWhere('last_name', 'like', "%{$search}%")
-                        ;
+                            ->orWhere('last_name', 'like', "%{$search}%");
                     });
                 })
                 ->when($request->filled('is_active'), function ($query) use ($request) {
                     $query->where('is_active', $request->boolean('is_active'));
                 })
                 ->latest()
-                ->paginate(20)
-            ;
+                ->paginate(20);
 
             // Get admin statistics
             $statistics = $this->getAdminStatistics();

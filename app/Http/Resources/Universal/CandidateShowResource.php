@@ -153,7 +153,7 @@ class CandidateShowResource extends JsonResource
     /**
      * Customize the outgoing response for the resource.
      *
-     * @param mixed $response
+     * @param  mixed  $response
      */
     public function withResponse(Request $request, $response): void
     {
@@ -174,7 +174,7 @@ class CandidateShowResource extends JsonResource
             $this->postal_code,
         ]);
 
-        return !empty($parts) ? implode(', ', $parts) : null;
+        return ! empty($parts) ? implode(', ', $parts) : null;
     }
 
     /**
@@ -182,9 +182,9 @@ class CandidateShowResource extends JsonResource
      */
     private function getFormattedSalary(string $type): ?string
     {
-        $amount = 'current' === $type ? $this->current_salary : $this->expected_salary;
+        $amount = $type === 'current' ? $this->current_salary : $this->expected_salary;
 
-        if (!$amount || !$this->salaryCurrency) {
+        if (! $amount || ! $this->salaryCurrency) {
             return null;
         }
 
@@ -220,8 +220,8 @@ class CandidateShowResource extends JsonResource
 
         $completedFields = 0;
         foreach ($fields as $field) {
-            if (!empty($this->{$field})) {
-                ++$completedFields;
+            if (! empty($this->{$field})) {
+                $completedFields++;
             }
         }
 

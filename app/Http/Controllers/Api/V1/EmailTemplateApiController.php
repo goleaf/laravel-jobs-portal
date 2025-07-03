@@ -74,7 +74,7 @@ class EmailTemplateApiController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function show($id): JsonResponse
     {
@@ -98,7 +98,7 @@ class EmailTemplateApiController extends Controller
     /**
      * Update the specified resource.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function update(UpdateEmailTemplateRequest $request, $id): JsonResponse
     {
@@ -124,7 +124,7 @@ class EmailTemplateApiController extends Controller
     /**
      * Remove the specified resource.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function destroy($id): JsonResponse
     {

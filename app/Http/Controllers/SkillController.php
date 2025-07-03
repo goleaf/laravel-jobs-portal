@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BulkActionSkillRequest;
+use App\Http\Requests\GetSkillsForSelectRequest;
 use App\Http\Requests\Skill\CreateSkillRequest;
 use App\Http\Requests\Skill\DestroySkillRequest;
 use App\Http\Requests\Skill\EditSkillRequest;
 use App\Http\Requests\Skill\IndexSkillRequest;
 use App\Http\Requests\Skill\ShowSkillRequest;
 use App\Http\Requests\Skill\UpdateSkillUpdateSkillRequest;
-use App\Http\Requests\GetSkillsForSelectRequest;
-use App\Http\Requests\BulkActionSkillRequest;
 use App\Models\Skill;
 use App\Repositories\SkillRepository;
 use Illuminate\Contracts\View\Factory;
@@ -313,7 +313,7 @@ class SkillController extends AppBaseController
                 case 'delete':
                     // Check for dependencies before deletion
                     $dependencies = $this->skillRepository->checkBulkDependencies($skillIds);
-                    if (!empty($dependencies)) {
+                    if (! empty($dependencies)) {
                         return $this->sendError(
                             __('messages.flash.skills_cant_delete_bulk'),
                             $dependencies,
@@ -414,8 +414,7 @@ class SkillController extends AppBaseController
                 })
                 ->active()
                 ->alphabetical()
-                ->paginate(20)
-            ;
+                ->paginate(20);
 
             // Get skill statistics
             $statistics = $this->getSkillStatistics();

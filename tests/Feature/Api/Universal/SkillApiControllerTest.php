@@ -40,7 +40,7 @@ class SkillApiControllerTest extends TestCase
     /**
      * Universal Pattern: Test API index endpoint.
      */
-    public function testIndexReturnsPaginatedResults(): void
+    public function test_index_returns_paginated_results(): void
     {
         Skill::factory()->count(3)->create();
 
@@ -58,14 +58,13 @@ class SkillApiControllerTest extends TestCase
                     'total',
                 ],
                 'meta',
-            ])
-        ;
+            ]);
     }
 
     /**
      * Universal Pattern: Test API store endpoint.
      */
-    public function testStoreCreatesNewResource(): void
+    public function test_store_creates_new_resource(): void
     {
         $data = [
             'name' => $this->faker->name,
@@ -87,8 +86,7 @@ class SkillApiControllerTest extends TestCase
                 'message',
                 'data' => ['id', 'name', 'email'],
                 'meta',
-            ])
-        ;
+            ]);
 
         $this->assertDatabaseHas('skills', [
             'name' => $data['name'],
@@ -99,7 +97,7 @@ class SkillApiControllerTest extends TestCase
     /**
      * Universal Pattern: Test API validation.
      */
-    public function testStoreValidatesRequiredFields(): void
+    public function test_store_validates_required_fields(): void
     {
         $response = $this->postJson('/api/v1/skills', []);
 
@@ -108,14 +106,13 @@ class SkillApiControllerTest extends TestCase
                 'success' => false,
                 'message' => 'Validation failed',
             ])
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /**
      * Universal Pattern: Test API show endpoint.
      */
-    public function testShowReturnsSingleResource(): void
+    public function test_show_returns_single_resource(): void
     {
         $skill = Skill::factory()->create();
 
@@ -128,14 +125,13 @@ class SkillApiControllerTest extends TestCase
                     'id' => $skill->id,
                     'name' => $skill->name,
                 ],
-            ])
-        ;
+            ]);
     }
 
     /**
      * Universal Pattern: Test API update endpoint.
      */
-    public function testUpdateModifiesExistingResource(): void
+    public function test_update_modifies_existing_resource(): void
     {
         $skill = Skill::factory()->create();
         $updateData = [
@@ -149,8 +145,7 @@ class SkillApiControllerTest extends TestCase
             ->assertJson([
                 'success' => true,
                 'message' => 'Skill updated successfully',
-            ])
-        ;
+            ]);
 
         $this->assertDatabaseHas('skills', [
             'id' => $skill->id,
@@ -161,7 +156,7 @@ class SkillApiControllerTest extends TestCase
     /**
      * Universal Pattern: Test API delete endpoint.
      */
-    public function testDestroyDeletesResource(): void
+    public function test_destroy_deletes_resource(): void
     {
         $skill = Skill::factory()->create();
 
@@ -171,8 +166,7 @@ class SkillApiControllerTest extends TestCase
             ->assertJson([
                 'success' => true,
                 'message' => 'Skill deleted successfully',
-            ])
-        ;
+            ]);
 
         $this->assertSoftDeleted($skill);
     }
@@ -180,7 +174,7 @@ class SkillApiControllerTest extends TestCase
     /**
      * Universal Pattern: Test unauthorized access.
      */
-    public function testUnauthorizedAccessReturns401(): void
+    public function test_unauthorized_access_returns401(): void
     {
         Sanctum::actingAs($this->user, []); // No abilities
 
@@ -195,10 +189,10 @@ class SkillApiControllerTest extends TestCase
     /**
      * Universal Pattern: Test rate limiting.
      */
-    public function testRateLimitingPreventsExcessiveRequests(): void
+    public function test_rate_limiting_prevents_excessive_requests(): void
     {
         // Make requests up to the limit
-        for ($i = 0; $i < 60; ++$i) {
+        for ($i = 0; $i < 60; $i++) {
             $this->getJson('/api/v1/skills');
         }
 
@@ -210,7 +204,7 @@ class SkillApiControllerTest extends TestCase
     /**
      * Universal Pattern: Test search functionality.
      */
-    public function testIndexCanSearchResources(): void
+    public function test_index_can_search_resources(): void
     {
         Skill::factory()->create(['name' => 'Searchable Item']);
         Skill::factory()->create(['name' => 'Other Item']);
@@ -218,14 +212,13 @@ class SkillApiControllerTest extends TestCase
         $response = $this->getJson('/api/v1/skills?search=Searchable');
 
         $response->assertStatus(200)
-            ->assertJsonCount(1, 'data.data')
-        ;
+            ->assertJsonCount(1, 'data.data');
     }
 
     /**
      * Universal Pattern: Test resource not found.
      */
-    public function testShowReturns404ForNonexistentResource(): void
+    public function test_show_returns404_for_nonexistent_resource(): void
     {
         $response = $this->getJson('/api/v1/skills/999999');
 
@@ -233,14 +226,13 @@ class SkillApiControllerTest extends TestCase
             ->assertJson([
                 'success' => false,
                 'message' => 'Skill not found',
-            ])
-        ;
+            ]);
     }
 
     /**
      * Universal Pattern: Test invalid JSON.
      */
-    public function testStoreHandlesInvalidJson(): void
+    public function test_store_handles_invalid_json(): void
     {
         $response = $this->json('POST', '/api/v1/skills', 'invalid-json', [
             'Content-Type' => 'application/json',

@@ -8,10 +8,6 @@ use Glorand\Model\Settings\Traits\HasSettingsField;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Spatie\Activitylog\LogOptions;
@@ -20,46 +16,46 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * App\Models\Job.
  *
- * @property int                 $id
- * @property string              $job_title
- * @property string              $description
- * @property string              $country
- * @property string              $state
- * @property string              $city
- * @property string              $salary_from
- * @property string              $salary_to
- * @property int                 $currency_id
- * @property int                 $salary_period_id
- * @property int                 $job_type_id
- * @property int                 $career_level_id
- * @property int                 $functional_area_id
- * @property int                 $job_shift_id
- * @property int                 $degree_level_id
- * @property int                 $position_id
- * @property string              $job_expiry_date
- * @property int                 $no_preference
- * @property int                 $hide_salary
- * @property int                 $is_freelance
- * @property int                 $is_suspended
- * @property null|Carbon         $created_at
- * @property null|Carbon         $updated_at
- * @property CareerLevel         $careerLevel
- * @property SalaryCurrency      $currency
+ * @property int $id
+ * @property string $job_title
+ * @property string $description
+ * @property string $country
+ * @property string $state
+ * @property string $city
+ * @property string $salary_from
+ * @property string $salary_to
+ * @property int $currency_id
+ * @property int $salary_period_id
+ * @property int $job_type_id
+ * @property int $career_level_id
+ * @property int $functional_area_id
+ * @property int $job_shift_id
+ * @property int $degree_level_id
+ * @property int $position_id
+ * @property string $job_expiry_date
+ * @property int $no_preference
+ * @property int $hide_salary
+ * @property int $is_freelance
+ * @property int $is_suspended
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property CareerLevel $careerLevel
+ * @property SalaryCurrency $currency
  * @property RequiredDegreeLevel $degreeLevel
- * @property FunctionalArea      $functionalArea
- * @property JobShift            $jobShift
- * @property JobType             $jobType
- * @property Position            $position
- * @property SalaryPeriod        $salaryPeriod
+ * @property FunctionalArea $functionalArea
+ * @property JobShift $jobShift
+ * @property JobType $jobType
+ * @property Position $position
+ * @property SalaryPeriod $salaryPeriod
  */
 class Job extends Model
 {
     use HasFactory;
-    use LogsActivity;
-    use SoftDeletes;
+    use HasSettingsField;
     use HasTaxonomy;
     use HasUniqueValues;
-    use HasSettingsField;
+    use LogsActivity;
+    use SoftDeletes;
 
     /**
      * Default settings for job model.
@@ -142,52 +138,52 @@ class Job extends Model
         'visibility.featured' => 'boolean',
         'visibility.highlight' => 'boolean',
         'visibility.urgent' => 'boolean',
-        
+
         'application.auto_accept' => 'boolean',
         'application.require_cover_letter' => 'boolean',
         'application.require_portfolio' => 'boolean',
         'application.max_applications' => 'integer|min:1|max:1000',
         'application.application_deadline_reminder' => 'boolean',
         'application.send_confirmation_email' => 'boolean',
-        
+
         'notifications.new_application' => 'boolean',
         'notifications.application_status_change' => 'boolean',
         'notifications.job_expiry_reminder' => 'boolean',
         'notifications.daily_digest' => 'boolean',
         'notifications.weekly_summary' => 'boolean',
-        
+
         'display.show_salary' => 'boolean',
         'display.show_company_logo' => 'boolean',
         'display.show_application_count' => 'boolean',
         'display.show_view_count' => 'boolean',
         'display.layout' => 'string|in:standard,compact,detailed',
         'display.color_scheme' => 'string|in:default,blue,green,red,purple',
-        
+
         'seo.custom_meta_title' => 'string|max:60',
         'seo.custom_meta_description' => 'string|max:160',
         'seo.custom_keywords' => 'string|max:255',
         'seo.canonical_url' => 'url|nullable',
         'seo.robots_index' => 'boolean',
         'seo.robots_follow' => 'boolean',
-        
+
         'social.share_enabled' => 'boolean',
         'social.auto_post_linkedin' => 'boolean',
         'social.auto_post_twitter' => 'boolean',
         'social.auto_post_facebook' => 'boolean',
         'social.custom_share_message' => 'string|max:280',
-        
+
         'analytics.track_views' => 'boolean',
         'analytics.track_applications' => 'boolean',
         'analytics.track_shares' => 'boolean',
         'analytics.google_analytics_enabled' => 'boolean',
         'analytics.custom_tracking_code' => 'string|max:500',
-        
+
         'workflow.auto_close_on_expiry' => 'boolean',
         'workflow.auto_extend_expiry' => 'boolean',
         'workflow.require_approval' => 'boolean',
         'workflow.auto_publish' => 'boolean',
         'workflow.screening_questions_enabled' => 'boolean',
-        
+
         'premium.boost_enabled' => 'boolean',
         'premium.priority_listing' => 'boolean',
         'premium.extended_visibility' => 'boolean',
@@ -293,8 +289,7 @@ class Job extends Model
             ->logOnly(['job_title', 'title', 'status', 'is_active', 'is_featured'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn (string $eventName) => "Job has been {$eventName}")
-        ;
+            ->setDescriptionForEvent(fn (string $eventName) => "Job has been {$eventName}");
     }
 
     /**
@@ -308,8 +303,7 @@ class Job extends Model
     /**
      * Scope a query to only include active jobs.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeActive($query)
@@ -320,8 +314,7 @@ class Job extends Model
     /**
      * Scope a query to only include inactive jobs.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeInactive($query)
@@ -332,22 +325,19 @@ class Job extends Model
     /**
      * Scope a query to only include published jobs.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopePublished($query)
     {
         return $query->whereNotNull('published_at')
-            ->where('published_at', '<=', now())
-        ;
+            ->where('published_at', '<=', now());
     }
 
     /**
      * Scope a query to only include jobs that haven't expired.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeNotExpired($query)
@@ -355,31 +345,27 @@ class Job extends Model
         return $query->where(function ($q) {
             $q->whereNull('expires_at')
                 ->orWhere('expires_at', '>=', now())
-                ->orWhere('job_expiry_date', '>=', now()->format('Y-m-d'))
-            ;
+                ->orWhere('job_expiry_date', '>=', now()->format('Y-m-d'));
         });
     }
 
     /**
      * Scope a query to only include expired jobs.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeExpired($query)
     {
         return $query->whereNotNull('expires_at')
             ->where('expires_at', '<', now())
-            ->orWhere('job_expiry_date', '<', now()->format('Y-m-d'))
-        ;
+            ->orWhere('job_expiry_date', '<', now()->format('Y-m-d'));
     }
 
     /**
      * Scope a query to only include remote jobs.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeRemote($query)
@@ -390,8 +376,7 @@ class Job extends Model
     /**
      * Scope a query to only include freelance jobs.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeFreelance($query)
@@ -402,8 +387,7 @@ class Job extends Model
     /**
      * Scope a query to only include non-freelance jobs.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeNotFreelance($query)
@@ -414,9 +398,8 @@ class Job extends Model
     /**
      * Scope a query to only include jobs in a specific location.
      *
-     * @param Builder $query
-     * @param string  $location
-     *
+     * @param  Builder  $query
+     * @param  string  $location
      * @return Builder
      */
     public function scopeInLocation($query, $location)
@@ -424,17 +407,15 @@ class Job extends Model
         return $query->where('location', 'like', '%'.$location.'%')
             ->orWhere('country', 'like', '%'.$location.'%')
             ->orWhere('state', 'like', '%'.$location.'%')
-            ->orWhere('city', 'like', '%'.$location.'%')
-        ;
+            ->orWhere('city', 'like', '%'.$location.'%');
     }
 
     /**
      * Scope a query to only include jobs within a salary range.
      *
-     * @param Builder $query
-     * @param float   $min
-     * @param float   $max
-     *
+     * @param  Builder  $query
+     * @param  float  $min
+     * @param  float  $max
      * @return Builder
      */
     public function scopeSalaryRange($query, $min, $max)
@@ -442,16 +423,14 @@ class Job extends Model
         return $query->where('salary_min', '<=', $max)
             ->where('salary_max', '>=', $min)
             ->orWhere('salary_from', '<=', $max)
-            ->where('salary_to', '>=', $min)
-        ;
+            ->where('salary_to', '>=', $min);
     }
 
     /**
      * Scope a query to only include jobs of a specific type.
      *
-     * @param Builder $query
-     * @param int     $jobTypeId
-     *
+     * @param  Builder  $query
+     * @param  int  $jobTypeId
      * @return Builder
      */
     public function scopeOfType($query, $jobTypeId)
@@ -462,24 +441,21 @@ class Job extends Model
     /**
      * Scope a query to only include jobs in a specific industry.
      *
-     * @param Builder $query
-     * @param int     $industryId
-     *
+     * @param  Builder  $query
+     * @param  int  $industryId
      * @return Builder
      */
     public function scopeInIndustry($query, $industryId)
     {
         return $query->where('industry_id', $industryId)
-            ->orWhere('functional_area_id', $industryId)
-        ;
+            ->orWhere('functional_area_id', $industryId);
     }
 
     /**
      * Scope a query to only include jobs from a specific company.
      *
-     * @param Builder $query
-     * @param int     $companyId
-     *
+     * @param  Builder  $query
+     * @param  int  $companyId
      * @return Builder
      */
     public function scopeFromCompany($query, $companyId)
@@ -490,25 +466,22 @@ class Job extends Model
     /**
      * Scope a query to search jobs by title or description.
      *
-     * @param Builder $query
-     * @param string  $search
-     *
+     * @param  Builder  $query
+     * @param  string  $search
      * @return Builder
      */
     public function scopeSearch($query, $search)
     {
         return $query->where('title', 'like', '%'.$search.'%')
             ->orWhere('description', 'like', '%'.$search.'%')
-            ->orWhere('job_title', 'like', '%'.$search.'%')
-        ;
+            ->orWhere('job_title', 'like', '%'.$search.'%');
     }
 
     /**
      * Scope a query to order jobs by creation date.
      *
-     * @param Builder $query
-     * @param string  $direction
-     *
+     * @param  Builder  $query
+     * @param  string  $direction
      * @return Builder
      */
     public function scopeOrderByCreated($query, $direction = 'desc')
@@ -519,9 +492,8 @@ class Job extends Model
     /**
      * Scope a query to order jobs by publication date.
      *
-     * @param Builder $query
-     * @param string  $direction
-     *
+     * @param  Builder  $query
+     * @param  string  $direction
      * @return Builder
      */
     public function scopeOrderByPublished($query, $direction = 'desc')
@@ -532,25 +504,22 @@ class Job extends Model
     /**
      * Scope a query to order jobs by salary range.
      *
-     * @param Builder $query
-     * @param string  $direction
-     *
+     * @param  Builder  $query
+     * @param  string  $direction
      * @return Builder
      */
     public function scopeOrderBySalary($query, $direction = 'desc')
     {
         return $query->orderBy('salary_max', $direction)
-            ->orOrderBy('salary_to', $direction)
-        ;
+            ->orOrderBy('salary_to', $direction);
     }
 
     /**
      * Scope a query to only include jobs published within a date range.
      *
-     * @param Builder        $query
-     * @param \Carbon\Carbon $start
-     * @param \Carbon\Carbon $end
-     *
+     * @param  Builder  $query
+     * @param  \Carbon\Carbon  $start
+     * @param  \Carbon\Carbon  $end
      * @return Builder
      */
     public function scopePublishedBetween($query, $start, $end)
@@ -571,8 +540,7 @@ class Job extends Model
     /**
      * Scope a query to only include recent jobs.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeRecent($query, int $days = 7)
@@ -583,9 +551,8 @@ class Job extends Model
     /**
      * Scope a query to filter jobs by category.
      *
-     * @param Builder $query
-     * @param int     $categoryId
-     *
+     * @param  Builder  $query
+     * @param  int  $categoryId
      * @return Builder
      */
     public function scopeByCategory($query, $categoryId)
@@ -596,9 +563,8 @@ class Job extends Model
     /**
      * Scope a query to get popular jobs (jobs with many applications).
      *
-     * @param Builder $query
-     * @param int     $minApplications
-     *
+     * @param  Builder  $query
+     * @param  int  $minApplications
      * @return Builder
      */
     public function scopePopular($query, $minApplications = 10)

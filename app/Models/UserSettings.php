@@ -2,23 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Glorand\Model\Settings\Traits\HasSettingsField;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * UserSettings Model - Demonstrates Laravel Model Settings Integration
- * 
+ *
  * This model showcases the full integration of glorand/laravel-model-settings
  * package with comprehensive settings management for job portal users.
- * 
+ *
  * Features:
  * - Field-based settings storage (JSON column)
  * - Default settings configuration
  * - Validation rules for settings data
  * - Type casting and data integrity
  * - Nested settings structure
- * 
+ *
  * @property int $id
  * @property int $user_id
  * @property array $settings
@@ -42,10 +42,10 @@ class UserSettings extends Model
 
     /**
      * Default settings for User model.
-     * 
+     *
      * These settings provide user preferences and configuration options
      * that can be customized per user without database schema changes.
-     * 
+     *
      * @var array
      */
     public $defaultSettings = [
@@ -61,21 +61,21 @@ class UserSettings extends Model
             'salary_range' => [
                 'min' => 0,
                 'max' => 999999,
-                'currency' => 'USD'
+                'currency' => 'USD',
             ],
         ],
         'privacy' => [
             'profile_searchable' => true,
             'allow_recruiter_contact' => true,
-        ]
+        ],
     ];
 
     /**
      * Validation rules for settings data.
-     * 
+     *
      * These rules ensure data integrity when updating user settings
      * and provide clear validation messages for the frontend.
-     * 
+     *
      * @var array
      */
     public $settingsRules = [
@@ -134,7 +134,7 @@ class UserSettings extends Model
         return $this->settings()->get('job_preferences.salary_range', [
             'min' => 0,
             'max' => 999999,
-            'currency' => 'USD'
+            'currency' => 'USD',
         ]);
     }
 
@@ -160,6 +160,7 @@ class UserSettings extends Model
     public function getEnabledWidgets(): array
     {
         $widgets = $this->settings()->get('dashboard.widgets', []);
+
         return array_keys(array_filter($widgets));
     }
 
@@ -170,6 +171,7 @@ class UserSettings extends Model
     {
         try {
             $this->settings()->apply($settings);
+
             return true;
         } catch (\Exception $e) {
             return false;
@@ -184,9 +186,10 @@ class UserSettings extends Model
         try {
             $this->settings()->clear();
             $this->settings()->apply($this->defaultSettings);
+
             return true;
         } catch (\Exception $e) {
             return false;
         }
     }
-} 
+}

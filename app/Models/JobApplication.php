@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -34,8 +33,8 @@ class JobApplication extends Model
 {
     /** @use HasFactory<\Database\Factories\JobApplicationFactory> */
     use HasFactory;
-    use LogsActivity;
     use HasSettingsField;
+    use LogsActivity;
 
     /**
      * Application status constants
@@ -155,17 +154,17 @@ class JobApplication extends Model
         'workflow.require_portfolio' => 'boolean',
         'workflow.enable_screening_questions' => 'boolean',
         'workflow.send_status_notifications' => 'boolean',
-        
+
         'notifications.candidate_notifications.application_received' => 'boolean',
         'notifications.candidate_notifications.status_change' => 'boolean',
         'notifications.candidate_notifications.interview_scheduled' => 'boolean',
         'notifications.candidate_notifications.offer_extended' => 'boolean',
         'notifications.candidate_notifications.rejection_notice' => 'boolean',
-        
+
         'notifications.employer_notifications.new_application' => 'boolean',
         'notifications.employer_notifications.application_withdrawn' => 'boolean',
         'notifications.employer_notifications.candidate_response' => 'boolean',
-        
+
         'privacy.share_with_employer.contact_details' => 'boolean',
         'privacy.share_with_employer.resume' => 'boolean',
         'privacy.share_with_employer.cover_letter' => 'boolean',
@@ -173,18 +172,18 @@ class JobApplication extends Model
         'privacy.share_with_employer.availability' => 'boolean',
         'privacy.anonymize_after_rejection' => 'boolean',
         'privacy.data_retention_days' => 'integer|min:30|max:3650',
-        
+
         'tracking.track_application_source' => 'boolean',
         'tracking.track_time_to_hire' => 'boolean',
         'tracking.track_interview_feedback' => 'boolean',
         'tracking.enable_analytics' => 'boolean',
-        
+
         'features.enable_video_interviews' => 'boolean',
         'features.enable_skill_assessments' => 'boolean',
         'features.enable_reference_checks' => 'boolean',
         'features.enable_background_checks' => 'boolean',
         'features.custom_application_form' => 'boolean',
-        
+
         'automation.auto_screen_applications' => 'boolean',
         'automation.auto_reject_unqualified' => 'boolean',
         'automation.auto_schedule_interviews' => 'boolean',

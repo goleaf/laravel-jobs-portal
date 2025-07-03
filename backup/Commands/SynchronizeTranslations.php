@@ -112,21 +112,21 @@ class SynchronizeTranslations extends Command
         $locales = [];
         $langPath = resource_path('lang');
 
-        if (!empty($localesOption)) {
+        if (! empty($localesOption)) {
             $locales = explode(',', $localesOption);
         } else {
             // Get all locale directories and files
             if (File::exists($langPath)) {
                 // Get directories (old structure)
                 foreach (File::directories($langPath) as $directory) {
-                    if ('backup' !== basename($directory)) {
+                    if (basename($directory) !== 'backup') {
                         $locales[] = basename($directory);
                     }
                 }
 
                 // Get PHP files (new consolidated structure)
                 foreach (File::files($langPath) as $file) {
-                    if ('php' === $file->getExtension()) {
+                    if ($file->getExtension() === 'php') {
                         $locales[] = $file->getFilenameWithoutExtension();
                     }
                 }
@@ -160,7 +160,7 @@ class SynchronizeTranslations extends Command
         // Then try to load from directory structure
         elseif (File::isDirectory($localePath)) {
             foreach (File::files($localePath) as $file) {
-                if ('php' === $file->getExtension()) {
+                if ($file->getExtension() === 'php') {
                     try {
                         $domain = $file->getFilenameWithoutExtension();
                         $domainTranslations = require $file->getPathname();
@@ -201,7 +201,7 @@ class SynchronizeTranslations extends Command
 
             if (is_array($value)) {
                 // For nested arrays, recurse
-                if (!isset($translations[$key]) || !is_array($translations[$key])) {
+                if (! isset($translations[$key]) || ! is_array($translations[$key])) {
                     // The entire section is missing
                     $missing[$key] = $this->createEmptyTranslations($value);
                     $count += $this->countTranslations($value);
@@ -214,15 +214,15 @@ class SynchronizeTranslations extends Command
                         $count
                     );
 
-                    if (!empty($sectionMissing)) {
+                    if (! empty($sectionMissing)) {
                         $missing[$key] = $sectionMissing;
                     }
                 }
             } else {
                 // For scalar values, check if the key exists
-                if (!isset($translations[$key])) {
+                if (! isset($translations[$key])) {
                     $missing[$key] = "[MISSING] {$value}";
-                    ++$count;
+                    $count++;
                 }
             }
         }
@@ -233,7 +233,7 @@ class SynchronizeTranslations extends Command
     protected function addMissingTranslations($translations, $missing)
     {
         foreach ($missing as $key => $value) {
-            if (!isset($translations[$key])) {
+            if (! isset($translations[$key])) {
                 $translations[$key] = $value;
             } elseif (is_array($value) && is_array($translations[$key])) {
                 $translations[$key] = $this->addMissingTranslations($translations[$key], $value);
@@ -251,7 +251,7 @@ class SynchronizeTranslations extends Command
         // Create backup
         if (File::exists($localeFile)) {
             $backupDir = "{$langPath}/backup";
-            if (!File::exists($backupDir)) {
+            if (! File::exists($backupDir)) {
                 File::makeDirectory($backupDir, 0755, true);
             }
 
@@ -283,7 +283,7 @@ class SynchronizeTranslations extends Command
             if (is_array($value)) {
                 $count = $this->countTranslations($value, $count);
             } else {
-                ++$count;
+                $count++;
             }
         }
 
@@ -293,7 +293,7 @@ class SynchronizeTranslations extends Command
     /**
      * Memory-optimized version of var_export for large arrays.
      *
-     * @param mixed $var
+     * @param  mixed  $var
      */
     protected function varExportOptimized($var)
     {
@@ -302,7 +302,7 @@ class SynchronizeTranslations extends Command
             $first = true;
 
             foreach ($var as $key => $value) {
-                if (!$first) {
+                if (! $first) {
                     $output .= ',';
                 }
                 $first = false;

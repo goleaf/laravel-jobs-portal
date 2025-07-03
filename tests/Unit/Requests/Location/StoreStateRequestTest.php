@@ -47,9 +47,9 @@ class StoreStateRequestTest extends TestCase
     }
 
     /** @test */
-    public function adminIsAuthorized(): void
+    public function admin_is_authorized(): void
     {
-        $request = new StoreStateRequest();
+        $request = new StoreStateRequest;
         $request->setUserResolver(function () {
             return $this->admin;
         });
@@ -58,9 +58,9 @@ class StoreStateRequestTest extends TestCase
     }
 
     /** @test */
-    public function employerIsAuthorized(): void
+    public function employer_is_authorized(): void
     {
-        $request = new StoreStateRequest();
+        $request = new StoreStateRequest;
         $request->setUserResolver(function () {
             return $this->employer;
         });
@@ -69,9 +69,9 @@ class StoreStateRequestTest extends TestCase
     }
 
     /** @test */
-    public function candidateIsNotAuthorized(): void
+    public function candidate_is_not_authorized(): void
     {
-        $request = new StoreStateRequest();
+        $request = new StoreStateRequest;
         $request->setUserResolver(function () {
             return $this->candidate;
         });
@@ -80,9 +80,9 @@ class StoreStateRequestTest extends TestCase
     }
 
     /** @test */
-    public function validationPassesWithValidData(): void
+    public function validation_passes_with_valid_data(): void
     {
-        $request = new StoreStateRequest();
+        $request = new StoreStateRequest;
         $data = [
             'name' => 'California',
             'code' => 'CA',
@@ -100,9 +100,9 @@ class StoreStateRequestTest extends TestCase
     }
 
     /** @test */
-    public function validationFailsWithInvalidData(): void
+    public function validation_fails_with_invalid_data(): void
     {
-        $request = new StoreStateRequest();
+        $request = new StoreStateRequest;
         $data = [
             'name' => '', // Empty name should fail
         ];
@@ -114,9 +114,9 @@ class StoreStateRequestTest extends TestCase
     }
 
     /** @test */
-    public function validationSanitizesData(): void
+    public function validation_sanitizes_data(): void
     {
-        $request = new StoreStateRequest();
+        $request = new StoreStateRequest;
         $request->merge([
             'name' => '  Test Name  ',
             'is_active' => 'true',
@@ -129,9 +129,9 @@ class StoreStateRequestTest extends TestCase
     }
 
     /** @test */
-    public function hasProperErrorMessages(): void
+    public function has_proper_error_messages(): void
     {
-        $request = new StoreStateRequest();
+        $request = new StoreStateRequest;
         $messages = $request->messages();
 
         $this->assertIsArray($messages);
@@ -139,9 +139,9 @@ class StoreStateRequestTest extends TestCase
     }
 
     /** @test */
-    public function hasProperFieldAttributes(): void
+    public function has_proper_field_attributes(): void
     {
-        $request = new StoreStateRequest();
+        $request = new StoreStateRequest;
         $attributes = $request->attributes();
 
         $this->assertIsArray($attributes);

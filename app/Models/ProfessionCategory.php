@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
 
 class ProfessionCategory extends Model
 {
@@ -49,41 +49,44 @@ class ProfessionCategory extends Model
     /**
      * Get translation for specific locale
      */
-    public function translation(string $locale = null): ?ProfessionCategoryTranslation
+    public function translation(?string $locale = null): ?ProfessionCategoryTranslation
     {
         $locale = $locale ?? app()->getLocale();
+
         return $this->translations()->where('locale', $locale)->first();
     }
 
     /**
      * Get name in current or specified locale
      */
-    public function getName(string $locale = null): string
+    public function getName(?string $locale = null): string
     {
         $translation = $this->translation($locale);
-        
+
         if ($translation) {
             return $translation->name;
         }
 
         // Fallback to default language
         $fallback = $this->translation(config('app.locale', 'en'));
+
         return $fallback?->name ?? $this->code;
     }
 
     /**
      * Get description in current or specified locale
      */
-    public function getDescription(string $locale = null): ?string
+    public function getDescription(?string $locale = null): ?string
     {
         $translation = $this->translation($locale);
-        
+
         if ($translation) {
             return $translation->description;
         }
 
         // Fallback to default language
         $fallback = $this->translation(config('app.locale', 'en'));
+
         return $fallback?->description;
     }
 
@@ -221,11 +224,11 @@ class ProfessionCategory extends Model
     public function getTotalProfessionsCountAttribute(): int
     {
         $count = $this->activeProfessions()->count();
-        
+
         foreach ($this->activeChildren as $child) {
             $count += $child->total_professions_count;
         }
-        
+
         return $count;
     }
 
@@ -246,4 +249,4 @@ class ProfessionCategory extends Model
             }
         });
     }
-} 
+}

@@ -35,7 +35,7 @@ abstract class Controller extends BaseController
     /**
      * Response structure for consistent API responses.
      *
-     * @param null|mixed $data
+     * @param  null|mixed  $data
      */
     protected function successResponse($data = null, string $message = 'Operation successful', int $status = 200): JsonResponse
     {
@@ -50,7 +50,7 @@ abstract class Controller extends BaseController
     /**
      * Error response structure.
      *
-     * @param null|mixed $errors
+     * @param  null|mixed  $errors
      */
     protected function errorResponse(string $message = 'Operation failed', int $status = 400, $errors = null): JsonResponse
     {
@@ -70,8 +70,8 @@ abstract class Controller extends BaseController
     /**
      * Cache wrapper for consistent caching.
      *
-     * @param mixed $ttl
-     * @param mixed $callback
+     * @param  mixed  $ttl
+     * @param  mixed  $callback
      */
     protected function cacheRemember(string $key, $ttl, $callback)
     {
@@ -128,7 +128,7 @@ abstract class Controller extends BaseController
 
         return $request->is('api/*')
                || $request->expectsJson()
-               || 'application/json' === $request->header('Accept');
+               || $request->header('Accept') === 'application/json';
     }
 
     /**
@@ -163,8 +163,8 @@ abstract class Controller extends BaseController
     /**
      * Apply common filters to query.
      *
-     * @param mixed $query
-     * @param mixed $request
+     * @param  mixed  $query
+     * @param  mixed  $request
      */
     protected function applyCommonFilters($query, $request)
     {
@@ -196,7 +196,7 @@ abstract class Controller extends BaseController
     /**
      * Override this method in child controllers to define search fields.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     protected function applySearchFilter($query, string $searchTerm)
     {
@@ -227,7 +227,7 @@ abstract class Controller extends BaseController
     /**
      * Log controller action for audit trail.
      *
-     * @param null|mixed $model
+     * @param  null|mixed  $model
      */
     protected function logAction(string $action, $model = null, array $data = []): void
     {
@@ -270,7 +270,7 @@ abstract class Controller extends BaseController
     /**
      * Handle validation failures gracefully.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     protected function handleValidationFailure($validator): array
     {

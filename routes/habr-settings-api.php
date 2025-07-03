@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\SettingsController;
+use Illuminate\Support\Facades\Route;
 
 /**
  * Habr-Based Settings Management API Routes
- * 
+ *
  * Based on modern Laravel settings management patterns from Habr community
  * Provides comprehensive API for managing application settings
  */
@@ -15,7 +15,7 @@ Route::prefix('settings/public')->group(function () {
     // Get all public settings
     Route::get('/', [SettingsController::class, 'public'])
         ->name('api.settings.public');
-    
+
     // Get public settings by group
     Route::get('/{group}', [SettingsController::class, 'publicGroup'])
         ->name('api.settings.public.group')
@@ -24,39 +24,39 @@ Route::prefix('settings/public')->group(function () {
 
 // Protected settings routes (authentication required)
 Route::prefix('settings')->group(function () {
-    
+
     // Core CRUD operations
     Route::get('/', [SettingsController::class, 'index'])
         ->name('api.settings.index');
-    
+
     Route::get('/{key}', [SettingsController::class, 'show'])
         ->name('api.settings.show')
         ->where('key', '[a-zA-Z0-9_.-]+');
-    
+
     Route::put('/{key}', [SettingsController::class, 'update'])
         ->name('api.settings.update')
         ->where('key', '[a-zA-Z0-9_.-]+');
-    
+
     Route::delete('/{key}', [SettingsController::class, 'destroy'])
         ->name('api.settings.destroy')
         ->where('key', '[a-zA-Z0-9_.-]+');
-    
+
     // Bulk operations
     Route::post('/bulk-update', [SettingsController::class, 'bulkUpdate'])
         ->name('api.settings.bulk-update');
-    
+
     // Import/Export operations
     Route::get('/export/all', [SettingsController::class, 'export'])
         ->name('api.settings.export');
-    
+
     Route::post('/import', [SettingsController::class, 'import'])
         ->name('api.settings.import');
-    
+
     // Utility operations
     Route::post('/{key}/reset-default', [SettingsController::class, 'resetToDefault'])
         ->name('api.settings.reset-default')
         ->where('key', '[a-zA-Z0-9_.-]+');
-    
+
     Route::post('/cache/clear', [SettingsController::class, 'clearCache'])
         ->name('api.settings.cache.clear');
 });
@@ -84,7 +84,7 @@ Route::get('/settings/docs', function () {
                 'POST /api/settings/import' => 'Import settings',
                 'POST /api/settings/{key}/reset-default' => 'Reset setting to default',
                 'POST /api/settings/cache/clear' => 'Clear settings cache',
-            ]
+            ],
         ],
         'parameters' => [
             'query_parameters' => [
@@ -116,16 +116,16 @@ Route::get('/settings/docs', function () {
                             'group' => 'general',
                             'description' => 'Main website title',
                             'is_public' => true,
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             'update_setting' => [
                 'request' => 'PUT /api/settings/site_title',
                 'body' => [
                     'value' => 'New Site Title',
-                    'description' => 'Updated description'
-                ]
+                    'description' => 'Updated description',
+                ],
             ],
             'bulk_update' => [
                 'request' => 'POST /api/settings/bulk-update',
@@ -133,10 +133,10 @@ Route::get('/settings/docs', function () {
                     'settings' => [
                         'site_title' => 'New Title',
                         'jobs_per_page' => 25,
-                        'email_notifications_enabled' => true
-                    ]
-                ]
-            ]
+                        'email_notifications_enabled' => true,
+                    ],
+                ],
+            ],
         ],
         'habr_integration' => [
             'based_on' => 'Habr article best practices for Laravel settings management',
@@ -148,8 +148,8 @@ Route::get('/settings/docs', function () {
                 'Import/export functionality',
                 'Audit trail with user tracking',
                 'Default value management',
-                'Bulk operations support'
-            ]
-        ]
+                'Bulk operations support',
+            ],
+        ],
     ]);
-})->name('api.settings.docs'); 
+})->name('api.settings.docs');

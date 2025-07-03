@@ -4,17 +4,18 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
     public function up(): void
     {
         Schema::table('candidates', function (Blueprint $table) {
-            if (!Schema::hasColumn('candidates', 'image_path')) {
+            if (! Schema::hasColumn('candidates', 'image_path')) {
                 $table->string('image_path')->nullable()->after('expected_salary');
             }
-            if (!Schema::hasColumn('candidates', 'resume_path')) {
+            if (! Schema::hasColumn('candidates', 'resume_path')) {
                 $table->string('resume_path')->nullable()->after('image_path');
             }
         });

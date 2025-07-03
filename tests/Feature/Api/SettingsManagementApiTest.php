@@ -6,10 +6,10 @@ use App\Actions\SettingsManagement\GetModelSettings;
 use App\Actions\SettingsManagement\UpdateModelSettings;
 use App\Data\SettingsManagement\ModelSettingsData;
 use App\Data\SettingsManagement\SettingsUpdateData;
-use App\Models\User;
 use App\Models\Candidate;
-use App\Models\Job;
 use App\Models\Company;
+use App\Models\Job;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Cache;
@@ -18,7 +18,7 @@ use Tests\TestCase;
 
 /**
  * Settings Management API Test Suite
- * 
+ *
  * Comprehensive testing for the Settings Management API including:
  * - Actionable actions testing
  * - DTO transformations
@@ -29,7 +29,8 @@ use Tests\TestCase;
  */
 class SettingsManagementApiTest extends TestCase
 {
-    use RefreshDatabase, WithFaker;
+    use RefreshDatabase;
+    use WithFaker;
 
     protected User $user;
     protected Candidate $candidate;
@@ -39,7 +40,7 @@ class SettingsManagementApiTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create test models with settings support
         $this->user = User::factory()->create();
         $this->candidate = Candidate::factory()->create();
@@ -133,7 +134,7 @@ class SettingsManagementApiTest extends TestCase
         // Should detect theme change and new sms setting
         $this->assertContains('profile.theme', $updateData->changedKeys);
         $this->assertContains('notifications.sms', $updateData->changedKeys);
-        
+
         // Should not include unchanged email setting
         $this->assertNotContains('notifications.email', $updateData->changedKeys);
     }
@@ -148,14 +149,14 @@ class SettingsManagementApiTest extends TestCase
         $response = $this->getJson('/api/v1/settings/');
 
         $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        'supported_models',
-                        'total_count',
-                    ],
-                    'message',
-                ]);
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    'supported_models',
+                    'total_count',
+                ],
+                'message',
+            ]);
 
         $data = $response->json('data');
         $this->assertArrayHasKey('user', $data['supported_models']);
@@ -170,16 +171,16 @@ class SettingsManagementApiTest extends TestCase
         $response = $this->getJson('/api/v1/settings/user/schema');
 
         $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        'model_type',
-                        'model_name',
-                        'supports_settings',
-                        'settings_categories',
-                    ],
-                    'message',
-                ]);
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    'model_type',
+                    'model_name',
+                    'supports_settings',
+                    'settings_categories',
+                ],
+                'message',
+            ]);
 
         $data = $response->json('data');
         $this->assertEquals('App\Models\User', $data['model_type']);
@@ -197,17 +198,17 @@ class SettingsManagementApiTest extends TestCase
         $response = $this->getJson("/api/v1/settings/user/{$this->user->id}");
 
         $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        'model_type',
-                        'model_id',
-                        'settings',
-                        'from_cache',
-                        'performance',
-                    ],
-                    'message',
-                ]);
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    'model_type',
+                    'model_id',
+                    'settings',
+                    'from_cache',
+                    'performance',
+                ],
+                'message',
+            ]);
 
         $data = $response->json('data');
         $this->assertEquals('App\Models\User', $data['model_type']);
@@ -234,7 +235,7 @@ class SettingsManagementApiTest extends TestCase
         $this->assertArrayHasKey('notifications', $settings);
         $this->assertEquals('dark', $settings['profile']['theme']);
         $this->assertTrue($settings['notifications']['email']);
-        
+
         // Should not include unrequested keys
         $this->assertArrayNotHasKey('language', $settings['profile'] ?? []);
         $this->assertArrayNotHasKey('sms', $settings['notifications'] ?? []);
@@ -257,17 +258,17 @@ class SettingsManagementApiTest extends TestCase
         ]);
 
         $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        'model_type',
-                        'model_id',
-                        'updated_keys',
-                        'update_summary',
-                        'backup_id',
-                    ],
-                    'message',
-                ]);
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    'model_type',
+                    'model_id',
+                    'updated_keys',
+                    'update_summary',
+                    'backup_id',
+                ],
+                'message',
+            ]);
 
         // Verify settings were updated
         $this->assertEquals('light', $this->user->fresh()->settings()->get('profile.theme'));
@@ -294,20 +295,20 @@ class SettingsManagementApiTest extends TestCase
         ]);
 
         $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        'successful_updates',
-                        'failed_updates',
-                        'summary' => [
-                            'total',
-                            'successful',
-                            'failed',
-                            'success_rate',
-                        ],
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    'successful_updates',
+                    'failed_updates',
+                    'summary' => [
+                        'total',
+                        'successful',
+                        'failed',
+                        'success_rate',
                     ],
-                    'message',
-                ]);
+                ],
+                'message',
+            ]);
 
         $data = $response->json('data');
         $this->assertEquals(3, $data['summary']['total']);
@@ -376,7 +377,7 @@ class SettingsManagementApiTest extends TestCase
         ]);
 
         $response->assertStatus(422)
-                ->assertJsonValidationErrors(['settings']);
+            ->assertJsonValidationErrors(['settings']);
     }
 
     /** @test */
@@ -388,7 +389,7 @@ class SettingsManagementApiTest extends TestCase
         ]);
 
         $response->assertStatus(422)
-                ->assertJsonValidationErrors(['update_strategy']);
+            ->assertJsonValidationErrors(['update_strategy']);
     }
 
     /** @test */
@@ -397,12 +398,12 @@ class SettingsManagementApiTest extends TestCase
         $response = $this->getJson('/api/v1/settings/user/999999');
 
         $response->assertStatus(500)
-                ->assertJson([
-                    'success' => false,
-                    'message' => function ($message) {
-                        return str_contains($message, 'not found');
-                    },
-                ]);
+            ->assertJson([
+                'success' => false,
+                'message' => function ($message) {
+                    return str_contains($message, 'not found');
+                },
+            ]);
     }
 
     /** @test */
@@ -416,7 +417,7 @@ class SettingsManagementApiTest extends TestCase
         ]);
 
         $response->assertStatus(422)
-                ->assertJsonValidationErrors(['model_ids']);
+            ->assertJsonValidationErrors(['model_ids']);
     }
 
     /**
@@ -439,7 +440,7 @@ class SettingsManagementApiTest extends TestCase
             // Test retrieval
             $response = $this->getJson("/api/v1/settings/{$modelData['type']}/{$modelData['model']->id}");
             $response->assertStatus(200);
-            
+
             $settings = $response->json('data.settings');
             $this->assertEquals('test_data', $settings['test']['value']);
 
@@ -467,15 +468,15 @@ class SettingsManagementApiTest extends TestCase
         $response = $this->getJson('/api/v1/public/settings/models');
 
         $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        'supported_models',
-                        'api_version',
-                        'documentation_url',
-                    ],
-                    'message',
-                ]);
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    'supported_models',
+                    'api_version',
+                    'documentation_url',
+                ],
+                'message',
+            ]);
 
         $data = $response->json('data');
         $this->assertArrayHasKey('user', $data['supported_models']);
@@ -490,18 +491,18 @@ class SettingsManagementApiTest extends TestCase
         $response = $this->getJson('/api/v1/public/settings/user/schema/public');
 
         $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        'model_type',
-                        'schema' => [
-                            'categories',
-                            'description',
-                        ],
-                        'api_endpoints',
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    'model_type',
+                    'schema' => [
+                        'categories',
+                        'description',
                     ],
-                    'message',
-                ]);
+                    'api_endpoints',
+                ],
+                'message',
+            ]);
 
         $data = $response->json('data');
         $this->assertEquals('user', $data['model_type']);
@@ -518,20 +519,20 @@ class SettingsManagementApiTest extends TestCase
         $response = $this->getJson('/api/v1/settings/docs/');
 
         $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        'api_version',
-                        'title',
-                        'description',
-                        'base_url',
-                        'authentication',
-                        'rate_limits',
-                        'endpoints',
-                        'supported_models',
-                    ],
-                    'message',
-                ]);
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    'api_version',
+                    'title',
+                    'description',
+                    'base_url',
+                    'authentication',
+                    'rate_limits',
+                    'endpoints',
+                    'supported_models',
+                ],
+                'message',
+            ]);
 
         $data = $response->json('data');
         $this->assertEquals('1.0', $data['api_version']);
@@ -545,15 +546,15 @@ class SettingsManagementApiTest extends TestCase
         $response = $this->getJson('/api/v1/settings/docs/examples');
 
         $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        'get_settings',
-                        'update_settings',
-                        'bulk_update',
-                    ],
-                    'message',
-                ]);
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    'get_settings',
+                    'update_settings',
+                    'bulk_update',
+                ],
+                'message',
+            ]);
 
         $data = $response->json('data');
         $this->assertArrayHasKey('url', $data['get_settings']);
@@ -564,11 +565,10 @@ class SettingsManagementApiTest extends TestCase
     /**
      * Helper Methods
      */
-
     protected function tearDown(): void
     {
         // Clear cache between tests
         Cache::flush();
         parent::tearDown();
     }
-} 
+}

@@ -44,4 +44,4 @@ return new class extends Migration
             $table->dropSoftDeletes();
         });
     }
-}; 
+};

@@ -6,7 +6,7 @@ use App\Models\JobType;
 
 /**
  * Job Type Template Model
- * 
+ *
  * Based on Habr article patterns for model-oriented templating
  */
 class JobTypeTemplateModel extends BaseTemplateModel
@@ -19,19 +19,19 @@ class JobTypeTemplateModel extends BaseTemplateModel
 
     public static function fromJobType(JobType $jobType): self
     {
-        $model = new self();
+        $model = new self;
         $model->name = $jobType->name ?? '';
         $model->slug = $jobType->slug ?? '';
         $model->description = $jobType->description;
-        $model->isActive = (bool)$jobType->is_active;
+        $model->isActive = (bool) $jobType->is_active;
         $model->jobsCount = $jobType->jobs()->count();
-        
+
         return $model;
     }
 
     public function badge(): string
     {
-        return match($this->name) {
+        return match ($this->name) {
             'Full-time' => 'bg-blue-100 text-blue-800',
             'Part-time' => 'bg-purple-100 text-purple-800',
             'Contract' => 'bg-orange-100 text-orange-800',
@@ -40,4 +40,4 @@ class JobTypeTemplateModel extends BaseTemplateModel
             default => 'bg-gray-100 text-gray-800',
         };
     }
-} 
+}

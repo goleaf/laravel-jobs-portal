@@ -42,7 +42,7 @@ class SalaryCurrencyControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanCreateSalarycurrency(): void
+    public function admin_can_create_salarycurrency(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -58,8 +58,7 @@ class SalaryCurrencyControllerTest extends TestCase
         $response->assertStatus(201)
             ->assertJsonStructure([
                 'data' => ['currency_name', 'currency_code', 'currency_icon', 'is_active', 'id', 'created_at', 'updated_at'],
-            ])
-        ;
+            ]);
 
         $this->assertDatabaseHas('salary_currencies', [
             'name' => $data['name'] ?? $data[array_key_first($data)],
@@ -67,7 +66,7 @@ class SalaryCurrencyControllerTest extends TestCase
     }
 
     /** @test */
-    public function employerCanCreateSalarycurrency(): void
+    public function employer_can_create_salarycurrency(): void
     {
         Sanctum::actingAs($this->employer);
 
@@ -84,7 +83,7 @@ class SalaryCurrencyControllerTest extends TestCase
     }
 
     /** @test */
-    public function candidateCannotCreateSalarycurrency(): void
+    public function candidate_cannot_create_salarycurrency(): void
     {
         Sanctum::actingAs($this->candidate);
 
@@ -101,7 +100,7 @@ class SalaryCurrencyControllerTest extends TestCase
     }
 
     /** @test */
-    public function unauthenticatedUserCannotCreateSalarycurrency(): void
+    public function unauthenticated_user_cannot_create_salarycurrency(): void
     {
         $data = [
             'currency_name' => 'US Dollar',
@@ -116,7 +115,7 @@ class SalaryCurrencyControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanUpdateSalarycurrency(): void
+    public function admin_can_update_salarycurrency(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -139,7 +138,7 @@ class SalaryCurrencyControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanDeleteSalarycurrency(): void
+    public function admin_can_delete_salarycurrency(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -155,7 +154,7 @@ class SalaryCurrencyControllerTest extends TestCase
     }
 
     /** @test */
-    public function validationFailsWithInvalidData(): void
+    public function validation_fails_with_invalid_data(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -166,12 +165,11 @@ class SalaryCurrencyControllerTest extends TestCase
         $response = $this->postJson('/api/salarycurrency', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function validationFailsWithDuplicateName(): void
+    public function validation_fails_with_duplicate_name(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -188,12 +186,11 @@ class SalaryCurrencyControllerTest extends TestCase
         $response = $this->postJson('/api/salarycurrency', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function canListSalarycurrencys(): void
+    public function can_list_salarycurrencys(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -206,12 +203,11 @@ class SalaryCurrencyControllerTest extends TestCase
                 'data' => [
                     '*' => ['currency_name', 'currency_code', 'currency_icon', 'is_active', 'id', 'created_at', 'updated_at'],
                 ],
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function canShowSingleSalarycurrency(): void
+    public function can_show_single_salarycurrency(): void
     {
         Sanctum::actingAs($this->admin);
 

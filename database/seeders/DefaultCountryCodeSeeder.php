@@ -14,7 +14,7 @@ class DefaultCountryCodeSeeder extends Seeder
     {
         $countryCodeExist = Setting::where('key', 'default_country_code')->exists();
 
-        if (!$countryCodeExist) {
+        if (! $countryCodeExist) {
             Setting::create(['key' => 'default_country_code', 'value' => 'in']);
         }
     }

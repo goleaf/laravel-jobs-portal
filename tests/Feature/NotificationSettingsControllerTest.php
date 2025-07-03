@@ -31,11 +31,10 @@ class NotificationSettingsControllerTest extends TestCase
     /**
      * Universal Pattern: Test index functionality.
      */
-    public function testIndexDisplaysCorrectly(): void
+    public function test_index_displays_correctly(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('notificationsettings.index'))
-        ;
+            ->get(route('notificationsettings.index'));
 
         $response->assertStatus(200);
     }
@@ -43,11 +42,10 @@ class NotificationSettingsControllerTest extends TestCase
     /**
      * Universal Pattern: Test create form display.
      */
-    public function testCreateDisplaysForm(): void
+    public function test_create_displays_form(): void
     {
         $response = $this->actingAs($this->user)
-            ->get(route('notificationsettings.create'))
-        ;
+            ->get(route('notificationsettings.create'));
 
         $response->assertStatus(200);
     }
@@ -55,7 +53,7 @@ class NotificationSettingsControllerTest extends TestCase
     /**
      * Universal Pattern: Test successful store operation.
      */
-    public function testStoreCreatesNewRecord(): void
+    public function test_store_creates_new_record(): void
     {
         $data = [
             'name' => $this->faker->name,
@@ -65,8 +63,7 @@ class NotificationSettingsControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->post(route('notificationsettings.store'), $data)
-        ;
+            ->post(route('notificationsettings.store'), $data);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('notificationsettingss', [
@@ -78,11 +75,10 @@ class NotificationSettingsControllerTest extends TestCase
     /**
      * Universal Pattern: Test validation errors.
      */
-    public function testStoreValidatesRequiredFields(): void
+    public function test_store_validates_required_fields(): void
     {
         $response = $this->actingAs($this->user)
-            ->post(route('notificationsettings.store'), [])
-        ;
+            ->post(route('notificationsettings.store'), []);
 
         $response->assertSessionHasErrors(['name']);
     }
@@ -90,13 +86,12 @@ class NotificationSettingsControllerTest extends TestCase
     /**
      * Universal Pattern: Test show functionality.
      */
-    public function testShowDisplaysRecord(): void
+    public function test_show_displays_record(): void
     {
         $notificationsettings = NotificationSettings::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->get(route('notificationsettings.show', $notificationsettings))
-        ;
+            ->get(route('notificationsettings.show', $notificationsettings));
 
         $response->assertStatus(200);
     }
@@ -104,13 +99,12 @@ class NotificationSettingsControllerTest extends TestCase
     /**
      * Universal Pattern: Test edit form display.
      */
-    public function testEditDisplaysForm(): void
+    public function test_edit_displays_form(): void
     {
         $notificationsettings = NotificationSettings::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->get(route('notificationsettings.edit', $notificationsettings))
-        ;
+            ->get(route('notificationsettings.edit', $notificationsettings));
 
         $response->assertStatus(200);
     }
@@ -118,7 +112,7 @@ class NotificationSettingsControllerTest extends TestCase
     /**
      * Universal Pattern: Test successful update operation.
      */
-    public function testUpdateModifiesRecord(): void
+    public function test_update_modifies_record(): void
     {
         $notificationsettings = NotificationSettings::factory()->create();
         $newData = [
@@ -127,8 +121,7 @@ class NotificationSettingsControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->put(route('notificationsettings.update', $notificationsettings), $newData)
-        ;
+            ->put(route('notificationsettings.update', $notificationsettings), $newData);
 
         $response->assertRedirect();
         $this->assertDatabaseHas('notificationsettingss', [
@@ -140,13 +133,12 @@ class NotificationSettingsControllerTest extends TestCase
     /**
      * Universal Pattern: Test successful delete operation.
      */
-    public function testDestroyDeletesRecord(): void
+    public function test_destroy_deletes_record(): void
     {
         $notificationsettings = NotificationSettings::factory()->create();
 
         $response = $this->actingAs($this->user)
-            ->delete(route('notificationsettings.destroy', $notificationsettings))
-        ;
+            ->delete(route('notificationsettings.destroy', $notificationsettings));
 
         $response->assertRedirect();
         $this->assertSoftDeleted($notificationsettings);
@@ -155,7 +147,7 @@ class NotificationSettingsControllerTest extends TestCase
     /**
      * Universal Pattern: Test authorization.
      */
-    public function testUnauthorizedAccessIsPrevented(): void
+    public function test_unauthorized_access_is_prevented(): void
     {
         $response = $this->get(route('notificationsettings.index'));
 
@@ -165,7 +157,7 @@ class NotificationSettingsControllerTest extends TestCase
     /**
      * Universal Pattern: Test with invalid data.
      */
-    public function testStoreWithInvalidEmail(): void
+    public function test_store_with_invalid_email(): void
     {
         $data = [
             'name' => 'Test Name',
@@ -174,8 +166,7 @@ class NotificationSettingsControllerTest extends TestCase
         ];
 
         $response = $this->actingAs($this->user)
-            ->post(route('notificationsettings.store'), $data)
-        ;
+            ->post(route('notificationsettings.store'), $data);
 
         $response->assertSessionHasErrors(['email']);
     }
@@ -183,7 +174,7 @@ class NotificationSettingsControllerTest extends TestCase
     /**
      * Universal Pattern: Test unique validation.
      */
-    public function testStorePreventsDuplicateNames(): void
+    public function test_store_prevents_duplicate_names(): void
     {
         $existing = NotificationSettings::factory()->create(['name' => 'Unique Name']);
 

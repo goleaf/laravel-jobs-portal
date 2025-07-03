@@ -78,7 +78,7 @@ class UserUpdateRequest extends FormRequest
             foreach ($socialFields as $field) {
                 if ($this->has($field) && $this->{$field}) {
                     $platform = str_replace('_url', '', $field);
-                    if (!str_contains($this->{$field}, $platform.'.com')) {
+                    if (! str_contains($this->{$field}, $platform.'.com')) {
                         $validator->errors()->add($field, "Please provide a valid {$platform} URL.");
                     }
                 }

@@ -9,14 +9,14 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\ReportedToCandidate.
  *
- * @property int         $id
- * @property int         $user_id
- * @property int         $candidate_id
- * @property string      $note
+ * @property int $id
+ * @property int $user_id
+ * @property int $candidate_id
+ * @property string $note
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
- * @property Candidate   $candidate
- * @property User        $user
+ * @property Candidate $candidate
+ * @property User $user
  *
  * @method static \Illuminate\Database\Eloquent\Builder|ReportedToCandidate newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ReportedToCandidate newQuery()

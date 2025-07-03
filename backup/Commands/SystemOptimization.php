@@ -193,8 +193,8 @@ class SystemOptimization extends Command
         ];
 
         foreach ($securityChecks as $key => $value) {
-            $status = ('APP_DEBUG' === $key && 'OFF' === $value)
-                      || ('APP_DEBUG' !== $key && 'MISSING' !== $value && 'unknown' !== $value);
+            $status = ($key === 'APP_DEBUG' && $value === 'OFF')
+                      || ($key !== 'APP_DEBUG' && $value !== 'MISSING' && $value !== 'unknown');
 
             $icon = $status ? '✅' : '⚠️';
             $this->line("   {$icon} {$key}: {$value}");
@@ -260,9 +260,9 @@ class SystemOptimization extends Command
         $this->line(str_repeat('=', 35));
 
         $checklist = [
-            'Environment Configuration' => 'production' === env('APP_ENV'),
-            'Debug Mode Disabled' => !env('APP_DEBUG', true),
-            'Application Key Set' => !empty(env('APP_KEY')),
+            'Environment Configuration' => env('APP_ENV') === 'production',
+            'Debug Mode Disabled' => ! env('APP_DEBUG', true),
+            'Application Key Set' => ! empty(env('APP_KEY')),
             'Database Connected' => $this->isDatabaseConnected(),
             'Routes Cached' => file_exists('bootstrap/cache/routes-v7.php'),
             'Config Cached' => file_exists('bootstrap/cache/config.php'),
@@ -277,7 +277,7 @@ class SystemOptimization extends Command
             $icon = $status ? '✅' : '❌';
             $this->line("   {$icon} {$item}");
             if ($status) {
-                ++$readyCount;
+                $readyCount++;
             }
         }
 
@@ -314,7 +314,7 @@ class SystemOptimization extends Command
     private function hasEnoughTranslations(): bool
     {
         $langFile = 'lang/en.json';
-        if (!file_exists($langFile)) {
+        if (! file_exists($langFile)) {
             return false;
         }
 

@@ -75,7 +75,7 @@ class CityTest extends TestCase
     // =============================================
 
     /** @test */
-    public function itHasCorrectFillableAttributes()
+    public function it_has_correct_fillable_attributes()
     {
         $expected = [
             'state_id',
@@ -94,7 +94,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function itHasCorrectCasts()
+    public function it_has_correct_casts()
     {
         $expected = [
             'is_active' => 'boolean',
@@ -118,7 +118,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function itHidesDeletedAtAttribute()
+    public function it_hides_deleted_at_attribute()
     {
         $expected = ['deleted_at'];
         $this->assertEquals($expected, $this->city->getHidden());
@@ -129,21 +129,21 @@ class CityTest extends TestCase
     // =============================================
 
     /** @test */
-    public function itBelongsToState()
+    public function it_belongs_to_state()
     {
         $this->assertInstanceOf(State::class, $this->city->state);
         $this->assertEquals($this->state->id, $this->city->state->id);
     }
 
     /** @test */
-    public function itHasCountryThroughState()
+    public function it_has_country_through_state()
     {
         $this->assertInstanceOf(Country::class, $this->city->country);
         $this->assertEquals($this->country->id, $this->city->country->id);
     }
 
     /** @test */
-    public function itHasManyUsers()
+    public function it_has_many_users()
     {
         $users = User::factory()->count(3)->create(['city_id' => $this->city->id]);
 
@@ -152,7 +152,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function itHasManyCompanies()
+    public function it_has_many_companies()
     {
         $companies = Company::factory()->count(2)->create(['city_id' => $this->city->id]);
 
@@ -161,7 +161,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function itHasManyJobs()
+    public function it_has_many_jobs()
     {
         $jobs = Job::factory()->count(4)->create(['city_id' => $this->city->id]);
 
@@ -170,7 +170,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function itHasManyCandidates()
+    public function it_has_many_candidates()
     {
         $candidates = Candidate::factory()->count(5)->create(['city_id' => $this->city->id]);
 
@@ -183,7 +183,7 @@ class CityTest extends TestCase
     // =============================================
 
     /** @test */
-    public function scopeActiveReturnsOnlyActiveCities()
+    public function scope_active_returns_only_active_cities()
     {
         // Get initial count of active cities
         $initialActiveCount = City::active()->count();
@@ -200,7 +200,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopeInactiveReturnsOnlyInactiveCities()
+    public function scope_inactive_returns_only_inactive_cities()
     {
         $inactiveCity = City::factory()->create(['state_id' => $this->state->id, 'is_active' => false]);
 
@@ -212,7 +212,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopeFeaturedReturnsOnlyFeaturedCities()
+    public function scope_featured_returns_only_featured_cities()
     {
         $featuredCity = City::factory()->create(['state_id' => $this->state->id, 'is_featured' => true]);
 
@@ -228,7 +228,7 @@ class CityTest extends TestCase
     // =============================================
 
     /** @test */
-    public function scopeByStateFiltersCitiesByState()
+    public function scope_by_state_filters_cities_by_state()
     {
         $otherState = State::factory()->create(['country_id' => $this->country->id]);
         City::factory()->create(['state_id' => $otherState->id]);
@@ -240,7 +240,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopeInStatesFiltersCitiesByMultipleStates()
+    public function scope_in_states_filters_cities_by_multiple_states()
     {
         $state2 = State::factory()->create(['country_id' => $this->country->id]);
         $state3 = State::factory()->create(['country_id' => $this->country->id]);
@@ -256,7 +256,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopeByCountryFiltersCitiesByCountry()
+    public function scope_by_country_filters_cities_by_country()
     {
         $otherCountry = Country::factory()->create();
         $otherState = State::factory()->create(['country_id' => $otherCountry->id]);
@@ -269,7 +269,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopeWithCoordinatesReturnsCitiesWithCoordinates()
+    public function scope_with_coordinates_returns_cities_with_coordinates()
     {
         City::factory()->create([
             'state_id' => $this->state->id,
@@ -284,7 +284,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopeWithoutCoordinatesReturnsCitiesWithoutCoordinates()
+    public function scope_without_coordinates_returns_cities_without_coordinates()
     {
         // Get initial count of cities without coordinates
         $initialWithoutCoordinatesCount = City::withoutCoordinates()->count();
@@ -304,7 +304,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopeByTimezoneFiltersCitiesByTimezone()
+    public function scope_by_timezone_filters_cities_by_timezone()
     {
         City::factory()->create([
             'state_id' => $this->state->id,
@@ -322,7 +322,7 @@ class CityTest extends TestCase
     // =============================================
 
     /** @test */
-    public function scopeByPopulationRangeFiltersCitiesByPopulation()
+    public function scope_by_population_range_filters_cities_by_population()
     {
         City::factory()->create([
             'state_id' => $this->state->id,
@@ -336,7 +336,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopePopulationGreaterThanFiltersCorrectly()
+    public function scope_population_greater_than_filters_correctly()
     {
         City::factory()->create([
             'state_id' => $this->state->id,
@@ -350,7 +350,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopePopulationLessThanFiltersCorrectly()
+    public function scope_population_less_than_filters_correctly()
     {
         $smallCity = City::factory()->create([
             'state_id' => $this->state->id,
@@ -365,7 +365,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopeMajorReturnsMajorCities()
+    public function scope_major_returns_major_cities()
     {
         // City with is_major flag
         $majorCity1 = City::factory()->create([
@@ -390,7 +390,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopeMetropolitanReturnsMetropolitanCities()
+    public function scope_metropolitan_returns_metropolitan_cities()
     {
         // City with is_metropolitan flag
         $metroCity1 = City::factory()->create([
@@ -415,7 +415,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopeSmallReturnsSmallCities()
+    public function scope_small_returns_small_cities()
     {
         $smallCity = City::factory()->create([
             'state_id' => $this->state->id,
@@ -430,7 +430,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopeMediumReturnsMediumCities()
+    public function scope_medium_returns_medium_cities()
     {
         $mediumCity = City::factory()->create([
             'state_id' => $this->state->id,
@@ -445,7 +445,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopeLargeReturnsLargeCities()
+    public function scope_large_returns_large_cities()
     {
         $largeCity = City::factory()->create([
             'state_id' => $this->state->id,
@@ -464,7 +464,7 @@ class CityTest extends TestCase
     // =============================================
 
     /** @test */
-    public function scopeSearchFindsCitiesByName()
+    public function scope_search_finds_cities_by_name()
     {
         City::factory()->create([
             'state_id' => $this->state->id,
@@ -478,7 +478,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopeRecentReturnsRecentlyCreatedCities()
+    public function scope_recent_returns_recently_created_cities()
     {
         // Get initial count of recent cities
         $initialRecentCount = City::recent(30)->count();
@@ -497,7 +497,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopeOldReturnsOldCities()
+    public function scope_old_returns_old_cities()
     {
         $oldCity = City::factory()->create([
             'state_id' => $this->state->id,
@@ -512,7 +512,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopeAlphabeticalOrdersCitiesByName()
+    public function scope_alphabetical_orders_cities_by_name()
     {
         $cityA = City::factory()->create([
             'state_id' => $this->state->id,
@@ -534,7 +534,7 @@ class CityTest extends TestCase
     // =============================================
 
     /** @test */
-    public function scopeWithCompaniesReturnsCitiesWithCompanies()
+    public function scope_with_companies_returns_cities_with_companies()
     {
         Company::factory()->create(['city_id' => $this->city->id]);
         $cityWithoutCompanies = City::factory()->create(['state_id' => $this->state->id]);
@@ -547,7 +547,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopeWithActiveCompaniesReturnsCitiesWithActiveCompanies()
+    public function scope_with_active_companies_returns_cities_with_active_companies()
     {
         Company::factory()->create(['city_id' => $this->city->id, 'is_active' => true]);
         $cityWithInactiveCompany = City::factory()->create(['state_id' => $this->state->id]);
@@ -561,7 +561,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopeWithJobsReturnsCitiesWithJobs()
+    public function scope_with_jobs_returns_cities_with_jobs()
     {
         Job::factory()->create(['city_id' => $this->city->id]);
         $cityWithoutJobs = City::factory()->create(['state_id' => $this->state->id]);
@@ -574,7 +574,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopeWithActiveJobsReturnsCitiesWithActiveJobs()
+    public function scope_with_active_jobs_returns_cities_with_active_jobs()
     {
         Job::factory()->create(['city_id' => $this->city->id, 'status' => 'active']);
         $cityWithInactiveJob = City::factory()->create(['state_id' => $this->state->id]);
@@ -588,7 +588,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function scopePopularReturnsCitiesOrderedByActiveCompaniesCount()
+    public function scope_popular_returns_cities_ordered_by_active_companies_count()
     {
         $city2 = City::factory()->create(['state_id' => $this->state->id]);
 
@@ -620,13 +620,13 @@ class CityTest extends TestCase
     // =============================================
 
     /** @test */
-    public function hasCoordinatesReturnsTrueWhenBothCoordinatesExist()
+    public function has_coordinates_returns_true_when_both_coordinates_exist()
     {
         $this->assertTrue($this->city->hasCoordinates());
     }
 
     /** @test */
-    public function hasCoordinatesReturnsFalseWhenCoordinatesMissing()
+    public function has_coordinates_returns_false_when_coordinates_missing()
     {
         $city = City::factory()->create([
             'state_id' => $this->state->id,
@@ -638,14 +638,14 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function getCoordinatesAttributeReturnsFormattedCoordinates()
+    public function get_coordinates_attribute_returns_formatted_coordinates()
     {
         $expected = '40.71280000, -74.00600000';
         $this->assertEquals($expected, $this->city->coordinates);
     }
 
     /** @test */
-    public function getCoordinatesAttributeReturnsNullWhenNoCoordinates()
+    public function get_coordinates_attribute_returns_null_when_no_coordinates()
     {
         $city = City::factory()->create([
             'state_id' => $this->state->id,
@@ -657,7 +657,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function getPopulationCategoryAttributeReturnsCorrectCategory()
+    public function get_population_category_attribute_returns_correct_category()
     {
         $this->assertEquals('major', $this->city->population_category);
 
@@ -675,21 +675,21 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function getFullNameAttributeIncludesStateAndCountry()
+    public function get_full_name_attribute_includes_state_and_country()
     {
         $expected = 'Test City, Test State, Test Country';
         $this->assertEquals($expected, $this->city->full_name);
     }
 
     /** @test */
-    public function getDisplayNameAttributeIncludesState()
+    public function get_display_name_attribute_includes_state()
     {
         $expected = 'Test City, Test State';
         $this->assertEquals($expected, $this->city->display_name);
     }
 
     /** @test */
-    public function isMajorReturnsTrueForMajorCities()
+    public function is_major_returns_true_for_major_cities()
     {
         $this->assertTrue($this->city->isMajor());
 
@@ -702,7 +702,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function isMetropolitanReturnsTrueForMetropolitanCities()
+    public function is_metropolitan_returns_true_for_metropolitan_cities()
     {
         $this->assertTrue($this->city->isMetropolitan());
 
@@ -715,7 +715,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function distanceToCalculatesDistanceBetweenCities()
+    public function distance_to_calculates_distance_between_cities()
     {
         $city2 = City::factory()->create([
             'state_id' => $this->state->id,
@@ -731,7 +731,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function distanceToReturnsNullWhenCoordinatesMissing()
+    public function distance_to_returns_null_when_coordinates_missing()
     {
         $cityWithoutCoords = City::factory()->create([
             'state_id' => $this->state->id,
@@ -749,7 +749,7 @@ class CityTest extends TestCase
     // =============================================
 
     /** @test */
-    public function getCachedByStateReturnsCachedResults()
+    public function get_cached_by_state_returns_cached_results()
     {
         City::factory()->count(3)->create(['state_id' => $this->state->id, 'is_active' => true]);
 
@@ -762,7 +762,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function getCachedByCountryReturnsCachedResults()
+    public function get_cached_by_country_returns_cached_results()
     {
         $results1 = City::getCachedByCountry($this->country->id);
         $results2 = City::getCachedByCountry($this->country->id);
@@ -773,7 +773,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function getCachedActiveReturnsCachedResults()
+    public function get_cached_active_returns_cached_results()
     {
         $results1 = City::getCachedActive();
         $results2 = City::getCachedActive();
@@ -786,7 +786,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function getCachedFeaturedReturnsCachedResults()
+    public function get_cached_featured_returns_cached_results()
     {
         City::factory()->create(['state_id' => $this->state->id, 'is_featured' => true, 'is_active' => true]);
 
@@ -799,7 +799,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function clearCachesRemovesRelatedCacheKeys()
+    public function clear_caches_removes_related_cache_keys()
     {
         // Set up some cache entries
         City::getCachedByState($this->state->id);
@@ -818,7 +818,7 @@ class CityTest extends TestCase
     // =============================================
 
     /** @test */
-    public function validationRulesAreCorrectlyDefined()
+    public function validation_rules_are_correctly_defined()
     {
         $expectedRules = [
             'name' => 'required|string|max:180|unique:cities,name',
@@ -837,7 +837,7 @@ class CityTest extends TestCase
     }
 
     /** @test */
-    public function updateRulesExcludeCurrentCityFromUniqueCheck()
+    public function update_rules_exclude_current_city_from_unique_check()
     {
         $updateRules = City::updateRules($this->city->id);
 

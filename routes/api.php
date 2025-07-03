@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\JobTypeController;
+use App\Http\Controllers\Api\ModelSettingsController;
 use App\Http\Controllers\Api\V1\AdminApiController;
 use App\Http\Controllers\Api\V1\CandidateApiController;
 use App\Http\Controllers\Api\V1\CompanyApiController;
@@ -10,7 +11,6 @@ use App\Http\Controllers\Api\V1\JobApiController;
 use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\ModelSettingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -146,7 +146,7 @@ Route::group(['prefix' => 'i18n'], function () {
     Route::get('/translations/{locale}', function ($locale) {
         $availableLanguages = config('languages.available', ['en']);
 
-        if (!in_array($locale, $availableLanguages)) {
+        if (! in_array($locale, $availableLanguages)) {
             return response()->json(['error' => 'Language not available'], 404);
         }
 
@@ -174,7 +174,7 @@ Route::group(['prefix' => 'i18n'], function () {
         $locale = $request->input('locale');
         $availableLanguages = config('languages.available', ['en']);
 
-        if (!in_array($locale, $availableLanguages)) {
+        if (! in_array($locale, $availableLanguages)) {
             return response()->json(['error' => 'Language not available'], 400);
         }
 
@@ -224,11 +224,21 @@ Route::prefix('v1')->group(function () {
         Route::post('/register', [App\Http\Controllers\Api\V1\AuthController::class, 'register']);
 
         // Authentication routes (now public - authentication disabled)
-        Route::get('/user', function() { return response()->json(['message' => 'Authentication disabled', 'user' => null]); });
-        Route::post('/logout', function() { return response()->json(['message' => 'Authentication disabled']); });
-        Route::post('/logout-all', function() { return response()->json(['message' => 'Authentication disabled']); });
-        Route::post('/refresh', function() { return response()->json(['message' => 'Authentication disabled']); });
-        Route::get('/check-role/{role}', function() { return response()->json(['message' => 'Authentication disabled', 'role' => null]); });
+        Route::get('/user', function () {
+            return response()->json(['message' => 'Authentication disabled', 'user' => null]);
+        });
+        Route::post('/logout', function () {
+            return response()->json(['message' => 'Authentication disabled']);
+        });
+        Route::post('/logout-all', function () {
+            return response()->json(['message' => 'Authentication disabled']);
+        });
+        Route::post('/refresh', function () {
+            return response()->json(['message' => 'Authentication disabled']);
+        });
+        Route::get('/check-role/{role}', function () {
+            return response()->json(['message' => 'Authentication disabled', 'role' => null]);
+        });
     });
 
     // Test dashboard stats without authentication
@@ -306,11 +316,11 @@ Route::prefix('v1')->group(function () {
 
     /**
      * ELOQUENT HAS MANY DEEP INTEGRATION ROUTES
-     * 
+     *
      * Package: staudenmeir/eloquent-has-many-deep v1.21
      * Source: https://github.com/staudenmeir/eloquent-has-many-deep
      * Reference: https://madewithlaravel.com/eloquent-has-many-deep
-     * 
+     *
      * These routes demonstrate complex multi-level relationships
      * that replace multiple queries with single optimized calls.
      */
@@ -318,23 +328,23 @@ Route::prefix('v1')->group(function () {
         // User Location Jobs: User -> Country -> State -> City -> Jobs
         Route::get('/location-jobs', [\App\Http\Controllers\Enhanced\DeepRelationshipController::class, 'getUserLocationJobs'])
             ->name('api.deep.location-jobs');
-        
-        // Company Applications: User -> Company -> Jobs -> JobApplications  
+
+        // Company Applications: User -> Company -> Jobs -> JobApplications
         Route::get('/company-applications', [\App\Http\Controllers\Enhanced\DeepRelationshipController::class, 'getCompanyApplications'])
             ->name('api.deep.company-applications');
-        
+
         // Region Candidates: User -> Country -> State -> City -> Users (Candidates)
         Route::get('/region-candidates', [\App\Http\Controllers\Enhanced\DeepRelationshipController::class, 'getRegionCandidates'])
             ->name('api.deep.region-candidates');
-        
+
         // Applied Skills: User -> JobApplications -> Jobs -> JobSkills -> Skills
         Route::get('/applied-skills', [\App\Http\Controllers\Enhanced\DeepRelationshipController::class, 'getCandidateAppliedSkills'])
             ->name('api.deep.applied-skills');
-        
+
         // Similar Candidates: User -> JobApplications -> Jobs -> JobApplications -> Users
         Route::get('/similar-candidates', [\App\Http\Controllers\Enhanced\DeepRelationshipController::class, 'getSimilarCandidates'])
             ->name('api.deep.similar-candidates');
-        
+
         // Comprehensive Analytics using multiple deep relationships
         Route::get('/analytics', [\App\Http\Controllers\Enhanced\DeepRelationshipController::class, 'getDeepAnalytics'])
             ->name('api.deep.analytics');
@@ -353,26 +363,26 @@ Route::prefix('model-settings')->group(function () {
     // General model settings endpoints
     Route::get('/models', [ModelSettingsController::class, 'listSupportedModels']);
     Route::get('/demo/comprehensive', [ModelSettingsController::class, 'comprehensiveDemo']);
-    
+
     // Model schema information (must be before {model}/{id} routes)
     Route::get('/{model}/schema', [ModelSettingsController::class, 'getModelSchema']);
-    
+
     // Dynamic model settings routes
     Route::get('/{model}/{id}', [ModelSettingsController::class, 'getModelSettings']);
     Route::put('/{model}/{id}', [ModelSettingsController::class, 'updateModelSettings']);
     Route::delete('/{model}/{id}', [ModelSettingsController::class, 'clearModelSettings']);
-    
+
     // Specific setting management
     Route::get('/{model}/{id}/{key}', [ModelSettingsController::class, 'getSpecificSetting']);
     Route::put('/{model}/{id}/{key}', [ModelSettingsController::class, 'setSpecificSetting']);
     Route::delete('/{model}/{id}/{key}', [ModelSettingsController::class, 'deleteSpecificSetting']);
-    
+
     // Legacy endpoints for backward compatibility
     Route::get('/users/{userId}', [ModelSettingsController::class, 'getUserSettings']);
     Route::put('/users/{userId}', [ModelSettingsController::class, 'updateUserSettings']);
     Route::get('/companies/{companyId}', [ModelSettingsController::class, 'getCompanySettings']);
     Route::put('/companies/{companyId}', [ModelSettingsController::class, 'updateCompanySettings']);
-    
+
     // Original demo endpoints
     Route::get('/demo', [ModelSettingsController::class, 'demo']);
     Route::get('/schema', [ModelSettingsController::class, 'getSchema']);

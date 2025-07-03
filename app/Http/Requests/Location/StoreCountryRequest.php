@@ -22,14 +22,14 @@ class StoreCountryRequest extends FormRequest
     public function authorize(): bool
     {
         $user = Auth::user();
-        
-        if (!$user) {
+
+        if (! $user) {
             return false;
         }
-        
+
         // Only admin or users with location management permissions
-        return $user->hasRole('Admin') || 
-               $user->hasRole('Location Manager') || 
+        return $user->hasRole('Admin') ||
+               $user->hasRole('Location Manager') ||
                $user->can('manage-locations');
     }
 
@@ -51,7 +51,7 @@ class StoreCountryRequest extends FormRequest
                 'unique:countries,name',
                 'regex:/^[a-zA-Z\s\-\.\(\)\']+$/', // Only letters, spaces, and basic punctuation
             ],
-            
+
             'official_name' => [
                 'nullable',
                 'string',
@@ -59,7 +59,7 @@ class StoreCountryRequest extends FormRequest
                 'max:150',
                 'regex:/^[a-zA-Z\s\-\.\(\)\']+$/',
             ],
-            
+
             'native_name' => [
                 'nullable',
                 'string',
@@ -76,7 +76,7 @@ class StoreCountryRequest extends FormRequest
                 'unique:countries,iso_code_2',
                 'regex:/^[A-Z]{2}$/',
             ],
-            
+
             'iso_code_3' => [
                 'required',
                 'string',
@@ -85,7 +85,7 @@ class StoreCountryRequest extends FormRequest
                 'unique:countries,iso_code_3',
                 'regex:/^[A-Z]{3}$/',
             ],
-            
+
             'iso_numeric' => [
                 'nullable',
                 'string',
@@ -100,13 +100,13 @@ class StoreCountryRequest extends FormRequest
                 'string',
                 Rule::in(['Africa', 'Antarctica', 'Asia', 'Europe', 'North America', 'South America', 'Oceania']),
             ],
-            
+
             'region' => [
                 'nullable',
                 'string',
                 'max:100',
             ],
-            
+
             'subregion' => [
                 'nullable',
                 'string',
@@ -122,13 +122,13 @@ class StoreCountryRequest extends FormRequest
                 'exists:salary_currencies,iso_code',
                 'regex:/^[A-Z]{3}$/',
             ],
-            
+
             'currency_name' => [
                 'nullable',
                 'string',
                 'max:100',
             ],
-            
+
             'currency_symbol' => [
                 'nullable',
                 'string',
@@ -143,7 +143,7 @@ class StoreCountryRequest extends FormRequest
                 'exists:languages,iso_code',
                 'regex:/^[a-z]{2}$/',
             ],
-            
+
             'languages' => [
                 'nullable',
                 'array',
@@ -162,13 +162,13 @@ class StoreCountryRequest extends FormRequest
                 'numeric',
                 'between:-90,90',
             ],
-            
+
             'longitude' => [
                 'nullable',
                 'numeric',
                 'between:-180,180',
             ],
-            
+
             'area_km2' => [
                 'nullable',
                 'numeric',
@@ -183,7 +183,7 @@ class StoreCountryRequest extends FormRequest
                 'max:10',
                 'regex:/^\+?[0-9]+$/',
             ],
-            
+
             'internet_tld' => [
                 'nullable',
                 'string',
@@ -197,13 +197,13 @@ class StoreCountryRequest extends FormRequest
                 'string',
                 'max:10',
             ],
-            
+
             'flag_image_url' => [
                 'nullable',
                 'url',
                 'max:500',
             ],
-            
+
             'display_order' => [
                 'nullable',
                 'integer',
@@ -216,12 +216,12 @@ class StoreCountryRequest extends FormRequest
                 'nullable',
                 'boolean',
             ],
-            
+
             'is_visible' => [
                 'nullable',
                 'boolean',
             ],
-            
+
             'is_supported' => [
                 'nullable',
                 'boolean',
@@ -234,7 +234,7 @@ class StoreCountryRequest extends FormRequest
                 'max:50',
                 'regex:/^[A-Za-z_\/\+\-0-9]+$/',
             ],
-            
+
             'timezones' => [
                 'nullable',
                 'array',
@@ -266,7 +266,7 @@ class StoreCountryRequest extends FormRequest
                 'min:0',
                 'max:999999',
             ],
-            
+
             'population' => [
                 'nullable',
                 'integer',
@@ -279,7 +279,7 @@ class StoreCountryRequest extends FormRequest
                 'nullable',
                 'array',
             ],
-            
+
             'notes' => [
                 'nullable',
                 'string',
@@ -299,7 +299,7 @@ class StoreCountryRequest extends FormRequest
             'name.required' => __('location.validation.country_name_required'),
             'name.unique' => __('location.validation.country_name_unique'),
             'name.regex' => __('location.validation.country_name_format'),
-            
+
             // ISO codes
             'iso_code_2.required' => __('location.validation.iso2_required'),
             'iso_code_2.size' => __('location.validation.iso2_size'),
@@ -310,28 +310,28 @@ class StoreCountryRequest extends FormRequest
             'iso_code_3.unique' => __('location.validation.iso3_unique'),
             'iso_code_3.regex' => __('location.validation.iso3_format'),
             'iso_numeric.regex' => __('location.validation.iso_numeric_format'),
-            
+
             // Geographic
             'continent.required' => __('location.validation.continent_required'),
             'continent.in' => __('location.validation.continent_invalid'),
-            
+
             // Currency
             'currency_code.exists' => __('location.validation.currency_invalid'),
             'currency_code.regex' => __('location.validation.currency_format'),
-            
+
             // Language
             'primary_language.exists' => __('location.validation.language_invalid'),
             'languages.*.exists' => __('location.validation.language_not_found'),
             'languages.*.distinct' => __('location.validation.languages_unique'),
-            
+
             // Coordinates
             'latitude.between' => __('location.validation.latitude_range'),
             'longitude.between' => __('location.validation.longitude_range'),
-            
+
             // Phone and internet
             'phone_prefix.regex' => __('location.validation.phone_prefix_format'),
             'internet_tld.regex' => __('location.validation.tld_format'),
-            
+
             // Borders
             'borders.*.exists' => __('location.validation.border_country_invalid'),
             'borders.*.distinct' => __('location.validation.borders_unique'),
@@ -384,17 +384,17 @@ class StoreCountryRequest extends FormRequest
             if ($this->hasGeographicInconsistencies()) {
                 $validator->errors()->add('continent', __('location.validation.geographic_inconsistency'));
             }
-            
+
             // Validate currency and language compatibility
             if ($this->hasIncompatibleLocaleData()) {
                 $validator->errors()->add('currency_code', __('location.validation.locale_incompatible'));
             }
-            
+
             // Check for self-referencing borders
             if ($this->hasSelfReferencingBorders()) {
                 $validator->errors()->add('borders', __('location.validation.self_referencing_border'));
             }
-            
+
             // Validate coordinate consistency
             if ($this->hasInvalidCoordinates()) {
                 $validator->errors()->add('latitude', __('location.validation.invalid_coordinates'));
@@ -414,25 +414,25 @@ class StoreCountryRequest extends FormRequest
             'official_name' => trim($this->official_name ?? '') ?: null,
             'native_name' => trim($this->native_name ?? '') ?: null,
         ]);
-        
+
         // Normalize ISO codes to uppercase
         if ($this->filled('iso_code_2')) {
             $this->merge(['iso_code_2' => strtoupper($this->iso_code_2)]);
         }
-        
+
         if ($this->filled('iso_code_3')) {
             $this->merge(['iso_code_3' => strtoupper($this->iso_code_3)]);
         }
-        
+
         if ($this->filled('currency_code')) {
             $this->merge(['currency_code' => strtoupper($this->currency_code)]);
         }
-        
+
         // Normalize language codes to lowercase
         if ($this->filled('primary_language')) {
             $this->merge(['primary_language' => strtolower($this->primary_language)]);
         }
-        
+
         // Set defaults
         $this->merge([
             'is_active' => filter_var($this->is_active ?? true, FILTER_VALIDATE_BOOLEAN),
@@ -440,24 +440,24 @@ class StoreCountryRequest extends FormRequest
             'is_supported' => filter_var($this->is_supported ?? true, FILTER_VALIDATE_BOOLEAN),
             'display_order' => (int) ($this->display_order ?? 0),
         ]);
-        
+
         // Clean arrays
         if ($this->filled('languages')) {
             $this->merge([
                 'languages' => array_filter(array_unique(array_map('strtolower', (array) $this->languages))),
             ]);
         }
-        
+
         if ($this->filled('borders')) {
             $this->merge([
                 'borders' => array_filter(array_unique(array_map('strtoupper', (array) $this->borders))),
             ]);
         }
-        
+
         if ($this->filled('timezones')) {
             $this->merge([
                 'timezones' => array_filter(array_unique((array) $this->timezones)),
-        ]);
+            ]);
         }
     }
 
@@ -486,31 +486,31 @@ class StoreCountryRequest extends FormRequest
     public function getProcessedData(): array
     {
         $data = $this->validated();
-        
+
         // Add creator information
         $data['created_by'] = Auth::id();
-        
+
         // Set timestamps
         $data['created_at'] = now();
         $data['updated_at'] = now();
-        
+
         // Process arrays as JSON
         if (isset($data['languages'])) {
             $data['languages'] = json_encode($data['languages']);
         }
-        
+
         if (isset($data['borders'])) {
             $data['borders'] = json_encode($data['borders']);
         }
-        
+
         if (isset($data['timezones'])) {
             $data['timezones'] = json_encode($data['timezones']);
         }
-        
+
         if (isset($data['metadata'])) {
             $data['metadata'] = json_encode($data['metadata']);
         }
-        
+
         return $data;
     }
 
@@ -522,7 +522,7 @@ class StoreCountryRequest extends FormRequest
         // Validate continent-region relationships
         $continent = $this->continent;
         $region = $this->region;
-        
+
         if ($continent && $region) {
             $validRegions = [
                 'Africa' => ['Northern Africa', 'Western Africa', 'Central Africa', 'Eastern Africa', 'Southern Africa'],
@@ -532,12 +532,12 @@ class StoreCountryRequest extends FormRequest
                 'South America' => ['South America'],
                 'Oceania' => ['Australia and New Zealand', 'Melanesia', 'Micronesia', 'Polynesia'],
             ];
-            
-            if (isset($validRegions[$continent]) && !in_array($region, $validRegions[$continent])) {
+
+            if (isset($validRegions[$continent]) && ! in_array($region, $validRegions[$continent])) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -549,14 +549,14 @@ class StoreCountryRequest extends FormRequest
         // Check if currency and country make sense together
         $countryCode = $this->iso_code_2;
         $currencyCode = $this->currency_code;
-        
+
         if ($countryCode && $currencyCode) {
             // Example validation: EUR should only be used by EU countries
-            if ($currencyCode === 'EUR' && !in_array($countryCode, ['AT', 'BE', 'CY', 'EE', 'FI', 'FR', 'DE', 'GR', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PT', 'SK', 'SI', 'ES'])) {
+            if ($currencyCode === 'EUR' && ! in_array($countryCode, ['AT', 'BE', 'CY', 'EE', 'FI', 'FR', 'DE', 'GR', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PT', 'SK', 'SI', 'ES'])) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -567,7 +567,7 @@ class StoreCountryRequest extends FormRequest
     {
         $borders = $this->borders ?? [];
         $countryCode = $this->iso_code_2;
-        
+
         return in_array($countryCode, $borders);
     }
 
@@ -578,15 +578,15 @@ class StoreCountryRequest extends FormRequest
     {
         $lat = $this->latitude;
         $lng = $this->longitude;
-        
+
         // If one coordinate is provided, both should be provided
         if (($lat !== null && $lng === null) || ($lat === null && $lng !== null)) {
             return true;
         }
-        
+
         // Validate specific impossible coordinates (e.g., ocean coordinates for landlocked countries)
         // This would require a more complex geographic database
-        
+
         return false;
     }
 }

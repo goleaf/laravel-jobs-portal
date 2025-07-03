@@ -2,17 +2,17 @@
 
 namespace App\Services\Universal;
 
-use JustBetter\UniqueValues\Support\UniqueValue;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
 use Exception;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use JustBetter\UniqueValues\Support\UniqueValue;
 
 /**
  * Universal Unique Value Service
- * 
+ *
  * Integrates Laravel Unique Values package with concurrency support
  * for generating unique identifiers across the job portal application.
- * 
+ *
  * Features:
  * - Job reference numbers
  * - Application tracking codes
@@ -36,6 +36,7 @@ class UniversalUniqueValueService
             ->generator(function (int $attempt): string {
                 $year = date('Y');
                 $baseNumber = str_pad((string) ($attempt + 1), 6, '0', STR_PAD_LEFT);
+
                 return "JOB-{$year}-{$baseNumber}";
             })
             ->generate();
@@ -54,6 +55,7 @@ class UniversalUniqueValueService
             ->generator(function (int $attempt): string {
                 $date = date('Ymd');
                 $baseNumber = str_pad((string) ($attempt + 1), 5, '0', STR_PAD_LEFT);
+
                 return "APP-{$date}-{$baseNumber}";
             })
             ->generate();
@@ -71,6 +73,7 @@ class UniversalUniqueValueService
             ->attempts(5)
             ->generator(function (int $attempt): string {
                 $baseNumber = str_pad((string) ($attempt + 1), 6, '0', STR_PAD_LEFT);
+
                 return "CAN-{$baseNumber}";
             })
             ->generate();
@@ -89,6 +92,7 @@ class UniversalUniqueValueService
             ->generator(function (int $attempt): string {
                 $year = date('Y');
                 $baseNumber = str_pad((string) ($attempt + 1), 5, '0', STR_PAD_LEFT);
+
                 return "COM-{$year}-{$baseNumber}";
             })
             ->generate();
@@ -101,7 +105,7 @@ class UniversalUniqueValueService
     public function generateUniqueSlug(string $title, string $scope = 'general-slug', string|int|null $subjectId = null): string
     {
         $baseSlug = Str::slug($title);
-        
+
         return UniqueValue::make()
             ->scope($scope)
             ->subject($subjectId)
@@ -125,6 +129,7 @@ class UniversalUniqueValueService
             ->generator(function (int $attempt): string {
                 $date = date('Ymd');
                 $baseNumber = str_pad((string) ($attempt + 1), 5, '0', STR_PAD_LEFT);
+
                 return "INV-{$date}-{$baseNumber}";
             })
             ->generate();
@@ -159,6 +164,7 @@ class UniversalUniqueValueService
             ->generator(function (int $attempt): string {
                 $timestamp = date('Ymd-His');
                 $suffix = str_pad((string) ($attempt + 1), 3, '0', STR_PAD_LEFT);
+
                 return "ORD-{$timestamp}-{$suffix}";
             })
             ->generate();
@@ -187,7 +193,7 @@ class UniversalUniqueValueService
                 'max_attempts' => $maxAttempts,
                 'error' => $e->getMessage(),
             ]);
-            
+
             throw $e;
         }
     }
@@ -198,22 +204,22 @@ class UniversalUniqueValueService
     public function generateBatch(string $type, array $subjectIds): array
     {
         $results = [];
-        
+
         // Validate the type parameter
         $validTypes = [
             'job-reference',
-            'application-code', 
+            'application-code',
             'candidate-code',
             'company-code',
             'invoice-number',
             'order-reference',
-            'api-key'
+            'api-key',
         ];
-        
-        if (!in_array($type, $validTypes)) {
-            throw new Exception("Invalid batch generation type: {$type}. Valid types are: " . implode(', ', $validTypes));
+
+        if (! in_array($type, $validTypes)) {
+            throw new Exception("Invalid batch generation type: {$type}. Valid types are: ".implode(', ', $validTypes));
         }
-        
+
         foreach ($subjectIds as $subjectId) {
             try {
                 $value = match ($type) {
@@ -226,7 +232,7 @@ class UniversalUniqueValueService
                     'api-key' => $this->generateApiKey($subjectId),
                     default => throw new Exception("Unsupported type: {$type}")
                 };
-                
+
                 $results[$subjectId] = $value;
             } catch (Exception $e) {
                 Log::error('Failed to generate value in batch', [
@@ -237,7 +243,7 @@ class UniversalUniqueValueService
                 throw $e;
             }
         }
-        
+
         return $results;
     }
 
@@ -249,7 +255,7 @@ class UniversalUniqueValueService
         return [
             'scopes' => [
                 'job-reference',
-                'application-code', 
+                'application-code',
                 'candidate-code',
                 'company-code',
                 'invoice-number',
@@ -274,4 +280,4 @@ class UniversalUniqueValueService
             ],
         ];
     }
-} 
+}

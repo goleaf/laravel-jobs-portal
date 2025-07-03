@@ -47,14 +47,13 @@ class MasterDataController extends AppBaseController
 
         return redirect()
             ->route('masterdata.index')
-            ->with('success', 'Master data created successfully.')
-        ;
+            ->with('success', 'Master data created successfully.');
     }
 
     /**
      * Display the specified master data.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function show($id): View
     {
@@ -65,7 +64,7 @@ class MasterDataController extends AppBaseController
     /**
      * Show the form for editing master data.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function edit($id): View
     {
@@ -76,7 +75,7 @@ class MasterDataController extends AppBaseController
     /**
      * Update the specified master data.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function update(UpdateMasterDataRequest $request, $id): RedirectResponse
     {
@@ -88,14 +87,13 @@ class MasterDataController extends AppBaseController
 
         return redirect()
             ->route('masterdata.index')
-            ->with('success', 'Master data updated successfully.')
-        ;
+            ->with('success', 'Master data updated successfully.');
     }
 
     /**
      * Remove the specified master data.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function destroy($id): RedirectResponse
     {
@@ -105,8 +103,7 @@ class MasterDataController extends AppBaseController
 
         return redirect()
             ->route('masterdata.index')
-            ->with('success', 'Master data deleted successfully.')
-        ;
+            ->with('success', 'Master data deleted successfully.');
     }
 
     /**

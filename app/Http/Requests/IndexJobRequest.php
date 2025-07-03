@@ -49,4 +49,4 @@ class IndexJobRequest extends FormRequest
             'per_page.max' => __('validation.max.numeric', ['attribute' => 'per page', 'max' => 100]),
         ];
     }
-} 
+}

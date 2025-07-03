@@ -270,8 +270,7 @@ class SkillController extends AppBaseController
                             'text' => $skill->name,
                             'name' => $skill->name,
                         ];
-                    })
-                ;
+                    });
             });
 
             return $this->sendResponse($skills, 'Skills retrieved for selection');
@@ -321,10 +320,9 @@ class SkillController extends AppBaseController
                             $query->has('jobs')->orHas('candidates');
                         })
                         ->pluck('name')
-                        ->toArray()
-                    ;
+                        ->toArray();
 
-                    if (!empty($skillsWithDependencies)) {
+                    if (! empty($skillsWithDependencies)) {
                         return $this->sendError(
                             'Some skills cannot be deleted as they are in use',
                             ['skills_in_use' => $skillsWithDependencies],
@@ -425,8 +423,7 @@ class SkillController extends AppBaseController
                 })
                 ->active()
                 ->alphabetical()
-                ->paginate(20)
-            ;
+                ->paginate(20);
 
             // Get skill statistics using model scopes
             $statistics = [

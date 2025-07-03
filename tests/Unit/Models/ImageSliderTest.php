@@ -16,7 +16,7 @@ class ImageSliderTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function itCanBeCreated()
+    public function it_can_be_created()
     {
         $model = ImageSlider::factory()->create();
 
@@ -27,9 +27,9 @@ class ImageSliderTest extends TestCase
     }
 
     /** @test */
-    public function itHasFillableAttributes()
+    public function it_has_fillable_attributes()
     {
-        $model = new ImageSlider();
+        $model = new ImageSlider;
         $fillable = $model->getFillable();
 
         $this->assertIsArray($fillable);
@@ -37,9 +37,9 @@ class ImageSliderTest extends TestCase
     }
 
     /** @test */
-    public function itHasProperCasts()
+    public function it_has_proper_casts()
     {
-        $model = new ImageSlider();
+        $model = new ImageSlider;
         $casts = $model->getCasts();
 
         $this->assertIsArray($casts);
@@ -47,7 +47,7 @@ class ImageSliderTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeUpdated()
+    public function it_can_be_updated()
     {
         $model = ImageSlider::factory()->create();
         $originalData = $model->toArray();
@@ -55,7 +55,7 @@ class ImageSliderTest extends TestCase
         // Update with specific attributes that exist in fillable
         $updateData = [
             'description' => 'Updated description',
-            'is_active' => !$model->is_active,
+            'is_active' => ! $model->is_active,
         ];
         $model->update($updateData);
 
@@ -66,7 +66,7 @@ class ImageSliderTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeDeleted()
+    public function it_can_be_deleted()
     {
         $model = ImageSlider::factory()->create();
         $modelId = $model->id;

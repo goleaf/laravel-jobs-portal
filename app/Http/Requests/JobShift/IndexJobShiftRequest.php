@@ -159,9 +159,9 @@ class IndexJobShiftRequest extends FormRequest
         }
 
         // Convert status to boolean for is_active filter
-        if ('active' === $this->status) {
+        if ($this->status === 'active') {
             $this->merge(['is_active' => true]);
-        } elseif ('inactive' === $this->status) {
+        } elseif ($this->status === 'inactive') {
             $this->merge(['is_active' => false]);
         }
     }

@@ -2,38 +2,38 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
-use Spatie\Activitylog\LogOptions;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Facades\Log;
 use LumoSolutions\Actionable\Traits\ArrayConvertible;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * Setting Model - Enhanced with Context7 patterns.
  *
- * @property int         $id
- * @property string      $key
+ * @property int $id
+ * @property string $key
  * @property null|string $value
  * @property null|string $category
  * @property null|string $type
  * @property null|string $description
- * @property bool        $is_public
- * @property bool        $is_editable
- * @property bool        $is_active
- * @property null|array  $options
- * @property null|int    $sort_order
+ * @property bool $is_public
+ * @property bool $is_editable
+ * @property bool $is_active
+ * @property null|array $options
+ * @property null|int $sort_order
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
- * @property string      $logo_url
- * @property mixed       $parsed_value
- * @property string      $display_name
- * @property string      $category_label
- * @property string      $type_label
+ * @property string $logo_url
+ * @property mixed $parsed_value
+ * @property string $display_name
+ * @property string $category_label
+ * @property string $type_label
  *
  * Context7 Scopes:
  *
@@ -70,9 +70,9 @@ use LumoSolutions\Actionable\Traits\ArrayConvertible;
  */
 class Setting extends Model
 {
+    use ArrayConvertible;
     use HasFactory;
     use LogsActivity;
-    use ArrayConvertible;
 
     // =============================================
     // CONSTANTS
@@ -164,7 +164,7 @@ class Setting extends Model
         'validation_rules',
         'default_value',
         'created_by',
-        'updated_by'
+        'updated_by',
     ];
 
     /**
@@ -193,8 +193,7 @@ class Setting extends Model
                 'sort_order',
             ])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -225,7 +224,7 @@ class Setting extends Model
     /**
      * Scope a query to only include active settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -235,7 +234,7 @@ class Setting extends Model
     /**
      * Scope a query to only include inactive settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -245,7 +244,7 @@ class Setting extends Model
     /**
      * Scope for public settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePublic($query)
     {
@@ -255,7 +254,7 @@ class Setting extends Model
     /**
      * Scope for private settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePrivate($query)
     {
@@ -265,7 +264,7 @@ class Setting extends Model
     /**
      * Scope for editable settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeEditable($query)
     {
@@ -275,7 +274,7 @@ class Setting extends Model
     /**
      * Scope for non-editable settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNonEditable($query)
     {
@@ -289,7 +288,7 @@ class Setting extends Model
     /**
      * Scope for settings by category.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByCategory($query, string $category)
     {
@@ -299,7 +298,7 @@ class Setting extends Model
     /**
      * Scope for settings by type.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByType($query, string $type)
     {
@@ -309,7 +308,7 @@ class Setting extends Model
     /**
      * Scope for settings by key.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByKey($query, string $key)
     {
@@ -319,7 +318,7 @@ class Setting extends Model
     /**
      * Scope for searching settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
@@ -327,15 +326,14 @@ class Setting extends Model
             $q->where('key', 'like', "%{$term}%")
                 ->orWhere('value', 'like', "%{$term}%")
                 ->orWhere('category', 'like', "%{$term}%")
-                ->orWhere('description', 'like', "%{$term}%")
-            ;
+                ->orWhere('description', 'like', "%{$term}%");
         });
     }
 
     /**
      * Scope for recent settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -345,7 +343,7 @@ class Setting extends Model
     /**
      * Scope for old settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -359,7 +357,7 @@ class Setting extends Model
     /**
      * Scope for general settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeGeneral($query)
     {
@@ -369,22 +367,21 @@ class Setting extends Model
     /**
      * Scope for email settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeEmail($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'email')
                 ->orWhere('key', 'like', '%email%')
-                ->orWhere('key', 'like', '%mail%')
-            ;
+                ->orWhere('key', 'like', '%mail%');
         });
     }
 
     /**
      * Scope for payment settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePayment($query)
     {
@@ -392,30 +389,28 @@ class Setting extends Model
             $q->where('category', 'payment')
                 ->orWhere('key', 'like', '%payment%')
                 ->orWhere('key', 'like', '%stripe%')
-                ->orWhere('key', 'like', '%paypal%')
-            ;
+                ->orWhere('key', 'like', '%paypal%');
         });
     }
 
     /**
      * Scope for notification settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNotification($query)
     {
         return $query->where(function ($q) {
             $q->where('category', 'notification')
                 ->orWhere('key', 'like', '%notification%')
-                ->orWhere('key', 'like', '%alert%')
-            ;
+                ->orWhere('key', 'like', '%alert%');
         });
     }
 
     /**
      * Scope for security settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSecurity($query)
     {
@@ -423,15 +418,14 @@ class Setting extends Model
             $q->where('category', 'security')
                 ->orWhere('key', 'like', '%security%')
                 ->orWhere('key', 'like', '%password%')
-                ->orWhere('key', 'like', '%auth%')
-            ;
+                ->orWhere('key', 'like', '%auth%');
         });
     }
 
     /**
      * Scope for appearance settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAppearance($query)
     {
@@ -439,15 +433,14 @@ class Setting extends Model
             $q->where('category', 'appearance')
                 ->orWhere('key', 'like', '%theme%')
                 ->orWhere('key', 'like', '%color%')
-                ->orWhere('key', 'like', '%logo%')
-            ;
+                ->orWhere('key', 'like', '%logo%');
         });
     }
 
     /**
      * Scope for social media settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSocial($query)
     {
@@ -456,15 +449,14 @@ class Setting extends Model
                 ->orWhere('key', 'like', '%facebook%')
                 ->orWhere('key', 'like', '%twitter%')
                 ->orWhere('key', 'like', '%linkedin%')
-                ->orWhere('key', 'like', '%instagram%')
-            ;
+                ->orWhere('key', 'like', '%instagram%');
         });
     }
 
     /**
      * Scope for SEO settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSeo($query)
     {
@@ -472,15 +464,14 @@ class Setting extends Model
             $q->where('category', 'seo')
                 ->orWhere('key', 'like', '%seo%')
                 ->orWhere('key', 'like', '%meta%')
-                ->orWhere('key', 'like', '%sitemap%')
-            ;
+                ->orWhere('key', 'like', '%sitemap%');
         });
     }
 
     /**
      * Scope for API settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeApi($query)
     {
@@ -488,15 +479,14 @@ class Setting extends Model
             $q->where('category', 'api')
                 ->orWhere('key', 'like', '%api%')
                 ->orWhere('key', 'like', '%token%')
-                ->orWhere('key', 'like', '%key%')
-            ;
+                ->orWhere('key', 'like', '%key%');
         });
     }
 
     /**
      * Scope for system settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSystem($query)
     {
@@ -510,7 +500,7 @@ class Setting extends Model
     /**
      * Scope for boolean type settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeBoolean($query)
     {
@@ -520,7 +510,7 @@ class Setting extends Model
     /**
      * Scope for string type settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeString($query)
     {
@@ -530,7 +520,7 @@ class Setting extends Model
     /**
      * Scope for integer type settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInteger($query)
     {
@@ -540,7 +530,7 @@ class Setting extends Model
     /**
      * Scope for array type settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeArray($query)
     {
@@ -550,7 +540,7 @@ class Setting extends Model
     /**
      * Scope for JSON type settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeJson($query)
     {
@@ -560,7 +550,7 @@ class Setting extends Model
     /**
      * Scope for text type settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeText($query)
     {
@@ -570,7 +560,7 @@ class Setting extends Model
     /**
      * Scope for email type settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeEmailType($query)
     {
@@ -580,7 +570,7 @@ class Setting extends Model
     /**
      * Scope for URL type settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeUrl($query)
     {
@@ -590,7 +580,7 @@ class Setting extends Model
     /**
      * Scope for color type settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeColor($query)
     {
@@ -600,7 +590,7 @@ class Setting extends Model
     /**
      * Scope for file type settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFile($query)
     {
@@ -614,7 +604,7 @@ class Setting extends Model
     /**
      * Scope a query to only include popular records.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopular($query)
     {
@@ -624,19 +614,18 @@ class Setting extends Model
     /**
      * Scope for user-configurable settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeUser($query)
     {
         return $query->where('is_editable', true)
-            ->where('is_public', true)
-        ;
+            ->where('is_public', true);
     }
 
     /**
      * Scope for required settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRequired($query)
     {
@@ -646,7 +635,7 @@ class Setting extends Model
     /**
      * Scope for optional settings.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOptional($query)
     {
@@ -656,7 +645,7 @@ class Setting extends Model
     /**
      * Scope for alphabetical ordering.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
@@ -666,13 +655,12 @@ class Setting extends Model
     /**
      * Scope for ordering by sort order.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeBySortOrder($query)
     {
         return $query->orderBy('sort_order', 'asc')
-            ->orderBy('key', 'asc')
-        ;
+            ->orderBy('key', 'asc');
     }
 
     // =============================================
@@ -712,7 +700,7 @@ class Setting extends Model
     /**
      * Get cached setting value by key.
      *
-     * @param null|mixed $default
+     * @param  null|mixed  $default
      */
     public static function getCachedValue(string $key, $default = null)
     {
@@ -801,7 +789,7 @@ class Setting extends Model
      */
     public function isSystem(): bool
     {
-        return !$this->is_editable || 'system' === $this->category;
+        return ! $this->is_editable || $this->category === 'system';
     }
 
     /**
@@ -831,7 +819,7 @@ class Setting extends Model
     /**
      * Set setting value with type casting.
      *
-     * @param mixed $value
+     * @param  mixed  $value
      */
     public function setValue($value): void
     {
@@ -889,7 +877,7 @@ class Setting extends Model
             $setting->clearCaches();
             Cache::forget("settings.{$setting->key}");
             Cache::forget('settings.all');
-            
+
             Log::info('Setting updated', [
                 'key' => $setting->key,
                 'value' => $setting->value,
@@ -973,6 +961,7 @@ class Setting extends Model
     {
         return Cache::remember("settings.{$key}", 3600, function () use ($key, $default) {
             $setting = static::where('key', $key)->first();
+
             return $setting ? $setting->value : $default;
         });
     }
@@ -983,7 +972,7 @@ class Setting extends Model
     public static function set(string $key, $value, array $options = [])
     {
         $setting = static::firstOrNew(['key' => $key]);
-        
+
         $setting->fill([
             'value' => $value,
             'type' => $options['type'] ?? 'string',
@@ -1008,16 +997,17 @@ class Setting extends Model
     public static function getAll($group = null): array
     {
         $cacheKey = $group ? "settings.group.{$group}" : 'settings.all';
-        
+
         return Cache::remember($cacheKey, 3600, function () use ($group) {
             $query = static::query();
-            
+
             if ($group) {
                 $query->where('group', $group);
             }
-            
+
             return $query->pluck('value', 'key')->map(function ($value, $key) {
                 $setting = static::where('key', $key)->first();
+
                 return $setting ? $setting->value : $value;
             })->toArray();
         });
@@ -1052,15 +1042,15 @@ class Setting extends Model
      */
     public function validateValue($value): bool
     {
-        if (!$this->validation_rules) {
+        if (! $this->validation_rules) {
             return true;
         }
 
         $validator = \Validator::make(['value' => $value], [
-            'value' => $this->validation_rules
+            'value' => $this->validation_rules,
         ]);
 
-        return !$validator->fails();
+        return ! $validator->fails();
     }
 
     /**
@@ -1078,9 +1068,10 @@ class Setting extends Model
     {
         if ($this->default_value !== null) {
             $this->value = $this->default_value;
+
             return $this->save();
         }
-        
+
         return false;
     }
 
@@ -1090,11 +1081,11 @@ class Setting extends Model
     public static function export($group = null): array
     {
         $query = static::query();
-        
+
         if ($group) {
             $query->where('group', $group);
         }
-        
+
         return $query->get()->map(function ($setting) {
             return [
                 'key' => $setting->key,
@@ -1115,7 +1106,7 @@ class Setting extends Model
     public static function import(array $settings): int
     {
         $imported = 0;
-        
+
         foreach ($settings as $settingData) {
             if (isset($settingData['key'])) {
                 static::updateOrCreate(
@@ -1125,10 +1116,10 @@ class Setting extends Model
                 $imported++;
             }
         }
-        
+
         // Clear all caches
         Cache::flush();
-        
+
         return $imported;
     }
 

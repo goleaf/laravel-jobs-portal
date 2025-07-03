@@ -20,13 +20,13 @@ abstract class DuskTestCase extends BaseTestCase
 
         // Enhanced pattern: Ensure screenshots directory exists
         $screenshotsPath = base_path('tests/Browser/screenshots');
-        if (!is_dir($screenshotsPath)) {
+        if (! is_dir($screenshotsPath)) {
             mkdir($screenshotsPath, 0755, true);
         }
 
         // Enhanced pattern: Ensure console logs directory exists
         $consolePath = base_path('tests/Browser/console');
-        if (!is_dir($consolePath)) {
+        if (! is_dir($consolePath)) {
             mkdir($consolePath, 0755, true);
         }
     }
@@ -37,7 +37,7 @@ abstract class DuskTestCase extends BaseTestCase
     protected function tearDown(): void
     {
         // Enhanced pattern: Clean up temporary Chrome user data directories
-        if ('WIN' === strtoupper(substr(PHP_OS, 0, 3))) {
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $tempDir = sys_get_temp_dir();
             $chromeDirs = glob($tempDir.DIRECTORY_SEPARATOR.'chrome-dusk-*');
             foreach ($chromeDirs as $dir) {
@@ -59,7 +59,7 @@ abstract class DuskTestCase extends BaseTestCase
         ini_set('memory_limit', '4G');
         ini_set('max_execution_time', '600');
 
-        if (!static::runningInSail()) {
+        if (! static::runningInSail()) {
             static::startChromeDriver();
         }
     }
@@ -92,7 +92,7 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected function driver(): RemoteWebDriver
     {
-        $options = (new ChromeOptions())->addArguments([
+        $options = (new ChromeOptions)->addArguments([
             '--disable-gpu',
             '--headless=new',  // Use new headless mode
             '--no-sandbox',
@@ -124,7 +124,7 @@ abstract class DuskTestCase extends BaseTestCase
         ]);
 
         // Enhanced pattern: Add platform-specific configurations
-        if ('WIN' === strtoupper(substr(PHP_OS, 0, 3))) {
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $options->addArguments([
                 '--disable-features=VizDisplayCompositor',
                 '--log-level=3',  // Reduce logging on Windows
@@ -191,7 +191,7 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected static function runningInSail(): bool
     {
-        return isset($_ENV['LARAVEL_SAIL']) && '1' === $_ENV['LARAVEL_SAIL'];
+        return isset($_ENV['LARAVEL_SAIL']) && $_ENV['LARAVEL_SAIL'] === '1';
     }
 
     /**
@@ -199,7 +199,7 @@ abstract class DuskTestCase extends BaseTestCase
      */
     private function removeDirectory(string $dir): void
     {
-        if (!is_dir($dir)) {
+        if (! is_dir($dir)) {
             return;
         }
 
@@ -212,7 +212,7 @@ abstract class DuskTestCase extends BaseTestCase
             rmdir($dir);
         } catch (\Exception $e) {
             // Ignore cleanup errors in CI environments
-            if (!getenv('CI')) {
+            if (! getenv('CI')) {
                 throw $e;
             }
         }

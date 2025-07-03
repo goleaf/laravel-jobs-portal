@@ -80,7 +80,7 @@ class SetLocale
     {
         $acceptLanguage = $request->header('Accept-Language');
 
-        if (!$acceptLanguage) {
+        if (! $acceptLanguage) {
             return null;
         }
 
@@ -93,7 +93,7 @@ class SetLocale
             $lang = trim($subparts[0]);
             $quality = 1.0;
 
-            if (count($subparts) > 1 && 0 === strpos($subparts[1], 'q=')) {
+            if (count($subparts) > 1 && strpos($subparts[1], 'q=') === 0) {
                 $quality = floatval(substr($subparts[1], 2));
             }
 

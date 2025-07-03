@@ -5,18 +5,19 @@ namespace App\Actions\SettingsManagement;
 use App\Models\SettingsVersion;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
-use LumoSolutions\Actionable\Traits\IsRunnable;
 use LumoSolutions\Actionable\Traits\IsDispatchable;
+use LumoSolutions\Actionable\Traits\IsRunnable;
 
 /**
  * Create Settings Version Action
- * 
+ *
  * Creates comprehensive version history for settings changes with
  * audit trails, change analysis, and rollback capabilities.
  */
 class CreateSettingsVersion
 {
-    use IsRunnable, IsDispatchable;
+    use IsDispatchable;
+    use IsRunnable;
 
     /**
      * Create a new settings version
@@ -25,10 +26,10 @@ class CreateSettingsVersion
         string $modelType,
         string|int $modelId,
         array $newSettings,
-        array $previousSettings = null,
+        ?array $previousSettings = null,
         string $changeType = 'update',
-        int $userId = null,
-        string $changeReason = null,
+        ?int $userId = null,
+        ?string $changeReason = null,
         string $source = 'api'
     ): SettingsVersion {
         try {
@@ -94,10 +95,10 @@ class CreateSettingsVersion
     public static function fromModel(
         Model $model,
         array $newSettings,
-        array $previousSettings = null,
+        ?array $previousSettings = null,
         string $changeType = 'update',
-        int $userId = null,
-        string $changeReason = null
+        ?int $userId = null,
+        ?string $changeReason = null
     ): SettingsVersion {
         return self::run(
             modelType: get_class($model),
@@ -115,8 +116,8 @@ class CreateSettingsVersion
      */
     public static function createRollback(
         SettingsVersion $targetVersion,
-        int $userId = null,
-        string $reason = null
+        ?int $userId = null,
+        ?string $reason = null
     ): SettingsVersion {
         return self::run(
             modelType: $targetVersion->model_type,
@@ -137,19 +138,19 @@ class CreateSettingsVersion
     {
         $previousFlat = $this->flattenArray($previous);
         $newFlat = $this->flattenArray($new);
-        
+
         $changedKeys = [];
 
         // Find changed and new keys
         foreach ($newFlat as $key => $value) {
-            if (!array_key_exists($key, $previousFlat) || $previousFlat[$key] !== $value) {
+            if (! array_key_exists($key, $previousFlat) || $previousFlat[$key] !== $value) {
                 $changedKeys[] = $key;
             }
         }
 
         // Find removed keys
         foreach ($previousFlat as $key => $value) {
-            if (!array_key_exists($key, $newFlat)) {
+            if (! array_key_exists($key, $newFlat)) {
                 $changedKeys[] = $key;
             }
         }
@@ -165,7 +166,7 @@ class CreateSettingsVersion
         $flattened = [];
 
         foreach ($array as $key => $value) {
-            $newKey = $prefix === '' ? $key : $prefix . '.' . $key;
+            $newKey = $prefix === '' ? $key : $prefix.'.'.$key;
 
             if (is_array($value)) {
                 $flattened = array_merge($flattened, $this->flattenArray($value, $newKey));
@@ -181,25 +182,25 @@ class CreateSettingsVersion
      * Get version history for a model
      */
     public static function getVersionHistory(
-        string $modelType, 
-        string|int $modelId, 
+        string $modelType,
+        string|int $modelId,
         int $limit = 10
     ): \Illuminate\Database\Eloquent\Collection {
         return SettingsVersion::forModel($modelType, $modelId)
-                              ->active()
-                              ->orderByVersion('desc')
-                              ->limit($limit)
-                              ->get();
+            ->active()
+            ->orderByVersion('desc')
+            ->limit($limit)
+            ->get();
     }
 
     /**
      * Compare two versions
      */
     public static function compareVersions(
-        SettingsVersion $version1, 
+        SettingsVersion $version1,
         SettingsVersion $version2
     ): array {
-        if ($version1->model_type !== $version2->model_type || 
+        if ($version1->model_type !== $version2->model_type ||
             $version1->model_id !== $version2->model_id) {
             throw new \InvalidArgumentException('Cannot compare versions from different models');
         }
@@ -237,10 +238,16 @@ class CreateSettingsVersion
      */
     private function getChangeType($oldValue, $newValue): string
     {
-        if ($oldValue === null && $newValue !== null) return 'added';
-        if ($oldValue !== null && $newValue === null) return 'removed';
-        if ($oldValue !== $newValue) return 'modified';
-        
+        if ($oldValue === null && $newValue !== null) {
+            return 'added';
+        }
+        if ($oldValue !== null && $newValue === null) {
+            return 'removed';
+        }
+        if ($oldValue !== $newValue) {
+            return 'modified';
+        }
+
         return 'unchanged';
     }
 
@@ -248,12 +255,12 @@ class CreateSettingsVersion
      * Cleanup old versions based on retention policy
      */
     public static function cleanupOldVersions(
-        string $modelType = null,
+        ?string $modelType = null,
         int $keepLastVersions = 10,
         int $keepDays = 365
     ): int {
         $query = SettingsVersion::where('created_at', '<', now()->subDays($keepDays));
-        
+
         if ($modelType) {
             $query->where('model_type', $modelType);
         }
@@ -262,10 +269,10 @@ class CreateSettingsVersion
         if ($keepLastVersions > 0) {
             $query->whereNotIn('id', function ($subQuery) use ($modelType, $keepLastVersions) {
                 $subQuery->select('id')
-                         ->from('settings_versions')
-                         ->when($modelType, fn($q) => $q->where('model_type', $modelType))
-                         ->orderBy('created_at', 'desc')
-                         ->limit($keepLastVersions);
+                    ->from('settings_versions')
+                    ->when($modelType, fn ($q) => $q->where('model_type', $modelType))
+                    ->orderBy('created_at', 'desc')
+                    ->limit($keepLastVersions);
             });
         }
 
@@ -281,4 +288,4 @@ class CreateSettingsVersion
 
         return $deletedCount;
     }
-} 
+}

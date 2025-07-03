@@ -15,11 +15,10 @@ class FrontSettingRepository extends BaseRepository implements FrontSettingRepos
     /**
      * Get setting by key.
      *
-     * @param string $key
      * @return mixed
      */
     public function getByKey(string $key)
     {
         return $this->model->where('key', $key)->first();
     }
-} 
+}

@@ -67,7 +67,7 @@ class DestroyCandidateResource extends JsonResource
                 'request_id' => request()->header('X-Request-ID') ?? \Str::uuid(),
             ],
 
-            'recovery_options' => $this->when(!$this->resource['force_delete'], [
+            'recovery_options' => $this->when(! $this->resource['force_delete'], [
                 'soft_delete_enabled' => true,
                 'recovery_possible' => true,
                 'recovery_deadline' => now()->addDays(30)->format('Y-m-d H:i:s'),
@@ -134,7 +134,7 @@ class DestroyCandidateResource extends JsonResource
     /**
      * Customize the outgoing response for the resource.
      *
-     * @param mixed $response
+     * @param  mixed  $response
      */
     public function withResponse(Request $request, $response): void
     {
@@ -193,7 +193,7 @@ class DestroyCandidateResource extends JsonResource
     {
         $recommendations = [];
 
-        if (!($this->resource['force_delete'] ?? false)) {
+        if (! ($this->resource['force_delete'] ?? false)) {
             $recommendations[] = 'Save the recovery information if account restoration might be needed.';
             $recommendations[] = 'Contact support within 30 days if this deletion was accidental.';
         }

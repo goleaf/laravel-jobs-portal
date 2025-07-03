@@ -31,7 +31,7 @@ class JobTypePolicy
         }
 
         // Only authenticated users with proper permissions can view inactive job types
-        if (!$user) {
+        if (! $user) {
             return Response::deny('You must be logged in to view inactive job types.');
         }
 
@@ -80,7 +80,7 @@ class JobTypePolicy
         }
 
         // Prevent updating default job types by non-admin users
-        if ($jobType->is_default && !$user->hasRole(['admin', 'super_admin'])) {
+        if ($jobType->is_default && ! $user->hasRole(['admin', 'super_admin'])) {
             return Response::deny('You cannot modify default job types.');
         }
 
@@ -154,7 +154,7 @@ class JobTypePolicy
         }
 
         // HR managers can manage status of custom job types
-        if ($user->hasRole('hr_manager') && !$jobType->is_default) {
+        if ($user->hasRole('hr_manager') && ! $jobType->is_default) {
             return Response::allow();
         }
 
@@ -171,7 +171,7 @@ class JobTypePolicy
         }
 
         // HR managers can feature custom job types
-        if ($user->hasRole('hr_manager') && !$jobType->is_default) {
+        if ($user->hasRole('hr_manager') && ! $jobType->is_default) {
             return Response::allow();
         }
 
@@ -338,7 +338,7 @@ class JobTypePolicy
      */
     public function modifyDefault(User $user, JobType $jobType): Response
     {
-        if (!$jobType->is_default) {
+        if (! $jobType->is_default) {
             return Response::allow(); // Not a default job type
         }
 
@@ -378,8 +378,7 @@ class JobTypePolicy
             // Check if any of the job types are default types
             $hasDefaultTypes = JobType::whereIn('id', $jobTypeIds)
                 ->where('is_default', true)
-                ->exists()
-            ;
+                ->exists();
 
             if ($hasDefaultTypes) {
                 return Response::deny('You cannot perform bulk operations on default job types.');

@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class CandidateModelTest extends TestCase
 {
     /** @test */
-    public function itHasStatusConstants()
+    public function it_has_status_constants()
     {
         $this->assertEquals(1, Candidate::ACTIVE);
         $this->assertEquals(0, Candidate::DEACTIVE);
@@ -23,23 +23,23 @@ class CandidateModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasAvailabilityConstants()
+    public function it_has_availability_constants()
     {
         $this->assertEquals(1, Candidate::IMMEDIATE_AVAILABLE);
         $this->assertEquals(0, Candidate::Not_IMMEDIATE_AVAILABLE);
     }
 
     /** @test */
-    public function itHasPathConstants()
+    public function it_has_path_constants()
     {
         $this->assertEquals('candidates/resumes', Candidate::RESUME_PATH);
         $this->assertEquals('candidates/images', Candidate::IMAGE_PATH);
     }
 
     /** @test */
-    public function itHasCorrectFillableAttributes()
+    public function it_has_correct_fillable_attributes()
     {
-        $candidate = new Candidate();
+        $candidate = new Candidate;
         $fillable = $candidate->getFillable();
 
         $expectedFillable = [
@@ -68,9 +68,9 @@ class CandidateModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasCorrectCasts()
+    public function it_has_correct_casts()
     {
-        $candidate = new Candidate();
+        $candidate = new Candidate;
         $casts = $candidate->getCasts();
 
         $expectedCasts = [
@@ -89,7 +89,7 @@ class CandidateModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasStatusArrayConstants()
+    public function it_has_status_array_constants()
     {
         $expectedStatus = [
             2 => 'All',
@@ -101,7 +101,7 @@ class CandidateModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasImmediateAvailabilityConstants()
+    public function it_has_immediate_availability_constants()
     {
         $expectedImmediate = [
             2 => 'All',
@@ -113,7 +113,7 @@ class CandidateModelTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeInstantiatedWithAttributes()
+    public function it_can_be_instantiated_with_attributes()
     {
         $candidate = new Candidate([
             'user_id' => 1,
@@ -147,9 +147,9 @@ class CandidateModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasRelationshipMethods()
+    public function it_has_relationship_methods()
     {
-        $candidate = new Candidate();
+        $candidate = new Candidate;
 
         // Test that relationship methods exist by checking they are callable
         $this->assertTrue(method_exists($candidate, 'user'));
@@ -159,14 +159,14 @@ class CandidateModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasCorrectTableName()
+    public function it_has_correct_table_name()
     {
-        $candidate = new Candidate();
+        $candidate = new Candidate;
         $this->assertEquals('candidates', $candidate->getTable());
     }
 
     /** @test */
-    public function itHasValidationRules()
+    public function it_has_validation_rules()
     {
         $expectedRules = [
             'first_name' => 'required|string|max:100',

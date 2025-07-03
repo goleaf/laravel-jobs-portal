@@ -126,28 +126,27 @@ class EnhancedUserService
         $query = User::query();
 
         // Apply filters
-        if (!empty($filters['search'])) {
+        if (! empty($filters['search'])) {
             $query->where(function ($q) use ($filters) {
                 $q->where('first_name', 'LIKE', "%{$filters['search']}%")
                     ->orWhere('last_name', 'LIKE', "%{$filters['search']}%")
-                    ->orWhere('email', 'LIKE', "%{$filters['search']}%")
-                ;
+                    ->orWhere('email', 'LIKE', "%{$filters['search']}%");
             });
         }
 
-        if (!empty($filters['user_type'])) {
+        if (! empty($filters['user_type'])) {
             $query->byType($filters['user_type']);
         }
 
-        if (!empty($filters['is_active'])) {
+        if (! empty($filters['is_active'])) {
             $query->where('is_active', $filters['is_active']);
         }
 
-        if (!empty($filters['is_verified'])) {
+        if (! empty($filters['is_verified'])) {
             $query->verified();
         }
 
-        if (!empty($filters['country_id'])) {
+        if (! empty($filters['country_id'])) {
             $query->where('country_id', $filters['country_id']);
         }
 
@@ -155,8 +154,7 @@ class EnhancedUserService
         $query->with(['country', 'state', 'city', 'roles']);
 
         return $query->orderBy('created_at', 'desc')
-            ->paginate($filters['per_page'] ?? 15)
-        ;
+            ->paginate($filters['per_page'] ?? 15);
     }
 
     /**
@@ -277,18 +275,17 @@ class EnhancedUserService
         $query = User::query();
 
         // Apply same filters as search
-        if (!empty($filters['user_type'])) {
+        if (! empty($filters['user_type'])) {
             $query->byType($filters['user_type']);
         }
 
-        if (!empty($filters['is_active'])) {
+        if (! empty($filters['is_active'])) {
             $query->where('is_active', $filters['is_active']);
         }
 
         return $query->with(['country', 'state', 'city', 'roles'])
             ->orderBy('created_at', 'desc')
-            ->get()
-        ;
+            ->get();
     }
 
     /**

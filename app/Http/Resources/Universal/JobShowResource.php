@@ -90,7 +90,7 @@ class JobShowResource extends JsonResource
                 'status' => $this->status,
                 'is_featured' => $this->is_featured,
                 'is_freelance' => $this->is_freelance,
-                'is_active' => 'published' === $this->status,
+                'is_active' => $this->status === 'published',
                 'views_count' => $this->views_count ?? 0,
             ],
             'similar_jobs' => $this->when($this->relationLoaded('similarJobs'), function () {
@@ -133,7 +133,7 @@ class JobShowResource extends JsonResource
 
     private function getFormattedSalaryRange(): ?string
     {
-        if ($this->hide_salary || (!$this->salary_from && !$this->salary_to)) {
+        if ($this->hide_salary || (! $this->salary_from && ! $this->salary_to)) {
             return null;
         }
 
@@ -171,7 +171,7 @@ class JobShowResource extends JsonResource
 
     private function getExperienceRange(): ?string
     {
-        if (!$this->experience_years_min && !$this->experience_years_max) {
+        if (! $this->experience_years_min && ! $this->experience_years_max) {
             return null;
         }
 
@@ -188,17 +188,17 @@ class JobShowResource extends JsonResource
 
     private function canUserApply($user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
-        if ('published' !== $this->status) {
+        if ($this->status !== 'published') {
             return false;
         }
         if ($this->deadline && $this->deadline->isPast()) {
             return false;
         }
 
-        return !$this->applications()->where('candidate_id', $user->candidate?->id)->exists();
+        return ! $this->applications()->where('candidate_id', $user->candidate?->id)->exists();
     }
 
     private function getIncludedRelations(): array

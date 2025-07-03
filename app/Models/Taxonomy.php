@@ -18,26 +18,26 @@ use Spatie\Activitylog\Traits\LogsActivity;
  * Organizes terms into logical categories for the job portal system.
  * Supports hierarchical structures and flexible metadata.
  *
- * @property int               $id
- * @property string            $name
- * @property string            $slug
- * @property null|string       $description
- * @property string            $type
- * @property bool              $is_hierarchical
- * @property bool              $is_active
- * @property bool              $is_public
- * @property null|array        $meta
- * @property int               $sort_order
- * @property null|Carbon       $created_at
- * @property null|Carbon       $updated_at
- * @property null|Carbon       $deleted_at
+ * @property int $id
+ * @property string $name
+ * @property string $slug
+ * @property null|string $description
+ * @property string $type
+ * @property bool $is_hierarchical
+ * @property bool $is_active
+ * @property bool $is_public
+ * @property null|array $meta
+ * @property int $sort_order
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property null|Carbon $deleted_at
  * @property Collection|Term[] $terms
  * @property Collection|Term[] $activeTerms
  * @property Collection|Term[] $rootTerms
- * @property int               $terms_count
- * @property int               $active_terms_count
- * @property string            $display_name
- * @property string            $type_label
+ * @property int $terms_count
+ * @property int $active_terms_count
+ * @property string $display_name
+ * @property string $type_label
  *
  * Enhanced Enhanced Scopes:
  *
@@ -142,8 +142,7 @@ class Taxonomy extends Model
                 'sort_order',
             ])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -209,7 +208,7 @@ class Taxonomy extends Model
     /**
      * Scope a query to only include active taxonomies.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -219,7 +218,7 @@ class Taxonomy extends Model
     /**
      * Scope a query to only include inactive taxonomies.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -229,7 +228,7 @@ class Taxonomy extends Model
     /**
      * Scope a query to only include public taxonomies.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePublic($query)
     {
@@ -239,7 +238,7 @@ class Taxonomy extends Model
     /**
      * Scope a query to only include private taxonomies.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePrivate($query)
     {
@@ -249,7 +248,7 @@ class Taxonomy extends Model
     /**
      * Scope a query to only include hierarchical taxonomies.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeHierarchical($query)
     {
@@ -259,7 +258,7 @@ class Taxonomy extends Model
     /**
      * Scope a query to only include flat taxonomies.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFlat($query)
     {
@@ -273,7 +272,7 @@ class Taxonomy extends Model
     /**
      * Scope a query to filter by type.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByType($query, string $type)
     {
@@ -283,15 +282,14 @@ class Taxonomy extends Model
     /**
      * Scope a query to search taxonomies.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
             $q->where('name', 'like', "%{$term}%")
                 ->orWhere('description', 'like', "%{$term}%")
-                ->orWhere('type', 'like', "%{$term}%")
-            ;
+                ->orWhere('type', 'like', "%{$term}%");
         });
     }
 
@@ -302,7 +300,7 @@ class Taxonomy extends Model
     /**
      * Scope a query to order alphabetically.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
@@ -312,7 +310,7 @@ class Taxonomy extends Model
     /**
      * Scope a query to order by sort order.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOrdered($query)
     {
@@ -326,7 +324,7 @@ class Taxonomy extends Model
     /**
      * Scope a query to include term counts.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithTermCounts($query)
     {
@@ -336,26 +334,24 @@ class Taxonomy extends Model
     /**
      * Scope a query to get popular taxonomies.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopePopular($query, int $limit = 10)
     {
         return $query->withCount('terms')
             ->orderBy('terms_count', 'desc')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     /**
      * Scope a query to get recent taxonomies.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query, int $days = 30)
     {
         return $query->where('created_at', '>=', now()->subDays($days))
-            ->orderBy('created_at', 'desc')
-        ;
+            ->orderBy('created_at', 'desc');
     }
 
     // =============================================

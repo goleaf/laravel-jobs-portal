@@ -32,8 +32,7 @@ class CompanyController extends AppBaseController
     }
 
     /**
-     * @param mixed $uniqueId
-     *
+     * @param  mixed  $uniqueId
      * @return Application|Factory|View
      */
     public function getCompaniesDetails($uniqueId): View

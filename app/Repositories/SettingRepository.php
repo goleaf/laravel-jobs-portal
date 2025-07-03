@@ -79,7 +79,7 @@ class SettingRepository extends BaseRepository
         $settingsData->forget($formMetadata);
 
         // Process cookie consent
-        $settingsData->put('cookie_consent_enabled', !empty($input['cookie_consent_enabled']));
+        $settingsData->put('cookie_consent_enabled', ! empty($input['cookie_consent_enabled']));
 
         // Define environment setting keys using collection operations
         $envKeys = collect([
@@ -112,7 +112,7 @@ class SettingRepository extends BaseRepository
         // $env = new DotenvEditor();
         $inputArr = Arr::except($input, ['_token']);
 
-        if ('env_setting' == $inputArr['sectionName']) {
+        if ($inputArr['sectionName'] == 'env_setting') {
             // $env->setAutoBackup(true);
 
             $envSetting = EnvSetting::pluck('value', 'key')->toArray();
@@ -143,23 +143,23 @@ class SettingRepository extends BaseRepository
             // }
         }
 
-        if ('social_settings' == $inputArr['sectionName']) {
+        if ($inputArr['sectionName'] == 'social_settings') {
             $inputArr['facebook_url'] = (empty($inputArr['facebook_url'])) ? '' : $inputArr['facebook_url'];
             $inputArr['twitter_url'] = (empty($inputArr['twitter_url'])) ? '' : $inputArr['twitter_url'];
             $inputArr['google_plus_url'] = (empty($inputArr['google_plus_url'])) ? '' : $inputArr['google_plus_url'];
             $inputArr['linkedIn_url'] = (empty($inputArr['linkedIn_url'])) ? '' : $inputArr['linkedIn_url'];
         }
-        if ('general' == $inputArr['sectionName']) {
-            $inputArr['enable_google_recaptcha'] = (!isset($inputArr['enable_google_recaptcha'])) ? false : $inputArr['enable_google_recaptcha'];
+        if ($inputArr['sectionName'] == 'general') {
+            $inputArr['enable_google_recaptcha'] = (! isset($inputArr['enable_google_recaptcha'])) ? false : $inputArr['enable_google_recaptcha'];
         }
         foreach ($inputArr as $key => $value) {
             /** @var Setting $setting */
             $setting = Setting::where('key', $key)->first();
-            if (!$setting) {
+            if (! $setting) {
                 continue;
             }
 
-            if (in_array($key, ['logo', 'favicon', 'footer_logo']) && !empty($value)) {
+            if (in_array($key, ['logo', 'favicon', 'footer_logo']) && ! empty($value)) {
                 $this->fileUpload($setting, $value);
 
                 continue;
@@ -172,8 +172,7 @@ class SettingRepository extends BaseRepository
     }
 
     /**
-     * @param mixed $file
-     *
+     * @param  mixed  $file
      * @return mixed
      *
      * @throws DiskDoesNotExist
@@ -191,7 +190,7 @@ class SettingRepository extends BaseRepository
 
     public function createOrUpdateEnv($env, $key, $value): bool
     {
-        if (!$env->keyExists($key)) {
+        if (! $env->keyExists($key)) {
             $env->addData([
                 $key => $value,
             ]);

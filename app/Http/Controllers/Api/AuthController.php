@@ -28,7 +28,7 @@ class AuthController extends Controller
             'remember' => 'boolean',
         ]);
 
-        if (!Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']], $credentials['remember'] ?? false)) {
+        if (! Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password']], $credentials['remember'] ?? false)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid credentials',
@@ -129,8 +129,7 @@ class AuthController extends Controller
                         'roles' => $user->user_type, // Simplified role display
                         'created_at' => $user->created_at?->format('Y-m-d H:i:s'),
                     ];
-                })
-            ;
+                });
 
             // System information
             $systemInfo = [
@@ -201,10 +200,9 @@ class AuthController extends Controller
         try {
             $user = User::where('email', $request->email)
                 ->where('is_active', 1)
-                ->first()
-            ;
+                ->first();
 
-            if (!$user) {
+            if (! $user) {
                 return response()->json([
                     'success' => false,
                     'message' => 'User not found or inactive',
@@ -213,7 +211,7 @@ class AuthController extends Controller
             }
 
             // Check if password matches (for demo, we assume 'password' is correct)
-            $canLogin = 'password' === $request->password
+            $canLogin = $request->password === 'password'
                        || Hash::check($request->password, $user->password);
 
             return response()->json([

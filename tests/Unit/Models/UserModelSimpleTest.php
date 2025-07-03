@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class UserModelSimpleTest extends TestCase
 {
     /** @test */
-    public function itHasUserTypeConstants()
+    public function it_has_user_type_constants()
     {
         $this->assertEquals('admin', User::ADMIN);
         $this->assertEquals('employer', User::EMPLOYER);
@@ -21,9 +21,9 @@ class UserModelSimpleTest extends TestCase
     }
 
     /** @test */
-    public function itHasCorrectFillableAttributes()
+    public function it_has_correct_fillable_attributes()
     {
-        $user = new User();
+        $user = new User;
         $fillable = $user->getFillable();
 
         $expectedFillable = [
@@ -60,9 +60,9 @@ class UserModelSimpleTest extends TestCase
     }
 
     /** @test */
-    public function itHasCorrectHiddenAttributes()
+    public function it_has_correct_hidden_attributes()
     {
-        $user = new User();
+        $user = new User;
         $hidden = $user->getHidden();
 
         $this->assertContains('password', $hidden);
@@ -70,9 +70,9 @@ class UserModelSimpleTest extends TestCase
     }
 
     /** @test */
-    public function itHasCorrectCasts()
+    public function it_has_correct_casts()
     {
-        $user = new User();
+        $user = new User;
         $casts = $user->getCasts();
 
         $expectedCasts = [
@@ -90,7 +90,7 @@ class UserModelSimpleTest extends TestCase
     }
 
     /** @test */
-    public function itGeneratesFullNameAttribute()
+    public function it_generates_full_name_attribute()
     {
         $user = new User([
             'first_name' => 'John',
@@ -101,7 +101,7 @@ class UserModelSimpleTest extends TestCase
     }
 
     /** @test */
-    public function itHasLanguageConstants()
+    public function it_has_language_constants()
     {
         $expectedLanguages = [
             'ar' => 'Arabic',
@@ -119,13 +119,13 @@ class UserModelSimpleTest extends TestCase
     }
 
     /** @test */
-    public function itHasProfileConstant()
+    public function it_has_profile_constant()
     {
         $this->assertEquals('profile-pictures', User::PROFILE);
     }
 
     /** @test */
-    public function itHasModeConstants()
+    public function it_has_mode_constants()
     {
         $this->assertEquals(1, User::DARK_MODE);
         $this->assertEquals(0, User::LIGHT_MODE);
@@ -133,7 +133,7 @@ class UserModelSimpleTest extends TestCase
     }
 
     /** @test */
-    public function itChecksOnlineProfileAvailabilityWhenNoSocialUrls()
+    public function it_checks_online_profile_availability_when_no_social_urls()
     {
         $user = new User([
             'facebook_url' => null,
@@ -148,7 +148,7 @@ class UserModelSimpleTest extends TestCase
     }
 
     /** @test */
-    public function itChecksOnlineProfileAvailabilityWhenHasSocialUrls()
+    public function it_checks_online_profile_availability_when_has_social_urls()
     {
         $user = new User([
             'linkedin_url' => 'https://linkedin.com/in/johndoe',
@@ -159,9 +159,9 @@ class UserModelSimpleTest extends TestCase
     }
 
     /** @test */
-    public function itHasRelationshipMethods()
+    public function it_has_relationship_methods()
     {
-        $user = new User();
+        $user = new User;
 
         // Test that relationship methods exist by checking they are callable
         $this->assertTrue(method_exists($user, 'country'));

@@ -14,17 +14,17 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Class CompanySize.
  *
- * @property int                  $id
- * @property string               $size
- * @property string               $name
- * @property string               $description
- * @property bool                 $is_active
- * @property bool                 $is_default
- * @property int                  $order
- * @property null|Carbon          $created_at
- * @property null|Carbon          $updated_at
+ * @property int $id
+ * @property string $size
+ * @property string $name
+ * @property string $description
+ * @property bool $is_active
+ * @property bool $is_default
+ * @property int $order
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
  * @property Collection|Company[] $companies
- * @property null|int             $companies_count
+ * @property null|int $companies_count
  */
 class CompanySize extends Model
 {
@@ -84,8 +84,7 @@ class CompanySize extends Model
             ->logOnly(['size', 'name', 'is_active', 'is_default'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn (string $eventName) => "Company size has been {$eventName}")
-        ;
+            ->setDescriptionForEvent(fn (string $eventName) => "Company size has been {$eventName}");
     }
 
     /**
@@ -99,7 +98,7 @@ class CompanySize extends Model
     /**
      * Scope a query to only include active company sizes.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -109,7 +108,7 @@ class CompanySize extends Model
     /**
      * Scope a query to only include inactive company sizes.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -119,8 +118,8 @@ class CompanySize extends Model
     /**
      * Scope a query to order by order field.
      *
-     * @param mixed $query
-     * @param mixed $direction
+     * @param  mixed  $query
+     * @param  mixed  $direction
      */
     public function scopeOrdered($query, $direction = 'asc')
     {
@@ -130,21 +129,20 @@ class CompanySize extends Model
     /**
      * Scope a query to search company sizes by name or description.
      *
-     * @param mixed $query
-     * @param mixed $search
+     * @param  mixed  $query
+     * @param  mixed  $search
      */
     public function scopeSearch($query, $search)
     {
         return $query->where('name', 'like', '%'.$search.'%')
             ->orWhere('size', 'like', '%'.$search.'%')
-            ->orWhere('description', 'like', '%'.$search.'%')
-        ;
+            ->orWhere('description', 'like', '%'.$search.'%');
     }
 
     /**
      * Scope a query to only include default company sizes.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeDefault($query)
     {
@@ -154,7 +152,7 @@ class CompanySize extends Model
     /**
      * Scope a query to only include custom (non-default) company sizes.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeCustom($query)
     {
@@ -164,8 +162,8 @@ class CompanySize extends Model
     /**
      * Scope a query to only include recently created company sizes.
      *
-     * @param mixed $query
-     * @param mixed $days
+     * @param  mixed  $query
+     * @param  mixed  $days
      */
     public function scopeRecent($query, $days = 30)
     {
@@ -175,8 +173,8 @@ class CompanySize extends Model
     /**
      * Scope a query to only include old company sizes.
      *
-     * @param mixed $query
-     * @param mixed $days
+     * @param  mixed  $query
+     * @param  mixed  $days
      */
     public function scopeOld($query, $days = 365)
     {
@@ -186,7 +184,7 @@ class CompanySize extends Model
     /**
      * Scope a query to only include company sizes that have companies.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithCompanies($query)
     {
@@ -196,7 +194,7 @@ class CompanySize extends Model
     /**
      * Scope a query to order company sizes alphabetically by name.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
@@ -206,14 +204,13 @@ class CompanySize extends Model
     /**
      * Scope a query to get most popular company sizes by company count.
      *
-     * @param mixed      $query
-     * @param null|mixed $limit
+     * @param  mixed  $query
+     * @param  null|mixed  $limit
      */
     public function scopePopular($query, $limit = null)
     {
         $query = $query->withCount('companies')
-            ->orderBy('companies_count', 'desc')
-        ;
+            ->orderBy('companies_count', 'desc');
 
         if ($limit) {
             $query = $query->limit($limit);
@@ -225,37 +222,34 @@ class CompanySize extends Model
     /**
      * Scope a query to only include small company sizes.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSmall($query)
     {
         return $query->where('size', 'like', '%small%')
-            ->orWhere('size', 'like', '%startup%')
-        ;
+            ->orWhere('size', 'like', '%startup%');
     }
 
     /**
      * Scope a query to only include medium company sizes.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeMedium($query)
     {
         return $query->where('size', 'like', '%medium%')
-            ->orWhere('size', 'like', '%mid%')
-        ;
+            ->orWhere('size', 'like', '%mid%');
     }
 
     /**
      * Scope a query to only include large company sizes.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeLarge($query)
     {
         return $query->where('size', 'like', '%large%')
-            ->orWhere('size', 'like', '%enterprise%')
-        ;
+            ->orWhere('size', 'like', '%enterprise%');
     }
 
     /**
@@ -331,7 +325,7 @@ class CompanySize extends Model
      */
     public function getSizeCategoryAttribute(): string
     {
-        if (!$this->max_employees) {
+        if (! $this->max_employees) {
             return self::CATEGORY_ENTERPRISE;
         }
 
@@ -380,7 +374,7 @@ class CompanySize extends Model
      */
     public function getIsStartupAttribute(): bool
     {
-        return self::CATEGORY_STARTUP === $this->size_category;
+        return $this->size_category === self::CATEGORY_STARTUP;
     }
 
     /**
@@ -388,7 +382,7 @@ class CompanySize extends Model
      */
     public function getIsSmallAttribute(): bool
     {
-        return self::CATEGORY_SMALL === $this->size_category;
+        return $this->size_category === self::CATEGORY_SMALL;
     }
 
     /**
@@ -396,7 +390,7 @@ class CompanySize extends Model
      */
     public function getIsMediumAttribute(): bool
     {
-        return self::CATEGORY_MEDIUM === $this->size_category;
+        return $this->size_category === self::CATEGORY_MEDIUM;
     }
 
     /**
@@ -404,7 +398,7 @@ class CompanySize extends Model
      */
     public function getIsLargeAttribute(): bool
     {
-        return self::CATEGORY_LARGE === $this->size_category;
+        return $this->size_category === self::CATEGORY_LARGE;
     }
 
     /**
@@ -412,7 +406,7 @@ class CompanySize extends Model
      */
     public function getIsEnterpriseAttribute(): bool
     {
-        return self::CATEGORY_ENTERPRISE === $this->size_category;
+        return $this->size_category === self::CATEGORY_ENTERPRISE;
     }
 
     /**
@@ -468,7 +462,7 @@ class CompanySize extends Model
      */
     public function hasColor(): bool
     {
-        return !empty($this->color);
+        return ! empty($this->color);
     }
 
     /**
@@ -476,7 +470,7 @@ class CompanySize extends Model
      */
     public function hasIcon(): bool
     {
-        return !empty($this->icon);
+        return ! empty($this->icon);
     }
 
     /**

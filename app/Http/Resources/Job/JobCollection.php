@@ -135,7 +135,7 @@ class JobCollection extends ResourceCollection
      */
     protected function getAggregations(Request $request): array
     {
-        if (!$request->has('include_aggregations')) {
+        if (! $request->has('include_aggregations')) {
             return [];
         }
 
@@ -207,7 +207,7 @@ class JobCollection extends ResourceCollection
      */
     protected function getPerformanceMetrics(Request $request): array
     {
-        if (!$request->has('include_performance') || !config('app.debug')) {
+        if (! $request->has('include_performance') || ! config('app.debug')) {
             return [];
         }
 
@@ -227,7 +227,7 @@ class JobCollection extends ResourceCollection
     protected function getSalaryStatistics(): array
     {
         $jobsWithSalary = $this->collection->filter(function ($job) {
-            return !$job['salary']['hide_salary']
+            return ! $job['salary']['hide_salary']
                    && $job['salary']['salary_from']
                    && $job['salary']['salary_to'];
         });
@@ -275,8 +275,7 @@ class JobCollection extends ResourceCollection
             })
             ->values()
             ->take(10) // Top 10 countries
-            ->toArray()
-        ;
+            ->toArray();
 
         return $locations;
     }
@@ -348,7 +347,7 @@ class JobCollection extends ResourceCollection
     {
         $query = $request->get('search');
 
-        if (!$query || strlen($query) < 3) {
+        if (! $query || strlen($query) < 3) {
             return [];
         }
 
@@ -398,8 +397,7 @@ class JobCollection extends ResourceCollection
             ->values()
             ->sortByDesc('count')
             ->take(20)
-            ->toArray()
-        ;
+            ->toArray();
     }
 
     /**
@@ -419,8 +417,7 @@ class JobCollection extends ResourceCollection
             })
             ->values()
             ->sortByDesc('count')
-            ->toArray()
-        ;
+            ->toArray();
     }
 
     /**
@@ -452,7 +449,7 @@ class JobCollection extends ResourceCollection
     {
         $newestJob = $this->collection->max('updated_at');
 
-        if (!$newestJob) {
+        if (! $newestJob) {
             return 'unknown';
         }
 
@@ -479,8 +476,7 @@ class JobCollection extends ResourceCollection
             ->values()
             ->sortByDesc('count')
             ->take(15)
-            ->toArray()
-        ;
+            ->toArray();
     }
 
     protected function getSalaryRangeAggregation(): array
@@ -520,8 +516,7 @@ class JobCollection extends ResourceCollection
             })
             ->values()
             ->sortBy('experience')
-            ->toArray()
-        ;
+            ->toArray();
     }
 
     protected function getCompanyAggregation(): array
@@ -539,8 +534,7 @@ class JobCollection extends ResourceCollection
             ->values()
             ->sortByDesc('count')
             ->take(20)
-            ->toArray()
-        ;
+            ->toArray();
     }
 
     protected function getSkillAggregation(): array
@@ -568,8 +562,7 @@ class JobCollection extends ResourceCollection
             ->values()
             ->sortByDesc('count')
             ->take(30)
-            ->toArray()
-        ;
+            ->toArray();
     }
 
     protected function getCareerLevelAggregation(): array
@@ -586,8 +579,7 @@ class JobCollection extends ResourceCollection
             })
             ->values()
             ->sortByDesc('count')
-            ->toArray()
-        ;
+            ->toArray();
     }
 
     protected function getUniqueCategories(): array
@@ -596,8 +588,7 @@ class JobCollection extends ResourceCollection
             ->filter()
             ->unique('id')
             ->values()
-            ->toArray()
-        ;
+            ->toArray();
     }
 
     protected function getUniqueCompanies(): array
@@ -606,8 +597,7 @@ class JobCollection extends ResourceCollection
             ->filter()
             ->unique('id')
             ->values()
-            ->toArray()
-        ;
+            ->toArray();
     }
 
     protected function getUniqueLocations(): array
@@ -616,8 +606,7 @@ class JobCollection extends ResourceCollection
             ->filter()
             ->unique('city.id')
             ->values()
-            ->toArray()
-        ;
+            ->toArray();
     }
 
     protected function getPopularSkills(): array

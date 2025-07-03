@@ -79,7 +79,7 @@ class IndexTaxonomyRequest extends FormRequest
                 'max:50',
                 function ($attribute, $value, $fail) {
                     $validTypes = ['job_category', 'skill', 'industry', 'location', 'education', 'experience_level', 'employment_type', 'company_size', 'custom'];
-                    if (!in_array($value, $validTypes)) {
+                    if (! in_array($value, $validTypes)) {
                         $fail(__('validation.invalid_taxonomy_type'));
                     }
                 },
@@ -557,38 +557,38 @@ class IndexTaxonomyRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Set default values
-        if (!$this->has('per_page')) {
+        if (! $this->has('per_page')) {
             $this->merge(['per_page' => 20]);
         }
 
-        if (!$this->has('sort_by')) {
+        if (! $this->has('sort_by')) {
             $this->merge(['sort_by' => 'name']);
         }
 
-        if (!$this->has('sort_direction')) {
+        if (! $this->has('sort_direction')) {
             $this->merge(['sort_direction' => 'asc']);
         }
 
-        if (!$this->has('search_type')) {
+        if (! $this->has('search_type')) {
             $this->merge(['search_type' => 'all']);
         }
 
-        if (!$this->has('response_format')) {
+        if (! $this->has('response_format')) {
             $this->merge(['response_format' => 'full']);
         }
 
-        if (!$this->has('recently_used_days')) {
+        if (! $this->has('recently_used_days')) {
             $this->merge(['recently_used_days' => 30]);
         }
 
-        if (!$this->has('terms_limit')) {
+        if (! $this->has('terms_limit')) {
             $this->merge(['terms_limit' => 10]);
         }
 
         // Clean search input
         if ($this->has('search')) {
             $this->merge([
-                'search' => trim($this->input('search'))
+                'search' => trim($this->input('search')),
             ]);
         }
 
@@ -599,13 +599,13 @@ class IndexTaxonomyRequest extends FormRequest
             'with_usage_stats', 'with_meta', 'with_counts', 'minimal_data',
             'exclude_system', 'active_only', 'public_only', 'export_include_terms',
             'include_analytics', 'has_children', 'has_parent', 'root_only',
-            'leaf_only', 'force_refresh'
+            'leaf_only', 'force_refresh',
         ];
 
         foreach ($booleanFields as $field) {
             if ($this->has($field)) {
                 $this->merge([
-                    $field => filter_var($this->input($field), FILTER_VALIDATE_BOOLEAN)
+                    $field => filter_var($this->input($field), FILTER_VALIDATE_BOOLEAN),
                 ]);
             }
         }
@@ -613,9 +613,9 @@ class IndexTaxonomyRequest extends FormRequest
         // Ensure arrays are properly formatted
         $arrayFields = ['search_fields', 'types', 'export_fields', 'selected_taxonomies', 'include_relationships'];
         foreach ($arrayFields as $field) {
-            if ($this->has($field) && !is_array($this->input($field))) {
+            if ($this->has($field) && ! is_array($this->input($field))) {
                 $this->merge([
-                    $field => array_filter(explode(',', $this->input($field)))
+                    $field => array_filter(explode(',', $this->input($field))),
                 ]);
             }
         }
@@ -651,7 +651,7 @@ class IndexTaxonomyRequest extends FormRequest
         Log::info('Admin taxonomy index request validated', [
             'filters_applied' => count(array_filter($this->only([
                 'search', 'type', 'status', 'visibility', 'hierarchical',
-                'has_terms', 'terms_count_min', 'terms_count_max'
+                'has_terms', 'terms_count_min', 'terms_count_max',
             ]))),
             'search_performed' => $this->has('search'),
             'export_requested' => $this->has('export_format'),
@@ -672,11 +672,11 @@ class IndexTaxonomyRequest extends FormRequest
         $inappropriateWords = [
             'spam', 'scam', 'fraud', 'fake', 'illegal', 'hack', 'virus',
             'malware', 'phishing', 'adult', 'xxx', 'porn', 'sex', 'drug',
-            'weapon', 'violence', 'hate', 'racist', 'terrorist'
+            'weapon', 'violence', 'hate', 'racist', 'terrorist',
         ];
 
         $lowercaseContent = strtolower($content);
-        
+
         foreach ($inappropriateWords as $word) {
             if (strpos($lowercaseContent, $word) !== false) {
                 return true;
@@ -687,7 +687,7 @@ class IndexTaxonomyRequest extends FormRequest
         $sqlPatterns = [
             '/(\bselect\b|\binsert\b|\bupdate\b|\bdelete\b|\bdrop\b|\bunion\b)/i',
             '/(\bor\s+1\s*=\s*1\b|\band\s+1\s*=\s*1\b)/i',
-            '/(--|\/\*|\*\/|;)/i'
+            '/(--|\/\*|\*\/|;)/i',
         ];
 
         foreach ($sqlPatterns as $pattern) {
@@ -698,4 +698,4 @@ class IndexTaxonomyRequest extends FormRequest
 
         return false;
     }
-} 
+}

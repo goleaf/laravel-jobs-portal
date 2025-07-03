@@ -49,7 +49,7 @@ class UpdateApplicationStatusRequest extends FormRequest
                     'rejected',
                     'withdrawn',
                     'on_hold',
-                    'archived'
+                    'archived',
                 ]),
             ],
 
@@ -75,7 +75,7 @@ class UpdateApplicationStatusRequest extends FormRequest
                     'rejected',
                     'withdrawn',
                     'on_hold',
-                    'archived'
+                    'archived',
                 ]),
             ],
 
@@ -84,7 +84,7 @@ class UpdateApplicationStatusRequest extends FormRequest
                 'integer',
                 'exists:job_stages,id',
                 function ($attribute, $value, $fail) {
-                    if (!$this->validateStageAccess($value)) {
+                    if (! $this->validateStageAccess($value)) {
                         $fail(__('validation.unauthorized_stage_access'));
                     }
                 },
@@ -172,7 +172,7 @@ class UpdateApplicationStatusRequest extends FormRequest
                     'soft_skills',
                     'portfolio',
                     'references',
-                    'background_check'
+                    'background_check',
                 ]),
             ],
 
@@ -236,7 +236,7 @@ class UpdateApplicationStatusRequest extends FormRequest
                 'required_if:schedule_interview,true',
                 'date',
                 'after:now',
-                'before:' . now()->addMonths(6)->format('Y-m-d H:i:s'),
+                'before:'.now()->addMonths(6)->format('Y-m-d H:i:s'),
             ],
 
             'interview_time' => [
@@ -452,7 +452,7 @@ class UpdateApplicationStatusRequest extends FormRequest
                 'required_if:schedule_assessment,true',
                 'date',
                 'after:now',
-                'before:' . now()->addMonth()->format('Y-m-d'),
+                'before:'.now()->addMonth()->format('Y-m-d'),
             ],
 
             'assessment_instructions' => [
@@ -653,7 +653,7 @@ class UpdateApplicationStatusRequest extends FormRequest
                     'quality_of_hire',
                     'hiring_manager_satisfaction',
                     'candidate_satisfaction',
-                    'offer_acceptance_rate'
+                    'offer_acceptance_rate',
                 ]),
             ],
 
@@ -908,75 +908,75 @@ class UpdateApplicationStatusRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Set intelligent defaults
-        if (!$this->has('transition_type')) {
+        if (! $this->has('transition_type')) {
             $this->merge(['transition_type' => 'manual']);
         }
 
-        if (!$this->has('notify_candidate')) {
+        if (! $this->has('notify_candidate')) {
             $this->merge(['notify_candidate' => true]);
         }
 
-        if (!$this->has('notify_team')) {
+        if (! $this->has('notify_team')) {
             $this->merge(['notify_team' => false]);
         }
 
-        if (!$this->has('broadcast_update')) {
+        if (! $this->has('broadcast_update')) {
             $this->merge(['broadcast_update' => true]);
         }
 
-        if (!$this->has('real_time_sync')) {
+        if (! $this->has('real_time_sync')) {
             $this->merge(['real_time_sync' => true]);
         }
 
-        if (!$this->has('audit_trail')) {
+        if (! $this->has('audit_trail')) {
             $this->merge(['audit_trail' => true]);
         }
 
-        if (!$this->has('gdpr_compliant')) {
+        if (! $this->has('gdpr_compliant')) {
             $this->merge(['gdpr_compliant' => true]);
         }
 
-        if (!$this->has('priority')) {
+        if (! $this->has('priority')) {
             $this->merge(['priority' => 'normal']);
         }
 
-        if (!$this->has('feedback_type')) {
+        if (! $this->has('feedback_type')) {
             $this->merge(['feedback_type' => 'neutral']);
         }
 
-        if (!$this->has('approval_priority')) {
+        if (! $this->has('approval_priority')) {
             $this->merge(['approval_priority' => 'normal']);
         }
 
-        if (!$this->has('notification_method')) {
+        if (! $this->has('notification_method')) {
             $this->merge(['notification_method' => 'email']);
         }
 
-        if (!$this->has('confidentiality_level')) {
+        if (! $this->has('confidentiality_level')) {
             $this->merge(['confidentiality_level' => 'internal']);
         }
 
-        if (!$this->has('salary_currency')) {
+        if (! $this->has('salary_currency')) {
             $this->merge(['salary_currency' => config('app.currency', 'USD')]);
         }
 
-        if (!$this->has('salary_type')) {
+        if (! $this->has('salary_type')) {
             $this->merge(['salary_type' => 'annually']);
         }
 
-        if (!$this->has('interview_duration')) {
+        if (! $this->has('interview_duration')) {
             $this->merge(['interview_duration' => 60]); // 1 hour default
         }
 
-        if (!$this->has('assessment_duration')) {
+        if (! $this->has('assessment_duration')) {
             $this->merge(['assessment_duration' => 120]); // 2 hours default
         }
 
-        if (!$this->has('data_retention_period')) {
+        if (! $this->has('data_retention_period')) {
             $this->merge(['data_retention_period' => 2555]); // 7 years default
         }
 
-        if (!$this->has('deadline_type')) {
+        if (! $this->has('deadline_type')) {
             $this->merge(['deadline_type' => 'soft']);
         }
 
@@ -986,13 +986,13 @@ class UpdateApplicationStatusRequest extends FormRequest
             'broadcast_update', 'real_time_sync', 'requires_approval', 'schedule_assessment',
             'background_check_required', 'reference_check_required', 'salary_negotiation',
             'track_metrics', 'sync_external_systems', 'audit_trail', 'compliance_check',
-            'gdpr_compliant', 'legal_review_required'
+            'gdpr_compliant', 'legal_review_required',
         ];
 
         foreach ($booleanFields as $field) {
             if ($this->has($field)) {
                 $this->merge([
-                    $field => filter_var($this->input($field), FILTER_VALIDATE_BOOLEAN)
+                    $field => filter_var($this->input($field), FILTER_VALIDATE_BOOLEAN),
                 ]);
             }
         }
@@ -1001,39 +1001,39 @@ class UpdateApplicationStatusRequest extends FormRequest
         $arrayFields = [
             'feedback_categories', 'interviewer_ids', 'broadcast_channels', 'approver_ids',
             'assessment_links', 'benefits_offered', 'performance_indicators', 'external_system_ids',
-            'webhook_triggers', 'tags'
+            'webhook_triggers', 'tags',
         ];
 
         foreach ($arrayFields as $field) {
-            if ($this->has($field) && !is_array($this->input($field))) {
+            if ($this->has($field) && ! is_array($this->input($field))) {
                 $this->merge([
-                    $field => array_filter(explode(',', $this->input($field)))
+                    $field => array_filter(explode(',', $this->input($field))),
                 ]);
             }
         }
 
         // Auto-enable features for certain status changes
         if (in_array($this->input('status'), ['rejected', 'hired', 'offer_extended'])) {
-            if (!$this->has('audit_trail')) {
+            if (! $this->has('audit_trail')) {
                 $this->merge(['audit_trail' => true]);
             }
-            if (!$this->has('notify_candidate')) {
+            if (! $this->has('notify_candidate')) {
                 $this->merge(['notify_candidate' => true]);
             }
         }
 
         // Auto-set interview requirements for interview_scheduled status
-        if ($this->input('status') === 'interview_scheduled' && !$this->has('schedule_interview')) {
+        if ($this->input('status') === 'interview_scheduled' && ! $this->has('schedule_interview')) {
             $this->merge(['schedule_interview' => true]);
         }
 
         // Auto-set assessment requirements for assessment_pending status
-        if ($this->input('status') === 'assessment_pending' && !$this->has('schedule_assessment')) {
+        if ($this->input('status') === 'assessment_pending' && ! $this->has('schedule_assessment')) {
             $this->merge(['schedule_assessment' => true]);
         }
 
         // Set default broadcast channels based on status
-        if ($this->input('broadcast_update') && !$this->has('broadcast_channels')) {
+        if ($this->input('broadcast_update') && ! $this->has('broadcast_channels')) {
             $defaultChannels = ['application.status.updated'];
             if ($this->input('status') === 'hired') {
                 $defaultChannels[] = 'hiring.completed';
@@ -1045,7 +1045,7 @@ class UpdateApplicationStatusRequest extends FormRequest
         }
 
         // Set default WebSocket event
-        if ($this->input('real_time_sync') && !$this->has('websocket_event')) {
+        if ($this->input('real_time_sync') && ! $this->has('websocket_event')) {
             $this->merge(['websocket_event' => 'application.status.changed']);
         }
 
@@ -1093,7 +1093,7 @@ class UpdateApplicationStatusRequest extends FormRequest
                 'notify_candidate' => $this->input('notify_candidate', false),
                 'notify_team' => $this->input('notify_team', false),
                 'notification_method' => $this->input('notification_method'),
-                'custom_message_provided' => !empty($this->input('custom_message')),
+                'custom_message_provided' => ! empty($this->input('custom_message')),
             ],
             'real_time_features' => [
                 'broadcast_update' => $this->input('broadcast_update', false),
@@ -1136,11 +1136,11 @@ class UpdateApplicationStatusRequest extends FormRequest
         $inappropriateWords = [
             'spam', 'scam', 'fraud', 'fake', 'illegal', 'hack', 'virus',
             'malware', 'phishing', 'adult', 'xxx', 'porn', 'sex', 'drug',
-            'weapon', 'violence', 'hate', 'racist', 'terrorist', 'discrimin'
+            'weapon', 'violence', 'hate', 'racist', 'terrorist', 'discrimin',
         ];
 
         $lowercaseContent = strtolower($content);
-        
+
         foreach ($inappropriateWords as $word) {
             if (strpos($lowercaseContent, $word) !== false) {
                 return true;

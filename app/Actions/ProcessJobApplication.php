@@ -3,18 +3,18 @@
 namespace App\Actions;
 
 use App\Dtos\JobApplicationData;
-use App\Models\JobApplication;
-use App\Models\Job;
 use App\Models\Candidate;
+use App\Models\Job;
+use App\Models\JobApplication;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 use LumoSolutions\Actionable\Concerns\IsDispatchable;
 use LumoSolutions\Actionable\Concerns\IsRunnable;
 
 class ProcessJobApplication
 {
-    use IsRunnable, IsDispatchable;
+    use IsDispatchable;
+    use IsRunnable;
 
     /**
      * Process a job application with comprehensive business logic
@@ -25,8 +25,8 @@ class ProcessJobApplication
             // 1. Validate job and candidate exist and are active
             $job = Job::findOrFail($applicationData->jobId);
             $candidate = Candidate::findOrFail($applicationData->candidateId);
-            
-            if (!$job->isActive() || $job->isExpired()) {
+
+            if (! $job->isActive() || $job->isExpired()) {
                 throw new \Exception('Job is no longer accepting applications');
             }
 
@@ -35,14 +35,14 @@ class ProcessJobApplication
                 ->where('candidate_id', $applicationData->candidateId)
                 ->first();
 
-            if ($existingApplication && !$existingApplication->trashed()) {
+            if ($existingApplication && ! $existingApplication->trashed()) {
                 throw new \Exception('You have already applied for this job');
             }
 
             // 3. Check if job has reached application limit
             $maxApplications = $job->settings('application.max_applications', 100);
             $currentApplications = $job->appliedJobs()->count();
-            
+
             if ($currentApplications >= $maxApplications) {
                 throw new \Exception('This job has reached its application limit');
             }
@@ -60,7 +60,7 @@ class ProcessJobApplication
                 'notes' => $applicationData->notes,
                 'applied_at' => now(),
                 'application_source' => $applicationData->applicationSource ?? 'website',
-                'metadata' => $applicationData->metadata
+                'metadata' => $applicationData->metadata,
             ]);
 
             // 5. Set application-specific settings
@@ -68,7 +68,7 @@ class ProcessJobApplication
                 'privacy.share_with_employer.contact_details' => $applicationData->shareContactDetails,
                 'privacy.share_with_employer.expected_salary' => $applicationData->shareExpectedSalary,
                 'workflow.auto_acknowledge' => $job->settings('application.send_confirmation_email', true),
-                'tracking.application_source' => $applicationData->applicationSource ?? 'website'
+                'tracking.application_source' => $applicationData->applicationSource ?? 'website',
             ]);
 
             // 6. Update job statistics
@@ -86,7 +86,7 @@ class ProcessJobApplication
                 ->withProperties([
                     'job_title' => $job->job_title,
                     'company_name' => $job->company->name,
-                    'application_source' => $applicationData->applicationSource
+                    'application_source' => $applicationData->applicationSource,
                 ])
                 ->log('applied_for_job');
 
@@ -104,8 +104,8 @@ class ProcessJobApplication
             UpdateCandidateRecommendations::dispatch($candidate);
 
             // 11. Auto-screening if enabled
-            if ($job->settings('workflow.screening_questions_enabled', false) && 
-                !empty($applicationData->screeningAnswers)) {
+            if ($job->settings('workflow.screening_questions_enabled', false) &&
+                ! empty($applicationData->screeningAnswers)) {
                 AutoScreenJobApplication::dispatch($application);
             }
 
@@ -116,7 +116,7 @@ class ProcessJobApplication
                 'application_id' => $application->id,
                 'job_id' => $job->id,
                 'candidate_id' => $candidate->id,
-                'source' => $applicationData->applicationSource
+                'source' => $applicationData->applicationSource,
             ]);
 
             return $application;
@@ -130,13 +130,13 @@ class ProcessJobApplication
     {
         Log::error('Job application processing failed', [
             'error' => $exception->getMessage(),
-            'trace' => $exception->getTraceAsString()
+            'trace' => $exception->getTraceAsString(),
         ]);
 
         // Send failure notification to admin
         AdminNotification::dispatch('job_application_processing_failed', [
             'error' => $exception->getMessage(),
-            'timestamp' => now()
+            'timestamp' => now(),
         ]);
     }
 }

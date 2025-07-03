@@ -10,10 +10,10 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Models\NotificationSetting.
  *
- * @property int                             $id
- * @property string                          $key
- * @property string                          $value
- * @property null|string                     $type
+ * @property int $id
+ * @property string $key
+ * @property string $value
+ * @property null|string $type
  * @property null|\Illuminate\Support\Carbon $created_at
  * @property null|\Illuminate\Support\Carbon $updated_at
  *
@@ -54,8 +54,7 @@ class NotificationSetting extends Model
     /**
      * Scope a query to only include active records.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeActive($query)
@@ -66,8 +65,7 @@ class NotificationSetting extends Model
     /**
      * Scope a query to only include inactive records.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeInactive($query)
@@ -78,8 +76,7 @@ class NotificationSetting extends Model
     /**
      * Scope a query to only include recent records.
      *
-     * @param Builder $query
-     *
+     * @param  Builder  $query
      * @return Builder
      */
     public function scopeRecent($query, int $days = 30)
@@ -90,16 +87,14 @@ class NotificationSetting extends Model
     /**
      * Scope a query to search records by name or relevant fields.
      *
-     * @param Builder $query
-     * @param string  $search
-     *
+     * @param  Builder  $query
+     * @param  string  $search
      * @return Builder
      */
     public function scopeSearch($query, $search)
     {
         return $query->where('key', 'like', '%'.$search.'%')
-            ->orWhere('value', 'like', '%'.$search.'%')
-        ;
+            ->orWhere('value', 'like', '%'.$search.'%');
     }
 
     /**

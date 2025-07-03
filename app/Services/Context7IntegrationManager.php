@@ -211,7 +211,7 @@ class Context7IntegrationManager
         $removedIndices = array_merge($removedIndices, $level1Indices->toArray());
 
         // Security Level 2: Context-aware security filtering
-        if (isset($context['security_level']) && 'high' === $context['security_level']) {
+        if (isset($context['security_level']) && $context['security_level'] === 'high') {
             $level2Indices = $data->filter(function ($record, $index) {
                 return $this->containsSecurityRisk($record, 'level2');
             })->keys();
@@ -305,12 +305,12 @@ class Context7IntegrationManager
         $level1Risks = ['script', 'javascript:', 'onclick', 'onerror', '<iframe'];
         $level2Risks = ['eval(', 'document.cookie', 'localStorage', 'sessionStorage'];
 
-        $risks = 'level1' === $level ? $level1Risks : array_merge($level1Risks, $level2Risks);
+        $risks = $level === 'level1' ? $level1Risks : array_merge($level1Risks, $level2Risks);
 
         foreach ($record as $value) {
             if (is_string($value)) {
                 foreach ($risks as $risk) {
-                    if (false !== stripos($value, $risk)) {
+                    if (stripos($value, $risk) !== false) {
                         return true;
                     }
                 }

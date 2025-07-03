@@ -13,17 +13,17 @@ use PHPUnit\Framework\TestCase;
 class SimpleModelTest extends TestCase
 {
     /** @test */
-    public function itCanInstantiateCandidateModel()
+    public function it_can_instantiate_candidate_model()
     {
-        $candidate = new Candidate();
+        $candidate = new Candidate;
 
         $this->assertInstanceOf(Candidate::class, $candidate);
     }
 
     /** @test */
-    public function itHasCorrectFillableAttributes()
+    public function it_has_correct_fillable_attributes()
     {
-        $candidate = new Candidate();
+        $candidate = new Candidate;
         $fillable = $candidate->getFillable();
 
         $expectedFillable = [
@@ -52,9 +52,9 @@ class SimpleModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasCorrectCasts()
+    public function it_has_correct_casts()
     {
-        $candidate = new Candidate();
+        $candidate = new Candidate;
         $casts = $candidate->getCasts();
 
         // Test some basic casts that should exist
@@ -68,7 +68,7 @@ class SimpleModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasStatusConstants()
+    public function it_has_status_constants()
     {
         $this->assertEquals(1, Candidate::ACTIVE);
         $this->assertEquals(0, Candidate::DEACTIVE);
@@ -78,9 +78,9 @@ class SimpleModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasTableName()
+    public function it_has_table_name()
     {
-        $candidate = new Candidate();
+        $candidate = new Candidate;
         $this->assertEquals('candidates', $candidate->getTable());
     }
 }

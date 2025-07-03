@@ -38,10 +38,10 @@ abstract class UniversalBaseController extends Controller
     /**
      * Universal Pattern: Flexible caching with stale-while-revalidate.
      *
-     * @param string   $key          Cache key
-     * @param callable $callback     Function to execute if not cached
-     * @param int      $freshMinutes Fresh time in minutes
-     * @param int      $staleMinutes Additional stale time in minutes
+     * @param  string  $key  Cache key
+     * @param  callable  $callback  Function to execute if not cached
+     * @param  int  $freshMinutes  Fresh time in minutes
+     * @param  int  $staleMinutes  Additional stale time in minutes
      */
     protected function cacheFlexible(string $key, callable $callback, int $freshMinutes = 60, int $staleMinutes = 120): mixed
     {
@@ -51,9 +51,9 @@ abstract class UniversalBaseController extends Controller
     /**
      * Universal Pattern: Standard cache with remember.
      *
-     * @param string   $key      Cache key
-     * @param callable $callback Function to execute if not cached
-     * @param int      $minutes  Cache duration in minutes
+     * @param  string  $key  Cache key
+     * @param  callable  $callback  Function to execute if not cached
+     * @param  int  $minutes  Cache duration in minutes
      */
     protected function cacheRemember(string $key, callable $callback, int $minutes = 60): mixed
     {
@@ -63,10 +63,9 @@ abstract class UniversalBaseController extends Controller
     /**
      * Universal Pattern: Optimized cursor pagination for large datasets.
      *
-     * @param Builder $query   Query builder instance
-     * @param int     $perPage Items per page
-     * @param array   $columns Columns to select
-     *
+     * @param  Builder  $query  Query builder instance
+     * @param  int  $perPage  Items per page
+     * @param  array  $columns  Columns to select
      * @return CursorPaginator
      */
     protected function paginateWithCursor(Builder $query, ?int $perPage = null, array $columns = ['*'])
@@ -79,10 +78,10 @@ abstract class UniversalBaseController extends Controller
     /**
      * Universal Pattern: Standard pagination with caching.
      *
-     * @param Builder $query    Query builder instance
-     * @param int     $perPage  Items per page
-     * @param string  $cacheKey Cache key for pagination
-     * @param array   $columns  Columns to select
+     * @param  Builder  $query  Query builder instance
+     * @param  int  $perPage  Items per page
+     * @param  string  $cacheKey  Cache key for pagination
+     * @param  array  $columns  Columns to select
      */
     protected function paginateWithCache(Builder $query, ?int $perPage = null, ?string $cacheKey = null, array $columns = ['*']): LengthAwarePaginator
     {
@@ -100,9 +99,9 @@ abstract class UniversalBaseController extends Controller
     /**
      * Universal Pattern: Chunk processing for large datasets.
      *
-     * @param Builder  $query     Query builder instance
-     * @param callable $callback  Function to process each chunk
-     * @param int      $chunkSize Size of each chunk
+     * @param  Builder  $query  Query builder instance
+     * @param  callable  $callback  Function to process each chunk
+     * @param  int  $chunkSize  Size of each chunk
      */
     protected function processInChunks(Builder $query, callable $callback, int $chunkSize = 100): bool
     {
@@ -112,17 +111,17 @@ abstract class UniversalBaseController extends Controller
     /**
      * Universal Pattern: Optimized query with eager loading.
      *
-     * @param Builder $query     Query builder instance
-     * @param array   $relations Relations to eager load
-     * @param array   $counts    Relations to count
+     * @param  Builder  $query  Query builder instance
+     * @param  array  $relations  Relations to eager load
+     * @param  array  $counts  Relations to count
      */
     protected function optimizeQuery(Builder $query, array $relations = [], array $counts = []): Builder
     {
-        if (!empty($relations)) {
+        if (! empty($relations)) {
             $query->with($relations);
         }
 
-        if (!empty($counts)) {
+        if (! empty($counts)) {
             $query->withCount($counts);
         }
 
@@ -132,8 +131,8 @@ abstract class UniversalBaseController extends Controller
     /**
      * Universal Pattern: Safe transaction execution.
      *
-     * @param callable $callback Transaction callback
-     * @param int      $attempts Number of retry attempts
+     * @param  callable  $callback  Transaction callback
+     * @param  int  $attempts  Number of retry attempts
      *
      * @throws \Exception
      */
@@ -145,7 +144,7 @@ abstract class UniversalBaseController extends Controller
     /**
      * Universal Pattern: Pessimistic locking for critical operations.
      *
-     * @param Builder $query Query builder instance
+     * @param  Builder  $query  Query builder instance
      */
     protected function lockForUpdate(Builder $query): Builder
     {
@@ -155,7 +154,7 @@ abstract class UniversalBaseController extends Controller
     /**
      * Universal Pattern: Shared locking for read operations.
      *
-     * @param Builder $query Query builder instance
+     * @param  Builder  $query  Query builder instance
      */
     protected function sharedLock(Builder $query): Builder
     {
@@ -165,9 +164,9 @@ abstract class UniversalBaseController extends Controller
     /**
      * Universal Pattern: Generate cache key with request parameters.
      *
-     * @param Request $request          Request instance
-     * @param string  $prefix           Cache key prefix
-     * @param array   $additionalParams Additional parameters for cache key
+     * @param  Request  $request  Request instance
+     * @param  string  $prefix  Cache key prefix
+     * @param  array  $additionalParams  Additional parameters for cache key
      */
     protected function generateCacheKey(FormRequest $request, string $prefix, array $additionalParams = []): string
     {
@@ -188,11 +187,11 @@ abstract class UniversalBaseController extends Controller
     /**
      * Universal Pattern: Rate limited action.
      *
-     * @param Request  $request      Request instance
-     * @param string   $action       Action name for rate limiting
-     * @param callable $callback     Action to execute
-     * @param int      $maxAttempts  Maximum attempts
-     * @param int      $decayMinutes Decay time in minutes
+     * @param  Request  $request  Request instance
+     * @param  string  $action  Action name for rate limiting
+     * @param  callable  $callback  Action to execute
+     * @param  int  $maxAttempts  Maximum attempts
+     * @param  int  $decayMinutes  Decay time in minutes
      */
     protected function rateLimitedAction(StoreRequest $request, string $action, callable $callback, int $maxAttempts = 60, int $decayMinutes = 1): mixed
     {
@@ -214,8 +213,8 @@ abstract class UniversalBaseController extends Controller
     /**
      * Universal Pattern: Generate rate limit key.
      *
-     * @param Request $request Request instance
-     * @param string  $action  Action name
+     * @param  Request  $request  Request instance
+     * @param  string  $action  Action name
      */
     protected function generateRateLimitKey(StoreRequest $request, string $action): string
     {
@@ -227,10 +226,10 @@ abstract class UniversalBaseController extends Controller
     /**
      * Universal Pattern: JSON response with consistent format.
      *
-     * @param array  $data    Response data
-     * @param string $message Response message
-     * @param int    $status  HTTP status code
-     * @param array  $meta    Additional metadata
+     * @param  array  $data  Response data
+     * @param  string  $message  Response message
+     * @param  int  $status  HTTP status code
+     * @param  array  $meta  Additional metadata
      */
     protected function jsonResponse(array $data = [], string $message = 'Success', int $status = 200, array $meta = []): JsonResponse
     {
@@ -248,10 +247,10 @@ abstract class UniversalBaseController extends Controller
     /**
      * Universal Pattern: Error response with consistent format.
      *
-     * @param string $message Error message
-     * @param int    $status  HTTP status code
-     * @param array  $errors  Validation errors
-     * @param array  $debug   Debug information (only in debug mode)
+     * @param  string  $message  Error message
+     * @param  int  $status  HTTP status code
+     * @param  array  $errors  Validation errors
+     * @param  array  $debug  Debug information (only in debug mode)
      */
     protected function errorResponse(string $message = 'Error', int $status = 400, array $errors = [], array $debug = []): JsonResponse
     {
@@ -265,7 +264,7 @@ abstract class UniversalBaseController extends Controller
             ],
         ];
 
-        if (config('app.debug') && !empty($debug)) {
+        if (config('app.debug') && ! empty($debug)) {
             $response['debug'] = $debug;
         }
 
@@ -275,11 +274,10 @@ abstract class UniversalBaseController extends Controller
     /**
      * Universal Pattern: Cached model retrieval.
      *
-     * @param string $model        Model class name
-     * @param mixed  $id           Model ID
-     * @param array  $relations    Relations to eager load
-     * @param int    $cacheMinutes Cache duration in minutes
-     *
+     * @param  string  $model  Model class name
+     * @param  mixed  $id  Model ID
+     * @param  array  $relations  Relations to eager load
+     * @param  int  $cacheMinutes  Cache duration in minutes
      * @return null|Model
      */
     protected function findCached(string $model, mixed $id, array $relations = [], int $cacheMinutes = 60)
@@ -289,7 +287,7 @@ abstract class UniversalBaseController extends Controller
         return $this->cacheRemember($cacheKey, function () use ($model, $id, $relations) {
             $query = $model::query();
 
-            if (!empty($relations)) {
+            if (! empty($relations)) {
                 $query->with($relations);
             }
 
@@ -300,8 +298,8 @@ abstract class UniversalBaseController extends Controller
     /**
      * Universal Pattern: Clear model cache.
      *
-     * @param string $model Model class name
-     * @param mixed  $id    Model ID
+     * @param  string  $model  Model class name
+     * @param  mixed  $id  Model ID
      */
     protected function clearModelCache(string $model, mixed $id): void
     {

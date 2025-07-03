@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Candidate;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class CandidateController extends Controller
@@ -12,18 +11,21 @@ class CandidateController extends Controller
     public function index()
     {
         $candidates = Candidate::with('user')->paginate(10);
+
         return view('candidates.index', compact('candidates'));
     }
 
     public function show(Candidate $candidate)
     {
         $candidate->load('user');
+
         return view('candidates.show', compact('candidate'));
     }
 
     public function edit(Candidate $candidate)
     {
         $candidate->load('user');
+
         return view('candidates.edit', compact('candidate'));
     }
 
@@ -34,6 +36,7 @@ class CandidateController extends Controller
         if ($candidate->user) {
             $candidate->user->update($request->only(['name', 'email', 'phone', 'is_active', 'is_verified', 'dob', 'gender', 'country_id', 'state_id', 'city_id']));
         }
+
         return redirect()->route('admin.candidates.index')->with('success', 'Candidate updated!');
     }
 
@@ -43,13 +46,15 @@ class CandidateController extends Controller
             $candidate->user->forceDelete();
         }
         $candidate->forceDelete();
+
         return response()->json(['success' => true]);
     }
 
     public function changeStatus(Candidate $candidate)
     {
-        $candidate->user->is_active = !$candidate->user->is_active;
+        $candidate->user->is_active = ! $candidate->user->is_active;
         $candidate->user->save();
+
         return response()->json(['success' => true]);
     }
 
@@ -58,6 +63,7 @@ class CandidateController extends Controller
         $user = $candidate->user;
         $user->email_verified_at = $user->email_verified_at ? null : now();
         $user->save();
+
         return response()->json(['success' => true]);
     }
 
@@ -66,4 +72,4 @@ class CandidateController extends Controller
         // Avoid 500 error, just return success
         return response()->json(['success' => true]);
     }
-} 
+}

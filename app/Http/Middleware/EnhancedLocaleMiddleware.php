@@ -29,8 +29,7 @@ class EnhancedLocaleMiddleware
     /**
      * Handle an incoming request with enhanced locale detection.
      *
-     * @param \Closure(Request): (RedirectResponse|Response) $next
-     *
+     * @param  \Closure(Request): (RedirectResponse|Response)  $next
      * @return RedirectResponse|Response
      */
     public function handle(Request $request, \Closure $next)
@@ -110,7 +109,7 @@ class EnhancedLocaleMiddleware
     {
         $acceptLanguage = $request->header('Accept-Language');
 
-        if (!$acceptLanguage) {
+        if (! $acceptLanguage) {
             return null;
         }
 
@@ -122,7 +121,7 @@ class EnhancedLocaleMiddleware
             $lang = trim($part);
             $priority = 1.0;
 
-            if (false !== strpos($lang, ';q=')) {
+            if (strpos($lang, ';q=') !== false) {
                 [$lang, $q] = explode(';q=', $lang);
                 $priority = (float) $q;
             }
@@ -136,9 +135,9 @@ class EnhancedLocaleMiddleware
             $languages[$lang] = $priority;
 
             // Also store language family (e.g., 'en-US' -> 'en')
-            if (false !== strpos($lang, '-')) {
+            if (strpos($lang, '-') !== false) {
                 $shortLang = substr($lang, 0, 2);
-                if (!isset($languages[$shortLang]) || $languages[$shortLang] < $priority) {
+                if (! isset($languages[$shortLang]) || $languages[$shortLang] < $priority) {
                     $languages[$shortLang] = $priority * 0.9; // Slightly lower priority
                 }
             }

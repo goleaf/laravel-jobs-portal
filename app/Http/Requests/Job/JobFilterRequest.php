@@ -116,7 +116,7 @@ class JobFilterRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param Validator $validator
+     * @param  Validator  $validator
      */
     public function withValidator($validator): void
     {
@@ -125,10 +125,9 @@ class JobFilterRequest extends FormRequest
             if ($this->filled('state_id') && $this->filled('country_id')) {
                 $stateExists = State::where('id', $this->input('state_id'))
                     ->where('country_id', $this->input('country_id'))
-                    ->exists()
-                ;
+                    ->exists();
 
-                if (!$stateExists) {
+                if (! $stateExists) {
                     $validator->errors()->add('state_id', 'The selected state does not belong to the selected country.');
                 }
             }
@@ -136,10 +135,9 @@ class JobFilterRequest extends FormRequest
             if ($this->filled('city_id') && $this->filled('state_id')) {
                 $cityExists = City::where('id', $this->input('city_id'))
                     ->where('state_id', $this->input('state_id'))
-                    ->exists()
-                ;
+                    ->exists();
 
-                if (!$cityExists) {
+                if (! $cityExists) {
                     $validator->errors()->add('city_id', 'The selected city does not belong to the selected state.');
                 }
             }

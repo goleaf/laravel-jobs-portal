@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Log;
 
 /**
  * ActionableJobController - Demonstrating Clean Architecture with Actionable Package
- * 
+ *
  * This controller showcases how to use the Actionable package to:
  * - Eliminate fat controllers
  * - Create reusable business logic
@@ -29,7 +29,7 @@ class ActionableJobController extends Controller
 {
     /**
      * Create a new job using clean action-based architecture
-     * 
+     *
      * ✅ Before Actionable: 200+ lines of controller logic
      * ✅ After Actionable: Clean, focused, single responsibility
      */
@@ -38,37 +38,37 @@ class ActionableJobController extends Controller
         try {
             // 🎯 Convert request to DTO with automatic validation and transformation
             $jobData = JobData::fromArray($request->validated());
-            
+
             // 🚀 Execute business logic in a single, expressive call
             $job = CreateJob::run($jobData, auth()->id());
-            
+
             // 📱 Transform to API-friendly response using DTO
             return response()->json([
                 'success' => true,
                 'message' => 'Job created successfully',
                 'data' => JobData::fromModel($job)->toArray(),
                 'job_id' => $job->id,
-                'slug' => $job->slug
+                'slug' => $job->slug,
             ], 201);
-            
+
         } catch (\Exception $e) {
             Log::error('Job creation failed', [
                 'user_id' => auth()->id(),
                 'error' => $e->getMessage(),
-                'request_data' => $request->validated()
+                'request_data' => $request->validated(),
             ]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to create job',
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ], 422);
         }
     }
 
     /**
      * Process job application with comprehensive business logic
-     * 
+     *
      * ✅ Includes: Validation, notifications, analytics, background processing
      * ✅ All in one clean action call!
      */
@@ -81,13 +81,13 @@ class ActionableJobController extends Controller
                     'job_id' => $job->id,
                     'candidate_id' => auth()->user()->candidate->id,
                     'applied_at' => now(),
-                    'application_source' => $request->header('User-Agent') ? 'web' : 'api'
+                    'application_source' => $request->header('User-Agent') ? 'web' : 'api',
                 ])
             );
-            
+
             // 🚀 Process application with full business logic
             $application = ProcessJobApplication::run($applicationData);
-            
+
             // 📊 Return comprehensive response
             return response()->json([
                 'success' => true,
@@ -95,20 +95,20 @@ class ActionableJobController extends Controller
                 'data' => JobApplicationData::fromModel($application)->toArray(),
                 'application_id' => $application->id,
                 'status' => $application->getStatusDisplayName(),
-                'next_steps' => $this->getApplicationNextSteps($application)
+                'next_steps' => $this->getApplicationNextSteps($application),
             ], 201);
-            
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], 422);
         }
     }
 
     /**
      * Publish job with background processing
-     * 
+     *
      * ✅ Auto-notifications, SEO updates, social posting - all handled!
      */
     public function publish(Job $job): JsonResponse
@@ -116,29 +116,29 @@ class ActionableJobController extends Controller
         try {
             // 🎯 Single action call handles complex publishing workflow
             $publishedJob = PublishJob::run($job);
-            
+
             // 🔄 Queue background tasks for immediate response
             SendJobAlert::dispatch($publishedJob);
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Job published successfully',
                 'data' => JobData::fromModel($publishedJob)->toArray(),
                 'published_at' => $publishedJob->published_at?->format('Y-m-d H:i:s'),
-                'expiry_date' => $publishedJob->job_expiry_date?->format('Y-m-d')
+                'expiry_date' => $publishedJob->job_expiry_date?->format('Y-m-d'),
             ]);
-            
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], 422);
         }
     }
 
     /**
      * Get job applications with filtered data based on user role
-     * 
+     *
      * ✅ DTO automatically handles field filtering and privacy settings
      */
     public function getApplications(Job $job, Request $request): JsonResponse
@@ -157,7 +157,7 @@ class ActionableJobController extends Controller
         // 🎯 Transform each application using DTO with privacy controls
         $transformedApplications = $applications->getCollection()->map(function ($application) {
             $applicationData = JobApplicationData::fromModel($application);
-            
+
             // 🔒 Automatically handle privacy settings from DTO
             return $applicationData->toArray();
         });
@@ -169,20 +169,20 @@ class ActionableJobController extends Controller
                 'current_page' => $applications->currentPage(),
                 'last_page' => $applications->lastPage(),
                 'per_page' => $applications->perPage(),
-                'total' => $applications->total()
+                'total' => $applications->total(),
             ],
             'statistics' => [
                 'total_applications' => $job->application_count,
                 'pending_review' => $job->appliedJobs()->pending()->count(),
                 'shortlisted' => $job->appliedJobs()->shortlisted()->count(),
-                'hired' => $job->appliedJobs()->hired()->count()
-            ]
+                'hired' => $job->appliedJobs()->hired()->count(),
+            ],
         ]);
     }
 
     /**
      * Batch operations using actions - process multiple applications
-     * 
+     *
      * ✅ Clean, consistent, reusable across different contexts
      */
     public function batchUpdateApplications(Request $request): JsonResponse
@@ -191,7 +191,7 @@ class ActionableJobController extends Controller
             'application_ids' => 'required|array',
             'application_ids.*' => 'exists:job_applications,id',
             'action' => 'required|in:approve,reject,shortlist',
-            'notes' => 'nullable|string|max:1000'
+            'notes' => 'nullable|string|max:1000',
         ]);
 
         $results = [];
@@ -201,26 +201,26 @@ class ActionableJobController extends Controller
         foreach ($request->application_ids as $applicationId) {
             try {
                 $application = JobApplication::findOrFail($applicationId);
-                
+
                 // 🎯 Use dedicated actions for each operation
-                match($request->action) {
+                match ($request->action) {
                     'approve' => ApproveJobApplication::run($application, $request->notes),
                     'reject' => RejectJobApplication::run($application, $request->notes),
                     'shortlist' => ShortlistJobApplication::run($application, $request->notes),
                 };
-                
+
                 $results[] = [
                     'id' => $applicationId,
                     'status' => 'success',
-                    'new_status' => $application->fresh()->status
+                    'new_status' => $application->fresh()->status,
                 ];
                 $successCount++;
-                
+
             } catch (\Exception $e) {
                 $results[] = [
                     'id' => $applicationId,
                     'status' => 'error',
-                    'message' => $e->getMessage()
+                    'message' => $e->getMessage(),
                 ];
                 $errorCount++;
             }
@@ -228,14 +228,14 @@ class ActionableJobController extends Controller
 
         return response()->json([
             'success' => $errorCount === 0,
-            'message' => "Processed {$successCount} applications successfully" . 
-                        ($errorCount > 0 ? ", {$errorCount} failed" : ""),
+            'message' => "Processed {$successCount} applications successfully".
+                        ($errorCount > 0 ? ", {$errorCount} failed" : ''),
             'results' => $results,
             'summary' => [
                 'total_processed' => count($request->application_ids),
                 'successful' => $successCount,
-                'failed' => $errorCount
-            ]
+                'failed' => $errorCount,
+            ],
         ]);
     }
 
@@ -244,23 +244,23 @@ class ActionableJobController extends Controller
      */
     private function getApplicationNextSteps(JobApplication $application): array
     {
-        return match($application->status) {
+        return match ($application->status) {
             'pending' => [
                 'message' => 'Your application is being reviewed',
                 'estimated_response_time' => '3-5 business days',
-                'actions' => ['You can track your application status in your dashboard']
+                'actions' => ['You can track your application status in your dashboard'],
             ],
             'reviewed' => [
                 'message' => 'Your application has been reviewed',
-                'actions' => ['Wait for further updates from the employer']
+                'actions' => ['Wait for further updates from the employer'],
             ],
             'shortlisted' => [
                 'message' => 'Congratulations! You have been shortlisted',
-                'actions' => ['Prepare for potential interview invitation']
+                'actions' => ['Prepare for potential interview invitation'],
             ],
             default => [
                 'message' => 'Application status updated',
-                'actions' => ['Check your email for updates']
+                'actions' => ['Check your email for updates'],
             ]
         };
     }
@@ -301,4 +301,4 @@ class ActionableJobController extends Controller
    - IntelliSense support for all actions
    - Clear, expressive code that tells a story
    - Easy onboarding for new developers
-*/ 
+*/

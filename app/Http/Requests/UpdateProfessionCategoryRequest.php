@@ -69,7 +69,7 @@ class UpdateProfessionCategoryRequest extends FormRequest
                 'string',
                 'regex:/^#[0-9a-f]{6}$/i', // Hex color validation
             ],
-            
+
             // Translation validation
             'translations' => [
                 'sometimes',
@@ -107,7 +107,7 @@ class UpdateProfessionCategoryRequest extends FormRequest
             'level.max' => 'The category level cannot exceed 10.',
             'sort_order.min' => 'The sort order must be 0 or greater.',
             'metadata.color.regex' => 'The color must be a valid hex color (e.g., #FF5733).',
-            
+
             'translations.min' => 'At least one translation is required.',
             'translations.*.name.required' => 'The category name is required for each language.',
             'translations.*.name.max' => 'The category name cannot exceed 255 characters.',
@@ -147,7 +147,7 @@ class UpdateProfessionCategoryRequest extends FormRequest
                 if ($parent && $this->level !== ($parent->level + 1)) {
                     $validator->errors()->add(
                         'level',
-                        "The level must be " . ($parent->level + 1) . " for this parent category."
+                        'The level must be '.($parent->level + 1).' for this parent category.'
                     );
                 }
             }
@@ -161,7 +161,7 @@ class UpdateProfessionCategoryRequest extends FormRequest
             }
 
             // Validate that non-root categories have parent_id
-            if ($this->level > 1 && !$this->parent_id) {
+            if ($this->level > 1 && ! $this->parent_id) {
                 $validator->errors()->add(
                     'parent_id',
                     'Categories with level > 1 must have a parent.'
@@ -172,7 +172,7 @@ class UpdateProfessionCategoryRequest extends FormRequest
             if ($this->parent_id) {
                 $category = \App\Models\ProfessionCategory::find($categoryId);
                 $proposedParent = \App\Models\ProfessionCategory::find($this->parent_id);
-                
+
                 if ($category && $proposedParent && $proposedParent->isDescendantOf($category)) {
                     $validator->errors()->add(
                         'parent_id',
@@ -184,9 +184,9 @@ class UpdateProfessionCategoryRequest extends FormRequest
             // Validate translation locales
             if ($this->translations) {
                 $supportedLocales = ['en', 'lt', 'ru', 'pl', 'de', 'fr', 'es', 'zh', 'ar', 'pt', 'tr', 'it', 'ja', 'hi'];
-                
+
                 foreach ($this->translations as $locale => $translation) {
-                    if (!in_array($locale, $supportedLocales)) {
+                    if (! in_array($locale, $supportedLocales)) {
                         $validator->errors()->add(
                             "translations.{$locale}",
                             "The locale '{$locale}' is not supported."
@@ -196,9 +196,9 @@ class UpdateProfessionCategoryRequest extends FormRequest
             }
 
             // Validate that category can be deactivated (no active children or professions)
-            if ($this->has('is_active') && !$this->is_active) {
+            if ($this->has('is_active') && ! $this->is_active) {
                 $category = \App\Models\ProfessionCategory::find($categoryId);
-                
+
                 if ($category) {
                     $activeChildren = $category->children()->where('is_active', true)->count();
                     if ($activeChildren > 0) {
@@ -228,13 +228,13 @@ class UpdateProfessionCategoryRequest extends FormRequest
         // Clean up metadata if provided
         if ($this->has('metadata') && is_array($this->metadata)) {
             $metadata = $this->metadata;
-            
+
             // Remove empty values
             $metadata = array_filter($metadata, function ($value) {
-                return !is_null($value) && $value !== '';
+                return ! is_null($value) && $value !== '';
             });
-            
+
             $this->merge(['metadata' => $metadata]);
         }
     }
-} 
+}

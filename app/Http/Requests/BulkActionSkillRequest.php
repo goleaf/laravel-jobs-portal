@@ -46,4 +46,4 @@ class BulkActionSkillRequest extends FormRequest
             'skill_ids.*.exists' => __('validation.exists', ['attribute' => 'skill ID']),
         ];
     }
-} 
+}

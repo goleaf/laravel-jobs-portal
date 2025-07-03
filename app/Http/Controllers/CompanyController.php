@@ -174,7 +174,7 @@ class CompanyController extends AppBaseController
     public function changeIsActive(Company $company, ChangeIsActiveCompanyRequest $request)
     {
         $isActive = $company->user->is_active;
-        $company->user->update(['is_active' => !$isActive]);
+        $company->user->update(['is_active' => ! $isActive]);
 
         if ($company) {
             if (Auth::user()->hasRole('Admin')) {
@@ -258,8 +258,7 @@ class CompanyController extends AppBaseController
     }
 
     /**
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return Application|Factory|View
      *
      * @throws \Exception
@@ -284,8 +283,7 @@ class CompanyController extends AppBaseController
     /**
      * Display a listing of the Job.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return Factory|View
      *
      * @throws \Exception
@@ -307,8 +305,7 @@ class CompanyController extends AppBaseController
     }
 
     /**
-     * @param mixed $companyId
-     *
+     * @param  mixed  $companyId
      * @return mixed
      */
     public function markAsFeatured($companyId, MarkAsFeaturedCompanyRequest $request)
@@ -339,7 +336,7 @@ class CompanyController extends AppBaseController
                 'end_date' => $endDate,
             ]);
 
-            if (1 == NotificationSetting::where('key', 'NEW_FEATURED_COMPANY_AVAILABLE')->first()->value) {
+            if (NotificationSetting::where('key', 'NEW_FEATURED_COMPANY_AVAILABLE')->first()->value == 1) {
                 $users = getAdminNotificationUserIds();
                 foreach ($users as $userId) {
                     addNotification([
@@ -370,8 +367,7 @@ class CompanyController extends AppBaseController
     }
 
     /**
-     * @param mixed $companyId
-     *
+     * @param  mixed  $companyId
      * @return mixed
      */
     public function markAsUnFeatured($companyId, MarkAsUnFeaturedCompanyRequest $request)
@@ -383,7 +379,7 @@ class CompanyController extends AppBaseController
 
         $company->update(['is_featured' => 0]);
         $featuredRecord = FeaturedRecord::where('owner_type', Company::class)->where('owner_id', $company->id)->first();
-        if (!empty($featuredRecord)) {
+        if (! empty($featuredRecord)) {
             $featuredRecord->delete();
         }
 

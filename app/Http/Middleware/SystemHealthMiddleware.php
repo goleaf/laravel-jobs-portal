@@ -2,17 +2,17 @@
 
 namespace App\Http\Middleware;
 
+use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
-use Carbon\Carbon;
 
 /**
  * Laravel Defibrillator-inspired Middleware
- * 
+ *
  * Prevents overwhelming the system by monitoring critical operations
  * and blocking requests when the system is under stress
  */
@@ -32,9 +32,9 @@ class SystemHealthMiddleware
 
         // Get cached health status
         $healthStatus = Cache::get('defibrillator:last_health_check');
-        
+
         // If no recent health check, perform basic check
-        if (!$healthStatus || Carbon::parse($healthStatus['timestamp'])->diffInMinutes(Carbon::now()) > 10) {
+        if (! $healthStatus || Carbon::parse($healthStatus['timestamp'])->diffInMinutes(Carbon::now()) > 10) {
             $this->performQuickHealthCheck();
             $healthStatus = Cache::get('defibrillator:last_health_check');
         }
@@ -56,7 +56,7 @@ class SystemHealthMiddleware
      */
     protected function handleCriticalOperations(Request $request, Closure $next, ?array $healthStatus): Response
     {
-        if (!$healthStatus || $healthStatus['status'] === 'critical') {
+        if (! $healthStatus || $healthStatus['status'] === 'critical') {
             Log::warning('Critical operation blocked due to system health issues', [
                 'url' => $request->url(),
                 'user_id' => $request->user()?->id,
@@ -66,7 +66,7 @@ class SystemHealthMiddleware
             return response()->json([
                 'error' => 'System temporarily unavailable for maintenance. Please try again in a few minutes.',
                 'status' => 'health_check_failed',
-                'retry_after' => 300 // 5 minutes
+                'retry_after' => 300, // 5 minutes
             ], 503);
         }
 
@@ -83,23 +83,23 @@ class SystemHealthMiddleware
      */
     protected function handleHeavyOperations(Request $request, Closure $next, ?array $healthStatus): Response
     {
-        if (!$healthStatus || $healthStatus['status'] === 'critical') {
+        if (! $healthStatus || $healthStatus['status'] === 'critical') {
             return response()->json([
                 'error' => 'Heavy operations temporarily disabled due to system load.',
                 'status' => 'health_check_failed',
-                'retry_after' => 180 // 3 minutes
+                'retry_after' => 180, // 3 minutes
             ], 503);
         }
 
         // Check for specific warnings that should block heavy operations
         if (isset($healthStatus['warnings'])) {
-            $blockingWarnings = array_filter($healthStatus['warnings'], function($warning) {
-                return str_contains($warning, 'High memory usage') || 
+            $blockingWarnings = array_filter($healthStatus['warnings'], function ($warning) {
+                return str_contains($warning, 'High memory usage') ||
                        str_contains($warning, 'High queue backlog') ||
                        str_contains($warning, 'Database connection slow');
             });
 
-            if (!empty($blockingWarnings)) {
+            if (! empty($blockingWarnings)) {
                 Log::info('Heavy operation throttled due to system warnings', [
                     'url' => $request->url(),
                     'warnings' => $blockingWarnings,
@@ -108,7 +108,7 @@ class SystemHealthMiddleware
                 return response()->json([
                     'error' => 'System is under heavy load. Please try this operation later.',
                     'status' => 'throttled',
-                    'retry_after' => 120 // 2 minutes
+                    'retry_after' => 120, // 2 minutes
                 ], 429);
             }
         }
@@ -122,33 +122,33 @@ class SystemHealthMiddleware
     protected function handleBasicOperations(Request $request, Closure $next, ?array $healthStatus): Response
     {
         // Only block if system is in critical state
-        if (!$healthStatus || $healthStatus['status'] === 'critical') {
+        if (! $healthStatus || $healthStatus['status'] === 'critical') {
             // For web requests, show a maintenance page
             if ($request->expectsJson()) {
                 return response()->json([
                     'error' => 'System maintenance in progress.',
                     'status' => 'maintenance_mode',
-                    'retry_after' => 60
+                    'retry_after' => 60,
                 ], 503);
             } else {
                 return response()->view('errors.503-health', [
                     'health_status' => $healthStatus,
-                    'retry_after' => 60
+                    'retry_after' => 60,
                 ], 503);
             }
         }
 
         // Add performance headers for monitoring
         $response = $next($request);
-        
+
         if ($healthStatus) {
             $response->headers->set('X-System-Health', $healthStatus['status']);
-            
+
             // Add performance metrics if available
             if (isset($healthStatus['checks']['database']['connection_time'])) {
                 $response->headers->set('X-DB-Response-Time', $healthStatus['checks']['database']['connection_time']);
             }
-            
+
             if (isset($healthStatus['checks']['resources']['memory_usage_percent'])) {
                 $response->headers->set('X-Memory-Usage', $healthStatus['checks']['resources']['memory_usage_percent']);
             }
@@ -164,16 +164,16 @@ class SystemHealthMiddleware
     {
         try {
             $start = microtime(true);
-            
+
             // Quick database check
             $dbHealthy = true;
             $connectionTime = 0;
-            
+
             try {
                 $startDb = microtime(true);
                 DB::connection()->getPdo();
                 $connectionTime = round((microtime(true) - $startDb) * 1000, 2);
-                
+
                 if ($connectionTime > 2000) { // 2 second threshold for quick check
                     $dbHealthy = false;
                 }
@@ -198,7 +198,7 @@ class SystemHealthMiddleware
             $memoryLimit = ini_get('memory_limit');
             $memoryLimitBytes = $this->convertToBytes($memoryLimit);
             $memoryUsagePercent = ($memoryUsage / $memoryLimitBytes) * 100;
-            
+
             if ($memoryUsagePercent > 95) {
                 $memoryHealthy = false;
             }
@@ -211,11 +211,11 @@ class SystemHealthMiddleware
                 'timestamp' => Carbon::now(),
                 'status' => $overallStatus,
                 'check_type' => 'quick',
-                'check_duration' => $totalTime . 'ms',
+                'check_duration' => $totalTime.'ms',
                 'checks' => [
-                    'database' => ['status' => $dbHealthy ? 'healthy' : 'critical', 'connection_time' => $connectionTime . 'ms'],
+                    'database' => ['status' => $dbHealthy ? 'healthy' : 'critical', 'connection_time' => $connectionTime.'ms'],
                     'queue' => ['status' => $queueHealthy ? 'healthy' : 'critical'],
-                    'resources' => ['status' => $memoryHealthy ? 'healthy' : 'critical', 'memory_usage_percent' => round($memoryUsagePercent, 2) . '%'],
+                    'resources' => ['status' => $memoryHealthy ? 'healthy' : 'critical', 'memory_usage_percent' => round($memoryUsagePercent, 2).'%'],
                 ],
                 'issues' => $overallStatus === 'critical' ? ['System under stress - quick health check failed'] : [],
                 'warnings' => [],
@@ -244,7 +244,7 @@ class SystemHealthMiddleware
                 'check_type' => 'quick_failed',
                 'error' => $e->getMessage(),
                 'checks' => [],
-                'issues' => ['Health check system failure: ' . $e->getMessage()],
+                'issues' => ['Health check system failure: '.$e->getMessage()],
                 'warnings' => [],
             ], 300); // Cache for 5 minutes only
         }

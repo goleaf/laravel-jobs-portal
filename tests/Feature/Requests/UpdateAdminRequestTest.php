@@ -30,17 +30,17 @@ class UpdateAdminRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAuthorizationReturnsTrue()
+    public function test_authorization_returns_true()
     {
-        $request = new UpdateAdminRequest();
+        $request = new UpdateAdminRequest;
 
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function testValidationRulesAreDefined()
+    public function test_validation_rules_are_defined()
     {
-        $request = new UpdateAdminRequest();
+        $request = new UpdateAdminRequest;
         $rules = $request->rules();
 
         $this->assertIsArray($rules);
@@ -48,9 +48,9 @@ class UpdateAdminRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationMessagesAreDefined()
+    public function test_validation_messages_are_defined()
     {
-        $request = new UpdateAdminRequest();
+        $request = new UpdateAdminRequest;
 
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
@@ -61,9 +61,9 @@ class UpdateAdminRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationAttributesAreDefined()
+    public function test_validation_attributes_are_defined()
     {
-        $request = new UpdateAdminRequest();
+        $request = new UpdateAdminRequest;
 
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
@@ -74,9 +74,9 @@ class UpdateAdminRequestTest extends TestCase
     }
 
     /** @test */
-    public function testFirstNameValidation()
+    public function test_first_name_validation()
     {
-        $request = new UpdateAdminRequest();
+        $request = new UpdateAdminRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('first_name', $rules);
@@ -87,9 +87,9 @@ class UpdateAdminRequestTest extends TestCase
     }
 
     /** @test */
-    public function testLastNameValidation()
+    public function test_last_name_validation()
     {
-        $request = new UpdateAdminRequest();
+        $request = new UpdateAdminRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('last_name', $rules);
@@ -100,9 +100,9 @@ class UpdateAdminRequestTest extends TestCase
     }
 
     /** @test */
-    public function testEmailValidation()
+    public function test_email_validation()
     {
-        $request = new UpdateAdminRequest();
+        $request = new UpdateAdminRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('email', $rules);
@@ -113,7 +113,7 @@ class UpdateAdminRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidDataPassesValidation()
+    public function test_valid_data_passes_validation()
     {
         $validData = [
             'first_name' => 'Test Value',
@@ -121,18 +121,18 @@ class UpdateAdminRequestTest extends TestCase
             'email' => 'test@example.com',
         ];
 
-        $request = new UpdateAdminRequest();
+        $request = new UpdateAdminRequest;
         $validator = validator($validData, $request->rules());
 
         $this->assertFalse($validator->fails());
     }
 
     /** @test */
-    public function testRequestHandlesEmptyDataCorrectly()
+    public function test_request_handles_empty_data_correctly()
     {
         $emptyData = [];
 
-        $request = new UpdateAdminRequest();
+        $request = new UpdateAdminRequest;
         $validator = validator($emptyData, $request->rules());
 
         // Should handle empty data according to rules
@@ -140,7 +140,7 @@ class UpdateAdminRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSecurityValidationPreventsXss()
+    public function test_security_validation_prevents_xss()
     {
         $maliciousData = [
             'name' => '<script>alert("xss")</script>',
@@ -148,7 +148,7 @@ class UpdateAdminRequestTest extends TestCase
             'content' => '<img src=x onerror=alert("xss")>',
         ];
 
-        $request = new UpdateAdminRequest();
+        $request = new UpdateAdminRequest;
         $validator = validator($maliciousData, $request->rules());
 
         // XSS data should either fail validation or be properly sanitized
@@ -163,7 +163,7 @@ class UpdateAdminRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSqlInjectionPrevention()
+    public function test_sql_injection_prevention()
     {
         $sqlInjectionData = [
             'name' => "'; DROP TABLE users; --",
@@ -171,7 +171,7 @@ class UpdateAdminRequestTest extends TestCase
             'filter' => 'UNION SELECT * FROM passwords',
         ];
 
-        $request = new UpdateAdminRequest();
+        $request = new UpdateAdminRequest;
         $validator = validator($sqlInjectionData, $request->rules());
 
         // SQL injection patterns should be handled safely

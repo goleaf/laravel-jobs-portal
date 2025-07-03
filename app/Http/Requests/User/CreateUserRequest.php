@@ -116,13 +116,13 @@ class CreateUserRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param mixed $validator
+     * @param  mixed  $validator
      */
     public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
             // Validate age requirement for certain roles
-            if ($this->input('dob') && 'candidate' === $this->input('role')) {
+            if ($this->input('dob') && $this->input('role') === 'candidate') {
                 $age = Carbon::parse($this->input('dob'))->age;
                 if ($age < 16) {
                     $validator->errors()->add('dob', __('validation.user.dob.minimum_age'));

@@ -16,11 +16,11 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 /**
  * CmsServices Model - Enhanced with Enhanced patterns.
  *
- * @property int         $id
- * @property string      $key
+ * @property int $id
+ * @property string $key
  * @property null|string $value
- * @property bool        $is_active
- * @property bool        $is_featured
+ * @property bool $is_active
+ * @property bool $is_featured
  * @property null|Carbon $created_at
  * @property null|Carbon $updated_at
  * @property null|Carbon $deleted_at
@@ -45,8 +45,8 @@ class CmsServices extends Model implements HasMedia
 {
     use HasFactory;
     use InteractsWithMedia;
-    use SoftDeletes;
     use LogsActivity;
+    use SoftDeletes;
 
     /**
      * Media collection path constant.
@@ -101,8 +101,7 @@ class CmsServices extends Model implements HasMedia
         return LogOptions::defaults()
             ->logOnly(['key', 'value', 'is_active', 'is_featured'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -127,7 +126,7 @@ class CmsServices extends Model implements HasMedia
     /**
      * Scope a query to only include active records.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeActive($query)
     {
@@ -137,7 +136,7 @@ class CmsServices extends Model implements HasMedia
     /**
      * Scope a query to only include inactive records.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeInactive($query)
     {
@@ -147,7 +146,7 @@ class CmsServices extends Model implements HasMedia
     /**
      * Scope a query to only include featured records.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeFeatured($query)
     {
@@ -157,7 +156,7 @@ class CmsServices extends Model implements HasMedia
     /**
      * Scope a query to only include non-featured records.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeNonFeatured($query)
     {
@@ -167,21 +166,20 @@ class CmsServices extends Model implements HasMedia
     /**
      * Scope a query to search by key or value.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeSearch($query, string $term)
     {
         return $query->where(function ($q) use ($term) {
             $q->where('key', 'like', '%'.$term.'%')
-                ->orWhere('value', 'like', '%'.$term.'%')
-            ;
+                ->orWhere('value', 'like', '%'.$term.'%');
         });
     }
 
     /**
      * Scope a query to filter by specific key.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeByKey($query, string $key)
     {
@@ -191,7 +189,7 @@ class CmsServices extends Model implements HasMedia
     /**
      * Scope a query to only include recent records.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeRecent($query, int $days = 30)
     {
@@ -201,7 +199,7 @@ class CmsServices extends Model implements HasMedia
     /**
      * Scope a query to only include old records.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeOld($query, int $days = 365)
     {
@@ -211,7 +209,7 @@ class CmsServices extends Model implements HasMedia
     /**
      * Scope a query to order records alphabetically by key.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeAlphabetical($query)
     {
@@ -221,7 +219,7 @@ class CmsServices extends Model implements HasMedia
     /**
      * Scope a query to include records with media.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithMedia($query)
     {
@@ -231,7 +229,7 @@ class CmsServices extends Model implements HasMedia
     /**
      * Scope a query to include records without media.
      *
-     * @param mixed $query
+     * @param  mixed  $query
      */
     public function scopeWithoutMedia($query)
     {
@@ -291,7 +289,7 @@ class CmsServices extends Model implements HasMedia
      */
     public function hasValue(): bool
     {
-        return !empty($this->value);
+        return ! empty($this->value);
     }
 
     /**
@@ -305,7 +303,7 @@ class CmsServices extends Model implements HasMedia
 
         // Try to decode JSON values
         $decoded = json_decode($this->value, true);
-        if (JSON_ERROR_NONE === json_last_error() && is_array($decoded)) {
+        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
             return implode(', ', array_values($decoded));
         }
 
@@ -378,7 +376,7 @@ class CmsServices extends Model implements HasMedia
                 $redis = $store->getRedis();
                 if (method_exists($redis, 'keys')) {
                     $keys = $redis->keys($pattern);
-                    if (!empty($keys)) {
+                    if (! empty($keys)) {
                         $redis->del($keys);
                     }
                 }

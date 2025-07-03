@@ -2,30 +2,30 @@
 
 namespace App\Services;
 
-use App\Models\User;
-use App\Models\Job;
-use App\Models\Company;
-use App\Models\JobApplication;
-use App\Models\Skill;
-use App\Models\Industry;
-use App\Models\Country;
-use App\Models\State;
 use App\Models\City;
-use App\Models\JobCategory;
+use App\Models\Company;
+use App\Models\Country;
 use App\Models\FunctionalArea;
+use App\Models\Industry;
+use App\Models\Job;
+use App\Models\JobApplication;
+use App\Models\JobCategory;
+use App\Models\Skill;
+use App\Models\State;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
  * Deep Relationship Service
- * 
+ *
  * Leverages staudenmeir/eloquent-has-many-deep package for complex
  * multi-level relationships in the job portal system.
- * 
+ *
  * Package: https://github.com/staudenmeir/eloquent-has-many-deep
  * Reference: https://madewithlaravel.com/eloquent-has-many-deep
  * Version: v1.21 (Latest stable)
- * 
+ *
  * This service provides methods for complex relationship queries
  * that would otherwise require multiple database calls or complex joins.
  */
@@ -33,12 +33,10 @@ class DeepRelationshipService
 {
     /**
      * Get jobs in user's location using deep relationships.
-     * 
+     *
      * Path: User -> Country -> State -> City -> Jobs
-     * 
-     * @param User $user
-     * @param array $filters Additional filters for jobs
-     * @return Collection
+     *
+     * @param  array  $filters  Additional filters for jobs
      */
     public function getUserLocationJobs(User $user, array $filters = []): Collection
     {
@@ -55,7 +53,7 @@ class DeepRelationshipService
         if (isset($filters['status'])) {
             $query->where('jobs.status', $filters['status']);
         }
-        
+
         if (isset($filters['job_type_id'])) {
             $query->where('jobs.job_type_id', $filters['job_type_id']);
         }
@@ -65,7 +63,7 @@ class DeepRelationshipService
         }
 
         $jobIds = $query->pluck('jobs.id');
-        
+
         return Job::whereIn('id', $jobIds)
             ->with(['company', 'jobType', 'jobCategory'])
             ->get();
@@ -73,12 +71,8 @@ class DeepRelationshipService
 
     /**
      * Get all job applications for an employer's company jobs.
-     * 
+     *
      * Path: User -> Company -> Jobs -> JobApplications
-     * 
-     * @param User $employer
-     * @param array $filters
-     * @return Collection
      */
     public function getEmployerJobApplications(User $employer, array $filters = []): Collection
     {
@@ -98,7 +92,7 @@ class DeepRelationshipService
         }
 
         $applicationIds = $query->pluck('job_applications.id');
-        
+
         return JobApplication::whereIn('id', $applicationIds)
             ->with(['candidate', 'job.company'])
             ->get();
@@ -106,17 +100,13 @@ class DeepRelationshipService
 
     /**
      * Get candidates in the same region as user.
-     * 
+     *
      * Path: User -> Country -> State -> City -> Users (Candidates)
-     * 
-     * @param User $user
-     * @param int $limit
-     * @return Collection
      */
     public function getRegionCandidates(User $user, int $limit = 50): Collection
     {
         return User::where('country_id', $user->country_id)
-            ->where('state_id', $user->state_id) 
+            ->where('state_id', $user->state_id)
             ->where('city_id', $user->city_id)
             ->where('id', '!=', $user->id)
             ->whereHas('candidate')
@@ -128,11 +118,8 @@ class DeepRelationshipService
 
     /**
      * Get skills through candidate's job applications.
-     * 
+     *
      * Path: User -> JobApplications -> Jobs -> JobSkills -> Skills
-     * 
-     * @param User $candidate
-     * @return Collection
      */
     public function getCandidateAppliedJobSkills(User $candidate): Collection
     {
@@ -149,12 +136,8 @@ class DeepRelationshipService
 
     /**
      * Get similar candidates who applied to same jobs.
-     * 
+     *
      * Path: User -> JobApplications -> Jobs -> JobApplications -> Users
-     * 
-     * @param User $candidate
-     * @param int $limit
-     * @return Collection
      */
     public function getSimilarCandidates(User $candidate, int $limit = 20): Collection
     {
@@ -177,24 +160,20 @@ class DeepRelationshipService
 
     /**
      * Get jobs in same industry as user's company.
-     * 
+     *
      * Path: User -> Company -> Industry -> Companies -> Jobs
-     * 
-     * @param User $employer
-     * @param array $filters
-     * @return Collection
      */
     public function getIndustryJobs(User $employer, array $filters = []): Collection
     {
         $company = $employer->company()->first();
-        
-        if (!$company || !$company->industry_id) {
+
+        if (! $company || ! $company->industry_id) {
             return collect([]);
         }
 
         $query = Job::whereHas('company', function ($q) use ($company) {
             $q->where('industry_id', $company->industry_id)
-              ->where('id', '!=', $company->id); // Exclude own company
+                ->where('id', '!=', $company->id); // Exclude own company
         });
 
         // Apply filters
@@ -213,11 +192,8 @@ class DeepRelationshipService
 
     /**
      * Get job categories through candidate's applications.
-     * 
+     *
      * Path: User -> JobApplications -> Jobs -> JobCategory
-     * 
-     * @param User $candidate
-     * @return Collection
      */
     public function getCandidateJobCategories(User $candidate): Collection
     {
@@ -233,11 +209,8 @@ class DeepRelationshipService
 
     /**
      * Get functional areas through employer's jobs.
-     * 
+     *
      * Path: User -> Company -> Jobs -> FunctionalArea
-     * 
-     * @param User $employer
-     * @return Collection
      */
     public function getEmployerFunctionalAreas(User $employer): Collection
     {
@@ -253,12 +226,8 @@ class DeepRelationshipService
 
     /**
      * Get local company jobs in user's city.
-     * 
+     *
      * Path: User -> City -> Companies -> Jobs
-     * 
-     * @param User $user
-     * @param array $filters
-     * @return Collection
      */
     public function getLocalCompanyJobs(User $user, array $filters = []): Collection
     {
@@ -282,11 +251,8 @@ class DeepRelationshipService
 
     /**
      * Get comprehensive candidate recommendations.
-     * 
+     *
      * Combines multiple deep relationships for intelligent matching.
-     * 
-     * @param User $candidate
-     * @return array
      */
     public function getCandidateRecommendations(User $candidate): array
     {
@@ -296,17 +262,14 @@ class DeepRelationshipService
             'similar_candidates' => $this->getSimilarCandidates($candidate, 10),
             'job_categories' => $this->getCandidateJobCategories($candidate),
             'local_jobs' => $this->getLocalCompanyJobs($candidate, ['is_active' => true]),
-            'region_candidates' => $this->getRegionCandidates($candidate, 10)
+            'region_candidates' => $this->getRegionCandidates($candidate, 10),
         ];
     }
 
     /**
      * Get comprehensive employer analytics.
-     * 
+     *
      * Provides deep insights using multiple relationship levels.
-     * 
-     * @param User $employer
-     * @return array
      */
     public function getEmployerAnalytics(User $employer): array
     {
@@ -318,4 +281,4 @@ class DeepRelationshipService
             'pending_applications' => $this->getEmployerJobApplications($employer, ['status' => 'pending']),
         ];
     }
-} 
+}

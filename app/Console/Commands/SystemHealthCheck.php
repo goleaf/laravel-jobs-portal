@@ -2,20 +2,20 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Company;
+use App\Models\Job;
+use App\Models\JobApplication;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Job;
-use App\Models\JobApplication;
-use App\Models\User;
-use App\Models\Company;
-use Carbon\Carbon;
 
 /**
  * Laravel Defibrillator-inspired System Health Monitor
- * 
+ *
  * Ensures your Laravel Job Portal keeps a normal rhythm by monitoring:
  * - Queue workers health
  * - Database performance
@@ -76,12 +76,12 @@ class SystemHealthCheck extends Command
         $this->displayHealthSummary();
 
         // Handle Repairs
-        if ($this->option('repair') && !empty($this->criticalIssues)) {
+        if ($this->option('repair') && ! empty($this->criticalIssues)) {
             $this->attemptRepairs();
         }
 
         // Handle Alerts
-        if ($this->option('alert') && !empty($this->criticalIssues)) {
+        if ($this->option('alert') && ! empty($this->criticalIssues)) {
             $this->sendHealthAlerts();
         }
 
@@ -97,11 +97,11 @@ class SystemHealthCheck extends Command
 
         try {
             $start = microtime(true);
-            
+
             // Test connection
             DB::connection()->getPdo();
             $connectionTime = round((microtime(true) - $start) * 1000, 2);
-            
+
             // Check critical tables
             $jobCount = Job::count();
             $applicationCount = JobApplication::count();
@@ -110,7 +110,7 @@ class SystemHealthCheck extends Command
 
             // Check for failed jobs
             $failedJobs = DB::table('failed_jobs')->count();
-            
+
             // Performance check
             $slowQueryTime = 1000; // 1 second threshold
             if ($connectionTime > $slowQueryTime) {
@@ -123,7 +123,7 @@ class SystemHealthCheck extends Command
 
             $this->healthChecks['database'] = [
                 'status' => 'healthy',
-                'connection_time' => $connectionTime . 'ms',
+                'connection_time' => $connectionTime.'ms',
                 'jobs' => $jobCount,
                 'applications' => $applicationCount,
                 'users' => $userCount,
@@ -141,7 +141,7 @@ class SystemHealthCheck extends Command
             }
 
         } catch (\Exception $e) {
-            $this->criticalIssues[] = 'Database connection failed: ' . $e->getMessage();
+            $this->criticalIssues[] = 'Database connection failed: '.$e->getMessage();
             $this->healthChecks['database'] = ['status' => 'critical', 'error' => $e->getMessage()];
             $this->error('   ❌ Database connection failed');
         }
@@ -157,7 +157,7 @@ class SystemHealthCheck extends Command
         try {
             // Check pending jobs
             $pendingJobs = DB::table('jobs')->count();
-            
+
             // Check if jobs are being processed (look for recent completions)
             $recentProcessed = DB::table('job_batches')
                 ->where('finished_at', '>', Carbon::now()->subMinutes($threshold))
@@ -169,7 +169,7 @@ class SystemHealthCheck extends Command
                 ->count();
 
             if ($stuckJobs > 0) {
-                $this->criticalIssues[] = "Found {$stuckJobs} stuck jobs (older than " . ($threshold * 2) . " minutes)";
+                $this->criticalIssues[] = "Found {$stuckJobs} stuck jobs (older than ".($threshold * 2).' minutes)';
             }
 
             if ($pendingJobs > 100) {
@@ -192,7 +192,7 @@ class SystemHealthCheck extends Command
             }
 
         } catch (\Exception $e) {
-            $this->criticalIssues[] = 'Queue system check failed: ' . $e->getMessage();
+            $this->criticalIssues[] = 'Queue system check failed: '.$e->getMessage();
             $this->healthChecks['queue'] = ['status' => 'critical', 'error' => $e->getMessage()];
         }
     }
@@ -207,17 +207,17 @@ class SystemHealthCheck extends Command
         try {
             // Check for recent job applications
             $recentApplications = JobApplication::where('created_at', '>', Carbon::now()->subHours(24))->count();
-            
+
             // Check for active jobs
             $activeJobs = Job::where('is_active', true)->count();
-            
+
             // Check for expired jobs not marked as inactive
             $expiredActiveJobs = Job::where('is_active', true)
                 ->where('deadline', '<', Carbon::now())
                 ->count();
 
             // Check for companies without jobs
-            $inactiveCompanies = Company::whereDoesntHave('jobs', function($query) {
+            $inactiveCompanies = Company::whereDoesntHave('jobs', function ($query) {
                 $query->where('is_active', true);
             })->count();
 
@@ -242,7 +242,7 @@ class SystemHealthCheck extends Command
             }
 
         } catch (\Exception $e) {
-            $this->criticalIssues[] = 'Job portal health check failed: ' . $e->getMessage();
+            $this->criticalIssues[] = 'Job portal health check failed: '.$e->getMessage();
             $this->healthChecks['job_portal'] = ['status' => 'critical', 'error' => $e->getMessage()];
         }
     }
@@ -258,26 +258,26 @@ class SystemHealthCheck extends Command
             $memoryUsage = memory_get_usage(true);
             $memoryLimit = ini_get('memory_limit');
             $memoryLimitBytes = $this->convertToBytes($memoryLimit);
-            
+
             $memoryUsagePercent = ($memoryUsage / $memoryLimitBytes) * 100;
 
             if ($memoryUsagePercent > 80) {
-                $this->warnings[] = "High memory usage: " . round($memoryUsagePercent, 2) . "%";
+                $this->warnings[] = 'High memory usage: '.round($memoryUsagePercent, 2).'%';
             }
 
             $this->healthChecks['resources'] = [
                 'status' => $memoryUsagePercent > 90 ? 'critical' : 'healthy',
                 'memory_usage' => $this->formatBytes($memoryUsage),
                 'memory_limit' => $memoryLimit,
-                'memory_usage_percent' => round($memoryUsagePercent, 2) . '%',
+                'memory_usage_percent' => round($memoryUsagePercent, 2).'%',
             ];
 
             if ($verbose) {
-                $this->line("   🧠 Memory usage: " . $this->formatBytes($memoryUsage) . " / {$memoryLimit} (" . round($memoryUsagePercent, 2) . "%)");
+                $this->line('   🧠 Memory usage: '.$this->formatBytes($memoryUsage)." / {$memoryLimit} (".round($memoryUsagePercent, 2).'%)');
             }
 
         } catch (\Exception $e) {
-            $this->warnings[] = 'Resource check failed: ' . $e->getMessage();
+            $this->warnings[] = 'Resource check failed: '.$e->getMessage();
         }
     }
 
@@ -291,11 +291,11 @@ class SystemHealthCheck extends Command
         try {
             // Check if schedule:run has been executed recently
             $lastScheduleRun = Cache::get('schedule:last_run');
-            
+
             if ($lastScheduleRun) {
                 $lastRunTime = Carbon::parse($lastScheduleRun);
                 $minutesSinceLastRun = $lastRunTime->diffInMinutes(Carbon::now());
-                
+
                 if ($minutesSinceLastRun > $threshold) {
                     $this->criticalIssues[] = "Scheduled tasks haven't run in {$minutesSinceLastRun} minutes";
                 }
@@ -317,7 +317,7 @@ class SystemHealthCheck extends Command
             }
 
         } catch (\Exception $e) {
-            $this->warnings[] = 'Scheduled tasks check failed: ' . $e->getMessage();
+            $this->warnings[] = 'Scheduled tasks check failed: '.$e->getMessage();
         }
     }
 
@@ -331,7 +331,7 @@ class SystemHealthCheck extends Command
         try {
             $mailDriver = config('mail.default');
             $mailHost = config("mail.mailers.{$mailDriver}.host");
-            
+
             // Check for recent email jobs
             $recentMailJobs = DB::table('jobs')
                 ->where('payload', 'like', '%mail%')
@@ -351,7 +351,7 @@ class SystemHealthCheck extends Command
             }
 
         } catch (\Exception $e) {
-            $this->warnings[] = 'Mail system check failed: ' . $e->getMessage();
+            $this->warnings[] = 'Mail system check failed: '.$e->getMessage();
         }
     }
 
@@ -364,17 +364,17 @@ class SystemHealthCheck extends Command
 
         try {
             $cacheDriver = config('cache.default');
-            
+
             // Test cache write/read
             $testKey = 'defibrillator:health:test';
             $testValue = Carbon::now()->timestamp;
-            
+
             Cache::put($testKey, $testValue, 60);
             $retrieved = Cache::get($testKey);
-            
+
             $cacheWorking = ($retrieved == $testValue);
-            
-            if (!$cacheWorking) {
+
+            if (! $cacheWorking) {
                 $this->criticalIssues[] = 'Cache system not working properly';
             }
 
@@ -388,11 +388,11 @@ class SystemHealthCheck extends Command
 
             if ($verbose) {
                 $this->line("   💾 Cache driver: {$cacheDriver}");
-                $this->line("   ✅ Cache working: " . ($cacheWorking ? 'Yes' : 'No'));
+                $this->line('   ✅ Cache working: '.($cacheWorking ? 'Yes' : 'No'));
             }
 
         } catch (\Exception $e) {
-            $this->criticalIssues[] = 'Cache system failed: ' . $e->getMessage();
+            $this->criticalIssues[] = 'Cache system failed: '.$e->getMessage();
         }
     }
 
@@ -405,18 +405,18 @@ class SystemHealthCheck extends Command
 
         try {
             $disk = Storage::disk();
-            
+
             // Test storage write/read
-            $testFile = 'health-check-' . Carbon::now()->timestamp . '.txt';
+            $testFile = 'health-check-'.Carbon::now()->timestamp.'.txt';
             $testContent = 'Laravel Defibrillator Health Check';
-            
+
             $disk->put($testFile, $testContent);
             $retrieved = $disk->get($testFile);
             $disk->delete($testFile);
-            
+
             $storageWorking = ($retrieved === $testContent);
 
-            if (!$storageWorking) {
+            if (! $storageWorking) {
                 $this->criticalIssues[] = 'Storage system not working properly';
             }
 
@@ -426,11 +426,11 @@ class SystemHealthCheck extends Command
             ];
 
             if ($verbose) {
-                $this->line("   💾 Storage working: " . ($storageWorking ? 'Yes' : 'No'));
+                $this->line('   💾 Storage working: '.($storageWorking ? 'Yes' : 'No'));
             }
 
         } catch (\Exception $e) {
-            $this->criticalIssues[] = 'Storage system failed: ' . $e->getMessage();
+            $this->criticalIssues[] = 'Storage system failed: '.$e->getMessage();
         }
     }
 
@@ -448,27 +448,31 @@ class SystemHealthCheck extends Command
         foreach ($this->healthChecks as $system => $data) {
             $status = $data['status'] ?? 'unknown';
             $icon = $status === 'healthy' ? '✅' : ($status === 'critical' ? '❌' : '⚠️');
-            
-            $this->line("   {$icon} " . ucfirst(str_replace('_', ' ', $system)) . ": {$status}");
-            
-            if ($status === 'healthy') $healthyCount++;
-            if ($status === 'critical') $criticalCount++;
+
+            $this->line("   {$icon} ".ucfirst(str_replace('_', ' ', $system)).": {$status}");
+
+            if ($status === 'healthy') {
+                $healthyCount++;
+            }
+            if ($status === 'critical') {
+                $criticalCount++;
+            }
         }
 
         $this->newLine();
-        
+
         if (empty($this->criticalIssues) && empty($this->warnings)) {
             $this->info('🫀 System Heartbeat: NORMAL RHYTHM ✅');
             $this->info('Your job portal is healthy and running smoothly!');
         } else {
-            if (!empty($this->criticalIssues)) {
+            if (! empty($this->criticalIssues)) {
                 $this->error('💔 CRITICAL ISSUES DETECTED:');
                 foreach ($this->criticalIssues as $issue) {
                     $this->error("   • {$issue}");
                 }
             }
 
-            if (!empty($this->warnings)) {
+            if (! empty($this->warnings)) {
                 $this->warn('⚠️  WARNINGS:');
                 foreach ($this->warnings as $warning) {
                     $this->warn("   • {$warning}");
@@ -495,13 +499,13 @@ class SystemHealthCheck extends Command
         $this->info('🔧 Attempting Automatic Repairs...');
 
         // Clear failed jobs if requested
-        if (in_array('Found failed jobs in queue', array_map(fn($issue) => substr($issue, 0, 25), $this->criticalIssues))) {
+        if (in_array('Found failed jobs in queue', array_map(fn ($issue) => substr($issue, 0, 25), $this->criticalIssues))) {
             DB::table('failed_jobs')->truncate();
             $this->info('   ✅ Cleared failed jobs table');
         }
 
         // Restart queue workers if stuck jobs detected
-        if (!empty(array_filter($this->criticalIssues, fn($issue) => str_contains($issue, 'stuck jobs')))) {
+        if (! empty(array_filter($this->criticalIssues, fn ($issue) => str_contains($issue, 'stuck jobs')))) {
             $this->info('   🔄 Restarting queue workers...');
             $this->call('queue:restart');
         }
@@ -547,11 +551,11 @@ class SystemHealthCheck extends Command
     protected function formatBytes(int $bytes): string
     {
         $units = ['B', 'KB', 'MB', 'GB'];
-        
+
         for ($i = 0; $bytes > 1024 && $i < count($units) - 1; $i++) {
             $bytes /= 1024;
         }
 
-        return round($bytes, 2) . ' ' . $units[$i];
+        return round($bytes, 2).' '.$units[$i];
     }
 }

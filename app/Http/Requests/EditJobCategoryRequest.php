@@ -40,4 +40,4 @@ class EditJobCategoryRequest extends FormRequest
             'id.exists' => __('validation.exists', ['attribute' => 'ID']),
         ];
     }
-} 
+}

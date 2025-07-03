@@ -98,7 +98,7 @@ class PerformanceMonitor
         }
 
         // Log slow queries
-        if (!empty($metrics['slow_queries'])) {
+        if (! empty($metrics['slow_queries'])) {
             Log::warning('Slow queries detected', [
                 'url' => $metrics['url'],
                 'slow_queries' => $metrics['slow_queries'],
@@ -132,16 +132,16 @@ class PerformanceMonitor
                 'slow_queries_count' => 0,
             ]);
 
-            ++$cachedData['requests'];
+            $cachedData['requests']++;
             $cachedData['total_time'] += $metrics['execution_time'];
             $cachedData['total_memory'] += $metrics['memory_usage_bytes'];
             $cachedData['total_queries'] += $metrics['query_count'];
 
             if ($metrics['execution_time'] > 1000) {
-                ++$cachedData['slow_requests'];
+                $cachedData['slow_requests']++;
             }
 
-            if (!empty($metrics['slow_queries'])) {
+            if (! empty($metrics['slow_queries'])) {
                 $cachedData['slow_queries_count'] += count($metrics['slow_queries']);
             }
 
@@ -158,7 +158,7 @@ class PerformanceMonitor
      */
     private function formatBytes(int $bytes): string
     {
-        if (0 === $bytes) {
+        if ($bytes === 0) {
             return '0 B';
         }
 

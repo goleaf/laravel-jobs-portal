@@ -154,10 +154,10 @@ class CandidateUpdateRequest extends FormRequest
             }
 
             // Validate location hierarchy
-            if ($this->has('state_id') && !$this->has('country_id')) {
+            if ($this->has('state_id') && ! $this->has('country_id')) {
                 // If updating state, ensure country is provided or already exists
                 $candidate = $this->route('candidate');
-                if (!$candidate->country_id) {
+                if (! $candidate->country_id) {
                     $validator->errors()->add('country_id', 'Country is required when updating state.');
                 }
             }

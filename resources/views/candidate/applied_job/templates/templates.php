@@ -12,7 +12,7 @@
                                     <input type="radio" name="slot_book" data-schedule="{{:schedule_id}}" id="{{:index}}" class="rounded border border border-gray-300 -gray-300 h-4 w-4 text-indigo-600 focus:ring-indigo-500 -gray-300 slot-book me-3" value="<?php
 use App\Models\JobApplicationSchedule;
 
-echo JobApplicationSchedule::STATUS_SEND; ?>">
+                                    echo JobApplicationSchedule::STATUS_SEND; ?>">
                                     <label class="custom-control-label fw-bold fs-5" for="{{:index}}"><?php echo __('messages.job_stage.slot_preference'); ?></label>
                                 </div>
                             </div>

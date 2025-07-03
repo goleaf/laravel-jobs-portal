@@ -42,7 +42,7 @@ class CareerLevelControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanCreateCareerlevel(): void
+    public function admin_can_create_careerlevel(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -58,8 +58,7 @@ class CareerLevelControllerTest extends TestCase
         $response->assertStatus(201)
             ->assertJsonStructure([
                 'data' => ['level_name', 'from_year', 'to_year', 'is_active', 'id', 'created_at', 'updated_at'],
-            ])
-        ;
+            ]);
 
         $this->assertDatabaseHas('career_levels', [
             'name' => $data['name'] ?? $data[array_key_first($data)],
@@ -67,7 +66,7 @@ class CareerLevelControllerTest extends TestCase
     }
 
     /** @test */
-    public function employerCanCreateCareerlevel(): void
+    public function employer_can_create_careerlevel(): void
     {
         Sanctum::actingAs($this->employer);
 
@@ -84,7 +83,7 @@ class CareerLevelControllerTest extends TestCase
     }
 
     /** @test */
-    public function candidateCannotCreateCareerlevel(): void
+    public function candidate_cannot_create_careerlevel(): void
     {
         Sanctum::actingAs($this->candidate);
 
@@ -101,7 +100,7 @@ class CareerLevelControllerTest extends TestCase
     }
 
     /** @test */
-    public function unauthenticatedUserCannotCreateCareerlevel(): void
+    public function unauthenticated_user_cannot_create_careerlevel(): void
     {
         $data = [
             'level_name' => 'Senior Level',
@@ -116,7 +115,7 @@ class CareerLevelControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanUpdateCareerlevel(): void
+    public function admin_can_update_careerlevel(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -139,7 +138,7 @@ class CareerLevelControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanDeleteCareerlevel(): void
+    public function admin_can_delete_careerlevel(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -155,7 +154,7 @@ class CareerLevelControllerTest extends TestCase
     }
 
     /** @test */
-    public function validationFailsWithInvalidData(): void
+    public function validation_fails_with_invalid_data(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -166,12 +165,11 @@ class CareerLevelControllerTest extends TestCase
         $response = $this->postJson('/api/careerlevel', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function validationFailsWithDuplicateName(): void
+    public function validation_fails_with_duplicate_name(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -188,12 +186,11 @@ class CareerLevelControllerTest extends TestCase
         $response = $this->postJson('/api/careerlevel', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function canListCareerlevels(): void
+    public function can_list_careerlevels(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -206,12 +203,11 @@ class CareerLevelControllerTest extends TestCase
                 'data' => [
                     '*' => ['level_name', 'from_year', 'to_year', 'is_active', 'id', 'created_at', 'updated_at'],
                 ],
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function canShowSingleCareerlevel(): void
+    public function can_show_single_careerlevel(): void
     {
         Sanctum::actingAs($this->admin);
 

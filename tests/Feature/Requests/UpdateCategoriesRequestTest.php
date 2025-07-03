@@ -30,17 +30,17 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAuthorizationReturnsTrue()
+    public function test_authorization_returns_true()
     {
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
 
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function testValidationRulesAreDefined()
+    public function test_validation_rules_are_defined()
     {
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertIsArray($rules);
@@ -48,9 +48,9 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationMessagesAreDefined()
+    public function test_validation_messages_are_defined()
     {
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
 
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
@@ -61,9 +61,9 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationAttributesAreDefined()
+    public function test_validation_attributes_are_defined()
     {
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
 
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
@@ -74,9 +74,9 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testCategoriesValidation()
+    public function test_categories_validation()
     {
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('Categories', $rules);
@@ -87,9 +87,9 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testIdValidation()
+    public function test_id_validation()
     {
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('id', $rules);
@@ -100,9 +100,9 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testNameValidation()
+    public function test_name_validation()
     {
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('name', $rules);
@@ -113,9 +113,9 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testRequiredValidation()
+    public function test_required_validation()
     {
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('required', $rules);
@@ -126,9 +126,9 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testStringValidation()
+    public function test_string_validation()
     {
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('string', $rules);
@@ -139,9 +139,9 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testCategoriessValidation()
+    public function test_categoriess_validation()
     {
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('Categoriess', $rules);
@@ -152,9 +152,9 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testEmailValidation()
+    public function test_email_validation()
     {
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('email', $rules);
@@ -165,9 +165,9 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testNullableValidation()
+    public function test_nullable_validation()
     {
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('nullable', $rules);
@@ -178,9 +178,9 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testUsersValidation()
+    public function test_users_validation()
     {
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('users', $rules);
@@ -191,9 +191,9 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testDescriptionValidation()
+    public function test_description_validation()
     {
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('description', $rules);
@@ -204,9 +204,9 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testStatusValidation()
+    public function test_status_validation()
     {
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('status', $rules);
@@ -217,9 +217,9 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testBooleanValidation()
+    public function test_boolean_validation()
     {
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('boolean', $rules);
@@ -230,7 +230,7 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidDataPassesValidation()
+    public function test_valid_data_passes_validation()
     {
         $validData = [
             'Categories' => 'Test Value',
@@ -247,18 +247,18 @@ class UpdateCategoriesRequestTest extends TestCase
             'boolean' => 'Test Value',
         ];
 
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
         $validator = validator($validData, $request->rules());
 
         $this->assertFalse($validator->fails());
     }
 
     /** @test */
-    public function testRequestHandlesEmptyDataCorrectly()
+    public function test_request_handles_empty_data_correctly()
     {
         $emptyData = [];
 
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
         $validator = validator($emptyData, $request->rules());
 
         // Should handle empty data according to rules
@@ -266,7 +266,7 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSecurityValidationPreventsXss()
+    public function test_security_validation_prevents_xss()
     {
         $maliciousData = [
             'name' => '<script>alert("xss")</script>',
@@ -274,7 +274,7 @@ class UpdateCategoriesRequestTest extends TestCase
             'content' => '<img src=x onerror=alert("xss")>',
         ];
 
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
         $validator = validator($maliciousData, $request->rules());
 
         // XSS data should either fail validation or be properly sanitized
@@ -289,7 +289,7 @@ class UpdateCategoriesRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSqlInjectionPrevention()
+    public function test_sql_injection_prevention()
     {
         $sqlInjectionData = [
             'name' => "'; DROP TABLE users; --",
@@ -297,7 +297,7 @@ class UpdateCategoriesRequestTest extends TestCase
             'filter' => 'UNION SELECT * FROM passwords',
         ];
 
-        $request = new UpdateCategoriesRequest();
+        $request = new UpdateCategoriesRequest;
         $validator = validator($sqlInjectionData, $request->rules());
 
         // SQL injection patterns should be handled safely

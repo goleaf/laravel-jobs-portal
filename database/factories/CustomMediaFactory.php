@@ -37,7 +37,7 @@ class CustomMediaFactory extends Factory
         ];
 
         // Use Laravel 12.16 Arr::hasAll() to validate factory data
-        if (!Arr::hasAll($attributes, ['name', 'file_name', 'mime_type', 'collection_name', 'size'])) {
+        if (! Arr::hasAll($attributes, ['name', 'file_name', 'mime_type', 'collection_name', 'size'])) {
             throw new \InvalidArgumentException('CustomMediaFactory: Missing required fields');
         }
 
@@ -51,7 +51,7 @@ class CustomMediaFactory extends Factory
     {
         return $this->afterMaking(function (CustomMedia $media) {
             $attributes = $media->getAttributes();
-            
+
             // Validate using our enhanced model method
             CustomMedia::validateFactoryData($attributes);
         });
@@ -77,9 +77,9 @@ class CustomMediaFactory extends Factory
                 'image/jpeg',
                 'image/png',
                 'image/gif',
-                'image/webp'
+                'image/webp',
             ]),
-            'file_name' => fake()->word() . '.' . fake()->randomElement(['jpg', 'png', 'gif', 'webp']),
+            'file_name' => fake()->word().'.'.fake()->randomElement(['jpg', 'png', 'gif', 'webp']),
         ]);
     }
 
@@ -94,9 +94,9 @@ class CustomMediaFactory extends Factory
                 'application/msword',
                 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 'application/vnd.ms-excel',
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             ]),
-            'file_name' => fake()->word() . '.' . fake()->randomElement(['pdf', 'doc', 'docx', 'xls', 'xlsx']),
+            'file_name' => fake()->word().'.'.fake()->randomElement(['pdf', 'doc', 'docx', 'xls', 'xlsx']),
         ]);
     }
 
@@ -110,9 +110,9 @@ class CustomMediaFactory extends Factory
                 'video/mp4',
                 'video/avi',
                 'video/quicktime',
-                'video/x-msvideo'
+                'video/x-msvideo',
             ]),
-            'file_name' => fake()->word() . '.' . fake()->randomElement(['mp4', 'avi', 'mov', 'wmv']),
+            'file_name' => fake()->word().'.'.fake()->randomElement(['mp4', 'avi', 'mov', 'wmv']),
         ]);
     }
 }

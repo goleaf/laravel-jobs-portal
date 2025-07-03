@@ -19,7 +19,7 @@ class RealTimeController extends Controller
     {
         $user = Auth::user();
 
-        if (!$user) {
+        if (! $user) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -47,7 +47,7 @@ class RealTimeController extends Controller
         $newStatus = $request->status;
 
         // Check authorization
-        if (!$this->canUpdateStatus($jobApplication, $newStatus)) {
+        if (! $this->canUpdateStatus($jobApplication, $newStatus)) {
             return response()->json(['error' => 'Unauthorized to update this status'], 403);
         }
 
@@ -84,14 +84,14 @@ class RealTimeController extends Controller
     {
         $user = Auth::user();
 
-        if (!$user) {
+        if (! $user) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
         $channels = [];
 
         // Add user-specific channels
-        if ('candidate' === $user->user_type) {
+        if ($user->user_type === 'candidate') {
             $channels[] = "job-application.{$user->id}";
         } else {
             // For employers, add company-specific channels
@@ -117,14 +117,13 @@ class RealTimeController extends Controller
 
         $activities = collect();
 
-        if ('candidate' === $user->user_type) {
+        if ($user->user_type === 'candidate') {
             // Get candidate's application activities
             $applications = JobApplication::where('candidate_id', $user->id)
                 ->with(['job.company'])
                 ->latest()
                 ->limit($limit)
-                ->get()
-            ;
+                ->get();
 
             foreach ($applications as $app) {
                 $activities->push([
@@ -145,8 +144,7 @@ class RealTimeController extends Controller
                     ->with(['job', 'candidate'])
                     ->latest()
                     ->limit($limit)
-                    ->get()
-                ;
+                    ->get();
 
                 foreach ($applications as $app) {
                     $activities->push([
@@ -196,12 +194,12 @@ class RealTimeController extends Controller
         $user = Auth::user();
 
         // Candidates can only withdraw their applications
-        if ('candidate' === $user->user_type) {
-            return $user->id === $jobApplication->candidate_id && 'withdrawn' === $newStatus;
+        if ($user->user_type === 'candidate') {
+            return $user->id === $jobApplication->candidate_id && $newStatus === 'withdrawn';
         }
 
         // Employers can update if they own the job
-        if ('employer' === $user->user_type && $user->company) {
+        if ($user->user_type === 'employer' && $user->company) {
             return $user->company->id === $jobApplication->job->company_id;
         }
 
@@ -212,14 +210,14 @@ class RealTimeController extends Controller
     /**
      * Get user-specific statistics.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function getUserStats($user): array
     {
         $cacheKey = "user:stats:{$user->id}:{$user->user_type}";
 
         return Cache::remember($cacheKey, 900, function () use ($user) {
-            if ('candidate' === $user->user_type) {
+            if ($user->user_type === 'candidate') {
                 return [
                     'total_applications' => JobApplication::where('candidate_id', $user->id)->count(),
                     'pending_applications' => JobApplication::where('candidate_id', $user->id)->where('status', 'pending')->count(),
@@ -228,7 +226,7 @@ class RealTimeController extends Controller
                 ];
             }
             $companyId = $user->company->id ?? null;
-            if (!$companyId) {
+            if (! $companyId) {
                 return [];
             }
 
@@ -250,7 +248,7 @@ class RealTimeController extends Controller
     /**
      * Get recent activities for user.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function getRecentActivities($user): array
     {

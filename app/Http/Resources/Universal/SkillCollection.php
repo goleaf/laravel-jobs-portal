@@ -44,9 +44,9 @@ class SkillCollection extends ResourceCollection
     /**
      * Universal Pattern: Customize pagination information.
      *
-     * @param mixed $request
-     * @param mixed $paginated
-     * @param mixed $default
+     * @param  mixed  $request
+     * @param  mixed  $paginated
+     * @param  mixed  $default
      */
     public function paginationInformation($request, $paginated, $default)
     {

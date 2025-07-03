@@ -20,7 +20,7 @@ class LinkTest extends DuskTestCase
     use DatabaseMigrations;
 
     /** @test */
-    public function homepageNavigationLinksWork()
+    public function homepage_navigation_links_work()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
@@ -32,13 +32,12 @@ class LinkTest extends DuskTestCase
                 ->clickLink('About Us')
                 ->assertPathIs('/about-us')
                 ->clickLink('Contact')
-                ->assertPathIs('/contact')
-            ;
+                ->assertPathIs('/contact');
         });
     }
 
     /** @test */
-    public function footerLinksWork()
+    public function footer_links_work()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
@@ -57,13 +56,12 @@ class LinkTest extends DuskTestCase
                 ->back()
                 ->scrollIntoView('footer')
                 ->clickLink('Terms & Conditions')
-                ->assertPathIs('/terms-conditions')
-            ;
+                ->assertPathIs('/terms-conditions');
         });
     }
 
     /** @test */
-    public function jobListingLinksWork()
+    public function job_listing_links_work()
     {
         $jobCategory = JobCategory::factory()->create();
         $job = Job::factory()->create([
@@ -78,13 +76,12 @@ class LinkTest extends DuskTestCase
                 ->click('.job-listing-item[data-job-id="'.$job->id.'"]')
                 ->assertPathIs('/jobs/'.$job->id)
                 ->assertSee('PHP Developer')
-                ->assertSee('Apply Now')
-            ;
+                ->assertSee('Apply Now');
         });
     }
 
     /** @test */
-    public function companyListingLinksWork()
+    public function company_listing_links_work()
     {
         $company = Company::factory()->create([
             'name' => 'Acme Inc',
@@ -97,13 +94,12 @@ class LinkTest extends DuskTestCase
                 ->click('.company-item[data-company-id="'.$company->id.'"]')
                 ->assertPathIs('/company/'.$company->id)
                 ->assertSee('Acme Inc')
-                ->assertSee('Company Profile')
-            ;
+                ->assertSee('Company Profile');
         });
     }
 
     /** @test */
-    public function jobCategoryLinksWork()
+    public function job_category_links_work()
     {
         $category = JobCategory::factory()->create([
             'name' => 'Web Development',
@@ -119,13 +115,12 @@ class LinkTest extends DuskTestCase
                 ->assertSee('Web Development')
                 ->clickLink('Web Development')
                 ->assertQueryStringHas('category', $category->id)
-                ->assertSee('Jobs in Web Development')
-            ;
+                ->assertSee('Jobs in Web Development');
         });
     }
 
     /** @test */
-    public function paginationLinksWork()
+    public function pagination_links_work()
     {
         // Create enough jobs to trigger pagination
         Job::factory()->count(20)->create([
@@ -139,13 +134,12 @@ class LinkTest extends DuskTestCase
                 ->assertQueryStringHas('page', 2)
                 ->assertSee('Previous')
                 ->clickLink('Previous')
-                ->assertQueryStringHas('page', 1)
-            ;
+                ->assertQueryStringHas('page', 1);
         });
     }
 
     /** @test */
-    public function socialMediaLinksHaveCorrectTargets()
+    public function social_media_links_have_correct_targets()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/')
@@ -153,13 +147,12 @@ class LinkTest extends DuskTestCase
                 ->assertAttribute('.facebook-link', 'href', 'https://facebook.com/')
                 ->assertAttribute('.twitter-link', 'href', 'https://twitter.com/')
                 ->assertAttribute('.linkedin-link', 'href', 'https://linkedin.com/')
-                ->assertAttribute('.instagram-link', 'href', 'https://instagram.com/')
-            ;
+                ->assertAttribute('.instagram-link', 'href', 'https://instagram.com/');
         });
     }
 
     /** @test */
-    public function candidateDashboardLinksWork()
+    public function candidate_dashboard_links_work()
     {
         $user = User::factory()->create([
             'email' => 'candidate@example.com',
@@ -185,13 +178,12 @@ class LinkTest extends DuskTestCase
                 ->clickLink('Favorite Jobs')
                 ->assertPathIs('/candidate/favorite-jobs')
                 ->clickLink('Job Alerts')
-                ->assertPathIs('/candidate/job-alerts')
-            ;
+                ->assertPathIs('/candidate/job-alerts');
         });
     }
 
     /** @test */
-    public function employerDashboardLinksWork()
+    public function employer_dashboard_links_work()
     {
         $user = User::factory()->create([
             'email' => 'employer@example.com',

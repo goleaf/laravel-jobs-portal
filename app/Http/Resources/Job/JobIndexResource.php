@@ -102,11 +102,11 @@ class JobIndexResource extends JsonResource
     /**
      * Check if user can edit this job.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function canUserEdit($user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
@@ -117,26 +117,26 @@ class JobIndexResource extends JsonResource
     /**
      * Check if user can delete this job.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function canUserDelete($user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
         return $user->hasRole('Admin')
-               || ($user->hasRole('Employer') && $this->company?->user_id === $user->id && 0 === $this->job_applications_count);
+               || ($user->hasRole('Employer') && $this->company?->user_id === $user->id && $this->job_applications_count === 0);
     }
 
     /**
      * Check if user can feature this job.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function canUserFeature($user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
@@ -147,11 +147,11 @@ class JobIndexResource extends JsonResource
     /**
      * Check if user can suspend this job.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function canUserSuspend($user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 

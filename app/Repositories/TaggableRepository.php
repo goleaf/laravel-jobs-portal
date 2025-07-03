@@ -15,7 +15,6 @@ class TaggableRepository extends BaseRepository implements TaggableRepositoryInt
     /**
      * Get taggables by tag ID.
      *
-     * @param int $tagId
      * @return mixed
      */
     public function getByTagId(int $tagId)
@@ -26,8 +25,6 @@ class TaggableRepository extends BaseRepository implements TaggableRepositoryInt
     /**
      * Get taggables by taggable type and ID.
      *
-     * @param string $taggableType
-     * @param int $taggableId
      * @return mixed
      */
     public function getByTaggable(string $taggableType, int $taggableId)
@@ -36,4 +33,4 @@ class TaggableRepository extends BaseRepository implements TaggableRepositoryInt
             ->where('taggable_id', $taggableId)
             ->get();
     }
-} 
+}

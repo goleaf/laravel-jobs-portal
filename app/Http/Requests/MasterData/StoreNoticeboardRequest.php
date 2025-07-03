@@ -23,7 +23,7 @@ class StoreNoticeboardRequest extends FormRequest
     {
         // Only admin and managers can create notices
         return Auth::check() && (
-            Auth::user()->hasRole('admin') || 
+            Auth::user()->hasRole('admin') ||
             Auth::user()->hasRole('manager') ||
             Auth::user()->can('create-notices')
         );
@@ -90,7 +90,7 @@ class StoreNoticeboardRequest extends FormRequest
                 'date',
                 'after:now',
                 function ($attribute, $value, $fail) {
-                    if ($this->status === 'scheduled' && !$value) {
+                    if ($this->status === 'scheduled' && ! $value) {
                         $fail(__('validation.required_when_scheduled'));
                     }
                 },
@@ -184,28 +184,28 @@ class StoreNoticeboardRequest extends FormRequest
             'title.required' => __('validation.required_field', ['field' => __('validation.attributes.notice_title')]),
             'title.unique' => __('validation.unique_field', ['field' => __('validation.attributes.notice_title')]),
             'title.regex' => __('validation.notice_title_format'),
-            
+
             'description.required' => __('validation.required_field', ['field' => __('validation.attributes.description')]),
             'description.min' => __('validation.min_chars', ['attribute' => __('validation.attributes.description'), 'min' => 10]),
             'description.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.description'), 'max' => 5000]),
-            
+
             'type.required' => __('validation.required_field', ['field' => __('validation.attributes.notice_type')]),
             'type.in' => __('validation.in_list', ['attribute' => __('validation.attributes.notice_type')]),
-            
+
             'priority.in' => __('validation.in_list', ['attribute' => __('validation.attributes.priority')]),
             'target_audience.in' => __('validation.in_list', ['attribute' => __('validation.attributes.target_audience')]),
             'status.in' => __('validation.in_list', ['attribute' => __('validation.attributes.status')]),
-            
+
             'published_at.after' => __('validation.future_date', ['attribute' => __('validation.attributes.published_at')]),
             'expires_at.after' => __('validation.after_field', ['attribute' => __('validation.attributes.expires_at'), 'after' => __('validation.attributes.published_at')]),
-            
+
             'tags.max' => __('validation.max_items', ['attribute' => __('validation.attributes.tags'), 'max' => 10]),
             'tags.*.regex' => __('validation.tag_format'),
-            
+
             'attachments.max' => __('validation.max_files', ['attribute' => __('validation.attributes.attachments'), 'max' => 5]),
             'attachments.*.max' => __('validation.max_file_size', ['attribute' => __('validation.attributes.attachment'), 'max' => '10MB']),
             'attachments.*.mimes' => __('validation.file_types', ['attribute' => __('validation.attributes.attachment')]),
-            
+
             'language.exists' => __('validation.exists', ['attribute' => __('validation.attributes.language')]),
         ];
     }
@@ -289,7 +289,7 @@ class StoreNoticeboardRequest extends FormRequest
         }
 
         // Auto-set published_at for immediate publication
-        if ($this->status === 'published' && !$this->has('published_at')) {
+        if ($this->status === 'published' && ! $this->has('published_at')) {
             $this->merge([
                 'published_at' => now(),
             ]);
@@ -345,7 +345,7 @@ class StoreNoticeboardRequest extends FormRequest
         // Generate slug from title
         if ($this->has('title')) {
             $this->merge([
-                'slug' => \Str::slug($this->title) . '-' . time(),
+                'slug' => \Str::slug($this->title).'-'.time(),
             ]);
         }
     }

@@ -12,7 +12,7 @@ use Tests\UnitTestCase;
 class RouteOptimizedTest extends UnitTestCase
 {
     /** @test */
-    public function itHasRouteFiles()
+    public function it_has_route_files()
     {
         // Test that route files exist
         $webRoutes = file_exists(__DIR__.'/../../routes/web.php');
@@ -23,7 +23,7 @@ class RouteOptimizedTest extends UnitTestCase
     }
 
     /** @test */
-    public function itHasValidRouteFileSyntax()
+    public function it_has_valid_route_file_syntax()
     {
         $webRoutesPath = __DIR__.'/../../routes/web.php';
         $apiRoutesPath = __DIR__.'/../../routes/api.php';
@@ -36,12 +36,12 @@ class RouteOptimizedTest extends UnitTestCase
         $this->assertNotEmpty($apiContent);
 
         // Check for basic route patterns
-        $this->assertTrue(false !== strpos($webContent, 'Route::'), 'Web routes should contain Route::');
-        $this->assertTrue(false !== strpos($apiContent, 'Route::'), 'API routes should contain Route::');
+        $this->assertTrue(strpos($webContent, 'Route::') !== false, 'Web routes should contain Route::');
+        $this->assertTrue(strpos($apiContent, 'Route::') !== false, 'API routes should contain Route::');
     }
 
     /** @test */
-    public function itHasControllerNamespaceStructure()
+    public function it_has_controller_namespace_structure()
     {
         // Test that controller directories exist
         $controllerPath = __DIR__.'/../../app/Http/Controllers';
@@ -53,7 +53,7 @@ class RouteOptimizedTest extends UnitTestCase
     }
 
     /** @test */
-    public function itHasMiddlewareStructure()
+    public function it_has_middleware_structure()
     {
         // Test that middleware directory exists
         $middlewarePath = __DIR__.'/../../app/Http/Middleware';
@@ -65,7 +65,7 @@ class RouteOptimizedTest extends UnitTestCase
     }
 
     /** @test */
-    public function itHasBasicRoutePatterns()
+    public function it_has_basic_route_patterns()
     {
         $webRoutesContent = file_get_contents(__DIR__.'/../../routes/web.php');
 
@@ -74,13 +74,13 @@ class RouteOptimizedTest extends UnitTestCase
 
         // Check if content looks like routes file
         $this->assertTrue(
-            0 === strpos($webRoutesContent, '<?php'),
+            strpos($webRoutesContent, '<?php') === 0,
             'Routes file should start with PHP opening tag'
         );
     }
 
     /** @test */
-    public function itHasApiRouteStructure()
+    public function it_has_api_route_structure()
     {
         $apiRoutesContent = file_get_contents(__DIR__.'/../../routes/api.php');
 
@@ -89,7 +89,7 @@ class RouteOptimizedTest extends UnitTestCase
 
         // Check if content looks like routes file
         $this->assertTrue(
-            0 === strpos($apiRoutesContent, '<?php'),
+            strpos($apiRoutesContent, '<?php') === 0,
             'API routes file should start with PHP opening tag'
         );
     }

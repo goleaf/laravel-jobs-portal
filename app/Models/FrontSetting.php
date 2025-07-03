@@ -19,19 +19,19 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 /**
  * FrontSetting Model - Enhanced with Enhanced patterns.
  *
- * @property int                     $id
- * @property string                  $key
- * @property string                  $value
- * @property bool                    $is_active
- * @property bool                    $is_featured
- * @property null|string             $description
- * @property null|array              $metadata
- * @property null|Carbon             $created_at
- * @property null|Carbon             $updated_at
+ * @property int $id
+ * @property string $key
+ * @property string $value
+ * @property bool $is_active
+ * @property bool $is_featured
+ * @property null|string $description
+ * @property null|array $metadata
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
  * @property Media[]|MediaCollection $media
- * @property null|int                $media_count
- * @property string                  $display_value
- * @property bool                    $is_recent
+ * @property null|int $media_count
+ * @property string $display_value
+ * @property bool $is_recent
  *
  * Enhanced Enhanced Scopes:
  *
@@ -103,8 +103,7 @@ class FrontSetting extends Model implements HasMedia
             ->logOnly(['key', 'value', 'is_featured'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn (string $eventName) => "Front setting has been {$eventName}")
-        ;
+            ->setDescriptionForEvent(fn (string $eventName) => "Front setting has been {$eventName}");
     }
 
     // =============================================
@@ -196,8 +195,7 @@ class FrontSetting extends Model implements HasMedia
     public function scopeThisMonth(Builder $query): Builder
     {
         return $query->whereMonth('created_at', now()->month)
-            ->whereYear('created_at', now()->year)
-        ;
+            ->whereYear('created_at', now()->year);
     }
 
     // =============================================
@@ -212,8 +210,7 @@ class FrontSetting extends Model implements HasMedia
         return $query->where(function ($q) use ($term) {
             $q->where('key', 'like', "%{$term}%")
                 ->orWhere('value', 'like', "%{$term}%")
-                ->orWhere('like', "%{$term}%")
-            ;
+                ->orWhere('like', "%{$term}%");
         });
     }
 
@@ -268,8 +265,7 @@ class FrontSetting extends Model implements HasMedia
     {
         return $query->orderBy('desc')
             ->orderBy('desc')
-            ->orderBy('key', 'asc')
-        ;
+            ->orderBy('key', 'asc');
     }
 
     // =============================================

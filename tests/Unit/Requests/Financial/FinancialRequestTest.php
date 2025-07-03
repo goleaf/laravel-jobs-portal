@@ -2,13 +2,13 @@
 
 namespace Tests\Unit\Requests\Financial;
 
-use Tests\TestCase;
 use App\Http\Requests\Financial\FinancialRequest;
 use Illuminate\Support\Facades\Validator;
+use Tests\TestCase;
 
 /**
  * FinancialRequest Test Suite
- * 
+ *
  * Tests the financial validation domain
  */
 class FinancialRequestTest extends TestCase
@@ -18,9 +18,10 @@ class FinancialRequestTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create anonymous test request for testing
-        $this->testRequest = new class extends FinancialRequest {
+        $this->testRequest = new class extends FinancialRequest
+        {
             public function rules(): array
             {
                 return $this->buildValidationRules();
@@ -43,7 +44,7 @@ class FinancialRequestTest extends TestCase
         $reflection = new \ReflectionClass($this->testRequest);
         $property = $reflection->getProperty('securityLevel');
         $property->setAccessible(true);
-        
+
         $this->assertEquals('critical', $property->getValue($this->testRequest));
     }
 
@@ -53,7 +54,7 @@ class FinancialRequestTest extends TestCase
         $reflection = new \ReflectionClass($this->testRequest);
         $property = $reflection->getProperty('performanceTracking');
         $property->setAccessible(true);
-        
+
         $this->assertTrue($property->getValue($this->testRequest));
     }
 
@@ -63,7 +64,7 @@ class FinancialRequestTest extends TestCase
         $reflection = new \ReflectionClass($this->testRequest);
         $property = $reflection->getProperty('auditLoggingEnabled');
         $property->setAccessible(true);
-        
+
         $this->assertTrue($property->getValue($this->testRequest));
     }
 
@@ -73,9 +74,9 @@ class FinancialRequestTest extends TestCase
         $reflection = new \ReflectionClass($this->testRequest);
         $property = $reflection->getProperty('validationModules');
         $property->setAccessible(true);
-        
+
         $modules = $property->getValue($this->testRequest);
-        
+
         $this->assertContains('payment_security', $modules);
         $this->assertContains('currency_validation', $modules);
         $this->assertContains('amount_verification', $modules);
@@ -87,9 +88,9 @@ class FinancialRequestTest extends TestCase
     {
         $method = new \ReflectionMethod($this->testRequest, 'getPaymentRules');
         $method->setAccessible(true);
-        
+
         $rules = $method->invoke($this->testRequest);
-        
+
         $this->assertArrayHasKey('card_number', $rules);
         $this->assertArrayHasKey('card_holder_name', $rules);
         $this->assertArrayHasKey('expiry_month', $rules);
@@ -102,9 +103,9 @@ class FinancialRequestTest extends TestCase
     {
         $method = new \ReflectionMethod($this->testRequest, 'getSubscriptionRules');
         $method->setAccessible(true);
-        
+
         $rules = $method->invoke($this->testRequest);
-        
+
         $this->assertArrayHasKey('plan_id', $rules);
         $this->assertArrayHasKey('billing_cycle', $rules);
         $this->assertArrayHasKey('start_date', $rules);
@@ -118,7 +119,7 @@ class FinancialRequestTest extends TestCase
             'amount' => 99.99,
             'currency' => 'USD',
             'payment_method' => 'card',
-            'transaction_type' => 'payment'
+            'transaction_type' => 'payment',
         ];
 
         // Use database-independent rules for testing
@@ -130,7 +131,7 @@ class FinancialRequestTest extends TestCase
         ];
 
         $validator = Validator::make($data, $rules);
-        
+
         $this->assertTrue($validator->passes());
     }
 
@@ -141,7 +142,7 @@ class FinancialRequestTest extends TestCase
             'amount' => -10.00,
             'currency' => 'USD',
             'payment_method' => 'card',
-            'transaction_type' => 'payment'
+            'transaction_type' => 'payment',
         ];
 
         // Use database-independent rules for testing
@@ -153,7 +154,7 @@ class FinancialRequestTest extends TestCase
         ];
 
         $validator = Validator::make($data, $rules);
-        
+
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('amount', $validator->errors()->toArray());
     }
@@ -164,13 +165,13 @@ class FinancialRequestTest extends TestCase
         $method = new \ReflectionMethod($this->testRequest, 'getPaymentRules');
         $method->setAccessible(true);
         $rules = $method->invoke($this->testRequest);
-        
+
         $validData = ['card_number' => '4111111111111111'];
         $invalidData = ['card_number' => '123'];
-        
+
         $validValidator = Validator::make($validData, $rules);
         $invalidValidator = Validator::make($invalidData, $rules);
-        
+
         $this->assertTrue($validValidator->passes());
         $this->assertTrue($invalidValidator->fails());
     }
@@ -181,13 +182,13 @@ class FinancialRequestTest extends TestCase
         $method = new \ReflectionMethod($this->testRequest, 'getPaymentRules');
         $method->setAccessible(true);
         $rules = $method->invoke($this->testRequest);
-        
+
         $validData = ['cvv' => '123'];
         $invalidData = ['cvv' => 'abc'];
-        
+
         $validValidator = Validator::make($validData, $rules);
         $invalidValidator = Validator::make($invalidData, $rules);
-        
+
         $this->assertTrue($validValidator->passes());
         $this->assertTrue($invalidValidator->fails());
     }
@@ -197,13 +198,13 @@ class FinancialRequestTest extends TestCase
     {
         // Test only the billing_cycle rule specifically
         $rules = ['billing_cycle' => 'required|string|in:monthly,quarterly,yearly'];
-        
+
         $validData = ['billing_cycle' => 'monthly'];
         $invalidData = ['billing_cycle' => 'invalid'];
-        
+
         $validValidator = Validator::make($validData, $rules);
         $invalidValidator = Validator::make($invalidData, $rules);
-        
+
         $this->assertTrue($validValidator->passes());
         $this->assertTrue($invalidValidator->fails());
     }
@@ -213,11 +214,11 @@ class FinancialRequestTest extends TestCase
     {
         $method = new \ReflectionMethod($this->testRequest, 'getAmountLimits');
         $method->setAccessible(true);
-        
+
         $paymentLimits = $method->invoke($this->testRequest, 'payment');
         $refundLimits = $method->invoke($this->testRequest, 'refund');
         $subscriptionLimits = $method->invoke($this->testRequest, 'subscription');
-        
+
         $this->assertEquals(['min' => 0.01, 'max' => 100000.00], $paymentLimits);
         $this->assertEquals(['min' => 0.01, 'max' => 50000.00], $refundLimits);
         $this->assertEquals(['min' => 1.00, 'max' => 10000.00], $subscriptionLimits);
@@ -228,10 +229,10 @@ class FinancialRequestTest extends TestCase
     {
         $method = new \ReflectionMethod($this->testRequest, 'getSupportedCurrencies');
         $method->setAccessible(true);
-        
+
         $paypalCurrencies = $method->invoke($this->testRequest, 'paypal');
         $stripeCurrencies = $method->invoke($this->testRequest, 'stripe');
-        
+
         $this->assertContains('USD', $paypalCurrencies);
         $this->assertContains('EUR', $paypalCurrencies);
         $this->assertGreaterThan(count($paypalCurrencies), count($stripeCurrencies));
@@ -243,14 +244,14 @@ class FinancialRequestTest extends TestCase
         $data = [
             'card_number' => '4111-1111-1111-1111',
             'amount' => '99.999',
-            'currency' => 'usd'
+            'currency' => 'usd',
         ];
 
         $method = new \ReflectionMethod($this->testRequest, 'applySanitization');
         $method->setAccessible(true);
-        
+
         $sanitized = $method->invoke($this->testRequest, $data);
-        
+
         $this->assertEquals('4111111111111111', $sanitized['card_number']);
         $this->assertEquals(100.00, $sanitized['amount']);
         $this->assertEquals('USD', $sanitized['currency']);
@@ -261,9 +262,9 @@ class FinancialRequestTest extends TestCase
     {
         $method = new \ReflectionMethod($this->testRequest, 'getDomainMessages');
         $method->setAccessible(true);
-        
+
         $messages = $method->invoke($this->testRequest);
-        
+
         $this->assertIsArray($messages);
         $this->assertArrayHasKey('amount.required', $messages);
         $this->assertArrayHasKey('currency.required', $messages);
@@ -275,9 +276,9 @@ class FinancialRequestTest extends TestCase
     {
         $method = new \ReflectionMethod($this->testRequest, 'getBillingAddressRules');
         $method->setAccessible(true);
-        
+
         $rules = $method->invoke($this->testRequest);
-        
+
         $this->assertArrayHasKey('billing_name', $rules);
         $this->assertArrayHasKey('billing_address', $rules);
         $this->assertArrayHasKey('billing_city', $rules);
@@ -291,13 +292,13 @@ class FinancialRequestTest extends TestCase
     {
         $method = new \ReflectionMethod($this->testRequest, 'getCurrencyRules');
         $method->setAccessible(true);
-        
+
         $rules = $method->invoke($this->testRequest);
-        
+
         $this->assertArrayHasKey('from_currency', $rules);
         $this->assertArrayHasKey('to_currency', $rules);
         $this->assertArrayHasKey('exchange_rate', $rules);
         $this->assertContains('required', $rules['from_currency']);
         $this->assertContains('size:3', $rules['from_currency']);
     }
-} 
+}

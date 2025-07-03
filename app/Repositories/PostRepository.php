@@ -47,11 +47,11 @@ class PostRepository extends BaseRepository
             $blogInput = Arr::only($input, ['title', 'description', 'created_by', 'is_default']);
             $post = $this->create($blogInput);
 
-            if (isset($input['image']) && !empty($input['image'])) {
+            if (isset($input['image']) && ! empty($input['image'])) {
                 $post->addMedia($input['image'])->toMediaCollection(Post::PATH, config('app.media_disc'));
             }
             // update blog assign Categories
-            if (isset($input['blogCategories']) && !empty($input['blogCategories'])) {
+            if (isset($input['blogCategories']) && ! empty($input['blogCategories'])) {
                 $post->postAssignCategories()->sync($input['blogCategories']);
             }
         } catch (\Exception $e) {
@@ -67,12 +67,12 @@ class PostRepository extends BaseRepository
             // @var Post $blog
             $blog->update($input);
 
-            if (isset($input['image']) && !empty($input['image'])) {
+            if (isset($input['image']) && ! empty($input['image'])) {
                 $blog->clearMediaCollection(Post::PATH);
                 $blog->addMedia($input['image'])->toMediaCollection(Post::PATH, config('app.media_disc'));
             }
             // update blog assign Categories
-            if (isset($input['blogCategories']) && !empty($input['blogCategories'])) {
+            if (isset($input['blogCategories']) && ! empty($input['blogCategories'])) {
                 $blog->postAssignCategories()->sync($input['blogCategories']);
             }
         } catch (\Exception $e) {
@@ -102,8 +102,7 @@ class PostRepository extends BaseRepository
     }
 
     /**
-     * @param mixed $blog
-     *
+     * @param  mixed  $blog
      * @return mixed
      */
     public function getBlogDetails($blog)
@@ -138,8 +137,7 @@ class PostRepository extends BaseRepository
         }, 'media'])->withCount('comments')
             ->whereHas('postAssignCategories', function (Builder $q) use ($categoryId) {
                 $q->where('post_categories_id', '=', $categoryId);
-            })->paginate(10)
-        ;
+            })->paginate(10);
         $blogIds = $data['blogs']->pluck('id')->toArray();
         $data['blogCategories'] = PostCategory::withCount('postAssignCategories')->toBase()->get();
         $data['blogCategory'] = PostCategory::toBase()->pluck('name', 'id');
@@ -153,9 +151,8 @@ class PostRepository extends BaseRepository
     }
 
     /**
-     * @param mixed $blogId
-     * @param mixed $input
-     *
+     * @param  mixed  $blogId
+     * @param  mixed  $input
      * @return mixed
      */
     public function createComment($blogId, $input)

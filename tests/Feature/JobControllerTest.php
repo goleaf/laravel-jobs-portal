@@ -25,7 +25,7 @@ class JobControllerTest extends TestCase
     }
 
     /** @test */
-    public function itCanDisplayIndexPage()
+    public function it_can_display_index_page()
     {
         $response = $this->actingAs($this->user)->get('/job');
 
@@ -34,7 +34,7 @@ class JobControllerTest extends TestCase
     }
 
     /** @test */
-    public function itCanCreateJob()
+    public function it_can_create_job()
     {
         $data = Job::factory()->make()->toArray();
 
@@ -45,7 +45,7 @@ class JobControllerTest extends TestCase
     }
 
     /** @test */
-    public function itCanUpdateJob()
+    public function it_can_update_job()
     {
         $job = Job::factory()->create();
         $data = Job::factory()->make()->toArray();
@@ -57,7 +57,7 @@ class JobControllerTest extends TestCase
     }
 
     /** @test */
-    public function itCanDeleteJob()
+    public function it_can_delete_job()
     {
         $job = Job::factory()->create();
 

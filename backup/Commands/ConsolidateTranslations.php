@@ -33,11 +33,11 @@ class ConsolidateTranslations extends Command
         $locales = [];
         $langPath = resource_path('lang');
 
-        if ('all' === $locale) {
+        if ($locale === 'all') {
             // Get all directory names as locales
             if (File::exists($langPath)) {
                 foreach (File::directories($langPath) as $directory) {
-                    if ('backup' !== basename($directory)) {
+                    if (basename($directory) !== 'backup') {
                         $locales[] = basename($directory);
                     }
                 }
@@ -45,7 +45,7 @@ class ConsolidateTranslations extends Command
 
             // Also check for PHP files in the root lang directory
             foreach (File::files($langPath) as $file) {
-                if ('php' === $file->getExtension()) {
+                if ($file->getExtension() === 'php') {
                     $locales[] = $file->getFilenameWithoutExtension();
                 }
             }
@@ -65,7 +65,7 @@ class ConsolidateTranslations extends Command
 
         // Create backup directory
         $backupDir = resource_path('lang/backup');
-        if (!File::exists($backupDir)) {
+        if (! File::exists($backupDir)) {
             File::makeDirectory($backupDir, 0755, true);
         }
 
@@ -98,7 +98,7 @@ class ConsolidateTranslations extends Command
             try {
                 // Process each PHP file in chunks to save memory
                 $files = collect(File::files($localeDir))->filter(function ($file) {
-                    return 'php' === $file->getExtension();
+                    return $file->getExtension() === 'php';
                 });
 
                 foreach ($files->chunk(5) as $fileChunk) {
@@ -123,7 +123,7 @@ class ConsolidateTranslations extends Command
                 $contents = '';
                 $chunkSize = 1024 * 1024; // 1MB chunks
 
-                while (!feof($handle)) {
+                while (! feof($handle)) {
                     $contents .= fread($handle, $chunkSize);
                 }
 
@@ -131,7 +131,7 @@ class ConsolidateTranslations extends Command
 
                 $jsonTranslations = json_decode($contents, true);
 
-                if (JSON_ERROR_NONE !== json_last_error()) {
+                if (json_last_error() !== JSON_ERROR_NONE) {
                     $this->error("Error parsing JSON file {$jsonFile}: ".json_last_error_msg());
                 } else {
                     // Process JSON translations in chunks
@@ -165,7 +165,7 @@ class ConsolidateTranslations extends Command
         }
 
         // Save consolidated translations
-        if (!empty($allTranslations)) {
+        if (! empty($allTranslations)) {
             try {
                 // Sort keys
                 ksort($allTranslations);
@@ -219,14 +219,14 @@ class ConsolidateTranslations extends Command
     protected function processJsonTranslation($key, $value, &$translations)
     {
         // Process keys with dot notation (e.g., "auth.password")
-        if (false !== strpos($key, '.')) {
+        if (strpos($key, '.') !== false) {
             [$group, $item] = explode('.', $key, 2);
 
-            if (!isset($translations[$group])) {
+            if (! isset($translations[$group])) {
                 $translations[$group] = [];
             }
 
-            if (false !== strpos($item, '.')) {
+            if (strpos($item, '.') !== false) {
                 // Handle nested keys (e.g., "auth.password.reset")
                 $parts = explode('.', $item);
                 $current = &$translations[$group];
@@ -235,7 +235,7 @@ class ConsolidateTranslations extends Command
                     if ($index === count($parts) - 1) {
                         $current[$part] = $value;
                     } else {
-                        if (!isset($current[$part])) {
+                        if (! isset($current[$part])) {
                             $current[$part] = [];
                         }
                         $current = &$current[$part];
@@ -247,7 +247,7 @@ class ConsolidateTranslations extends Command
             }
         } else {
             // No dot notation, add to general group
-            if (!isset($translations['general'])) {
+            if (! isset($translations['general'])) {
                 $translations['general'] = [];
             }
 

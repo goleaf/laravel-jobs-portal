@@ -61,16 +61,14 @@ class DashboardRepository
                 ->addSelect([\DB::raw('Month(created_at) as month,created_at')])
                 ->addSelect([\DB::raw('YEAR(created_at) as year,created_at')])
                 ->orderBy('created_at')
-                ->get()
-            ;
+                ->get();
             $candidate = Candidate::whereHas('user', function (Builder $query) {
                 $query->where('is_active', 1);
             })->addSelect([\DB::raw('DAY(created_at) as day,created_at')])
                 ->addSelect([\DB::raw('Month(created_at) as month,created_at')])
                 ->addSelect([\DB::raw('YEAR(created_at) as year,created_at')])
                 ->orderBy('created_at')
-                ->get()
-            ;
+                ->get();
             $period = CarbonPeriod::create($startDate, $endDate);
 
             foreach ($period as $date) {
@@ -95,8 +93,7 @@ class DashboardRepository
                 ->addSelect([\DB::raw('Month(created_at) as month,created_at')])
                 ->addSelect([\DB::raw('YEAR(created_at) as year,created_at')])
                 ->orderBy('created_at')
-                ->get()
-            ;
+                ->get();
 
             $period = CarbonPeriod::create($startDate, $endDate);
 
@@ -193,7 +190,7 @@ class DashboardRepository
         $dateArr = [];
         $subStartDate = '';
         $subEndDate = '';
-        if (!($startDate && $endDate)) {
+        if (! ($startDate && $endDate)) {
             return [
                 'dateArr' => $dateArr,
                 'startDate' => $subStartDate,
@@ -239,7 +236,7 @@ class DashboardRepository
             $query->where('id', $jobTitleId);
         })->pluck('id');
 
-        $jobApplications = JobApplication::when('' != $gender, function (Builder $query) use ($gender) {
+        $jobApplications = JobApplication::when($gender != '', function (Builder $query) use ($gender) {
             $query->whereHas('candidate.user', function (Builder $query) use ($gender) {
                 $query->where('gender', '=', $gender);
             });
@@ -258,8 +255,7 @@ class DashboardRepository
                 $item->date = Carbon::parse($item->date);
 
                 return $item;
-            })
-        ;
+            });
         $period = CarbonPeriod::create($dateS, $dateE);
 
         // get all date labels

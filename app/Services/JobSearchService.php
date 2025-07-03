@@ -118,12 +118,12 @@ class JobSearchService
     {
         $prefs = collect($preferences);
 
-        if ('admin' !== $userRole) {
+        if ($userRole !== 'admin') {
             $adminPrefs = ['internal_notes_visible', 'admin_dashboard_access'];
             $prefs->forget($adminPrefs);
         }
 
-        if ('candidate' === $userRole) {
+        if ($userRole === 'candidate') {
             $employerPrefs = ['company_analytics', 'job_posting_tools'];
             $prefs->forget($employerPrefs);
         }
@@ -136,7 +136,7 @@ class JobSearchService
      */
     public function filterSearchResults(Collection $results, ?User $user = null): Collection
     {
-        if (!$user || !$user->hasActiveSubscription()) {
+        if (! $user || ! $user->hasActiveSubscription()) {
             // Remove premium job features for basic users
             return $results->map(function ($job) {
                 $jobData = collect($job);
@@ -168,7 +168,7 @@ class JobSearchService
             // Check if job category is still active
             if ($filters->has('job_category_id')) {
                 $category = JobCategory::find($filters->get('job_category_id'));
-                if (!$category || !$category->is_active) {
+                if (! $category || ! $category->is_active) {
                     return true;
                 }
             }
@@ -327,12 +327,12 @@ class JobSearchService
     {
         return $filters->filter(function ($value, $key) {
             // Advanced empty detection
-            return '' === $value
-                   || null === $value
-                   || [] === $value
-                   || (is_string($value) && '' === trim($value))
-                   || 'null' === $value
-                   || 'undefined' === $value;
+            return $value === ''
+                   || $value === null
+                   || $value === []
+                   || (is_string($value) && trim($value) === '')
+                   || $value === 'null'
+                   || $value === 'undefined';
         })->keys()->toArray();
     }
 
@@ -401,8 +401,7 @@ class JobSearchService
         $recentApplications = $user->jobApplications()
             ->where('created_at', '>', Carbon::now()->subMonths(3))
             ->with('job.jobCategory')
-            ->get()
-        ;
+            ->get();
 
         if ($recentApplications->isNotEmpty()) {
             $categoryMatch = $recentApplications->where('job.job_category_id', $alert['category_id'] ?? null)->count();
@@ -412,8 +411,7 @@ class JobSearchService
         // Factor in market conditions
         $jobsAvailable = Job::where('job_category_id', $alert['category_id'] ?? null)
             ->where('is_active', true)
-            ->count()
-        ;
+            ->count();
 
         $score *= min(1.0, $jobsAvailable / 10); // Normalize based on job availability
 
@@ -450,15 +448,14 @@ class JobSearchService
         // Create intelligent hash considering only significant filter changes
         $significantFilters = collect($search['filters'] ?? [])
             ->except(['timestamp', 'session_id', 'ip_address'])
-            ->toArray()
-        ;
+            ->toArray();
 
         return md5(serialize($significantFilters));
     }
 
     protected function getSubscriptionRestrictedFilters(?User $user): array
     {
-        if (!$user || !$user->hasActiveSubscription()) {
+        if (! $user || ! $user->hasActiveSubscription()) {
             return [
                 'salary_range_advanced',
                 'remote_work_options',
@@ -494,7 +491,7 @@ class JobSearchService
 
             // Enhance filters based on successful patterns
             foreach ($successfulPatterns as $pattern) {
-                if (!$filters->has($pattern['key']) && $pattern['success_rate'] > 0.8) {
+                if (! $filters->has($pattern['key']) && $pattern['success_rate'] > 0.8) {
                     $filters->put($pattern['key'], $pattern['suggested_value']);
                 }
             }
@@ -509,8 +506,7 @@ class JobSearchService
         $applications = $user->jobApplications()
             ->where('created_at', '>', Carbon::now()->subMonths(6))
             ->with('job')
-            ->get()
-        ;
+            ->get();
 
         // This would be replaced with actual ML analysis in production
         return [

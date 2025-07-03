@@ -10,19 +10,19 @@ use Illuminate\Validation\Rule;
 
 /**
  * IndexJobApplicationRequest
- * 
+ *
  * Comprehensive validation for job application listing operations with enterprise-grade filtering.
  * Implements advanced search, pagination, filtering, and business logic validation.
  *
- * @package App\Http\Requests\JobApplication
  * @author System Generated
+ *
  * @version 1.0.0
  */
 class IndexJobApplicationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     * 
+     *
      * Implements role-based authorization with business logic validation.
      * Validates job ownership and access permissions.
      *
@@ -32,30 +32,30 @@ class IndexJobApplicationRequest extends FormRequest
     {
         // Basic authentication check - per user requirements: "do not make users and do not any users system"
         // However, we still need to validate job ownership for security
-        
+
         $jobId = $this->route('jobId');
-        
-        if (!$jobId) {
+
+        if (! $jobId) {
             return false;
         }
-        
+
         // Validate job exists and is accessible
         $job = Job::find($jobId);
-        if (!$job) {
+        if (! $job) {
             return false;
         }
-        
+
         // Business rule: Job must be active to view applications
-        if (!$job->is_active) {
+        if (! $job->is_active) {
             return false;
         }
-        
+
         return true;
     }
 
     /**
      * Get the validation rules that apply to the request.
-     * 
+     *
      * Implements comprehensive validation with filtering, pagination, and search capabilities.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
@@ -70,14 +70,14 @@ class IndexJobApplicationRequest extends FormRequest
                 'min:1',
                 'max:10000',
             ],
-            
+
             'per_page' => [
                 'sometimes',
                 'integer',
                 'min:5',
                 'max:500',
             ],
-            
+
             // Search parameters
             'search' => [
                 'sometimes',
@@ -85,7 +85,7 @@ class IndexJobApplicationRequest extends FormRequest
                 'max:255',
                 'regex:/^[\pL\pM\pN\s\.,@\-\'"]+$/u', // Allow multilingual characters, email format
             ],
-            
+
             'search_by' => [
                 'sometimes',
                 'string',
@@ -97,22 +97,22 @@ class IndexJobApplicationRequest extends FormRequest
                     'experience',
                     'skills',
                     'education',
-                    'all'
+                    'all',
                 ]),
             ],
-            
+
             // Status filtering
             'status' => [
                 'sometimes',
                 'array',
                 'max:10',
             ],
-            
+
             'status.*' => [
                 'integer',
                 Rule::in(array_keys(JobApplication::STATUS)),
             ],
-            
+
             // Date range filtering
             'date_from' => [
                 'sometimes',
@@ -120,14 +120,14 @@ class IndexJobApplicationRequest extends FormRequest
                 'before_or_equal:today',
                 'before_or_equal:date_to',
             ],
-            
+
             'date_to' => [
                 'sometimes',
                 'date',
                 'before_or_equal:today',
                 'after_or_equal:date_from',
             ],
-            
+
             // Experience filtering
             'experience_min' => [
                 'sometimes',
@@ -135,7 +135,7 @@ class IndexJobApplicationRequest extends FormRequest
                 'min:0',
                 'max:50',
             ],
-            
+
             'experience_max' => [
                 'sometimes',
                 'integer',
@@ -143,50 +143,50 @@ class IndexJobApplicationRequest extends FormRequest
                 'max:50',
                 'gte:experience_min',
             ],
-            
+
             // Education level filtering
             'education_level' => [
                 'sometimes',
                 'array',
                 'max:10',
             ],
-            
+
             'education_level.*' => [
                 'string',
                 'max:100',
             ],
-            
+
             // Skills filtering
             'skills' => [
                 'sometimes',
                 'array',
                 'max:20',
             ],
-            
+
             'skills.*' => [
                 'integer',
                 'exists:skills,id',
             ],
-            
+
             // Location filtering
             'location' => [
                 'sometimes',
                 'string',
                 'max:255',
             ],
-            
+
             'city_id' => [
                 'sometimes',
                 'integer',
                 'exists:cities,id',
             ],
-            
+
             'state_id' => [
                 'sometimes',
                 'integer',
                 'exists:states,id',
             ],
-            
+
             // Sorting parameters
             'sort_by' => [
                 'sometimes',
@@ -200,16 +200,16 @@ class IndexJobApplicationRequest extends FormRequest
                     'interview_date',
                     'last_activity',
                     'created_at',
-                    'updated_at'
+                    'updated_at',
                 ]),
             ],
-            
+
             'sort_direction' => [
                 'sometimes',
                 'string',
                 Rule::in(['asc', 'desc']),
             ],
-            
+
             // Advanced filtering
             'match_score_min' => [
                 'sometimes',
@@ -217,7 +217,7 @@ class IndexJobApplicationRequest extends FormRequest
                 'min:0',
                 'max:100',
             ],
-            
+
             'match_score_max' => [
                 'sometimes',
                 'integer',
@@ -225,14 +225,14 @@ class IndexJobApplicationRequest extends FormRequest
                 'max:100',
                 'gte:match_score_min',
             ],
-            
+
             // Interview status filtering
             'interview_status' => [
                 'sometimes',
                 'array',
                 'max:5',
             ],
-            
+
             'interview_status.*' => [
                 'string',
                 Rule::in([
@@ -240,73 +240,73 @@ class IndexJobApplicationRequest extends FormRequest
                     'completed',
                     'cancelled',
                     'no_show',
-                    'rescheduled'
+                    'rescheduled',
                 ]),
             ],
-            
+
             // Job stage filtering
             'job_stage_id' => [
                 'sometimes',
                 'integer',
                 'exists:job_stages,id',
             ],
-            
+
             // Application source filtering
             'source' => [
                 'sometimes',
                 'array',
                 'max:10',
             ],
-            
+
             'source.*' => [
                 'string',
                 'max:50',
             ],
-            
+
             // Response format
             'format' => [
                 'sometimes',
                 'string',
                 Rule::in(['json', 'html', 'csv', 'pdf']),
             ],
-            
+
             // View options
             'view_mode' => [
                 'sometimes',
                 'string',
                 Rule::in(['list', 'grid', 'compact', 'detailed']),
             ],
-            
+
             // Bulk selection
             'selected' => [
                 'sometimes',
                 'array',
                 'max:1000',
             ],
-            
+
             'selected.*' => [
                 'integer',
                 'exists:job_applications,id',
             ],
-            
+
             // Export options
             'export_fields' => [
                 'sometimes',
                 'array',
                 'max:20',
             ],
-            
+
             'export_fields.*' => [
                 'string',
                 'max:50',
             ],
-            
+
             // Filter persistence
             'save_filter' => [
                 'sometimes',
                 'boolean',
             ],
-            
+
             'filter_name' => [
                 'required_if:save_filter,true',
                 'string',
@@ -317,7 +317,7 @@ class IndexJobApplicationRequest extends FormRequest
 
     /**
      * Get custom validation messages.
-     * 
+     *
      * Provides comprehensive multilingual error messaging with business context.
      *
      * @return array<string, string>
@@ -329,54 +329,54 @@ class IndexJobApplicationRequest extends FormRequest
             'page.integer' => __('validation.page_integer'),
             'page.min' => __('validation.page_min'),
             'page.max' => __('validation.page_max'),
-            
+
             'per_page.integer' => __('validation.per_page_integer'),
             'per_page.min' => __('validation.per_page_min'),
             'per_page.max' => __('validation.per_page_max'),
-            
+
             // Search messages
             'search.string' => __('validation.search_string'),
             'search.max' => __('validation.search_max'),
             'search.regex' => __('validation.search_format'),
-            
+
             'search_by.in' => __('validation.search_by_invalid'),
-            
+
             // Status messages
             'status.array' => __('validation.status_array'),
             'status.*.in' => __('validation.status_invalid'),
-            
+
             // Date messages
             'date_from.date' => __('validation.date_from_date'),
             'date_from.before_or_equal' => __('validation.date_from_before_today'),
-            
+
             'date_to.date' => __('validation.date_to_date'),
             'date_to.after_or_equal' => __('validation.date_to_after_from'),
-            
+
             // Experience messages
             'experience_min.integer' => __('validation.experience_min_integer'),
             'experience_min.min' => __('validation.experience_min_value'),
             'experience_min.max' => __('validation.experience_min_max'),
-            
+
             'experience_max.gte' => __('validation.experience_max_gte_min'),
-            
+
             // Skills messages
             'skills.array' => __('validation.skills_array'),
             'skills.max' => __('validation.skills_max'),
             'skills.*.exists' => __('validation.skill_not_found'),
-            
+
             // Location messages
             'city_id.exists' => __('validation.city_not_found'),
             'state_id.exists' => __('validation.state_not_found'),
-            
+
             // Sorting messages
             'sort_by.in' => __('validation.sort_by_invalid'),
             'sort_direction.in' => __('validation.sort_direction_invalid'),
-            
+
             // Match score messages
             'match_score_min.min' => __('validation.match_score_min_value'),
             'match_score_min.max' => __('validation.match_score_min_max'),
             'match_score_max.gte' => __('validation.match_score_max_gte_min'),
-            
+
             // Export messages
             'filter_name.required_if' => __('validation.filter_name_required'),
             'filter_name.max' => __('validation.filter_name_max'),
@@ -424,8 +424,6 @@ class IndexJobApplicationRequest extends FormRequest
     /**
      * Handle a failed validation attempt.
      *
-     * @param \Illuminate\Contracts\Validation\Validator $validator
-     * @return void
      *
      * @throws \Illuminate\Http\Exceptions\HttpResponseException
      */
@@ -445,7 +443,6 @@ class IndexJobApplicationRequest extends FormRequest
     /**
      * Handle a failed authorization attempt.
      *
-     * @return void
      *
      * @throws \Illuminate\Http\Exceptions\HttpResponseException
      */
@@ -463,83 +460,81 @@ class IndexJobApplicationRequest extends FormRequest
 
     /**
      * Prepare the data for validation.
-     * 
+     *
      * Pre-processes and normalizes input data before validation.
      * Implements data sanitization and business logic preparation.
-     *
-     * @return void
      */
     protected function prepareForValidation(): void
     {
         // Set default pagination values
-        if (!$this->has('page')) {
+        if (! $this->has('page')) {
             $this->merge(['page' => 1]);
         }
-        
-        if (!$this->has('per_page')) {
+
+        if (! $this->has('per_page')) {
             $this->merge(['per_page' => 25]);
         }
-        
+
         // Set default sorting
-        if (!$this->has('sort_by')) {
+        if (! $this->has('sort_by')) {
             $this->merge(['sort_by' => 'application_date']);
         }
-        
-        if (!$this->has('sort_direction')) {
+
+        if (! $this->has('sort_direction')) {
             $this->merge(['sort_direction' => 'desc']);
         }
-        
+
         // Set default search field
-        if (!$this->has('search_by')) {
+        if (! $this->has('search_by')) {
             $this->merge(['search_by' => 'all']);
         }
-        
+
         // Set default view mode
-        if (!$this->has('view_mode')) {
+        if (! $this->has('view_mode')) {
             $this->merge(['view_mode' => 'list']);
         }
-        
+
         // Normalize boolean values
         if ($this->has('save_filter')) {
             $this->merge([
                 'save_filter' => filter_var($this->save_filter, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false,
             ]);
         }
-        
+
         // Sanitize search term
         if ($this->has('search')) {
             $this->merge([
                 'search' => trim($this->search),
             ]);
         }
-        
+
         // Normalize status array
         if ($this->has('status') && is_string($this->status)) {
             $this->merge([
                 'status' => explode(',', $this->status),
             ]);
         }
-        
+
         // Normalize skills array
         if ($this->has('skills') && is_string($this->skills)) {
             $this->merge([
                 'skills' => array_map('intval', explode(',', $this->skills)),
             ]);
         }
-        
+
         // Convert string dates to proper format
         if ($this->has('date_from')) {
             $this->merge([
-                'date_from' => \DateTime::createFromFormat('Y-m-d', $this->date_from) 
-                    ? $this->date_from 
+                'date_from' => \DateTime::createFromFormat('Y-m-d', $this->date_from)
+                    ? $this->date_from
                     : date('Y-m-d', strtotime($this->date_from)),
             ]);
         }
-        
+
         if ($this->has('date_to')) {
             $this->merge([
-                'date_to' => \DateTime::createFromFormat('Y-m-d', $this->date_to) 
-                    ? $this->date_to 
+                'date_to' => \DateTime::createFromFormat('Y-m-d', $this->date_to)
+                    ? $this->date_to
                     : date('Y-m-d', strtotime($this->date_to)),
             ]);
         }

@@ -13,16 +13,16 @@ use PHPUnit\Framework\TestCase;
 class JobTypeModelTest extends TestCase
 {
     /** @test */
-    public function itHasCorrectTableName()
+    public function it_has_correct_table_name()
     {
-        $jobType = new JobType();
+        $jobType = new JobType;
         $this->assertEquals('job_types', $jobType->getTable());
     }
 
     /** @test */
-    public function itHasCorrectFillableAttributes(): void
+    public function it_has_correct_fillable_attributes(): void
     {
-        $jobType = new JobType();
+        $jobType = new JobType;
         $expectedFillable = [
             'name',
             'description',
@@ -41,9 +41,9 @@ class JobTypeModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasCorrectCasts(): void
+    public function it_has_correct_casts(): void
     {
-        $jobType = new JobType();
+        $jobType = new JobType;
         $expectedCasts = [
             'id' => 'int',
             'sort_order' => 'int',
@@ -56,7 +56,7 @@ class JobTypeModelTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeInstantiatedWithAttributes()
+    public function it_can_be_instantiated_with_attributes()
     {
         $jobType = new JobType([
             'name' => 'Full Time',
@@ -72,9 +72,9 @@ class JobTypeModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasRelationshipMethods()
+    public function it_has_relationship_methods()
     {
-        $jobType = new JobType();
+        $jobType = new JobType;
 
         // Test that relationship methods exist
         $this->assertTrue(method_exists($jobType, 'jobs'));
@@ -82,7 +82,7 @@ class JobTypeModelTest extends TestCase
     }
 
     /** @test */
-    public function itHasValidationRules()
+    public function it_has_validation_rules()
     {
         $expectedRules = [
             'name' => 'required|max:160|unique:job_types,name',

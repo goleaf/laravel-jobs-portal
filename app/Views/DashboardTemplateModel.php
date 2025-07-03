@@ -6,7 +6,7 @@ use App\Models\User;
 
 /**
  * Dashboard Template Model
- * 
+ *
  * Based on Habr article patterns for model-oriented templating
  * Handles user dashboard with statistics and activities
  */
@@ -40,13 +40,13 @@ class DashboardTemplateModel extends BaseTemplateModel
     public function greeting(): string
     {
         $hour = (int) date('H');
-        $timeGreeting = match(true) {
+        $timeGreeting = match (true) {
             $hour < 12 => 'Good morning',
             $hour < 17 => 'Good afternoon',
             default => 'Good evening'
         };
 
-        return $timeGreeting . ', ' . $this->user->name;
+        return $timeGreeting.', '.$this->user->name;
     }
 
     /**
@@ -54,7 +54,7 @@ class DashboardTemplateModel extends BaseTemplateModel
      */
     public function dashboardTitle(): string
     {
-        return match($this->userType) {
+        return match ($this->userType) {
             'employer' => 'Employer Dashboard',
             'admin' => 'Admin Dashboard',
             default => 'Candidate Dashboard'
@@ -67,7 +67,7 @@ class DashboardTemplateModel extends BaseTemplateModel
     public function unreadNotificationsCount(): int
     {
         return count(array_filter($this->notifications, function ($notification) {
-            return !($notification['read'] ?? false);
+            return ! ($notification['read'] ?? false);
         }));
     }
 
@@ -80,4 +80,4 @@ class DashboardTemplateModel extends BaseTemplateModel
             return $action['urgent'] ?? false;
         });
     }
-} 
+}

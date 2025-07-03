@@ -99,10 +99,10 @@ class CandidateController extends AppBaseController
         $userStates = $userCities = null;
         $countries = Country::pluck('name', 'id');
         $states = State::toBase()->pluck('name', 'id');
-        if (!empty($user->country_id)) {
+        if (! empty($user->country_id)) {
             $userStates = getStates($user->country_id);
         }
-        if (!empty($user->state_id)) {
+        if (! empty($user->state_id)) {
             $userCities = getCities($user->state_id);
         }
 
@@ -148,15 +148,14 @@ class CandidateController extends AppBaseController
     }
 
     /**
-     * @param mixed $id
-     *
+     * @param  mixed  $id
      * @return mixed
      */
     public function changeStatus($id)
     {
         $candidate = Candidate::findOrFail($id);
 
-        $status = !$candidate->user->is_active;
+        $status = ! $candidate->user->is_active;
         $candidate->user->update(['is_active' => $status]);
 
         if ($candidate) {
@@ -250,7 +249,7 @@ class CandidateController extends AppBaseController
 
     public function candidateExportExcel(): BinaryFileResponse
     {
-        return Excel::download(new CandidatesExport(), 'candidates-'.time().'.xlsx');
+        return Excel::download(new CandidatesExport, 'candidates-'.time().'.xlsx');
     }
 
     public function resumes(): View

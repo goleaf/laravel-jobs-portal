@@ -16,22 +16,22 @@ use Spatie\Activitylog\Traits\LogsActivity;
  *
  * @version June 20, 2020, 5:43 am UTC
  *
- * @property int                    $id
- * @property string                 $name
- * @property null|string            $description
- * @property bool                   $is_default
- * @property bool                   $is_active
- * @property null|Carbon            $created_at
- * @property null|Carbon            $updated_at
- * @property Collection|Company[]   $companies
- * @property null|int               $companies_count
+ * @property int $id
+ * @property string $name
+ * @property null|string $description
+ * @property bool $is_default
+ * @property bool $is_active
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
+ * @property Collection|Company[] $companies
+ * @property null|int $companies_count
  * @property Candidate[]|Collection $candidates
- * @property null|int               $candidates_count
- * @property Collection|Job[]       $jobs
- * @property null|int               $jobs_count
- * @property mixed                  $usage_count
- * @property mixed                  $formatted_usage_stats
- * @property mixed                  $market_presence
+ * @property null|int $candidates_count
+ * @property Collection|Job[] $jobs
+ * @property null|int $jobs_count
+ * @property mixed $usage_count
+ * @property mixed $formatted_usage_stats
+ * @property mixed $market_presence
  *
  * @method static Builder|Industry newModelQuery()
  * @method static Builder|Industry newQuery()
@@ -102,8 +102,7 @@ class Industry extends Model
         return LogOptions::defaults()
             ->logOnly(['name', 'description', 'is_active', 'is_default'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -255,8 +254,7 @@ class Industry extends Model
     public function scopeSearch(Builder $query, string $term): Builder
     {
         return $query->where('name', 'like', "%{$term}%")
-            ->orWhere('description', 'like', "%{$term}%")
-        ;
+            ->orWhere('description', 'like', "%{$term}%");
     }
 
     /**
@@ -267,8 +265,7 @@ class Industry extends Model
         return $query->withCount(['companies', 'candidates'])
             ->orderByDesc('companies_count')
             ->orderByDesc('candidates_count')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     /**
@@ -285,8 +282,7 @@ class Industry extends Model
     public function scopeRecent(Builder $query, int $days = 30): Builder
     {
         return $query->where('created_at', '>=', now()->subDays($days))
-            ->orderByDesc('created_at')
-        ;
+            ->orderByDesc('created_at');
     }
 
     /**
@@ -303,8 +299,7 @@ class Industry extends Model
             },
         ])
             ->orderByDesc('companies_count')
-            ->orderByDesc('candidates_count')
-        ;
+            ->orderByDesc('candidates_count');
     }
 
     /**
@@ -318,8 +313,7 @@ class Industry extends Model
             },
         ])
             ->having('companies_count', '>=', 5)
-            ->orderByDesc('companies_count')
-        ;
+            ->orderByDesc('companies_count');
     }
 
     /**
@@ -330,8 +324,7 @@ class Industry extends Model
         return $query->withCount('companies')
             ->whereBetween('companies_count', [5, 20])
             ->where('created_at', '>=', now()->subYear())
-            ->orderByDesc('created_at')
-        ;
+            ->orderByDesc('created_at');
     }
 
     /**
@@ -342,8 +335,7 @@ class Industry extends Model
         return $query->withCount('companies')
             ->having('companies_count', '>=', 20)
             ->where('created_at', '<=', now()->subYears(2))
-            ->orderByDesc('companies_count')
-        ;
+            ->orderByDesc('companies_count');
     }
 
     /**
@@ -352,8 +344,7 @@ class Industry extends Model
     public function scopeMinUsage(Builder $query, int $count = 1): Builder
     {
         return $query->withCount(['companies', 'candidates'])
-            ->havingRaw('(companies_count + candidates_count) >= ?', [$count])
-        ;
+            ->havingRaw('(companies_count + candidates_count) >= ?', [$count]);
     }
 
     /**
@@ -389,7 +380,7 @@ class Industry extends Model
                 now()->subDays(90),
             ])->count();
 
-            if (0 === $previousQuarter) {
+            if ($previousQuarter === 0) {
                 return $currentQuarter > 0 ? 100.0 : 0.0;
             }
 
@@ -408,8 +399,7 @@ class Industry extends Model
                 ->withCount('companies')
                 ->orderByDesc('companies_count')
                 ->limit($limit)
-                ->get()
-            ;
+                ->get();
         });
     }
 
@@ -424,8 +414,7 @@ class Industry extends Model
                 ->withCount('jobs')
                 ->orderByDesc('jobs_count')
                 ->limit($limit)
-                ->get()
-            ;
+                ->get();
         });
     }
 

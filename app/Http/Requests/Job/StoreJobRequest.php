@@ -92,7 +92,7 @@ class StoreJobRequest extends FormRequest
                 'integer',
                 'exists:companies,id',
                 function ($attribute, $value, $fail) {
-                    if (!$this->isCompanyActive($value)) {
+                    if (! $this->isCompanyActive($value)) {
                         $fail(__('validation.company_not_active'));
                     }
                 },
@@ -341,7 +341,7 @@ class StoreJobRequest extends FormRequest
                 'sometimes',
                 'date',
                 'after:today',
-                'before:' . now()->addYear()->toDateString(),
+                'before:'.now()->addYear()->toDateString(),
             ],
 
             'max_applications' => [
@@ -416,7 +416,7 @@ class StoreJobRequest extends FormRequest
                 'required_if:is_featured,true',
                 'date',
                 'after:today',
-                'before:' . now()->addMonths(6)->toDateString(),
+                'before:'.now()->addMonths(6)->toDateString(),
             ],
 
             // Work environment
@@ -674,7 +674,7 @@ class StoreJobRequest extends FormRequest
                 'sometimes',
                 'date',
                 'after:publish_date',
-                'before:' . now()->addYear()->toDateString(),
+                'before:'.now()->addYear()->toDateString(),
             ],
 
             'auto_renew' => [
@@ -702,155 +702,155 @@ class StoreJobRequest extends FormRequest
             'title.required' => __('validation.required_field', ['field' => __('validation.attributes.job_title')]),
             'title.min' => __('validation.min_chars', ['attribute' => __('validation.attributes.job_title'), 'min' => 5]),
             'title.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.job_title'), 'max' => 255]),
-            
+
             'slug.min' => __('validation.min_chars', ['attribute' => __('validation.attributes.slug'), 'min' => 5]),
             'slug.regex' => __('validation.invalid_slug_format'),
             'slug.unique' => __('validation.unique', ['attribute' => __('validation.attributes.slug')]),
-            
+
             'description.required' => __('validation.required_field', ['field' => __('validation.attributes.description')]),
             'description.min' => __('validation.min_chars', ['attribute' => __('validation.attributes.description'), 'min' => 100]),
             'description.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.description'), 'max' => 10000]),
-            
+
             'requirements.required' => __('validation.required_field', ['field' => __('validation.attributes.requirements')]),
             'requirements.min' => __('validation.min_chars', ['attribute' => __('validation.attributes.requirements'), 'min' => 50]),
             'requirements.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.requirements'), 'max' => 5000]),
-            
+
             'responsibilities.required' => __('validation.required_field', ['field' => __('validation.attributes.responsibilities')]),
             'responsibilities.min' => __('validation.min_chars', ['attribute' => __('validation.attributes.responsibilities'), 'min' => 50]),
             'responsibilities.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.responsibilities'), 'max' => 5000]),
-            
+
             'company_id.required' => __('validation.required_field', ['field' => __('validation.attributes.company')]),
             'company_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.company')]),
-            
+
             'location.required' => __('validation.required_field', ['field' => __('validation.attributes.location')]),
-            
+
             'city_id.required' => __('validation.required_field', ['field' => __('validation.attributes.city')]),
             'city_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.city')]),
-            
+
             'state_id.required' => __('validation.required_field', ['field' => __('validation.attributes.state')]),
             'state_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.state')]),
-            
+
             'country_id.required' => __('validation.required_field', ['field' => __('validation.attributes.country')]),
             'country_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.country')]),
-            
+
             'remote_type.required_if' => __('validation.remote_type_required'),
             'remote_type.in' => __('validation.invalid_remote_type'),
-            
+
             'job_category_id.required' => __('validation.required_field', ['field' => __('validation.attributes.job_category')]),
             'job_category_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.job_category')]),
-            
+
             'job_type_id.required' => __('validation.required_field', ['field' => __('validation.attributes.job_type')]),
             'job_type_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.job_type')]),
-            
+
             'career_level_id.required' => __('validation.required_field', ['field' => __('validation.attributes.career_level')]),
             'career_level_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.career_level')]),
-            
+
             'employment_type.required' => __('validation.required_field', ['field' => __('validation.attributes.employment_type')]),
             'employment_type.in' => __('validation.invalid_employment_type'),
-            
+
             'experience_level.required' => __('validation.required_field', ['field' => __('validation.attributes.experience_level')]),
             'experience_level.in' => __('validation.invalid_experience_level'),
-            
+
             'min_experience.min' => __('validation.min_value', ['attribute' => __('validation.attributes.min_experience'), 'min' => 0]),
             'min_experience.max' => __('validation.max_value', ['attribute' => __('validation.attributes.min_experience'), 'max' => 50]),
-            
+
             'max_experience.gte' => __('validation.gte', ['attribute' => __('validation.attributes.max_experience'), 'value' => __('validation.attributes.min_experience')]),
-            
+
             'salary_type.required' => __('validation.required_field', ['field' => __('validation.attributes.salary_type')]),
             'salary_type.in' => __('validation.invalid_salary_type'),
-            
+
             'min_salary.required_if' => __('validation.min_salary_required'),
             'min_salary.numeric' => __('validation.numeric', ['attribute' => __('validation.attributes.min_salary')]),
             'min_salary.max' => __('validation.max_value', ['attribute' => __('validation.attributes.min_salary'), 'max' => 10000000]),
-            
+
             'max_salary.required_if' => __('validation.max_salary_required'),
             'max_salary.gte' => __('validation.gte', ['attribute' => __('validation.attributes.max_salary'), 'value' => __('validation.attributes.min_salary')]),
-            
+
             'salary_currency_id.required_unless' => __('validation.salary_currency_required'),
             'salary_currency_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.salary_currency')]),
-            
+
             'salary_period.required_unless' => __('validation.salary_period_required'),
             'salary_period.in' => __('validation.invalid_salary_period'),
-            
+
             'commission_rate.required_if' => __('validation.commission_rate_required'),
             'commission_rate.max' => __('validation.max_value', ['attribute' => __('validation.attributes.commission_rate'), 'max' => 100]),
-            
+
             'skills.array' => __('validation.array', ['attribute' => __('validation.attributes.skills')]),
             'skills.max' => __('validation.max_items', ['attribute' => __('validation.attributes.skills'), 'max' => 50]),
             'skills.*.exists' => __('validation.exists', ['attribute' => __('validation.attributes.skill')]),
-            
+
             'required_skills.array' => __('validation.array', ['attribute' => __('validation.attributes.required_skills')]),
             'required_skills.max' => __('validation.max_items', ['attribute' => __('validation.attributes.required_skills'), 'max' => 20]),
-            
+
             'preferred_skills.array' => __('validation.array', ['attribute' => __('validation.attributes.preferred_skills')]),
             'preferred_skills.max' => __('validation.max_items', ['attribute' => __('validation.attributes.preferred_skills'), 'max' => 30]),
-            
+
             'languages.array' => __('validation.array', ['attribute' => __('validation.attributes.languages')]),
             'languages.max' => __('validation.max_items', ['attribute' => __('validation.attributes.languages'), 'max' => 10]),
             'languages.*.exists' => __('validation.exists', ['attribute' => __('validation.attributes.language')]),
-            
+
             'certifications.array' => __('validation.array', ['attribute' => __('validation.attributes.certifications')]),
             'certifications.max' => __('validation.max_items', ['attribute' => __('validation.attributes.certifications'), 'max' => 20]),
-            
+
             'application_deadline.after' => __('validation.application_deadline_future'),
             'application_deadline.before' => __('validation.application_deadline_limit'),
-            
+
             'max_applications.min' => __('validation.min_value', ['attribute' => __('validation.attributes.max_applications'), 'min' => 1]),
             'max_applications.max' => __('validation.max_value', ['attribute' => __('validation.attributes.max_applications'), 'max' => 10000]),
-            
+
             'application_email.email' => __('validation.email', ['attribute' => __('validation.attributes.application_email')]),
-            
+
             'external_apply_url.url' => __('validation.url', ['attribute' => __('validation.attributes.external_apply_url')]),
-            
+
             'status.in' => __('validation.invalid_job_status'),
-            
+
             'visibility.in' => __('validation.invalid_visibility'),
-            
+
             'featured_until.required_if' => __('validation.featured_until_required'),
             'featured_until.after' => __('validation.featured_until_future'),
             'featured_until.before' => __('validation.featured_until_limit'),
-            
+
             'work_environment.in' => __('validation.invalid_work_environment'),
-            
+
             'travel_percentage.required_if' => __('validation.travel_percentage_required'),
             'travel_percentage.min' => __('validation.min_value', ['attribute' => __('validation.attributes.travel_percentage'), 'min' => 1]),
             'travel_percentage.max' => __('validation.max_value', ['attribute' => __('validation.attributes.travel_percentage'), 'max' => 100]),
-            
+
             'security_clearance_level.required_if' => __('validation.security_clearance_level_required'),
             'security_clearance_level.in' => __('validation.invalid_security_clearance_level'),
-            
+
             'license_type.required_if' => __('validation.license_type_required'),
-            
+
             'meta_title.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.meta_title'), 'max' => 60]),
             'meta_description.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.meta_description'), 'max' => 160]),
-            
+
             'keywords.array' => __('validation.array', ['attribute' => __('validation.attributes.keywords')]),
             'keywords.max' => __('validation.max_items', ['attribute' => __('validation.attributes.keywords'), 'max' => 20]),
             'keywords.*.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.keyword'), 'max' => 50]),
-            
+
             'tags.array' => __('validation.array', ['attribute' => __('validation.attributes.tags')]),
             'tags.max' => __('validation.max_items', ['attribute' => __('validation.attributes.tags'), 'max' => 30]),
             'tags.*.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.tag'), 'max' => 50]),
             'tags.*.regex' => __('validation.invalid_tag_format'),
-            
+
             'contact_person.regex' => __('validation.invalid_person_name'),
             'contact_email.email' => __('validation.email', ['attribute' => __('validation.attributes.contact_email')]),
             'contact_phone.regex' => __('validation.invalid_phone_format'),
-            
+
             'priority_score.min' => __('validation.min_value', ['attribute' => __('validation.attributes.priority_score'), 'min' => 0]),
             'priority_score.max' => __('validation.max_value', ['attribute' => __('validation.attributes.priority_score'), 'max' => 100]),
-            
+
             'custom_fields.array' => __('validation.array', ['attribute' => __('validation.attributes.custom_fields')]),
             'custom_fields.max' => __('validation.max_items', ['attribute' => __('validation.attributes.custom_fields'), 'max' => 20]),
             'custom_fields.*.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.custom_field'), 'max' => 500]),
-            
+
             'notes.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.notes'), 'max' => 2000]),
-            
+
             'publish_date.after_or_equal' => __('validation.publish_date_future'),
-            
+
             'expire_date.after' => __('validation.expire_date_after_publish'),
             'expire_date.before' => __('validation.expire_date_limit'),
-            
+
             'renewal_period.required_if' => __('validation.renewal_period_required'),
             'renewal_period.min' => __('validation.min_value', ['attribute' => __('validation.attributes.renewal_period'), 'min' => 1]),
             'renewal_period.max' => __('validation.max_value', ['attribute' => __('validation.attributes.renewal_period'), 'max' => 365]),
@@ -970,7 +970,7 @@ class StoreJobRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Generate slug from title if not provided
-        if (!$this->has('slug') && $this->has('title')) {
+        if (! $this->has('slug') && $this->has('title')) {
             $this->merge([
                 'slug' => \Str::slug($this->title),
             ]);
@@ -1071,28 +1071,28 @@ class StoreJobRequest extends FormRequest
         }
 
         // Generate short description from description if not provided
-        if (!$this->has('short_description') && $this->has('description')) {
+        if (! $this->has('short_description') && $this->has('description')) {
             $this->merge([
                 'short_description' => \Str::limit(strip_tags($this->description), 200),
             ]);
         }
 
         // Set default application deadline if not provided
-        if (!$this->has('application_deadline')) {
+        if (! $this->has('application_deadline')) {
             $this->merge([
                 'application_deadline' => now()->addDays(30)->toDateString(),
             ]);
         }
 
         // Set default publish date if not provided
-        if (!$this->has('publish_date')) {
+        if (! $this->has('publish_date')) {
             $this->merge([
                 'publish_date' => now()->toDateString(),
             ]);
         }
 
         // Set default expire date if not provided
-        if (!$this->has('expire_date')) {
+        if (! $this->has('expire_date')) {
             $this->merge([
                 'expire_date' => now()->addDays(60)->toDateString(),
             ]);
@@ -1120,7 +1120,7 @@ class StoreJobRequest extends FormRequest
     {
         // Set processing metadata
         $this->merge([
-            'job_id' => 'JOB-' . date('Ymd') . '-' . strtoupper(substr(md5($this->title . time()), 0, 8)),
+            'job_id' => 'JOB-'.date('Ymd').'-'.strtoupper(substr(md5($this->title.time()), 0, 8)),
             'validated_at' => now(),
             'request_source' => $this->header('X-Request-Source', 'web'),
         ]);
@@ -1141,7 +1141,7 @@ class StoreJobRequest extends FormRequest
     {
         $inappropriateWords = [
             'scam', 'pyramid', 'mlm', 'get rich quick', 'work from home guaranteed',
-            'no experience required high pay', 'easy money', 'guaranteed income'
+            'no experience required high pay', 'easy money', 'guaranteed income',
         ];
 
         $content = strtolower($content);
@@ -1175,7 +1175,7 @@ class StoreJobRequest extends FormRequest
     {
         return $this->is_featured ||
                $this->salary_type === 'negotiable' ||
-               $this->containsInappropriateContent($this->title . ' ' . $this->description);
+               $this->containsInappropriateContent($this->title.' '.$this->description);
     }
 
     /**
@@ -1184,7 +1184,7 @@ class StoreJobRequest extends FormRequest
     private function shouldAutoPublish(): bool
     {
         return $this->status === 'active' &&
-               !$this->shouldRequireApproval() &&
+               ! $this->shouldRequireApproval() &&
                $this->publish_date <= now()->toDateString();
     }
 }

@@ -125,7 +125,7 @@ abstract class BaseController extends UniversalBaseController
             $response['error_code'] = $code;
         }
 
-        if (config('app.debug') && !empty($context)) {
+        if (config('app.debug') && ! empty($context)) {
             $response['debug'] = $context;
         }
 

@@ -103,10 +103,10 @@ class StoreRequest extends FormRequest
 
                 // Validate metadata values
                 foreach ($this->metadata as $key => $value) {
-                    if (!is_string($key) || strlen($key) > 50) {
+                    if (! is_string($key) || strlen($key) > 50) {
                         $validator->errors()->add('metadata', 'Metadata keys must be strings with maximum 50 characters.');
                     }
-                    if (!is_scalar($value) && !is_null($value)) {
+                    if (! is_scalar($value) && ! is_null($value)) {
                         $validator->errors()->add('metadata', 'Metadata values must be scalar or null.');
                     }
                 }
@@ -142,7 +142,7 @@ class StoreRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Generate slug from name or title if not provided
-        if (!$this->slug && ($this->name || $this->title)) {
+        if (! $this->slug && ($this->name || $this->title)) {
             $this->merge([
                 'slug' => \Str::slug($this->name ?: $this->title),
             ]);

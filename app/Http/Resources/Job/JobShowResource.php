@@ -75,7 +75,7 @@ class JobShowResource extends JsonResource
                 'to' => $this->hide_salary ? null : $this->salary_to,
                 'currency' => $this->salaryCurrency?->currency_code,
                 'period' => $this->salaryPeriod?->period,
-                'is_disclosed' => !$this->hide_salary,
+                'is_disclosed' => ! $this->hide_salary,
                 'formatted' => $this->getFormattedSalaryRange(),
             ],
 
@@ -200,7 +200,7 @@ class JobShowResource extends JsonResource
      */
     private function getFormattedSalaryRange(): ?string
     {
-        if ($this->hide_salary || (!$this->salary_from && !$this->salary_to)) {
+        if ($this->hide_salary || (! $this->salary_from && ! $this->salary_to)) {
             return null;
         }
 
@@ -237,11 +237,11 @@ class JobShowResource extends JsonResource
     /**
      * Check if user can view sensitive data.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function canViewSensitiveData($user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
@@ -252,7 +252,7 @@ class JobShowResource extends JsonResource
     /**
      * Check if user can view statistics.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function canViewStatistics($user): bool
     {
@@ -262,11 +262,11 @@ class JobShowResource extends JsonResource
     /**
      * Check if user can edit this job.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function canUserEdit($user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
@@ -277,43 +277,43 @@ class JobShowResource extends JsonResource
     /**
      * Check if user can delete this job.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function canUserDelete($user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
         return $user->hasRole('Admin')
-               || ($user->hasRole('Employer') && $this->company?->user_id === $user->id && 0 === $this->job_applications_count);
+               || ($user->hasRole('Employer') && $this->company?->user_id === $user->id && $this->job_applications_count === 0);
     }
 
     /**
      * Check if user can apply to this job.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function canUserApply($user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
         return $user->hasRole('Candidate')
-               && 'open' === $this->status
-               && !$this->is_suspended
-               && (null === $this->expires_at || $this->expires_at->isFuture());
+               && $this->status === 'open'
+               && ! $this->is_suspended
+               && ($this->expires_at === null || $this->expires_at->isFuture());
     }
 
     /**
      * Check if user can feature this job.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function canUserFeature($user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
@@ -324,11 +324,11 @@ class JobShowResource extends JsonResource
     /**
      * Check if user can suspend this job.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function canUserSuspend($user): bool
     {
-        if (!$user) {
+        if (! $user) {
             return false;
         }
 
@@ -338,7 +338,7 @@ class JobShowResource extends JsonResource
     /**
      * Check if user can close this job.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function canUserClose($user): bool
     {
@@ -348,7 +348,7 @@ class JobShowResource extends JsonResource
     /**
      * Check if user can view applications.
      *
-     * @param mixed $user
+     * @param  mixed  $user
      */
     private function canViewApplications($user): bool
     {

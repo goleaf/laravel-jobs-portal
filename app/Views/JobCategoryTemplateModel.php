@@ -6,7 +6,7 @@ use App\Models\JobCategory;
 
 /**
  * Job Category Template Model
- * 
+ *
  * Based on Habr article patterns for model-oriented templating
  */
 class JobCategoryTemplateModel extends BaseTemplateModel
@@ -21,15 +21,15 @@ class JobCategoryTemplateModel extends BaseTemplateModel
 
     public static function fromJobCategory(JobCategory $category): self
     {
-        $model = new self();
+        $model = new self;
         $model->name = $category->name ?? '';
         $model->slug = $category->slug ?? '';
         $model->description = $category->description;
         $model->icon = $category->icon;
         $model->color = $category->color ?? '#3b82f6';
-        $model->isActive = (bool)$category->is_active;
+        $model->isActive = (bool) $category->is_active;
         $model->jobsCount = $category->jobs()->count();
-        
+
         return $model;
     }
 
@@ -46,4 +46,4 @@ class JobCategoryTemplateModel extends BaseTemplateModel
             $this->name
         );
     }
-} 
+}

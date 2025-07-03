@@ -3,7 +3,6 @@
 namespace Tests\Unit\Models;
 
 use App\Models\CustomMedia;
-use App\Helpers\ValidationHelper;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
 use Tests\TestCase;
@@ -18,7 +17,7 @@ class CustomMediaTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function itCanBeCreated()
+    public function it_can_be_created()
     {
         $model = CustomMedia::factory()->create();
 
@@ -29,52 +28,52 @@ class CustomMediaTest extends TestCase
     }
 
     /** @test */
-    public function itHasFillableAttributes()
+    public function it_has_fillable_attributes()
     {
-        $model = new CustomMedia();
+        $model = new CustomMedia;
         $fillable = $model->getFillable();
 
         $this->assertIsArray($fillable);
         $this->assertNotEmpty($fillable);
-        
+
         // Test modern Laravel validation with actual fillable fields
         $requiredFields = ['name', 'file_name', 'mime_type', 'collection_name', 'size'];
-        
+
         // Check that fillable contains all required fields
         foreach ($requiredFields as $field) {
             $this->assertContains($field, $fillable, "Fillable should contain required field: {$field}");
         }
-        
+
         // Test using Arr::hasAll() - check if fillable array contains our required keys
         $fillableKeys = array_flip($fillable); // Convert to associative array for Arr::hasAll()
         $this->assertTrue(Arr::hasAll($fillableKeys, $requiredFields), 'Model should have all required fillable fields');
     }
 
     /** @test */
-    public function itHasProperCasts()
+    public function it_has_proper_casts()
     {
-        $model = new CustomMedia();
+        $model = new CustomMedia;
         $casts = $model->getCasts();
 
         $this->assertIsArray($casts);
-        
+
         // Test specific casts using modern Laravel techniques
         $expectedCasts = ['is_active', 'is_featured', 'is_processed'];
         $this->assertTrue(Arr::hasAll($casts, $expectedCasts), 'Model should have boolean casts for status fields');
     }
 
     /** @test */
-    public function itCanBeUpdated()
+    public function it_can_be_updated()
     {
         $model = CustomMedia::factory()->create();
 
         // Use only fillable attributes to avoid mass assignment exception
         $fillableAttributes = $model->getFillable();
         $newData = CustomMedia::factory()->make()->only($fillableAttributes);
-        
+
         // Remove any attributes that don't exist in the database
         $safeData = Arr::only($newData, ['name', 'file_name', 'mime_type', 'collection_name', 'size']);
-        
+
         $model->update($safeData);
 
         $this->assertDatabaseHas('custommedias', [
@@ -83,7 +82,7 @@ class CustomMediaTest extends TestCase
     }
 
     /** @test */
-    public function itCanBeDeleted()
+    public function it_can_be_deleted()
     {
         $model = CustomMedia::factory()->create();
         $modelId = $model->id;
@@ -97,14 +96,14 @@ class CustomMediaTest extends TestCase
     }
 
     /** @test */
-    public function itValidatesRequiredFieldsUsingArrHasAll()
+    public function it_validates_required_fields_using_arr_has_all()
     {
         $validData = [
             'name' => 'test-file',
             'file_name' => 'test.jpg',
             'mime_type' => 'image/jpeg',
             'collection_name' => 'uploads',
-            'size' => 1024
+            'size' => 1024,
         ];
 
         $this->assertTrue(CustomMedia::validateRequiredFields($validData));
@@ -118,13 +117,13 @@ class CustomMediaTest extends TestCase
     }
 
     /** @test */
-    public function itValidatesNestedPropertiesUsingDotNotation()
+    public function it_validates_nested_properties_using_dot_notation()
     {
         $validNestedData = [
             'custom_properties' => [
                 'alt_text' => 'Alternative text',
-                'caption' => 'Image caption'
-            ]
+                'caption' => 'Image caption',
+            ],
         ];
 
         $this->assertTrue(CustomMedia::validateNestedProperties($validNestedData));
@@ -133,23 +132,23 @@ class CustomMediaTest extends TestCase
             'custom_properties' => [
                 'alt_text' => 'Alternative text',
                 // missing caption
-            ]
+            ],
         ];
 
         $this->assertFalse(CustomMedia::validateNestedProperties($invalidNestedData));
     }
 
     /** @test */
-    public function itCanUseEnhancedFactoryValidation()
+    public function it_can_use_enhanced_factory_validation()
     {
         $this->expectNotToPerformAssertions();
-        
+
         // This should not throw an exception
         $model = CustomMedia::factory()->withValidation()->create();
     }
 
     /** @test */
-    public function itCanCreateSpecificMediaTypes(): void
+    public function it_can_create_specific_media_types(): void
     {
         // Test image media
         $imageMedia = CustomMedia::factory()->image()->create();

@@ -23,7 +23,7 @@ class OptimizeAssets extends Command
         $this->info('📦 Building optimized assets...');
         exec('npm run build', $output, $returnCode);
 
-        if (0 === $returnCode) {
+        if ($returnCode === 0) {
             $this->info('✅ Assets compiled successfully');
         } else {
             $this->error('❌ Asset compilation failed');

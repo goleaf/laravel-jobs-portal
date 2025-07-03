@@ -147,16 +147,16 @@ class CompanyStoreRequest extends FormRequest
     {
         $validator->after(function ($validator) {
             // Validate location hierarchy
-            if ($this->has('state_id') && !$this->has('country_id')) {
+            if ($this->has('state_id') && ! $this->has('country_id')) {
                 $validator->errors()->add('country_id', 'Country is required when state is specified.');
             }
 
-            if ($this->has('city_id') && !$this->has('state_id')) {
+            if ($this->has('city_id') && ! $this->has('state_id')) {
                 $validator->errors()->add('state_id', 'State is required when city is specified.');
             }
 
             // Validate revenue currency requirement
-            if ($this->has('revenue') && $this->revenue > 0 && !$this->has('revenue_currency_id')) {
+            if ($this->has('revenue') && $this->revenue > 0 && ! $this->has('revenue_currency_id')) {
                 $validator->errors()->add('revenue_currency_id', 'Currency is required when revenue is specified.');
             }
 
@@ -165,7 +165,7 @@ class CompanyStoreRequest extends FormRequest
             foreach ($socialFields as $field) {
                 if ($this->has($field) && $this->{$field}) {
                     $platform = str_replace('social_', '', $field);
-                    if (!str_contains($this->{$field}, $platform.'.com')) {
+                    if (! str_contains($this->{$field}, $platform.'.com')) {
                         $validator->errors()->add($field, "Please provide a valid {$platform} URL.");
                     }
                 }
@@ -193,7 +193,7 @@ class CompanyStoreRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Generate slug from name if not provided
-        if (!$this->slug && $this->name) {
+        if (! $this->slug && $this->name) {
             $this->merge([
                 'slug' => \Str::slug($this->name),
             ]);

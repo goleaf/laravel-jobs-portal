@@ -93,7 +93,7 @@ class FinalWorkingSeeder extends Seeder
         ];
 
         foreach ($directories as $directory) {
-            if (!Storage::exists($directory)) {
+            if (! Storage::exists($directory)) {
                 Storage::makeDirectory($directory);
                 $this->command->info("✅ Created directory: {$directory}");
             }
@@ -104,7 +104,7 @@ class FinalWorkingSeeder extends Seeder
     {
         $this->command->info('🌍 Seeding location data...');
 
-        if (0 == Country::count()) {
+        if (Country::count() == 0) {
             // Create 20 countries to avoid overwhelming the system
             $countries = Country::factory(20)->create();
             $this->seedingProgress['countries'] = $countries->count();
@@ -141,73 +141,73 @@ class FinalWorkingSeeder extends Seeder
         $this->command->info('📋 Seeding master data with safe limits...');
 
         // Industry data - limit to 15 (well below 40 available)
-        if (0 == Industry::count()) {
+        if (Industry::count() == 0) {
             Industry::factory(15)->create();
             $this->command->info('✅ Industries: 15');
         }
 
         // Company sizes - limit to 5
-        if (0 == CompanySize::count()) {
+        if (CompanySize::count() == 0) {
             CompanySize::factory(5)->create();
             $this->command->info('✅ Company sizes: 5');
         }
 
         // Functional areas - limit to 12
-        if (0 == FunctionalArea::count()) {
+        if (FunctionalArea::count() == 0) {
             FunctionalArea::factory(12)->create();
             $this->command->info('✅ Functional areas: 12');
         }
 
         // Career levels - limit to 6
-        if (0 == CareerLevel::count()) {
+        if (CareerLevel::count() == 0) {
             CareerLevel::factory(6)->create();
             $this->command->info('✅ Career levels: 6');
         }
 
         // Salary currencies - limit to 8
-        if (0 == SalaryCurrency::count()) {
+        if (SalaryCurrency::count() == 0) {
             SalaryCurrency::factory(8)->create();
             $this->command->info('✅ Salary currencies: 8');
         }
 
         // Salary periods - limit to 5
-        if (0 == SalaryPeriod::count()) {
+        if (SalaryPeriod::count() == 0) {
             SalaryPeriod::factory(5)->create();
             $this->command->info('✅ Salary periods: 5');
         }
 
         // Job types - limit to 6
-        if (0 == JobType::count()) {
+        if (JobType::count() == 0) {
             JobType::factory(6)->create();
             $this->command->info('✅ Job types: 6');
         }
 
         // Job shifts - limit to 4
-        if (0 == JobShift::count()) {
+        if (JobShift::count() == 0) {
             JobShift::factory(4)->create();
             $this->command->info('✅ Job shifts: 4');
         }
 
         // Required degree levels - limit to 8
-        if (0 == RequiredDegreeLevel::count()) {
+        if (RequiredDegreeLevel::count() == 0) {
             RequiredDegreeLevel::factory(8)->create();
             $this->command->info('✅ Degree levels: 8');
         }
 
         // Marital status - limit to 5
-        if (0 == MaritalStatus::count()) {
+        if (MaritalStatus::count() == 0) {
             MaritalStatus::factory(5)->create();
             $this->command->info('✅ Marital statuses: 5');
         }
 
         // Languages - limit to 10
-        if (0 == Language::count()) {
+        if (Language::count() == 0) {
             Language::factory(10)->create();
             $this->command->info('✅ Languages: 10');
         }
 
         // Ownership types - limit to 6
-        if (0 == OwnerShipType::count()) {
+        if (OwnerShipType::count() == 0) {
             OwnerShipType::factory(6)->create();
             $this->command->info('✅ Ownership types: 6');
         }
@@ -217,7 +217,7 @@ class FinalWorkingSeeder extends Seeder
     {
         $this->command->info('📂 Seeding job categories...');
 
-        if (0 == JobCategory::count()) {
+        if (JobCategory::count() == 0) {
             $categories = [
                 ['name' => 'Software Development', 'description' => 'Jobs related to software development and programming'],
                 ['name' => 'Data Science', 'description' => 'Data analysis, machine learning, and analytics roles'],
@@ -253,7 +253,7 @@ class FinalWorkingSeeder extends Seeder
     {
         $this->command->info('🛠️ Seeding skills...');
 
-        if (0 == Skill::count()) {
+        if (Skill::count() == 0) {
             $skillNames = [
                 'PHP', 'JavaScript', 'Python', 'Java', 'Laravel', 'React', 'Vue.js',
                 'MySQL', 'PostgreSQL', 'AWS', 'Docker', 'Git', 'Agile', 'Scrum',
@@ -282,7 +282,7 @@ class FinalWorkingSeeder extends Seeder
     {
         $this->command->info('👥 Seeding users...');
 
-        if (0 == User::count()) {
+        if (User::count() == 0) {
             // Create admin users
             $admins = User::factory(3)->create([
                 'user_type' => 1,
@@ -310,7 +310,7 @@ class FinalWorkingSeeder extends Seeder
     {
         $this->command->info('🏢 Seeding companies...');
 
-        if (0 == Company::count()) {
+        if (Company::count() == 0) {
             $employers = User::where('user_type', 2)->get();
             $industries = Industry::all();
             $companySizes = CompanySize::all();
@@ -338,7 +338,7 @@ class FinalWorkingSeeder extends Seeder
     {
         $this->command->info('💼 Seeding jobs...');
 
-        if (0 == Job::count()) {
+        if (Job::count() == 0) {
             $companies = Company::all();
             $jobCategories = JobCategory::all();
             $skills = Skill::all();
@@ -346,7 +346,7 @@ class FinalWorkingSeeder extends Seeder
             $jobs = collect();
 
             // Create 100 jobs
-            for ($i = 0; $i < 100; ++$i) {
+            for ($i = 0; $i < 100; $i++) {
                 $company = $companies->random();
 
                 $job = Job::factory()->create([
@@ -372,7 +372,7 @@ class FinalWorkingSeeder extends Seeder
     {
         $this->command->info('👨‍💼 Seeding candidates...');
 
-        if (0 == Candidate::count()) {
+        if (Candidate::count() == 0) {
             $candidateUsers = User::where('user_type', 3)->get();
             $skills = Skill::all();
 
@@ -399,24 +399,23 @@ class FinalWorkingSeeder extends Seeder
     {
         $this->command->info('📝 Seeding job applications...');
 
-        if (0 == JobApplication::count()) {
+        if (JobApplication::count() == 0) {
             $candidates = Candidate::all();
             $jobs = Job::where('status', 1)->get();
 
             $applications = collect();
 
             // Create 200 applications
-            for ($i = 0; $i < 200; ++$i) {
+            for ($i = 0; $i < 200; $i++) {
                 $candidate = $candidates->random();
                 $job = $jobs->random();
 
                 // Check for existing application
                 $exists = JobApplication::where('candidate_id', $candidate->id)
                     ->where('job_id', $job->id)
-                    ->exists()
-                ;
+                    ->exists();
 
-                if (!$exists) {
+                if (! $exists) {
                     $application = JobApplication::factory()->create([
                         'candidate_id' => $candidate->id,
                         'job_id' => $job->id,
@@ -436,7 +435,7 @@ class FinalWorkingSeeder extends Seeder
     {
         $this->command->info('💳 Seeding subscription plans...');
 
-        if (0 == Plan::count()) {
+        if (Plan::count() == 0) {
             $plans = Plan::factory(3)->create();
 
             $this->seedingProgress['plans'] = $plans->count();

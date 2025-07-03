@@ -1,45 +1,14 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminDashboardController;
-use App\Http\Controllers\Admin\BrandingSliderController;
-use App\Http\Controllers\Admin\CmsController;
-use App\Http\Controllers\Admin\EmailTemplateController;
-use App\Http\Controllers\Admin\FunctionalAreaController;
-use App\Http\Controllers\Admin\HeaderSliderController;
-use App\Http\Controllers\Admin\ImageSliderController;
-use App\Http\Controllers\Admin\MasterDataController;
-use App\Http\Controllers\Admin\OwnershipTypeController;
-use App\Http\Controllers\Admin\ReportedJobController;
-use App\Http\Controllers\Admin\SalaryCurrencyController;
-use App\Http\Controllers\Admin\SalaryPeriodController;
-use App\Http\Controllers\Admin\TaxonomyController;
-use App\Http\Controllers\Admin\TermController;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Candidate\ApplicationController;
 use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\CompanySizeController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Front\BlogCommentController;
-use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\RealTimeController;
-use App\Http\Controllers\SitemapController;
-use App\Http\Controllers\SubscriberController;
-use App\Http\Controllers\TranslationManagerController;
-use App\Http\Controllers\Web\CandidateController;
-use App\Http\Controllers\Web\HomeController;
-use App\Http\Controllers\Web\JobController;
 use App\Http\Controllers\Web\TransactionController;
 use App\Models\Company;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Validation\Rules\Password;
-use Illuminate\Support\Facades\Cache;
-use App\Http\Controllers\HabrViewsDemoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -138,11 +107,11 @@ Route::get('/help', function () {
     return view('app', ['title' => 'Help | Job Portal']);
 })->name('help.index');
 
-Route::get('/terms', function() {
+Route::get('/terms', function () {
     return view('app', ['title' => 'Terms | Job Portal']);
 })->name('terms');
 
-Route::get('/privacy', function() {
+Route::get('/privacy', function () {
     return view('app', ['title' => 'Privacy | Job Portal']);
 })->name('privacy');
 

@@ -9,7 +9,7 @@ use Tests\TestCase;
 
 /**
  * Simple Settings Management API Test
- * 
+ *
  * Basic tests to verify core functionality works without complex dependencies.
  */
 class SimpleSettingsTest extends TestCase
@@ -21,10 +21,10 @@ class SimpleSettingsTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create test user
         $this->user = User::factory()->create();
-        
+
         // Authenticate user
         Sanctum::actingAs($this->user);
     }
@@ -36,14 +36,14 @@ class SimpleSettingsTest extends TestCase
         $response = $this->withoutMiddleware()->getJson('/api/public/settings/models');
 
         $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        'supported_models',
-                        'api_version',
-                    ],
-                    'message',
-                ]);
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    'supported_models',
+                    'api_version',
+                ],
+                'message',
+            ]);
 
         $this->assertTrue($response->json('success'));
     }
@@ -54,15 +54,15 @@ class SimpleSettingsTest extends TestCase
         $response = $this->getJson('/api/settings/docs/');
 
         $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        'api_version',
-                        'title',
-                        'supported_models',
-                    ],
-                    'message',
-                ]);
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    'api_version',
+                    'title',
+                    'supported_models',
+                ],
+                'message',
+            ]);
 
         $this->assertTrue($response->json('success'));
     }
@@ -75,12 +75,12 @@ class SimpleSettingsTest extends TestCase
         // Check if response is successful
         if ($response->status() !== 200) {
             // Print response content for debugging
-            dump('Response Status: ' . $response->status());
-            dump('Response Content: ' . $response->content());
+            dump('Response Status: '.$response->status());
+            dump('Response Content: '.$response->content());
         }
 
         $response->assertStatus(200);
-        
+
         $this->assertTrue($response->json('success'));
         $this->assertArrayHasKey('supported_models', $response->json('data'));
     }
@@ -91,15 +91,15 @@ class SimpleSettingsTest extends TestCase
         $response = $this->getJson('/api/settings/user/schema');
 
         $response->assertStatus(200)
-                ->assertJsonStructure([
-                    'success',
-                    'data' => [
-                        'model_type',
-                        'model_name',
-                        'supports_settings',
-                    ],
-                    'message',
-                ]);
+            ->assertJsonStructure([
+                'success',
+                'data' => [
+                    'model_type',
+                    'model_name',
+                    'supports_settings',
+                ],
+                'message',
+            ]);
 
         $this->assertEquals('App\Models\User', $response->json('data.model_type'));
         $this->assertEquals('User', $response->json('data.model_name'));
@@ -120,8 +120,8 @@ class SimpleSettingsTest extends TestCase
 
         // Check if update was successful
         if ($updateResponse->status() !== 200) {
-            dump('Update Response Status: ' . $updateResponse->status());
-            dump('Update Response Content: ' . $updateResponse->content());
+            dump('Update Response Status: '.$updateResponse->status());
+            dump('Update Response Content: '.$updateResponse->content());
         }
 
         $updateResponse->assertStatus(200);
@@ -131,8 +131,8 @@ class SimpleSettingsTest extends TestCase
         $getResponse = $this->getJson("/api/settings/user/{$this->user->id}");
 
         if ($getResponse->status() !== 200) {
-            dump('Get Response Status: ' . $getResponse->status());
-            dump('Get Response Content: ' . $getResponse->content());
+            dump('Get Response Status: '.$getResponse->status());
+            dump('Get Response Content: '.$getResponse->content());
         }
 
         $getResponse->assertStatus(200);
@@ -141,12 +141,12 @@ class SimpleSettingsTest extends TestCase
         // Debug: Let's see what we actually get
         $settings = $getResponse->json('data.settings');
         dump('Actual settings returned:', $settings);
-        
+
         // Verify settings structure and check that our unique setting was stored
         $this->assertIsArray($settings);
-        
+
         // More flexible test - check if our data is somewhere in the settings
         $settingsJson = json_encode($settings);
         $this->assertStringContainsString('unique_value_12345', $settingsJson, 'Settings should contain our test data');
     }
-} 
+}

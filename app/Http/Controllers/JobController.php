@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\IndexJobRequest;
 use App\Http\Requests\CreateJobRequest;
-use App\Http\Requests\ShowJobRequest;
-use App\Http\Requests\EditJobRequest;
 use App\Http\Requests\DestroyJobRequest;
+use App\Http\Requests\EditJobRequest;
+use App\Http\Requests\IndexJobRequest;
 use App\Http\Requests\JobRequest;
+use App\Http\Requests\ShowJobRequest;
 use App\Models\Job;
 use App\Repositories\JobRepository;
-use Illuminate\Support\Facades\Gate;
-use JustBetter\UniqueValues\Support\UniqueValue;
-use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
+use JustBetter\UniqueValues\Support\UniqueValue;
 
 class JobController extends Controller
 {
@@ -54,6 +54,7 @@ class JobController extends Controller
             ->generator(function (int $attempt): string {
                 $year = Carbon::now()->format('Y');
                 $baseNumber = str_pad((string) (1000 + $attempt), 4, '0', STR_PAD_LEFT);
+
                 return "JOB-{$year}-{$baseNumber}";
             })
             ->generate();
@@ -64,6 +65,7 @@ class JobController extends Controller
             ->attempts(15)
             ->generator(function (int $attempt) use ($request): string {
                 $baseSlug = Str::slug($request->job_title);
+
                 return $attempt === 0 ? $baseSlug : "{$baseSlug}-{$attempt}";
             })
             ->generate();
@@ -78,7 +80,7 @@ class JobController extends Controller
         return response()->json([
             'success' => true,
             'job' => $job,
-            'message' => __('Job created successfully with reference: :reference', ['reference' => $jobReference])
+            'message' => __('Job created successfully with reference: :reference', ['reference' => $jobReference]),
         ]);
     }
 
@@ -124,6 +126,7 @@ class JobController extends Controller
             ->generator(function (int $attempt) use ($jobId, $candidateId): string {
                 $timestamp = Carbon::now()->format('ymd');
                 $suffix = $attempt > 0 ? "-{$attempt}" : '';
+
                 return "APP-{$timestamp}-{$jobId}-{$candidateId}{$suffix}";
             })
             ->generate();

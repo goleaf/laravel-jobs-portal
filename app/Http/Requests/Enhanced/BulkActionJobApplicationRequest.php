@@ -45,7 +45,7 @@ class BulkActionJobApplicationRequest extends FormRequest
                     'export',
                     'mark_reviewed',
                     'update_rating',
-                    'add_notes'
+                    'add_notes',
                 ]),
             ],
 
@@ -61,7 +61,7 @@ class BulkActionJobApplicationRequest extends FormRequest
                 'integer',
                 'exists:job_applications,id',
                 function ($attribute, $value, $fail) {
-                    if (!$this->validateApplicationAccess($value)) {
+                    if (! $this->validateApplicationAccess($value)) {
                         $fail(__('validation.unauthorized_application_access'));
                     }
                 },
@@ -78,7 +78,7 @@ class BulkActionJobApplicationRequest extends FormRequest
                 'integer',
                 'exists:jobs,id',
                 function ($attribute, $value, $fail) {
-                    if (!$this->validateJobOwnership($value)) {
+                    if (! $this->validateJobOwnership($value)) {
                         $fail(__('validation.unauthorized_job_access'));
                     }
                 },
@@ -165,7 +165,7 @@ class BulkActionJobApplicationRequest extends FormRequest
                 'integer',
                 'exists:job_stages,id',
                 function ($attribute, $value, $fail) {
-                    if ($this->input('action') === 'move_to_stage' && !$this->validateStageAccess($value)) {
+                    if ($this->input('action') === 'move_to_stage' && ! $this->validateStageAccess($value)) {
                         $fail(__('validation.unauthorized_stage_access'));
                     }
                 },
@@ -233,7 +233,7 @@ class BulkActionJobApplicationRequest extends FormRequest
                 'required_if:action,schedule_interview',
                 'date',
                 'after:now',
-                'before:' . now()->addMonths(6)->format('Y-m-d'),
+                'before:'.now()->addMonths(6)->format('Y-m-d'),
             ],
 
             'interview_time' => [
@@ -341,7 +341,7 @@ class BulkActionJobApplicationRequest extends FormRequest
                     'availability',
                     'notes',
                     'interview_scheduled',
-                    'interview_feedback'
+                    'interview_feedback',
                 ]),
             ],
 
@@ -620,23 +620,23 @@ class BulkActionJobApplicationRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Set default values
-        if (!$this->has('batch_size')) {
+        if (! $this->has('batch_size')) {
             $this->merge(['batch_size' => 50]);
         }
 
-        if (!$this->has('priority')) {
+        if (! $this->has('priority')) {
             $this->merge(['priority' => 'normal']);
         }
 
-        if (!$this->has('note_visibility')) {
+        if (! $this->has('note_visibility')) {
             $this->merge(['note_visibility' => 'internal']);
         }
 
-        if (!$this->has('data_retention_policy')) {
+        if (! $this->has('data_retention_policy')) {
             $this->merge(['data_retention_policy' => 'standard']);
         }
 
-        if (!$this->has('interview_duration')) {
+        if (! $this->has('interview_duration')) {
             $this->merge(['interview_duration' => 60]); // 1 hour default
         }
 
@@ -646,7 +646,7 @@ class BulkActionJobApplicationRequest extends FormRequest
             'process_async', 'send_confirmation', 'notify_candidates', 'notify_team',
             'requires_approval', 'compliance_checked', 'gdpr_compliant',
             'chunk_processing', 'create_backup', 'allow_rollback',
-            'trigger_webhooks', 'external_system_sync', 'include_attachments'
+            'trigger_webhooks', 'external_system_sync', 'include_attachments',
         ];
 
         foreach ($booleanFields as $field) {
@@ -654,18 +654,18 @@ class BulkActionJobApplicationRequest extends FormRequest
                 if (strpos($field, '.') !== false) {
                     // Handle nested fields
                     $parts = explode('.', $field);
-                    $value = $this->input($parts[0] . '.' . $parts[1]);
+                    $value = $this->input($parts[0].'.'.$parts[1]);
                     if ($value !== null) {
                         $this->merge([
                             $parts[0] => array_merge(
                                 $this->input($parts[0], []),
                                 [$parts[1] => filter_var($value, FILTER_VALIDATE_BOOLEAN)]
-                            )
+                            ),
                         ]);
                     }
                 } else {
                     $this->merge([
-                        $field => filter_var($this->input($field), FILTER_VALIDATE_BOOLEAN)
+                        $field => filter_var($this->input($field), FILTER_VALIDATE_BOOLEAN),
                     ]);
                 }
             }
@@ -674,42 +674,42 @@ class BulkActionJobApplicationRequest extends FormRequest
         // Ensure arrays are properly formatted
         $arrayFields = [
             'application_ids', 'selection_criteria.current_status', 'custom_variables',
-            'interviewer_ids', 'export_fields', 'approver_ids', 'webhook_urls', 'sync_systems'
+            'interviewer_ids', 'export_fields', 'approver_ids', 'webhook_urls', 'sync_systems',
         ];
 
         foreach ($arrayFields as $field) {
             if (strpos($field, '.') !== false) {
                 // Handle nested fields
                 $parts = explode('.', $field);
-                $value = $this->input($parts[0] . '.' . $parts[1]);
-                if ($value !== null && !is_array($value)) {
+                $value = $this->input($parts[0].'.'.$parts[1]);
+                if ($value !== null && ! is_array($value)) {
                     $this->merge([
                         $parts[0] => array_merge(
                             $this->input($parts[0], []),
                             [$parts[1] => array_filter(explode(',', $value))]
-                        )
+                        ),
                     ]);
                 }
             } else {
-                if ($this->has($field) && !is_array($this->input($field))) {
+                if ($this->has($field) && ! is_array($this->input($field))) {
                     $this->merge([
-                        $field => array_filter(explode(',', $this->input($field)))
+                        $field => array_filter(explode(',', $this->input($field))),
                     ]);
                 }
             }
         }
 
         // Set default export fields if export action is selected
-        if ($this->input('action') === 'export' && !$this->has('export_fields')) {
+        if ($this->input('action') === 'export' && ! $this->has('export_fields')) {
             $this->merge([
                 'export_fields' => [
-                    'candidate_name', 'email', 'status', 'applied_date', 'rating'
-                ]
+                    'candidate_name', 'email', 'status', 'applied_date', 'rating',
+                ],
             ]);
         }
 
         // Auto-enable GDPR compliance for delete and export actions
-        if (in_array($this->input('action'), ['delete', 'export']) && !$this->has('gdpr_compliant')) {
+        if (in_array($this->input('action'), ['delete', 'export']) && ! $this->has('gdpr_compliant')) {
             $this->merge(['gdpr_compliant' => true]);
         }
 
@@ -760,11 +760,11 @@ class BulkActionJobApplicationRequest extends FormRequest
         $inappropriateWords = [
             'spam', 'scam', 'fraud', 'fake', 'illegal', 'hack', 'virus',
             'malware', 'phishing', 'adult', 'xxx', 'porn', 'sex', 'drug',
-            'weapon', 'violence', 'hate', 'racist', 'terrorist', 'discrimin'
+            'weapon', 'violence', 'hate', 'racist', 'terrorist', 'discrimin',
         ];
 
         $lowercaseContent = strtolower($content);
-        
+
         foreach ($inappropriateWords as $word) {
             if (strpos($lowercaseContent, $word) !== false) {
                 return true;
@@ -803,4 +803,4 @@ class BulkActionJobApplicationRequest extends FormRequest
         // For now, returning true as per user requirements (no auth system)
         return \DB::table('job_stages')->where('id', $stageId)->exists();
     }
-} 
+}

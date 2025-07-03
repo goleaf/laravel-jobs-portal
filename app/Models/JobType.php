@@ -15,17 +15,17 @@ use Spatie\Activitylog\Traits\LogsActivity;
 /**
  * Class JobType.
  *
- * @property int              $id
- * @property string           $name
- * @property string           $description
- * @property bool             $is_default
- * @property bool             $is_active
- * @property null|Carbon      $created_at
- * @property null|Carbon      $updated_at
+ * @property int $id
+ * @property string $name
+ * @property string $description
+ * @property bool $is_default
+ * @property bool $is_active
+ * @property null|Carbon $created_at
+ * @property null|Carbon $updated_at
  * @property Collection|Job[] $jobs
- * @property null|int         $jobs_count
- * @property mixed            $usage_count
- * @property mixed            $formatted_usage_stats
+ * @property null|int $jobs_count
+ * @property mixed $usage_count
+ * @property mixed $formatted_usage_stats
  *
  * @method static Builder|JobType newModelQuery()
  * @method static Builder|JobType newQuery()
@@ -63,8 +63,8 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class JobType extends Model
 {
     use HasFactory;
-    use LogsActivity;
     use HasSettingsField;
+    use LogsActivity;
 
     /**
      * The attributes that are mass assignable.
@@ -143,18 +143,18 @@ class JobType extends Model
         'display.color_scheme' => 'string|in:default,blue,green,red,purple',
         'display.featured_placement' => 'boolean',
         'display.priority_order' => 'integer|min:0|max:100',
-        
+
         'filtering.enable_filtering' => 'boolean',
         'filtering.default_sort' => 'string|in:name,job_count,recent,popular',
         'filtering.group_similar_types' => 'boolean',
         'filtering.min_jobs_to_show' => 'integer|min:0|max:100',
         'filtering.hide_empty_types' => 'boolean',
-        
+
         'features.enable_job_alerts' => 'boolean',
         'features.enable_saved_searches' => 'boolean',
         'features.enable_salary_insights' => 'boolean',
         'features.premium_features_enabled' => 'boolean',
-        
+
         'analytics.track_views' => 'boolean',
         'analytics.track_applications' => 'boolean',
         'analytics.google_analytics_enabled' => 'boolean',
@@ -168,8 +168,7 @@ class JobType extends Model
         return LogOptions::defaults()
             ->logOnly(['name', 'description', 'is_active', 'is_default'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs()
-        ;
+            ->dontSubmitEmptyLogs();
     }
 
     /**
@@ -261,8 +260,7 @@ class JobType extends Model
     public function scopeSearch(Builder $query, string $term): Builder
     {
         return $query->where('name', 'like', "%{$term}%")
-            ->orWhere('description', 'like', "%{$term}%")
-        ;
+            ->orWhere('description', 'like', "%{$term}%");
     }
 
     /**
@@ -280,8 +278,7 @@ class JobType extends Model
     {
         return $query->withCount('jobs')
             ->orderBy('jobs_count', 'desc')
-            ->limit($limit)
-        ;
+            ->limit($limit);
     }
 
     /**
@@ -302,8 +299,7 @@ class JobType extends Model
                 $q->where('created_at', '>=', now()->subDays(30));
             },
         ])
-            ->orderByDesc('jobs_count')
-        ;
+            ->orderByDesc('jobs_count');
     }
 
     /**
@@ -312,8 +308,7 @@ class JobType extends Model
     public function scopeMinUsage(Builder $query, int $count = 1): Builder
     {
         return $query->withCount('jobs')
-            ->having('jobs_count', '>=', $count)
-        ;
+            ->having('jobs_count', '>=', $count);
     }
 
     /**
@@ -323,8 +318,7 @@ class JobType extends Model
     {
         return $query->withCount('jobs')
             ->having('jobs_count', '>=', $minJobs)
-            ->orderByDesc('jobs_count')
-        ;
+            ->orderByDesc('jobs_count');
     }
 
     /**
@@ -334,8 +328,7 @@ class JobType extends Model
     {
         return $query->where('name', 'like', '%full%time%')
             ->orWhere('name', 'like', '%full-time%')
-            ->orWhere('name', 'like', '%fulltime%')
-        ;
+            ->orWhere('name', 'like', '%fulltime%');
     }
 
     /**
@@ -345,8 +338,7 @@ class JobType extends Model
     {
         return $query->where('name', 'like', '%part%time%')
             ->orWhere('name', 'like', '%part-time%')
-            ->orWhere('name', 'like', '%parttime%')
-        ;
+            ->orWhere('name', 'like', '%parttime%');
     }
 
     /**
@@ -355,8 +347,7 @@ class JobType extends Model
     public function scopeContract(Builder $query): Builder
     {
         return $query->where('name', 'like', '%contract%')
-            ->orWhere('name', 'like', '%contractor%')
-        ;
+            ->orWhere('name', 'like', '%contractor%');
     }
 
     /**
@@ -365,8 +356,7 @@ class JobType extends Model
     public function scopeTemporary(Builder $query): Builder
     {
         return $query->where('name', 'like', '%temporary%')
-            ->orWhere('name', 'like', '%temp%')
-        ;
+            ->orWhere('name', 'like', '%temp%');
     }
 
     /**
@@ -375,8 +365,7 @@ class JobType extends Model
     public function scopeInternship(Builder $query): Builder
     {
         return $query->where('name', 'like', '%internship%')
-            ->orWhere('name', 'like', '%intern%')
-        ;
+            ->orWhere('name', 'like', '%intern%');
     }
 
     /**
@@ -385,8 +374,7 @@ class JobType extends Model
     public function scopeFreelance(Builder $query): Builder
     {
         return $query->where('name', 'like', '%freelance%')
-            ->orWhere('name', 'like', '%freelancer%')
-        ;
+            ->orWhere('name', 'like', '%freelancer%');
     }
 
     /**
@@ -396,8 +384,7 @@ class JobType extends Model
     {
         return $query->where('name', 'like', '%remote%')
             ->orWhere('name', 'like', '%work from home%')
-            ->orWhere('name', 'like', '%wfh%')
-        ;
+            ->orWhere('name', 'like', '%wfh%');
     }
 
     /**
@@ -413,7 +400,7 @@ class JobType extends Model
      */
     public function isFullTime(): bool
     {
-        return false !== stripos($this->name, 'full') && false !== stripos($this->name, 'time');
+        return stripos($this->name, 'full') !== false && stripos($this->name, 'time') !== false;
     }
 
     /**
@@ -421,7 +408,7 @@ class JobType extends Model
      */
     public function isPartTime(): bool
     {
-        return false !== stripos($this->name, 'part') && false !== stripos($this->name, 'time');
+        return stripos($this->name, 'part') !== false && stripos($this->name, 'time') !== false;
     }
 
     /**
@@ -429,9 +416,9 @@ class JobType extends Model
      */
     public function isRemote(): bool
     {
-        return false !== stripos($this->name, 'remote')
-               || false !== stripos($this->name, 'work from home')
-               || false !== stripos($this->name, 'wfh');
+        return stripos($this->name, 'remote') !== false
+               || stripos($this->name, 'work from home') !== false
+               || stripos($this->name, 'wfh') !== false;
     }
 
     /**
@@ -445,8 +432,7 @@ class JobType extends Model
                 ->withCount('jobs')
                 ->orderByDesc('jobs_count')
                 ->limit($limit)
-                ->get()
-            ;
+                ->get();
         });
     }
 

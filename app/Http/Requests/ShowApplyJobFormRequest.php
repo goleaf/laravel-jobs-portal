@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Gate;
 
 class ShowApplyJobFormRequest extends FormRequest
 {
@@ -40,4 +39,4 @@ class ShowApplyJobFormRequest extends FormRequest
             'jobId.exists' => __('validation.exists', ['attribute' => 'job ID']),
         ];
     }
-} 
+}

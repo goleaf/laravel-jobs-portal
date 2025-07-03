@@ -36,7 +36,7 @@ class GetCitiesCompanyRequest extends FormRequest
                 'exists:states,id',
                 function ($attribute, $value, $fail) {
                     // Additional business logic validation
-                    if ($value && !$this->validateStateExists($value)) {
+                    if ($value && ! $this->validateStateExists($value)) {
                         $fail(__('validation.state_not_found'));
                     }
                 },
@@ -108,23 +108,23 @@ class GetCitiesCompanyRequest extends FormRequest
             'state_id.integer' => __('validation.integer', ['attribute' => __('validation.attributes.state_id')]),
             'state_id.min' => __('validation.min_value', ['attribute' => __('validation.attributes.state_id'), 'min' => 1]),
             'state_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.state_id')]),
-            
+
             'country_id.integer' => __('validation.integer', ['attribute' => __('validation.attributes.country_id')]),
             'country_id.exists' => __('validation.exists', ['attribute' => __('validation.attributes.country_id')]),
-            
+
             'page.integer' => __('validation.integer', ['attribute' => __('validation.attributes.page')]),
             'page.min' => __('validation.min_value', ['attribute' => __('validation.attributes.page'), 'min' => 1]),
             'page.max' => __('validation.max_value', ['attribute' => __('validation.attributes.page'), 'max' => 1000]),
-            
+
             'per_page.integer' => __('validation.integer', ['attribute' => __('validation.attributes.per_page')]),
             'per_page.min' => __('validation.min_value', ['attribute' => __('validation.attributes.per_page'), 'min' => 1]),
             'per_page.max' => __('validation.max_value', ['attribute' => __('validation.attributes.per_page'), 'max' => 100]),
-            
+
             'search.string' => __('validation.string', ['attribute' => __('validation.attributes.search')]),
             'search.min' => __('validation.min_chars', ['attribute' => __('validation.attributes.search'), 'min' => 1]),
             'search.max' => __('validation.max_chars', ['attribute' => __('validation.attributes.search'), 'max' => 100]),
             'search.regex' => __('validation.search_format', ['attribute' => __('validation.attributes.search')]),
-            
+
             'sort_by.in' => __('validation.in_list', ['attribute' => __('validation.attributes.sort_by'), 'values' => 'name, created_at, id']),
             'sort_direction.in' => __('validation.in_list', ['attribute' => __('validation.attributes.sort_direction'), 'values' => 'asc, desc']),
             'status.in' => __('validation.in_list', ['attribute' => __('validation.attributes.status'), 'values' => 'active, inactive, all']),
@@ -196,8 +196,7 @@ class GetCitiesCompanyRequest extends FormRequest
     /**
      * Custom validation method to check if state exists and is active.
      *
-     * @param mixed $stateId
-     * @return bool
+     * @param  mixed  $stateId
      */
     private function validateStateExists($stateId): bool
     {

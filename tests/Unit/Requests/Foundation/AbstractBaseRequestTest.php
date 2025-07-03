@@ -2,14 +2,14 @@
 
 namespace Tests\Unit\Requests\Foundation;
 
-use Tests\TestCase;
 use App\Http\Requests\Foundation\AbstractBaseRequest;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Validator;
+use Tests\TestCase;
 
 /**
  * AbstractBaseRequest Test Suite
- * 
+ *
  * Tests the foundation validation architecture
  */
 class AbstractBaseRequestTest extends TestCase
@@ -19,9 +19,10 @@ class AbstractBaseRequestTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        
+
         // Create anonymous test request for testing
-        $this->testRequest = new class extends AbstractBaseRequest {
+        $this->testRequest = new class extends AbstractBaseRequest
+        {
             protected function getDomainRules(): array
             {
                 return [
@@ -65,7 +66,7 @@ class AbstractBaseRequestTest extends TestCase
         $reflection = new \ReflectionClass($this->testRequest);
         $property = $reflection->getProperty('securityLevel');
         $property->setAccessible(true);
-        
+
         $this->assertEquals('medium', $property->getValue($this->testRequest));
     }
 
@@ -74,11 +75,11 @@ class AbstractBaseRequestTest extends TestCase
     {
         $this->testRequest->replace([
             'test_field' => 'valid_value',
-            'email_field' => 'test@example.com'
+            'email_field' => 'test@example.com',
         ]);
 
         $rules = $this->testRequest->rules();
-        
+
         $this->assertArrayHasKey('test_field', $rules);
         $this->assertArrayHasKey('email_field', $rules);
         $this->assertContains('required', $rules['test_field']);
@@ -90,11 +91,11 @@ class AbstractBaseRequestTest extends TestCase
     {
         $data = [
             'test_field' => 'Valid Test Value',
-            'email_field' => 'test@example.com'
+            'email_field' => 'test@example.com',
         ];
 
         $validator = Validator::make($data, $this->testRequest->rules());
-        
+
         $this->assertTrue($validator->passes());
     }
 
@@ -103,11 +104,11 @@ class AbstractBaseRequestTest extends TestCase
     {
         $data = [
             'test_field' => '', // Required field empty
-            'email_field' => 'invalid-email' // Invalid email format
+            'email_field' => 'invalid-email', // Invalid email format
         ];
 
         $validator = Validator::make($data, $this->testRequest->rules());
-        
+
         $this->assertTrue($validator->fails());
         $this->assertArrayHasKey('test_field', $validator->errors()->toArray());
         $this->assertArrayHasKey('email_field', $validator->errors()->toArray());
@@ -118,15 +119,15 @@ class AbstractBaseRequestTest extends TestCase
     {
         $data = [
             'test_field' => '',
-            'email_field' => 'invalid-email'
+            'email_field' => 'invalid-email',
         ];
 
         $validator = Validator::make(
-            $data, 
+            $data,
             $this->testRequest->rules(),
             $this->testRequest->messages()
         );
-        
+
         $this->assertTrue($validator->fails());
         $this->assertContains('Test field is required', $validator->errors()->get('test_field'));
         $this->assertContains('Email field must be valid email', $validator->errors()->get('email_field'));
@@ -136,7 +137,7 @@ class AbstractBaseRequestTest extends TestCase
     public function it_applies_custom_attributes()
     {
         $attributes = $this->testRequest->attributes();
-        
+
         $this->assertArrayHasKey('test_field', $attributes);
         $this->assertArrayHasKey('email_field', $attributes);
         $this->assertEquals('Test Field', $attributes['test_field']);
@@ -149,7 +150,7 @@ class AbstractBaseRequestTest extends TestCase
         $reflection = new \ReflectionClass($this->testRequest);
         $property = $reflection->getProperty('performanceTracking');
         $property->setAccessible(true);
-        
+
         $this->assertTrue($property->getValue($this->testRequest));
     }
 
@@ -164,10 +165,10 @@ class AbstractBaseRequestTest extends TestCase
     {
         $method = new \ReflectionMethod($this->testRequest, 'getRequestId');
         $method->setAccessible(true);
-        
+
         $requestId1 = $method->invoke($this->testRequest);
         $requestId2 = $method->invoke($this->testRequest);
-        
+
         $this->assertNotEquals($requestId1, $requestId2);
         $this->assertIsString($requestId1);
         $this->assertTrue(strlen($requestId1) > 10);
@@ -178,9 +179,9 @@ class AbstractBaseRequestTest extends TestCase
     {
         $method = new \ReflectionMethod($this->testRequest, 'getSecurityLevel');
         $method->setAccessible(true);
-        
+
         $securityLevel = $method->invoke($this->testRequest);
-        
+
         $this->assertEquals('medium', $securityLevel);
     }
 
@@ -189,14 +190,14 @@ class AbstractBaseRequestTest extends TestCase
     {
         $data = [
             'test_field' => '  Trim This  ',
-            'email_field' => '<script>Test@EXAMPLE.COM</script>'
+            'email_field' => '<script>Test@EXAMPLE.COM</script>',
         ];
 
         $method = new \ReflectionMethod($this->testRequest, 'applySanitization');
         $method->setAccessible(true);
-        
+
         $sanitized = $method->invoke($this->testRequest, $data);
-        
+
         $this->assertEquals('Trim This', $sanitized['test_field']);
         $this->assertEquals('Test@EXAMPLE.COM', $sanitized['email_field']);
     }
@@ -207,9 +208,9 @@ class AbstractBaseRequestTest extends TestCase
         $reflection = new \ReflectionClass($this->testRequest);
         $property = $reflection->getProperty('validationModules');
         $property->setAccessible(true);
-        
+
         $modules = $property->getValue($this->testRequest);
-        
+
         $this->assertIsArray($modules);
     }
-} 
+}

@@ -84,9 +84,9 @@ class DataScienceService
 
         // Remove incomplete performance records
         $incompleteIndices = $data->filter(function ($record) {
-            return !isset($record['response_time'])
-                   || !isset($record['memory_usage'])
-                   || !isset($record['cpu_usage']);
+            return ! isset($record['response_time'])
+                   || ! isset($record['memory_usage'])
+                   || ! isset($record['cpu_usage']);
         })->keys();
 
         $data->forget($incompleteIndices->toArray());
@@ -192,7 +192,7 @@ class DataScienceService
         // Remove null/empty values
         $emptyIndices = $data->filter(function ($record, $index) {
             return empty($record)
-                   || (is_array($record) && 0 === count(array_filter($record)));
+                   || (is_array($record) && count(array_filter($record)) === 0);
         })->keys();
         $data->forget($emptyIndices->toArray());
 
@@ -234,7 +234,9 @@ class DataScienceService
                 $numericValues = array_filter($record, 'is_numeric');
                 if (count($numericValues) > 0) {
                     $mean = array_sum($numericValues) / count($numericValues);
-                    $variance = array_sum(array_map(function ($x) use ($mean) { return pow($x - $mean, 2); }, $numericValues)) / count($numericValues);
+                    $variance = array_sum(array_map(function ($x) use ($mean) {
+                        return pow($x - $mean, 2);
+                    }, $numericValues)) / count($numericValues);
                     $stdDev = sqrt($variance);
 
                     foreach ($numericValues as $value) {
@@ -324,7 +326,7 @@ class DataScienceService
         $score = 1.0;
         $fieldCount = count($record);
         $nullCount = count(array_filter($record, fn ($value) => is_null($value)));
-        $emptyCount = count(array_filter($record, fn ($value) => '' === $value));
+        $emptyCount = count(array_filter($record, fn ($value) => $value === ''));
 
         // Penalize for missing data
         $score -= ($nullCount / $fieldCount) * 0.3;

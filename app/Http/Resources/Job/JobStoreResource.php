@@ -70,7 +70,7 @@ class JobStoreResource extends JsonResource
                     'name' => $this->jobShift->name ?? null,
                 ]),
             ],
-            'salary' => $this->when(!$this->hide_salary, [
+            'salary' => $this->when(! $this->hide_salary, [
                 'from' => $this->salary_from,
                 'to' => $this->salary_to,
                 'currency' => [
@@ -225,10 +225,10 @@ class JobStoreResource extends JsonResource
      */
     protected function getFormattedExperience(): string
     {
-        if (0 == $this->experience) {
+        if ($this->experience == 0) {
             return __('jobs.experience.entry_level');
         }
-        if (1 == $this->experience) {
+        if ($this->experience == 1) {
             return __('jobs.experience.one_year');
         }
 
@@ -253,7 +253,7 @@ class JobStoreResource extends JsonResource
      */
     protected function getDaysUntilExpiry(): ?int
     {
-        if (!$this->job_expiry_date) {
+        if (! $this->job_expiry_date) {
             return null;
         }
 
@@ -272,7 +272,7 @@ class JobStoreResource extends JsonResource
      */
     protected function canUserEdit(): bool
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
 
@@ -294,12 +294,12 @@ class JobStoreResource extends JsonResource
      */
     protected function canUserDelete(): bool
     {
-        if (!$this->canUserEdit()) {
+        if (! $this->canUserEdit()) {
             return false;
         }
 
         // Cannot delete if there are active applications
-        return 0 === $this->getApplicationsCount();
+        return $this->getApplicationsCount() === 0;
     }
 
     /**
@@ -307,14 +307,14 @@ class JobStoreResource extends JsonResource
      */
     protected function canUserApply(): bool
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return true; // Allow guests to see apply button (will redirect to login)
         }
 
         $user = auth()->user();
 
         // Only candidates can apply
-        if (!$user->hasRole('candidate')) {
+        if (! $user->hasRole('candidate')) {
             return false;
         }
 
@@ -324,15 +324,14 @@ class JobStoreResource extends JsonResource
         }
 
         // Cannot apply if job is not active
-        if (1 !== $this->status || $this->isExpired()) {
+        if ($this->status !== 1 || $this->isExpired()) {
             return false;
         }
 
         // Check if already applied
-        return !$this->appliedJobs()
+        return ! $this->appliedJobs()
             ->where('user_id', $user->id)
-            ->exists()
-        ;
+            ->exists();
     }
 
     /**
@@ -368,7 +367,7 @@ class JobStoreResource extends JsonResource
     {
         $actions = [];
 
-        if (0 === $this->status) { // Draft
+        if ($this->status === 0) { // Draft
             $actions[] = [
                 'action' => 'publish',
                 'label' => __('jobs.actions.publish_job'),

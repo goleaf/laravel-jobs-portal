@@ -30,17 +30,17 @@ class CreateUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testAuthorizationReturnsTrue()
+    public function test_authorization_returns_true()
     {
-        $request = new CreateUserRequest();
+        $request = new CreateUserRequest;
 
         $this->assertTrue($request->authorize());
     }
 
     /** @test */
-    public function testValidationRulesAreDefined()
+    public function test_validation_rules_are_defined()
     {
-        $request = new CreateUserRequest();
+        $request = new CreateUserRequest;
         $rules = $request->rules();
 
         $this->assertIsArray($rules);
@@ -48,9 +48,9 @@ class CreateUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationMessagesAreDefined()
+    public function test_validation_messages_are_defined()
     {
-        $request = new CreateUserRequest();
+        $request = new CreateUserRequest;
 
         if (method_exists($request, 'messages')) {
             $messages = $request->messages();
@@ -61,9 +61,9 @@ class CreateUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidationAttributesAreDefined()
+    public function test_validation_attributes_are_defined()
     {
-        $request = new CreateUserRequest();
+        $request = new CreateUserRequest;
 
         if (method_exists($request, 'attributes')) {
             $attributes = $request->attributes();
@@ -74,9 +74,9 @@ class CreateUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testFirstNameValidation()
+    public function test_first_name_validation()
     {
-        $request = new CreateUserRequest();
+        $request = new CreateUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('first_name', $rules);
@@ -87,9 +87,9 @@ class CreateUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testRequiredValidation()
+    public function test_required_validation()
     {
-        $request = new CreateUserRequest();
+        $request = new CreateUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('required', $rules);
@@ -100,9 +100,9 @@ class CreateUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testStringValidation()
+    public function test_string_validation()
     {
-        $request = new CreateUserRequest();
+        $request = new CreateUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('string', $rules);
@@ -113,9 +113,9 @@ class CreateUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testLastNameValidation()
+    public function test_last_name_validation()
     {
-        $request = new CreateUserRequest();
+        $request = new CreateUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('last_name', $rules);
@@ -126,9 +126,9 @@ class CreateUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testEmailValidation()
+    public function test_email_validation()
     {
-        $request = new CreateUserRequest();
+        $request = new CreateUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('email', $rules);
@@ -139,9 +139,9 @@ class CreateUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testPasswordValidation()
+    public function test_password_validation()
     {
-        $request = new CreateUserRequest();
+        $request = new CreateUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('password', $rules);
@@ -152,9 +152,9 @@ class CreateUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testConfirmedValidation()
+    public function test_confirmed_validation()
     {
-        $request = new CreateUserRequest();
+        $request = new CreateUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('confirmed', $rules);
@@ -165,9 +165,9 @@ class CreateUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testPhoneValidation()
+    public function test_phone_validation()
     {
-        $request = new CreateUserRequest();
+        $request = new CreateUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('phone', $rules);
@@ -178,9 +178,9 @@ class CreateUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testNullableValidation()
+    public function test_nullable_validation()
     {
-        $request = new CreateUserRequest();
+        $request = new CreateUserRequest;
         $rules = $request->rules();
 
         $this->assertArrayHasKey('nullable', $rules);
@@ -191,7 +191,7 @@ class CreateUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testValidDataPassesValidation()
+    public function test_valid_data_passes_validation()
     {
         $validData = [
             'first_name' => 'Test Value',
@@ -205,18 +205,18 @@ class CreateUserRequestTest extends TestCase
             'nullable' => 'Test Value',
         ];
 
-        $request = new CreateUserRequest();
+        $request = new CreateUserRequest;
         $validator = validator($validData, $request->rules());
 
         $this->assertFalse($validator->fails());
     }
 
     /** @test */
-    public function testRequestHandlesEmptyDataCorrectly()
+    public function test_request_handles_empty_data_correctly()
     {
         $emptyData = [];
 
-        $request = new CreateUserRequest();
+        $request = new CreateUserRequest;
         $validator = validator($emptyData, $request->rules());
 
         // Should handle empty data according to rules
@@ -224,7 +224,7 @@ class CreateUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSecurityValidationPreventsXss()
+    public function test_security_validation_prevents_xss()
     {
         $maliciousData = [
             'name' => '<script>alert("xss")</script>',
@@ -232,7 +232,7 @@ class CreateUserRequestTest extends TestCase
             'content' => '<img src=x onerror=alert("xss")>',
         ];
 
-        $request = new CreateUserRequest();
+        $request = new CreateUserRequest;
         $validator = validator($maliciousData, $request->rules());
 
         // XSS data should either fail validation or be properly sanitized
@@ -247,7 +247,7 @@ class CreateUserRequestTest extends TestCase
     }
 
     /** @test */
-    public function testSqlInjectionPrevention()
+    public function test_sql_injection_prevention()
     {
         $sqlInjectionData = [
             'name' => "'; DROP TABLE users; --",
@@ -255,7 +255,7 @@ class CreateUserRequestTest extends TestCase
             'filter' => 'UNION SELECT * FROM passwords',
         ];
 
-        $request = new CreateUserRequest();
+        $request = new CreateUserRequest;
         $validator = validator($sqlInjectionData, $request->rules());
 
         // SQL injection patterns should be handled safely

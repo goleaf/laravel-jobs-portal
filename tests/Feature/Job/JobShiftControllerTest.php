@@ -42,7 +42,7 @@ class JobShiftControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanCreateJobshift(): void
+    public function admin_can_create_jobshift(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -58,8 +58,7 @@ class JobShiftControllerTest extends TestCase
         $response->assertStatus(201)
             ->assertJsonStructure([
                 'data' => ['shift', 'description', 'is_active', 'size', 'id', 'created_at', 'updated_at'],
-            ])
-        ;
+            ]);
 
         $this->assertDatabaseHas('job_shifts', [
             'name' => $data['name'] ?? $data[array_key_first($data)],
@@ -67,7 +66,7 @@ class JobShiftControllerTest extends TestCase
     }
 
     /** @test */
-    public function employerCanCreateJobshift(): void
+    public function employer_can_create_jobshift(): void
     {
         Sanctum::actingAs($this->employer);
 
@@ -84,7 +83,7 @@ class JobShiftControllerTest extends TestCase
     }
 
     /** @test */
-    public function candidateCannotCreateJobshift(): void
+    public function candidate_cannot_create_jobshift(): void
     {
         Sanctum::actingAs($this->candidate);
 
@@ -101,7 +100,7 @@ class JobShiftControllerTest extends TestCase
     }
 
     /** @test */
-    public function unauthenticatedUserCannotCreateJobshift(): void
+    public function unauthenticated_user_cannot_create_jobshift(): void
     {
         $data = [
             'shift' => 'Day Shift',
@@ -116,7 +115,7 @@ class JobShiftControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanUpdateJobshift(): void
+    public function admin_can_update_jobshift(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -139,7 +138,7 @@ class JobShiftControllerTest extends TestCase
     }
 
     /** @test */
-    public function adminCanDeleteJobshift(): void
+    public function admin_can_delete_jobshift(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -155,7 +154,7 @@ class JobShiftControllerTest extends TestCase
     }
 
     /** @test */
-    public function validationFailsWithInvalidData(): void
+    public function validation_fails_with_invalid_data(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -166,12 +165,11 @@ class JobShiftControllerTest extends TestCase
         $response = $this->postJson('/api/jobshift', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function validationFailsWithDuplicateName(): void
+    public function validation_fails_with_duplicate_name(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -188,12 +186,11 @@ class JobShiftControllerTest extends TestCase
         $response = $this->postJson('/api/jobshift', $data);
 
         $response->assertStatus(422)
-            ->assertJsonValidationErrors(['name'])
-        ;
+            ->assertJsonValidationErrors(['name']);
     }
 
     /** @test */
-    public function canListJobshifts(): void
+    public function can_list_jobshifts(): void
     {
         Sanctum::actingAs($this->admin);
 
@@ -206,12 +203,11 @@ class JobShiftControllerTest extends TestCase
                 'data' => [
                     '*' => ['shift', 'description', 'is_active', 'size', 'id', 'created_at', 'updated_at'],
                 ],
-            ])
-        ;
+            ]);
     }
 
     /** @test */
-    public function canShowSingleJobshift(): void
+    public function can_show_single_jobshift(): void
     {
         Sanctum::actingAs($this->admin);
 

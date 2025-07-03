@@ -64,14 +64,12 @@ class SitemapController extends Controller
                     'weekly',
                     '0.8'
                 );
-            })
-        ;
+            });
 
         // Companies
         Company::whereHas('jobs', function ($query) {
             $query->where('status', 'published')
-                ->where('expires_on', '>', now())
-            ;
+                ->where('expires_on', '>', now());
         })
             ->orderBy('updated_at', 'desc')
             ->take(500)
@@ -82,8 +80,7 @@ class SitemapController extends Controller
                     'weekly',
                     '0.6'
                 );
-            })
-        ;
+            });
 
         $xml .= '</urlset>';
 

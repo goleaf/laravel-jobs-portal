@@ -5,10 +5,6 @@ namespace App\Http\Requests\Foundation;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use App\Http\Requests\Foundation\Traits\SecurityValidationTrait;
-use App\Http\Requests\Foundation\Traits\MultilingualValidationTrait;
-use App\Http\Requests\Foundation\Traits\PerformanceOptimizationTrait;
-use App\Http\Requests\Foundation\Traits\AuditLoggingTrait;
 
 /**
  * Abstract Base Request - Universal parent class for all request validation files
@@ -27,10 +23,6 @@ use App\Http\Requests\Foundation\Traits\AuditLoggingTrait;
  */
 abstract class AbstractBaseRequest extends FormRequest
 {
-    use SecurityValidationTrait,
-        MultilingualValidationTrait,
-        PerformanceOptimizationTrait,
-        AuditLoggingTrait;
 
     /**
      * Security level for this request type

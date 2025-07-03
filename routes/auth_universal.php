@@ -36,7 +36,7 @@ Route::prefix('auth')->group(function () {
     ;
 
     // Public endpoints (no authentication required)
-    Route::group(function () {
+    Route::group([], function () {
         // Get public user info
         Route::get('/user', function (Request $request) {
             return response()->json([

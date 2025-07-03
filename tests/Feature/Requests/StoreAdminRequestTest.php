@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Requests;
 
-use App\Http\Requests\StoreAdminRequest;
+use App\Http\Requests\Admin\StoreAdminRequest;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;

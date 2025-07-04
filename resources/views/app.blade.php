@@ -45,22 +45,5 @@
     </noscript>
     
     @stack('scripts')
-
-    <style @cspNonce>
-        /* Hide loading indicator once Vue app is loaded */
-        .vue-app-loaded #initial-loader {
-            display: none;
-        }
-        
-        /* Smooth transition for Vue app mounting */
-        #app {
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
-        
-        .vue-app-loaded #app {
-            opacity: 1;
-        }
-    </style>
 </body>
 </html> 

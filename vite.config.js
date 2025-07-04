@@ -9,7 +9,7 @@ export default defineConfig({
         laravel({
             input: [
                 "resources/css/app.css",
-                "resources/js/app.ts"
+                "resources/js/main.js"
             ],
             refresh: true,
         }),
@@ -23,7 +23,7 @@ export default defineConfig({
         outDir: 'public/build',
         rollupOptions: {
             input: {
-                app: 'resources/js/app.ts',
+                app: 'resources/js/main.js',
                 styles: 'resources/css/app.css'
             },
             output: {
@@ -94,7 +94,7 @@ export default defineConfig({
                     } else if (/css/i.test(extType)) {
                         return `styles/[name]-[hash][extname]`;
                     } else if (/woff2?|eot|ttf|otf/i.test(extType)) {
-                        return `fonts/[name]-[hash][extname]`;
+                        return `styles/fonts/[name]-[hash][extname]`;
                     }
                     
                     return `assets/[name]-[hash][extname]`;

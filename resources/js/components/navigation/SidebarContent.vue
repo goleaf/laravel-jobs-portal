@@ -170,7 +170,7 @@ import {
   MagnifyingGlassIcon
 } from '@heroicons/vue/24/outline';
 
-export interface Props {
+interface Props {
   userRole: UserRole;
   isCollapsed: boolean;
 }

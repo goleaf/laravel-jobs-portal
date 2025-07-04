@@ -20,7 +20,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Terms Management</h1>
+            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ __('admin.terms.management_title') }}</h1>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                 Manage taxonomy terms across all taxonomies.
             </p>
@@ -65,7 +65,7 @@
                             name="taxonomy"
                             class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white"
                         >
-                            <option value="">All Taxonomies</option>
+                            <option value="">{{ __('admin.terms.all_taxonomies') }}</option>
                             @foreach($taxonomies as $taxonomy)
                                 <option value="{{ $taxonomy->id }}" {{ request('taxonomy') == $taxonomy->id ? 'selected' : '' }}>
                                     {{ $taxonomy->name }}
@@ -84,9 +84,9 @@
                             name="status"
                             class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white"
                         >
-                            <option value="">All Status</option>
-                            <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
-                            <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                            <option value="">{{ __('admin.terms.all_statuses') }}</option>
+                            <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>{{ __('admin.terms.status_active') }}</option>
+                            <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>{{ __('admin.terms.status_inactive') }}</option>
                         </select>
                     </div>
 
@@ -100,9 +100,9 @@
                             name="parent"
                             class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white"
                         >
-                            <option value="">All Terms</option>
-                            <option value="root" {{ request('parent') === 'root' ? 'selected' : '' }}>Root Terms Only</option>
-                            <option value="child" {{ request('parent') === 'child' ? 'selected' : '' }}>Child Terms Only</option>
+                            <option value="">{{ __('admin.terms.all_terms') }}</option>
+                            <option value="root" {{ request('parent') === 'root' ? 'selected' : '' }}>{{ __('admin.terms.root_terms_only') }}</option>
+                            <option value="child" {{ request('parent') === 'child' ? 'selected' : '' }}>{{ __('admin.terms.child_terms_only') }}</option>
                         </select>
                     </div>
                 </div>
@@ -157,10 +157,10 @@
                         id="bulk-action" 
                         class="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-md text-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white"
                     >
-                        <option value="">Bulk Actions</option>
-                        <option value="activate">Activate Selected</option>
-                        <option value="deactivate">Deactivate Selected</option>
-                        <option value="delete">Delete Selected</option>
+                        <option value="">{{ __('admin.terms.bulk_actions') }}</option>
+                        <option value="activate">{{ __('admin.terms.activate_selected') }}</option>
+                        <option value="deactivate">{{ __('admin.terms.deactivate_selected') }}</option>
+                        <option value="delete">{{ __('admin.terms.delete_selected') }}</option>
                     </select>
                     <button 
                         type="button" 
@@ -179,7 +179,7 @@
                 <thead class="bg-gray-50 dark:bg-gray-700">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            <span class="sr-only">Select</span>
+                            <span class="sr-only">{{ __('admin.terms.select') }}</span>
                         </th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             Term
@@ -200,7 +200,7 @@
                             Created
                         </th>
                         <th scope="col" class="relative px-6 py-3">
-                            <span class="sr-only">Actions</span>
+                            <span class="sr-only">{{ __('admin.terms.actions') }}</span>
                         </th>
                     </tr>
                 </thead>
@@ -238,7 +238,7 @@
                             @if($term->parent)
                                 <div class="text-sm text-gray-900 dark:text-white">{{ $term->parent->name }}</div>
                             @else
-                                <span class="text-sm text-gray-500 dark:text-gray-400">Root Term</span>
+                                <span class="text-sm text-gray-500 dark:text-gray-400">{{ __('admin.terms.root_term') }}</span>
                             @endif
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
@@ -284,7 +284,9 @@
             <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
             </svg>
-            <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">No terms found</h3>
+            <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">
+                {{ __('admin.terms.no_terms_found') }}
+            </h3>
             <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                 @if(request()->hasAny(['search', 'taxonomy', 'status', 'parent']))
                     Try adjusting your search criteria or filters.

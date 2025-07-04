@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'Admin Dashboard') - {{ config('app.name', 'Laravel Job Portal') }}</title>
+    <title>@yield('title', __('app.dashboard_title')) - {{ __('app.name') }}</title>
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.ts'])
@@ -48,13 +48,13 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"/>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"/>
                         </svg>
-                        {{ __('Dashboard') }}
+                        {{ __('admin.dashboard') }}
                     </a>
 
                     <!-- Content Management Section -->
                     <div class="mt-6">
                         <h3 class="px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                            {{ __('Content Management') }}
+                            {{ __('admin.content_management') }}
                         </h3>
                         <div class="mt-2 space-y-1">
                             <!-- Taxonomies -->
@@ -62,7 +62,7 @@
                                 <svg class="mr-3 h-5 w-5 {{ request()->routeIs('admin.taxonomies.*') ? 'text-indigo-500' : 'text-gray-400 group-hover:text-gray-500' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
                                 </svg>
-                                {{ __('Taxonomies') }}
+                                {{ __('admin.taxonomies') }}
                             </a>
 
                             <!-- Terms -->
@@ -70,7 +70,7 @@
                                 <svg class="mr-3 h-5 w-5 {{ request()->routeIs('admin.terms.*') ? 'text-indigo-500' : 'text-gray-400 group-hover:text-gray-500' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                                 </svg>
-                                {{ __('Terms') }}
+                                {{ __('admin.terms') }}
                             </a>
 
                             <!-- Job Types -->
@@ -78,7 +78,7 @@
                                 <svg class="mr-3 h-5 w-5 {{ request()->routeIs('admin.job-types.*') ? 'text-indigo-500' : 'text-gray-400 group-hover:text-gray-500' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6"/>
                                 </svg>
-                                {{ __('Job Types') }}
+                                {{ __('admin.job_types') }}
                             </a>
                         </div>
                     </div>

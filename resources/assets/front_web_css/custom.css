@@ -1,17 +1,8 @@
 @font-face {
-    font-family: "Circular Std";
-    src: url(../fonts/CircularStd-Book.otf);
+    font-family: 'Inter';
+    src: url('/fonts/inter-var.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
-    display: swap
-}
-
-@font-face {
-    font-family: "Circular Std";
-    src: url(../fonts/circular-std-medium-500.ttf);
-    font-weight: 500;
-    font-style: normal;
-    display: swap
 }
 
 body {
@@ -730,31 +721,6 @@ h4 {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@font-face {
-    font-family: "Poppins";
-    src: url(../fonts/Poppins-Medium.ttf);
-    font-weight: 500;
-    font-style: normal;
-    display: swap;
-}
-
-
-
 header .navbar .navbar-nav .nav-item {
     position: relative;
     transition: all .3s;
@@ -1264,7 +1230,6 @@ footer .social-icon a:focus {
     background-color: #c5d6ff !important;
 }
 
-
 input {
     font-family: "Circular Std", sans-serif !important;
     font-weight: 400 !important;
@@ -1348,8 +1313,6 @@ footer .text-decoration-none {
     font-size: 16px !important;
     color: #fff !important;
 }
-
-
 
 #toast-container .toast {
     min-width: calc(100% - 30px);

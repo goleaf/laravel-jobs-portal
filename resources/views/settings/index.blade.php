@@ -549,25 +549,26 @@
                             </div>
 
                             <!-- Language Selection -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                    {{ __('settings.language') }}
-                                </label>
-                                <x-ui.select
-                                    name="language"
-                                    :options="[
-                                        'en' => 'English',
-                                        'ar' => 'العربية',
-                                        'de' => 'Deutsch',
-                                        'es' => 'Español',
-                                        'fr' => 'Français',
-                                        'pt' => 'Português',
-                                        'ru' => 'Русский',
-                                        'tr' => 'Türkçe',
-                                        'zh' => '中文'
-                                    ]"
-                                    :selected="auth()->user()->settings['language'] ?? 'en'"
-                                />
+                            <div class="language-settings">
+                                <h3>{{ __('settings.language') }}</h3>
+                                <form action="{{ route('language.switch') }}" method="POST">
+                                    @csrf
+                                    <div class="language-selector">
+                                        <select name="locale" class="form-control">
+                                            @foreach(config('app.available_locales') as $locale)
+                                                <option 
+                                                    value="{{ $locale }}" 
+                                                    {{ app()->getLocale() === $locale ? 'selected' : '' }}
+                                                >
+                                                    {{ __("language.{$locale}_name") }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        <button type="submit" class="btn btn-primary">
+                                            {{ __('settings.save_changes') }}
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
 
                             <!-- Timezone -->

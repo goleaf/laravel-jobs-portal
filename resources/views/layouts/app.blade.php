@@ -17,7 +17,7 @@
     <link rel="preload" href="{{ asset('fonts/inter-var.woff2') }}" as="font" type="font/woff2" crossorigin>
     
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/main.js'])
+    @vite(['resources/css/app.css', 'resources/js/main.js', 'resources/js/init.js'])
     
     <!-- Fonts -->
     <!-- Local fonts loaded via Vite -->
@@ -81,14 +81,7 @@
         <div id="mobile-menu-overlay" class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-30 hidden lg:hidden"></div>
 
         <!-- Initialize app -->
-        <script>
-            // Initialize theme
-            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark')
-            } else {
-                document.documentElement.classList.remove('dark')
-            }
-
+        <script nonce="{{ csp_nonce() }}">
             // Initialize language and locale
             window.App = {
                 locale: '{{ app()->getLocale() }}',
@@ -97,13 +90,6 @@
                 baseUrl: '{{ url('/') }}',
                 translations: @json(__('common'))
             };
-
-            // Initialize multilingual system
-            document.addEventListener('DOMContentLoaded', function() {
-                if (window.UniversalI18nSystem) {
-                    window.i18n = new UniversalI18nSystem();
-                }
-            });
         </script>
 
         <!-- Page-specific JavaScript -->

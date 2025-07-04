@@ -117,61 +117,7 @@ return [
     */
 
     'available_locales' => [
-        'en' => [
-            'name' => 'English',
-            'script' => 'Latn',
-            'native' => 'English',
-            'regional' => 'en_US',
-        ],
-        'ar' => [
-            'name' => 'Arabic',
-            'script' => 'Arab',
-            'native' => 'العربية',
-            'regional' => 'ar_SA',
-            'rtl' => true,
-        ],
-        'de' => [
-            'name' => 'German',
-            'script' => 'Latn',
-            'native' => 'Deutsch',
-            'regional' => 'de_DE',
-        ],
-        'es' => [
-            'name' => 'Spanish',
-            'script' => 'Latn',
-            'native' => 'Español',
-            'regional' => 'es_ES',
-        ],
-        'fr' => [
-            'name' => 'French',
-            'script' => 'Latn',
-            'native' => 'Français',
-            'regional' => 'fr_FR',
-        ],
-        'pt' => [
-            'name' => 'Portuguese',
-            'script' => 'Latn',
-            'native' => 'Português',
-            'regional' => 'pt_PT',
-        ],
-        'ru' => [
-            'name' => 'Russian',
-            'script' => 'Cyrl',
-            'native' => 'Русский',
-            'regional' => 'ru_RU',
-        ],
-        'tr' => [
-            'name' => 'Turkish',
-            'script' => 'Latn',
-            'native' => 'Türkçe',
-            'regional' => 'tr_TR',
-        ],
-        'zh' => [
-            'name' => 'Chinese',
-            'script' => 'Hans',
-            'native' => '中文',
-            'regional' => 'zh_CN',
-        ],
+        'en', 'lt', 'ar', 'de', 'es', 'fr', 'pt', 'ru', 'tr', 'zh'
     ],
 
     /*

@@ -176,3 +176,9 @@ foreach ($spaRoutes as $route) {
 Route::get('/{path}', function () {
     return view('app');
 })->where('path', '.*')->name('spa.catchall');
+
+// Language Switching Routes
+Route::post('/language/switch', [App\Http\Controllers\LanguageController::class, 'switch'])
+    ->name('language.switch');
+Route::get('/language/supported', [App\Http\Controllers\LanguageController::class, 'getSupportedLanguages'])
+    ->name('language.supported');

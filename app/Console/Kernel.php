@@ -40,6 +40,7 @@ class Kernel extends ConsoleKernel
         $this->commands = array_merge($this->commands, [
             Commands\TranslationCommand::class,
             Commands\SystemHealthCheck::class, // Laravel Defibrillator command
+            \App\Console\Commands\TranslationAudit::class,
         ]);
 
         require base_path('routes/console.php');

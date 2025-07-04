@@ -42,7 +42,7 @@
         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Edit Taxonomy</h1>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ __('admin.taxonomies.edit_title') }}</h1>
                     <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                         Update the taxonomy information and settings.
                     </p>
@@ -117,13 +117,25 @@
                         required
                         class="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white @error('type') border-red-300 focus:border-red-500 focus:ring-red-500 @enderror"
                     >
-                        <option value="">Select taxonomy type</option>
-                        <option value="category" {{ old('type', $taxonomy->type) === 'category' ? 'selected' : '' }}>Category</option>
-                        <option value="tag" {{ old('type', $taxonomy->type) === 'tag' ? 'selected' : '' }}>Tag</option>
-                        <option value="skill" {{ old('type', $taxonomy->type) === 'skill' ? 'selected' : '' }}>Skill</option>
-                        <option value="location" {{ old('type', $taxonomy->type) === 'location' ? 'selected' : '' }}>Location</option>
-                        <option value="industry" {{ old('type', $taxonomy->type) === 'industry' ? 'selected' : '' }}>Industry</option>
-                        <option value="custom" {{ old('type', $taxonomy->type) === 'custom' ? 'selected' : '' }}>Custom</option>
+                        <option value="">{{ __('admin.taxonomies.select_type') }}</option>
+                        <option value="category" {{ old('type', $taxonomy->type) === 'category' ? 'selected' : '' }}>
+                            {{ __('admin.taxonomies.types.category') }}
+                        </option>
+                        <option value="tag" {{ old('type', $taxonomy->type) === 'tag' ? 'selected' : '' }}>
+                            {{ __('admin.taxonomies.types.tag') }}
+                        </option>
+                        <option value="skill" {{ old('type', $taxonomy->type) === 'skill' ? 'selected' : '' }}>
+                            {{ __('admin.taxonomies.types.skill') }}
+                        </option>
+                        <option value="location" {{ old('type', $taxonomy->type) === 'location' ? 'selected' : '' }}>
+                            {{ __('admin.taxonomies.types.location') }}
+                        </option>
+                        <option value="industry" {{ old('type', $taxonomy->type) === 'industry' ? 'selected' : '' }}>
+                            {{ __('admin.taxonomies.types.industry') }}
+                        </option>
+                        <option value="custom" {{ old('type', $taxonomy->type) === 'custom' ? 'selected' : '' }}>
+                            {{ __('admin.taxonomies.types.custom') }}
+                        </option>
                     </select>
                     @error('type')
                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -144,7 +156,9 @@
                                 {{ old('is_active', $taxonomy->is_active) == '1' ? 'checked' : '' }}
                                 class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-gray-600"
                             >
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Active</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                                {{ __('admin.taxonomies.status_active') }}
+                            </span>
                         </label>
                         <label class="flex items-center">
                             <input 
@@ -154,7 +168,9 @@
                                 {{ old('is_active', $taxonomy->is_active) == '0' ? 'checked' : '' }}
                                 class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-gray-600"
                             >
-                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Inactive</span>
+                            <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                                {{ __('admin.taxonomies.status_inactive') }}
+                            </span>
                         </label>
                     </div>
                     @error('is_active')
@@ -266,7 +282,9 @@
     <!-- Danger Zone -->
     <div class="mt-8 bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-red-200 dark:border-red-700">
         <div class="px-6 py-4 border-b border-red-200 dark:border-red-700">
-            <h3 class="text-lg font-medium text-red-900 dark:text-red-200">Danger Zone</h3>
+            <h3 class="text-lg font-medium text-red-900 dark:text-red-200">
+                {{ __('admin.taxonomies.danger_zone') }}
+            </h3>
             <p class="mt-1 text-sm text-red-600 dark:text-red-400">
                 These actions cannot be undone. Please be careful.
             </p>
@@ -274,7 +292,9 @@
         <div class="px-6 py-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <h4 class="text-sm font-medium text-gray-900 dark:text-white">Delete Taxonomy</h4>
+                    <h4 class="text-sm font-medium text-gray-900 dark:text-white">
+                        {{ __('admin.taxonomies.delete_taxonomy') }}
+                    </h4>
                     <p class="text-sm text-gray-500 dark:text-gray-400">
                         Permanently delete this taxonomy and all its terms. This action cannot be undone.
                     </p>

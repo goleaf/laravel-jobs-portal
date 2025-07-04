@@ -235,7 +235,7 @@
                             <x-icon name="envelope" class="h-5 w-5 text-gray-400" />
                             <div>
                                 <p class="text-sm font-medium text-gray-900 dark:text-white">{{ __('help.email_support') }}</p>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">support@jobportal.com</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('help.support_email') }}</p>
                             </div>
                         </div>
                         

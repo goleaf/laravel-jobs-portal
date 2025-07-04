@@ -357,7 +357,7 @@
                 <x-icon name="envelope" class="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 <div>
                     <h4 class="font-medium text-gray-900 dark:text-white">{{ __('errors.email_support') }}</h4>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">support@jobportal.com</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('errors.support_email') }}</p>
                 </div>
             </div>
             

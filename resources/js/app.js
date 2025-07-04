@@ -169,3 +169,11 @@ if (token) {
 } else {
     console.error('CSRF token not found');
 }
+
+import { createApp } from 'vue';
+import SvgIcon from './components/SvgIcon.vue';
+
+const app = createApp({});
+app.component('SvgIcon', SvgIcon);
+
+app.mount('#app');

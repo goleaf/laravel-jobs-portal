@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Messages')
+@section('title', __('messaging.title'))
 
 @section('content')
 <div class="bg-gray-50 min-h-screen">
@@ -10,7 +10,7 @@
             {{-- Header --}}
             <div class="p-4 border-b border-gray-200">
                 <div class="flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-gray-900">{{ __('Messages') }}</h2>
+                    <h2 class="text-lg font-semibold text-gray-900">{{ __('messaging.title') }}</h2>
                     <button class="bg-indigo-600 hover:bg-indigo-700 text-white p-2 rounded-lg">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
@@ -20,7 +20,7 @@
                 {{-- Search --}}
                 <div class="mt-4">
                     <div class="relative">
-                        <input type="text" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="{{ __('Search conversations...') }}">
+                        <input type="text" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="{{ __('messaging.search_conversations') }}">
                         <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                         </svg>
@@ -39,13 +39,13 @@
                         </div>
                         <div class="flex-1 min-w-0">
                             <div class="flex items-center justify-between">
-                                <h3 class="text-sm font-semibold text-gray-900 truncate">Sarah Wilson</h3>
+                                <h3 class="text-sm font-semibold text-gray-900 truncate">{{ __('messaging.sender_name') }}</h3>
                                 <span class="text-xs text-gray-500">2m</span>
                             </div>
-                            <p class="text-sm text-gray-600 truncate">{{ __('Thanks for your application...') }}</p>
+                            <p class="text-sm text-gray-600 truncate">{{ __('messaging.conversation_types.hr_manager') }}</p>
                             <div class="flex items-center mt-1">
                                 <span class="bg-indigo-500 text-white text-xs px-2 py-0.5 rounded-full">2</span>
-                                <span class="ml-2 text-xs text-gray-500">{{ __('HR Manager') }}</span>
+                                <span class="ml-2 text-xs text-gray-500">{{ __('messaging.conversation_types.hr_manager') }}</span>
                             </div>
                         </div>
                     </div>
@@ -63,9 +63,9 @@
                                 <h3 class="text-sm font-semibold text-gray-900 truncate">John Doe</h3>
                                 <span class="text-xs text-gray-500">1h</span>
                             </div>
-                            <p class="text-sm text-gray-600 truncate">{{ __('When can we schedule the interview?') }}</p>
+                            <p class="text-sm text-gray-600 truncate">{{ __('messaging.conversation_types.senior_developer') }}</p>
                             <div class="flex items-center mt-1">
-                                <span class="text-xs text-gray-500">{{ __('Senior Developer') }}</span>
+                                <span class="text-xs text-gray-500">{{ __('messaging.conversation_types.senior_developer') }}</span>
                             </div>
                         </div>
                     </div>
@@ -82,9 +82,9 @@
                                 <h3 class="text-sm font-semibold text-gray-900 truncate">Tech Corp</h3>
                                 <span class="text-xs text-gray-500">3h</span>
                             </div>
-                            <p class="text-sm text-gray-600 truncate">{{ __('We would like to move forward...') }}</p>
+                            <p class="text-sm text-gray-600 truncate">{{ __('messaging.conversation_types.company') }}</p>
                             <div class="flex items-center mt-1">
-                                <span class="text-xs text-gray-500">{{ __('Company') }}</span>
+                                <span class="text-xs text-gray-500">{{ __('messaging.conversation_types.company') }}</span>
                             </div>
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                         <img src="https://ui-avatars.com/api/?name=Sarah+Wilson&color=7c3aed&background=ede9fe" alt="Sarah Wilson" class="w-10 h-10 rounded-full">
                         <div>
                             <h3 class="text-sm font-semibold text-gray-900">Sarah Wilson</h3>
-                            <p class="text-xs text-green-600">{{ __('Online') }}</p>
+                            <p class="text-xs text-green-600">{{ __('messaging.online') }}</p>
                         </div>
                     </div>
                     <div class="flex items-center space-x-2">
@@ -131,9 +131,9 @@
                     <img src="https://ui-avatars.com/api/?name=Sarah+Wilson&color=7c3aed&background=ede9fe" alt="Sarah Wilson" class="w-8 h-8 rounded-full">
                     <div class="flex-1">
                         <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
-                            <p class="text-sm text-gray-900">{{ __('Hi! Thanks for applying to the Marketing Manager position. I\'d love to schedule a quick call to discuss your background.') }}</p>
+                            <p class="text-sm text-gray-900">{{ __('messaging.conversation_types.hr_manager') }}</p>
                         </div>
-                        <p class="text-xs text-gray-500 mt-1">{{ __('2 minutes ago') }}</p>
+                        <p class="text-xs text-gray-500 mt-1">{{ __('messaging.time_ago.minutes', ['count' => 2]) }}</p>
                     </div>
                 </div>
 
@@ -141,7 +141,7 @@
                 <div class="flex items-start space-x-3 justify-end">
                     <div class="flex-1 flex justify-end">
                         <div class="bg-indigo-600 rounded-lg p-3 max-w-xs">
-                            <p class="text-sm text-white">{{ __('Hello Sarah! Thank you for reaching out. I\'m very interested in the position and would be happy to schedule a call. When would work best for you?') }}</p>
+                            <p class="text-sm text-white">{{ __('messaging.conversation_types.senior_developer') }}</p>
                         </div>
                     </div>
                     <img src="https://ui-avatars.com/api/?name=You&color=ffffff&background=6366f1" alt="You" class="w-8 h-8 rounded-full">
@@ -150,7 +150,7 @@
                 {{-- System Message --}}
                 <div class="flex justify-center">
                     <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-2 px-3">
-                        <p class="text-xs text-yellow-700">{{ __('Sarah Wilson is typing...') }}</p>
+                        <p class="text-xs text-yellow-700">{{ __('messaging.typing', ['name' => 'Sarah Wilson']) }}</p>
                     </div>
                 </div>
 
@@ -164,12 +164,12 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                                 </svg>
                                 <div>
-                                    <p class="text-sm font-medium text-gray-900">job_description.pdf</p>
+                                    <p class="text-sm font-medium text-gray-900">{{ __('messaging.attachment_name', ['name' => 'job_description.pdf']) }}</p>
                                     <p class="text-xs text-gray-500">245 KB</p>
                                 </div>
                             </div>
                         </div>
-                        <p class="text-xs text-gray-500 mt-1">{{ __('1 minute ago') }}</p>
+                        <p class="text-xs text-gray-500 mt-1">{{ __('messaging.time_ago.minutes', ['count' => 1]) }}</p>
                     </div>
                 </div>
             </div>
@@ -179,7 +179,7 @@
                 <div class="flex items-end space-x-3">
                     <div class="flex-1">
                         <div class="border border-gray-300 rounded-lg">
-                            <textarea class="w-full p-3 border-0 rounded-lg resize-none focus:ring-0 focus:border-transparent" rows="2" placeholder="{{ __('Type your message...') }}"></textarea>
+                            <textarea class="w-full p-3 border-0 rounded-lg resize-none focus:ring-0 focus:border-transparent" rows="2" placeholder="{{ __('messaging.type_message') }}"></textarea>
                             <div class="flex items-center justify-between p-3 border-t border-gray-200">
                                 <div class="flex items-center space-x-2">
                                     <button class="p-1 text-gray-400 hover:text-gray-600 rounded">
@@ -199,7 +199,7 @@
                                     </button>
                                 </div>
                                 <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors duration-200">
-                                    {{ __('Send') }}
+                                    {{ __('messaging.send') }}
                                 </button>
                             </div>
                         </div>

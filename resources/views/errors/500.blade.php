@@ -59,7 +59,7 @@
             <!-- Quick Actions -->
             <div class="space-y-4 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center mb-12">
                 <x-ui.button 
-                    onclick="refreshPage()" 
+                    data-action="refresh-page"
                     variant="primary"
                     icon="arrow-path"
                 >
@@ -75,7 +75,7 @@
                 </x-ui.button>
 
                 <x-ui.button 
-                    onclick="reportError()" 
+                    data-action="report-error"
                     variant="ghost"
                     icon="exclamation-triangle"
                 >
@@ -193,7 +193,7 @@
                     
                     <div class="space-y-3 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center">
                         <x-ui.button 
-                            onclick="openSupportModal()" 
+                            data-action="open-support-modal"
                             variant="secondary"
                             class="bg-white text-red-600 hover:bg-gray-50"
                         >
@@ -247,7 +247,7 @@
             {{ __('errors.report_error') }}
         </h3>
         
-        <form onsubmit="submitErrorReport(event)">
+        <form data-action="submit-error-report">
             <div class="space-y-6">
                 <!-- What were you doing? -->
                 <div>
@@ -328,7 +328,8 @@
             <div class="flex justify-end space-x-3 mt-8">
                 <x-ui.button 
                     type="button"
-                    onclick="closeModal('error-report-modal')" 
+                    data-action="close-modal"
+                    data-modal-id="error-report-modal"
                     variant="secondary"
                 >
                     {{ __('errors.cancel') }}
@@ -353,7 +354,7 @@
         </h3>
         
         <div class="space-y-4">
-            <div class="flex items-center space-x-3 p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer" onclick="window.open('mailto:support@jobportal.com?subject=Server Error - {{ $errorId ?? 'ERR-' . time() }}')">
+            <div class="flex items-center space-x-3 p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer" data-action="open-support-modal">
                 <x-icon name="envelope" class="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 <div>
                     <h4 class="font-medium text-gray-900 dark:text-white">{{ __('errors.email_support') }}</h4>
@@ -394,7 +395,8 @@
         
         <div class="flex justify-end mt-6">
             <x-ui.button 
-                onclick="closeModal('support-modal')" 
+                data-action="close-modal"
+                data-modal-id="support-modal"
                 variant="primary"
             >
                 {{ __('errors.close') }}

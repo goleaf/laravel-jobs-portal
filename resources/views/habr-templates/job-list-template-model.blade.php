@@ -12,13 +12,13 @@
             <!-- View Type Toggle -->
             <div class="flex items-center space-x-2">
                 <button class="p-2 rounded-md {{ $viewType === 'list' ? 'bg-blue-100 text-blue-700' : 'text-gray-400 hover:text-gray-600' }}" 
-                        onclick="toggleViewType('list')">
+                        data-view-type="list">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 16a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
                     </svg>
                 </button>
                 <button class="p-2 rounded-md {{ $viewType === 'grid' ? 'bg-blue-100 text-blue-700' : 'text-gray-400 hover:text-gray-600' }}" 
-                        onclick="toggleViewType('grid')">
+                        data-view-type="grid">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
                     </svg>
@@ -44,7 +44,7 @@
                 </div>
                 
                 <button class="text-sm text-blue-600 hover:text-blue-800 transition-colors" 
-                        onclick="clearFilters()">
+                        data-action="clear-filters">
                     {{ __('jobs.clear_filters') }}
                 </button>
             </div>
@@ -100,7 +100,7 @@
             <div class="flex items-center space-x-2">
                 <label class="text-sm text-gray-600">{{ __('jobs.sort_by') }}:</label>
                 <select class="border border-gray-300 rounded-md px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        onchange="sortJobs(this.value)">
+                        data-sort-by>
                     <option value="created_at" {{ $sortBy === 'created_at' ? 'selected' : '' }}>{{ __('jobs.sort_newest') }}</option>
                     <option value="deadline" {{ $sortBy === 'deadline' ? 'selected' : '' }}>{{ __('jobs.sort_deadline') }}</option>
                     <option value="salary_from" {{ $sortBy === 'salary_from' ? 'selected' : '' }}>{{ __('jobs.sort_salary') }}</option>
@@ -189,39 +189,4 @@
             </div>
         @endif
     </div>
-</div>
-
-<script>
-function toggleViewType(type) {
-    const container = document.getElementById('jobs-container');
-    if (type === 'grid') {
-        container.className = 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6';
-    } else {
-        container.className = 'space-y-4';
-    }
-    
-    // Update active button states
-    document.querySelectorAll('button[onclick^="toggleViewType"]').forEach(btn => {
-        btn.className = btn.className.replace(/bg-blue-100 text-blue-700|text-gray-400 hover:text-gray-600/g, '');
-        if (btn.onclick.toString().includes(type)) {
-            btn.className += ' bg-blue-100 text-blue-700';
-        } else {
-            btn.className += ' text-gray-400 hover:text-gray-600';
-        }
-    });
-}
-
-function sortJobs(sortBy) {
-    const url = new URL(window.location);
-    url.searchParams.set('sort', sortBy);
-    window.location.href = url.toString();
-}
-
-function clearFilters() {
-    const url = new URL(window.location);
-    ['category', 'location', 'salary_range', 'experience'].forEach(param => {
-        url.searchParams.delete(param);
-    });
-    window.location.href = url.toString();
-}
-</script> 
+</div> 

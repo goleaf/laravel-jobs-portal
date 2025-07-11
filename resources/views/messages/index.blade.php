@@ -15,7 +15,7 @@
                     </h1>
                     
                     <x-ui.button 
-                        onclick="openNewMessageModal()" 
+                        data-action="openNewMessageModal" 
                         variant="primary" 
                         size="sm"
                         icon="plus"
@@ -39,16 +39,14 @@
             <div class="px-6 py-2 border-b border-gray-200 dark:border-gray-700">
                 <nav class="flex space-x-4">
                     <button 
-                        onclick="filterConversations('all')" 
-                        class="conversation-filter active text-sm font-medium text-blue-600 dark:text-blue-400"
                         data-filter="all"
+                        class="conversation-filter active text-sm font-medium text-blue-600 dark:text-blue-400"
                     >
                         {{ __('messages.all') }}
                     </button>
                     <button 
-                        onclick="filterConversations('unread')" 
-                        class="conversation-filter text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
                         data-filter="unread"
+                        class="conversation-filter text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
                     >
                         {{ __('messages.unread') }}
                         @if($unreadCount > 0)
@@ -58,9 +56,8 @@
                         @endif
                     </button>
                     <button 
-                        onclick="filterConversations('archived')" 
-                        class="conversation-filter text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
                         data-filter="archived"
+                        class="conversation-filter text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
                     >
                         {{ __('messages.archived') }}
                     </button>
@@ -143,7 +140,7 @@
                         </p>
                         <div class="mt-6">
                             <x-ui.button 
-                                onclick="openNewMessageModal()" 
+                                data-action="openNewMessageModal" 
                                 variant="primary"
                             >
                                 {{ __('messages.start_conversation') }}
@@ -207,7 +204,8 @@
                             @endif
                             
                             <x-ui.button 
-                                onclick="archiveConversation('{{ $activeConversation['id'] }}')" 
+                                data-action="archiveConversation" 
+                                data-conversation-id="{{ $activeConversation['id'] }}"
                                 variant="ghost" 
                                 size="sm"
                                 icon="archive-box"
@@ -216,7 +214,8 @@
                             </x-ui.button>
                             
                             <x-ui.button 
-                                onclick="deleteConversation('{{ $activeConversation['id'] }}')" 
+                                data-action="deleteConversation" 
+                                data-conversation-id="{{ $activeConversation['id'] }}"
                                 variant="ghost" 
                                 size="sm"
                                 icon="trash"
@@ -315,13 +314,13 @@
 
                 <!-- Message Input -->
                 <div class="bg-white dark:bg-gray-800 px-6 py-4 border-t border-gray-200 dark:border-gray-700">
-                    <form onsubmit="sendMessage(event)" class="flex items-end space-x-3">
+                    <form data-action="sendMessage" class="flex items-end space-x-3">
                         <!-- File Upload -->
                         <div class="flex-shrink-0">
                             <input type="file" id="message-attachment" multiple class="hidden" onchange="handleFileUpload(this.files)">
                             <button 
                                 type="button" 
-                                onclick="document.getElementById('message-attachment').click()"
+                                data-action="openFileUpload"
                                 class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                             >
                                 <x-icon name="paper-clip" class="h-5 w-5" />
@@ -376,7 +375,7 @@
                         </p>
                         <div class="mt-6">
                             <x-ui.button 
-                                onclick="openNewMessageModal()" 
+                                data-action="openNewMessageModal" 
                                 variant="primary"
                             >
                                 {{ __('messages.start_new_conversation') }}
@@ -396,7 +395,7 @@
             {{ __('messages.new_message') }}
         </h3>
         
-        <form onsubmit="createNewConversation(event)">
+        <form data-action="createNewConversation">
             <!-- Recipient Selection -->
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -455,7 +454,7 @@
             <div class="flex justify-end space-x-3">
                 <x-ui.button 
                     type="button"
-                    onclick="closeModal('new-message-modal')" 
+                    data-action="closeModal" 
                     variant="secondary"
                 >
                     {{ __('messages.cancel') }}

@@ -453,8 +453,8 @@ Remove any user/auth-related code, files, and relations
 - [ ] Ensure all validation and error messages are multi-language (JSON)
 
 ## 2. Multi-language System
-- [ ] Implement multi-language system using JSON files for all strings
-- [ ] Refactor all Blade files to use translation functions for all strings
+- [x] Implement multi-language system using JSON files for all strings
+- [x] Refactor all Blade files to use translation functions for all strings
 
 ## 3. Blade & UI Refactor
 - [ ] Remove Bootstrap and all CDN references from Blade files

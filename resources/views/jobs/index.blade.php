@@ -167,6 +167,8 @@
 @endsection
 
 @push('scripts')
+<script src="{{ asset('js/job-filters.js') }}"></script>
+<script src="{{ asset('js/job-interactions.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize job filters

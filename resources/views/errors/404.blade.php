@@ -75,7 +75,7 @@
                 </x-ui.button>
 
                 <x-ui.button 
-                    onclick="goBack()" 
+                    data-action="go-back"
                     variant="secondary"
                     icon="arrow-left"
                 >
@@ -198,7 +198,7 @@
 <!-- Floating Action Button for Quick Help -->
 <div class="fixed bottom-6 right-6 z-50">
     <button 
-        onclick="openQuickHelp()" 
+        data-action="open-quick-help" 
         class="w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-105"
         title="{{ __('errors.quick_help') }}"
     >
@@ -243,7 +243,7 @@
                     {{ __('errors.help_us_improve') }}
                 </p>
                 <x-ui.button 
-                    onclick="reportBrokenLink()" 
+                    data-action="report-broken-link" 
                     variant="secondary" 
                     size="sm"
                 >
@@ -254,7 +254,7 @@
         
         <div class="flex justify-end mt-6">
             <x-ui.button 
-                onclick="closeModal('quick-help-modal')" 
+                data-action="close-modal" 
                 variant="primary"
             >
                 {{ __('errors.got_it') }}
@@ -265,171 +265,5 @@
 @endsection
 
 @push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Track 404 error for analytics
-    trackPageNotFound();
-    
-    // Auto-focus search input
-    document.getElementById('site-search').focus();
-    
-    // Add keyboard shortcuts
-    document.addEventListener('keydown', function(e) {
-        // ESC to close modals
-        if (e.key === 'Escape') {
-            closeAllModals();
-        }
-        
-        // H for help
-        if (e.key === 'h' || e.key === 'H') {
-            if (!e.ctrlKey && !e.metaKey && !e.altKey) {
-                e.preventDefault();
-                openQuickHelp();
-            }
-        }
-    });
-});
-
-function goBack() {
-    if (window.history.length > 1) {
-        window.history.back();
-    } else {
-        window.location.href = '{{ route("home") }}';
-    }
-}
-
-function openQuickHelp() {
-    openModal('quick-help-modal');
-}
-
-function reportBrokenLink() {
-    const currentUrl = window.location.href;
-    const referrer = document.referrer || 'Direct access';
-    
-    fetch('/help/report-broken-link', {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            url: currentUrl,
-            referrer: referrer,
-            user_agent: navigator.userAgent,
-            timestamp: new Date().toISOString()
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showNotification('{{ __("errors.report_submitted") }}', 'success');
-            closeModal('quick-help-modal');
-        } else {
-            showNotification('{{ __("errors.report_failed") }}', 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Error reporting broken link:', error);
-        showNotification('{{ __("errors.report_error") }}', 'error');
-    });
-}
-
-function trackPageNotFound() {
-    // Track 404 error for analytics
-    if (typeof gtag !== 'undefined') {
-        gtag('event', 'page_not_found', {
-            'page_location': window.location.href,
-            'page_referrer': document.referrer
-        });
-    }
-    
-    // Send to internal analytics
-    fetch('/analytics/404', {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            url: window.location.href,
-            referrer: document.referrer,
-            user_agent: navigator.userAgent,
-            timestamp: new Date().toISOString()
-        })
-    })
-    .catch(error => {
-        console.error('Error tracking 404:', error);
-    });
-}
-
-function closeAllModals() {
-    document.querySelectorAll('[id$="-modal"]').forEach(modal => {
-        modal.classList.add('hidden');
-    });
-}
-
-function showNotification(message, type = 'info') {
-    const toast = document.createElement('div');
-    toast.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
-        type === 'success' ? 'bg-green-500 text-white' :
-        type === 'error' ? 'bg-red-500 text-white' :
-        'bg-blue-500 text-white'
-    }`;
-    toast.textContent = message;
-    
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-        toast.remove();
-    }, 3000);
-}
-
-// Add some fun easter eggs
-let konamiCode = [];
-const konamiSequence = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; // ↑↑↓↓←→←→BA
-
-document.addEventListener('keydown', function(e) {
-    konamiCode.push(e.keyCode);
-    
-    if (konamiCode.length > konamiSequence.length) {
-        konamiCode.shift();
-    }
-    
-    if (konamiCode.length === konamiSequence.length && 
-        konamiCode.every((code, index) => code === konamiSequence[index])) {
-        
-        // Easter egg activated!
-        showEasterEgg();
-        konamiCode = [];
-    }
-});
-
-function showEasterEgg() {
-    const easterEgg = document.createElement('div');
-    easterEgg.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50';
-    easterEgg.innerHTML = `
-        <div class="bg-white dark:bg-gray-800 rounded-lg p-8 text-center max-w-md">
-            <div class="text-6xl mb-4">🎉</div>
-            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                {{ __('errors.easter_egg_title') }}
-            </h3>
-            <p class="text-gray-600 dark:text-gray-400 mb-4">
-                {{ __('errors.easter_egg_message') }}
-            </p>
-            <button onclick="this.parentElement.parentElement.remove()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                {{ __('errors.awesome') }}
-            </button>
-        </div>
-    `;
-    
-    document.body.appendChild(easterEgg);
-    
-    // Auto-remove after 5 seconds
-    setTimeout(() => {
-        if (easterEgg.parentElement) {
-            easterEgg.remove();
-        }
-    }, 5000);
-}
-</script>
+<script src="{{ asset('js/404.js') }}"></script>
 @endpush 

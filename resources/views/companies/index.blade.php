@@ -59,7 +59,6 @@
                                 name="sort" 
                                 id="company-sort"
                                 class="w-auto"
-                                onchange="window.CompanyFilters.updateSort(this.value)"
                             >
                                 <option value="name_asc" {{ request('sort') === 'name_asc' ? 'selected' : '' }}>
                                     {{ __('companies.sort_name_asc') }}
@@ -189,6 +188,9 @@
 @endsection
 
 @push('scripts')
+<script src="{{ mix('js/company-filters.js') }}"></script>
+<script src="{{ mix('js/company-interactions.js') }}"></script>
+<script src="{{ mix('js/analytics.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize company filters

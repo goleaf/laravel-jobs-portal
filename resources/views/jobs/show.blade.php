@@ -382,6 +382,8 @@
 @endsection
 
 @push('scripts')
+<script src="{{ asset('js/job-application.js') }}"></script>
+<script src="{{ asset('js/job-actions.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize job application functionality

@@ -158,7 +158,7 @@
                     {{ __('errors.get_notified_description') }}
                 </p>
                 
-                <form onsubmit="subscribeToUpdates(event)" class="flex flex-col sm:flex-row gap-3">
+                <form data-subscribe-form class="flex flex-col sm:flex-row gap-3">
                     <x-ui.input
                         type="email"
                         id="notification-email"
@@ -240,7 +240,7 @@
                     
                     <div class="mt-3 flex space-x-2">
                         <x-ui.button 
-                            onclick="checkMaintenanceStatus()" 
+                            data-check-status-button 
                             variant="secondary" 
                             size="sm"
                         >
@@ -277,7 +277,7 @@
         </p>
         
         <x-ui.button 
-            onclick="closeModal('subscription-success-modal')" 
+            data-close-modal="subscription-success-modal" 
             variant="primary"
         >
             {{ __('errors.got_it') }}
@@ -309,6 +309,7 @@
 @endpush
 
 @push('scripts')
+<script src="{{ asset('js/maintenance.js') }}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize countdown timer
@@ -321,168 +322,6 @@ document.addEventListener('DOMContentLoaded', function() {
     setInterval(checkMaintenanceStatus, 60000); // Check every minute
 });
 
-function initializeCountdown() {
-    // Set target time (2 hours from now for demo)
-    const targetTime = new Date().getTime() + (2 * 60 * 60 * 1000);
-    
-    function updateCountdown() {
-        const now = new Date().getTime();
-        const distance = targetTime - now;
-        
-        if (distance < 0) {
-            // Maintenance should be complete
-            document.getElementById('countdown-timer').innerHTML = `
-                <div class="col-span-4 text-center">
-                    <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ __('errors.maintenance_complete') }}</div>
-                    <button onclick="window.location.reload()" class="mt-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
-                        {{ __('errors.reload_page') }}
-                    </button>
-                </div>
-            `;
-            return;
-        }
-        
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        
-        document.getElementById('days').textContent = days.toString().padStart(2, '0');
-        document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-        document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-        document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
-    }
-    
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-}
-
-function updateMaintenanceProgress() {
-    // Simulate progress updates
-    let progress = 60;
-    
-    function incrementProgress() {
-        if (progress < 95) {
-            progress += Math.random() * 2;
-            document.getElementById('maintenance-progress').style.width = progress + '%';
-            document.getElementById('progress-percentage').textContent = Math.round(progress) + '%';
-            
-            setTimeout(incrementProgress, 30000 + Math.random() * 30000); // 30-60 seconds
-        }
-    }
-    
-    setTimeout(incrementProgress, 30000);
-}
-
-function subscribeToUpdates(event) {
-    event.preventDefault();
-    
-    const email = document.getElementById('notification-email').value;
-    
-    fetch('/maintenance/subscribe', {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email: email })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            openModal('subscription-success-modal');
-            document.getElementById('notification-email').value = '';
-        } else {
-            showNotification(data.message || '{{ __("errors.subscription_failed") }}', 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Error subscribing to updates:', error);
-        showNotification('{{ __("errors.subscription_error") }}', 'error');
-    });
-}
-
-function checkMaintenanceStatus() {
-    fetch('/maintenance/status', {
-        method: 'GET',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.maintenance_active === false) {
-            showNotification('{{ __("errors.maintenance_complete") }}', 'success');
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
-        } else {
-            // Update progress if available
-            if (data.progress) {
-                document.getElementById('maintenance-progress').style.width = data.progress + '%';
-                document.getElementById('progress-percentage').textContent = Math.round(data.progress) + '%';
-            }
-            
-            // Update estimated completion time if available
-            if (data.estimated_completion) {
-                // Update countdown timer target
-                console.log('Updated completion time:', data.estimated_completion);
-            }
-        }
-    })
-    .catch(error => {
-        console.error('Error checking maintenance status:', error);
-    });
-}
-
-function showNotification(message, type = 'info') {
-    const toast = document.createElement('div');
-    toast.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
-        type === 'success' ? 'bg-green-500 text-white' :
-        type === 'error' ? 'bg-red-500 text-white' :
-        'bg-blue-500 text-white'
-    }`;
-    toast.textContent = message;
-    
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-        toast.remove();
-    }, 3000);
-}
-
-// Auto-refresh page when maintenance is complete
-function autoRefreshCheck() {
-    fetch('/', { method: 'HEAD' })
-    .then(response => {
-        if (response.ok) {
-            showNotification('{{ __("errors.service_restored") }}', 'success');
-            setTimeout(() => {
-                window.location.href = '/';
-            }, 2000);
-        }
-    })
-    .catch(() => {
-        // Still in maintenance, continue checking
-        setTimeout(autoRefreshCheck, 60000); // Check every minute
-    });
-}
-
-// Start auto-refresh check after 5 minutes
-setTimeout(autoRefreshCheck, 300000);
-
-// Add some visual feedback for the gears
-document.addEventListener('DOMContentLoaded', function() {
-    const gears = document.querySelectorAll('.animate-spin-slow, .animate-spin-reverse');
-    gears.forEach(gear => {
-        gear.addEventListener('mouseenter', function() {
-            this.style.animationDuration = '1s';
-        });
-        
-        gear.addEventListener('mouseleave', function() {
-            this.style.animationDuration = this.classList.contains('animate-spin-slow') ? '4s' : '3s';
-        });
-    });
-});
+// Remove all <script>, <style>, and inline JS event handlers. Move logic to resources/js and reference only external scripts via <script src>. Use Tailwind for all styling.
 </script>
 @endpush 

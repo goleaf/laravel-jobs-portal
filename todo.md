@@ -374,3 +374,43 @@
 - Maintain consistent translation key naming
 - Use context-aware translations
 - Avoid machine translations for critical text
+
+# TODO List (Project Refactor)
+
+## Priority 1: Remove Vue and Other JS Frameworks
+- [ ] Remove all Vue.js and related framework dependencies from package.json and resources
+- [ ] Delete all Vue components and related files
+- [ ] Remove any references to Vue in Blade files, controllers, and routes
+- [ ] Remove any other JS frameworks (React, Angular, etc.) if present
+
+## Priority 2: Blade Structure for Frontend and Backend
+- [ ] Create a single layout Blade file (resources/views/layouts/app.blade.php)
+- [ ] Create Blade files for all frontend pages (resources/views/frontend/)
+- [ ] Create Blade files for all backend/admin pages (resources/views/backend/)
+- [ ] Refactor all existing views to use TailwindCSS and Blade components
+- [ ] Ensure all JS and SCSS are in resources folder and built via npm
+
+## Priority 3: Database Seeds via Factories
+- [ ] Create factories for all models
+- [ ] Create seeders for all tables using factories
+- [ ] Run and verify database seeding
+
+## Priority 4: Request Files Organization
+- [ ] Create Form Request files for all controllers
+- [ ] Organize request files into subfolders: app/Http/Requests/Frontend/ and app/Http/Requests/Backend/
+- [ ] Add validation and error messages (multi-language via JSON)
+
+## Priority 5: Tests Organization
+- [ ] Create tests for all controllers and features
+- [ ] Organize tests into subfolders: tests/Feature/Frontend/ and tests/Feature/Backend/
+- [ ] Run all tests and fix any errors
+
+## Priority 6: Final QA and Browser Check
+- [ ] Ensure the project is fully functional in the browser
+- [ ] Check all routes, pages, and features for errors
+- [ ] Finalize and document any remaining issues
+
+
+
+
+start work with 1 point in todo task. yes. and then remove vue. remove vue  frameworks. make working frontend and backend. i need to create all blades for frontend and backend. create seeds via factories. create request files and tests for all project. request files make with subfolders for frontend and backend. make tests with subfolders for frontend and backend. do working project on browser

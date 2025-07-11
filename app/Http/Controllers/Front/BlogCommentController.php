@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
+use App\Http\Requests\Front\StoreBlogCommentRequest;
 
 class BlogCommentController extends Controller
 {
@@ -14,12 +15,6 @@ class BlogCommentController extends Controller
      */
     public function store(StoreBlogCommentRequest $request, $blog): JsonResponse
     {
-        $request->validate([
-            'comment' => 'required|string|max:1000',
-            'name' => 'required|string|max:255',
-            'email' => 'required|email',
-        ]);
-
         // Store comment logic here
 
         return response()->json([

@@ -45,30 +45,30 @@
             @method('PUT')
 
             <!-- Basic Information -->
-            <div class="bg-white dark:bg-gray-800 shadow rounded-lg mb-8">
-                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">
+            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl mb-8 p-6">
+                <div class="border-b border-gray-200 dark:border-gray-700 pb-6 mb-6">
+                    <h3 class="text-2xl font-extrabold text-gray-900 dark:text-white leading-tight">
                         {{ __('company.basic_information') }}
                     </h3>
-                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    <p class="mt-2 text-lg text-gray-600 dark:text-gray-400">
                         {{ __('company.basic_company_details') }}
                     </p>
                 </div>
                 
-                <div class="px-6 py-6 space-y-6">
+                <div class="space-y-8">
                     <!-- Company Logo -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
+                        <label class="block text-base font-semibold text-gray-700 dark:text-gray-300 mb-3">
                             {{ __('company.company_logo') }}
                         </label>
                         
                         <div class="flex items-center space-x-6">
                             <div class="flex-shrink-0">
                                 @if($company->logo)
-                                    <img class="h-20 w-20 rounded-lg object-cover" src="{{ $company->logo }}" alt="{{ $company->name }}">
+                                    <img class="h-24 w-24 rounded-full object-cover border-4 border-blue-400 shadow-md" src="{{ $company->logo }}" alt="{{ $company->name }}">
                                 @else
-                                    <div class="h-20 w-20 rounded-lg bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
-                                        <x-icon name="building-office" class="h-10 w-10 text-gray-500 dark:text-gray-400" />
+                                    <div class="h-24 w-24 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center border-4 border-blue-400 text-blue-600 dark:text-blue-300 text-4xl font-semibold">
+                                        {{ substr($company->name ?? '?', 0, 1) }}
                                     </div>
                                 @endif
                             </div>
@@ -82,7 +82,7 @@
                                     maxSize="5"
                                     :hint="__('company.logo_requirements')"
                                     :error="$errors->first('logo')"
-                                    :dropzone="false"
+                                    :dropzone="true"
                                 />
                             </div>
                         </div>
@@ -90,18 +90,18 @@
 
                     <!-- Company Cover Photo -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
+                        <label class="block text-base font-semibold text-gray-700 dark:text-gray-300 mb-3">
                             {{ __('company.cover_photo') }}
                         </label>
                         
                         <div class="space-y-4">
                             @if($company->cover_photo)
-                                <div class="w-full h-32 rounded-lg overflow-hidden">
+                                <div class="w-full h-48 rounded-lg overflow-hidden shadow-md">
                                     <img class="w-full h-full object-cover" src="{{ $company->cover_photo }}" alt="{{ $company->name }} Cover">
                                 </div>
                             @else
-                                <div class="w-full h-32 rounded-lg bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                                    <x-icon name="photo" class="h-8 w-8 text-gray-400" />
+                                <div class="w-full h-48 rounded-lg bg-gray-200 dark:bg-gray-700 flex items-center justify-center shadow-md">
+                                    <x-icon name="photo" class="h-12 w-12 text-gray-400" />
                                 </div>
                             @endif
                             
@@ -113,12 +113,12 @@
                                 maxSize="10"
                                 :hint="__('company.cover_photo_requirements')"
                                 :error="$errors->first('cover_photo')"
-                                :dropzone="false"
+                                :dropzone="true"
                             />
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                         <!-- Company Name -->
                         <x-ui.input
                             name="name"
@@ -220,18 +220,18 @@
             </div>
 
             <!-- Location Information -->
-            <div class="bg-white dark:bg-gray-800 shadow rounded-lg mb-8">
-                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">
+            <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl mb-8 p-6">
+                <div class="border-b border-gray-200 dark:border-gray-700 pb-6 mb-6">
+                    <h3 class="text-2xl font-extrabold text-gray-900 dark:text-white leading-tight">
                         {{ __('company.location_information') }}
                     </h3>
-                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    <p class="mt-2 text-lg text-gray-600 dark:text-gray-400">
                         {{ __('company.headquarters_and_locations') }}
                     </p>
                 </div>
                 
-                <div class="px-6 py-6 space-y-6">
-                    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div class="space-y-8">
+                    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                         <!-- Country -->
                         <x-ui.select
                             name="country_id"
@@ -290,40 +290,43 @@
 
                     <!-- Additional Locations -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label class="block text-base font-semibold text-gray-700 dark:text-gray-300 mb-3">
                             {{ __('company.additional_locations') }}
                         </label>
-                        <div id="additional-locations">
+                        <div id="additional-locations" class="space-y-4">
                             @if($company->additional_locations ?? false)
                                 @foreach($company->additional_locations as $index => $location)
-                                    <div class="location-item flex items-center space-x-2 mb-2">
+                                    <div class="location-item flex items-center space-x-3">
                                         <x-ui.input
                                             name="additional_locations[{{ $index }}]"
                                             :placeholder="__('company.location_placeholder')"
                                             :value="$location"
                                             class="flex-1"
+                                            icon="map-pin"
                                         />
-                                        <x-ui.button 
+                                        <x-button 
                                             type="button" 
-                                            variant="ghost" 
+                                            variant="danger-outline" 
                                             size="sm"
                                             onclick="removeLocation(this)"
-                                            class="text-red-600 hover:text-red-500"
+                                            icon="trash"
                                         >
                                             {{ __('company.remove') }}
-                                        </x-ui.button>
+                                        </x-button>
                                     </div>
                                 @endforeach
                             @endif
                         </div>
-                        <x-ui.button 
+                        <x-button 
                             type="button" 
                             variant="secondary" 
                             size="sm"
                             onclick="addLocation()"
+                            class="mt-4 inline-flex items-center"
                         >
+                            <x-icon name="plus" class="h-4 w-4 mr-2" />
                             {{ __('company.add_location') }}
-                        </x-ui.button>
+                        </x-button>
                     </div>
                 </div>
             </div>

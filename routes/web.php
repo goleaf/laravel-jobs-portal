@@ -148,34 +148,41 @@ Route::post('job-applications', [ApplicationController::class, 'store'])->name('
 | All frontend routes serve the Vue3 Single Page Application
 */
 
-// Main SPA routes - these serve the Vue3 app
-$spaRoutes = [
-    '/',
-    '/jobs',
-    '/jobs/{id}',
-    '/companies',
-    '/companies/{id}',
-    '/professions',
-    '/professions/{id}',
-    '/candidate',
-    '/candidate/{path}',
-    '/employer',
-    '/employer/{path}',
-    '/admin',
-    '/admin/{path}',
-];
+// Home page
+Route::get('/', function () {
+    return view('front_web.home.home');
+})->name('home');
 
-// Register SPA routes
-foreach ($spaRoutes as $route) {
-    Route::get($route, function () {
-        return view('app');
-    })->where('path', '.*')->where('id', '[0-9]+');
-}
+// Jobs
+Route::get('/jobs', function () {
+    return view('jobs.index');
+})->name('jobs.index');
+Route::get('/jobs/{id}', function ($id) {
+    return view('jobs.show', ['id' => $id]);
+})->name('jobs.show');
 
-// Catch-all route for Vue3 SPA (must be last)
-Route::get('/{path}', function () {
-    return view('app');
-})->where('path', '.*')->name('spa.catchall');
+// Companies
+Route::get('/companies', function () {
+    return view('companies.index');
+})->name('companies.index');
+Route::get('/companies/{id}', function ($id) {
+    return view('companies.show', ['id' => $id]);
+})->name('companies.show');
+
+// Candidate dashboard
+Route::get('/candidate', function () {
+    return view('candidate.dashboard');
+})->name('candidate.dashboard');
+
+// Employer dashboard
+Route::get('/employer', function () {
+    return view('employer.dashboard');
+})->name('employer.dashboard');
+
+// Admin dashboard
+Route::get('/admin', function () {
+    return view('admin.dashboard');
+})->name('admin.dashboard');
 
 // Language Switching Routes
 Route::post('/language/switch', [App\Http\Controllers\LanguageController::class, 'switch'])

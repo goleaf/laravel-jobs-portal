@@ -3,7 +3,7 @@
     <Transition name="modal-backdrop" appear>
       <div 
         v-if="show" 
-        class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm"
+        class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 backdrop-blur-sm p-4"
         @click="handleBackdropClick"
         role="dialog"
         :aria-label="title || $t('ui.modal.default_title')"
@@ -13,11 +13,10 @@
         <Transition name="modal-content" appear>
           <div 
             :class="[
-              'bg-white rounded-lg w-full mx-4 max-h-[90vh] overflow-hidden shadow-2xl',
+              'bg-white dark:bg-gray-800 rounded-xl w-full mx-auto max-h-[95vh] overflow-hidden shadow-2xl transition-all duration-300 ease-in-out transform',
               sizeClasses[size],
-              {
-                'dark:bg-gray-800 dark:text-white': isDark
-              }
+              isMaximized ? 'h-full' : '',
+              isMinimized ? 'h-auto w-auto translate-y-full opacity-0 pointer-events-none' : '',
             ]"
             @click.stop
             role="document"
@@ -26,34 +25,29 @@
             <!-- Header -->
             <div 
               :class="[
-                'flex justify-between items-center p-6 border-b',
+                'flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700',
                 {
-                  'border-gray-200 dark:border-gray-700': true,
-                  'bg-gray-50 dark:bg-gray-700': headerBackground
+                  'bg-gray-50 dark:bg-gray-700': headerBackground,
+                  'bg-blue-50 dark:bg-blue-900/20': variant === 'info',
+                  'bg-green-50 dark:bg-green-900/20': variant === 'success',
+                  'bg-yellow-50 dark:bg-yellow-900/20': variant === 'warning',
+                  'bg-red-50 dark:bg-red-900/20': variant === 'danger',
                 }
               ]"
             >
               <!-- Title Section -->
               <div class="flex items-center space-x-3">
-                <component 
-                  v-if="icon" 
-                  :is="icon" 
-                  :class="[
-                    'w-6 h-6',
-                    iconColorClasses[variant]
-                  ]"
-                  :aria-hidden="true"
-                />
+                <slot name="header-icon"></slot>
                 <div>
                   <h3 
-                    class="text-lg font-semibold leading-6"
+                    class="text-2xl font-extrabold text-gray-900 dark:text-white leading-tight"
                     :id="titleId"
                   >
                     {{ title || $t('ui.modal.default_title') }}
                   </h3>
                   <p 
                     v-if="subtitle" 
-                    class="text-sm text-gray-500 dark:text-gray-400 mt-1"
+                    class="text-base text-gray-600 dark:text-gray-400 mt-1"
                   >
                     {{ subtitle }}
                   </p>
@@ -65,7 +59,7 @@
                 <button
                   v-if="minimizable"
                   @click="handleMinimize"
-                  class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                  class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   :aria-label="$t('ui.modal.minimize')"
                 >
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -76,7 +70,7 @@
                 <button
                   v-if="maximizable"
                   @click="handleMaximize"
-                  class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                  class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   :aria-label="isMaximized ? $t('ui.modal.restore') : $t('ui.modal.maximize')"
                 >
                   <svg v-if="!isMaximized" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,7 +84,7 @@
                 <button
                   v-if="closable"
                   @click="closeModal"
-                  class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                  class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   :aria-label="$t('ui.modal.close')"
                 >
                   <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -102,9 +96,9 @@
 
             <!-- Content -->
             <div 
-              class="overflow-y-auto"
+              class="overflow-y-auto custom-scrollbar"
               :class="contentPaddingClasses"
-              :style="{ maxHeight: isMaximized ? 'calc(100vh - 200px)' : 'calc(90vh - 200px)' }"
+              :style="{ maxHeight: isMaximized ? 'calc(100vh - 120px)' : 'calc(95vh - 120px)' }"
               :id="contentId"
             >
               <slot></slot>
@@ -114,10 +108,13 @@
             <div 
               v-if="$slots.footer" 
               :class="[
-                'p-6 border-t flex justify-end space-x-3',
+                'p-6 border-t border-gray-200 dark:border-gray-700 flex justify-end space-x-3',
                 {
-                  'border-gray-200 dark:border-gray-700': true,
-                  'bg-gray-50 dark:bg-gray-700': footerBackground
+                  'bg-gray-50 dark:bg-gray-700': footerBackground,
+                  'bg-blue-50 dark:bg-blue-900/20': variant === 'info',
+                  'bg-green-50 dark:bg-green-900/20': variant === 'success',
+                  'bg-yellow-50 dark:bg-yellow-900/20': variant === 'warning',
+                  'bg-red-50 dark:bg-red-900/20': variant === 'danger',
                 }
               ]"
             >
@@ -127,10 +124,13 @@
             <!-- Loading Overlay -->
             <div 
               v-if="loading" 
-              class="absolute inset-0 bg-white bg-opacity-75 dark:bg-gray-800 dark:bg-opacity-75 flex items-center justify-center"
+              class="absolute inset-0 bg-white dark:bg-gray-800 bg-opacity-90 dark:bg-opacity-90 flex flex-col items-center justify-center transition-opacity duration-300"
             >
-              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
-              <span class="ml-3 text-sm text-gray-600 dark:text-gray-400">
+              <svg class="animate-spin h-10 w-10 text-blue-500 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span class="text-lg font-medium text-gray-700 dark:text-gray-300">
                 {{ loadingText || $t('ui.modal.loading') }}
               </span>
             </div>
@@ -151,7 +151,7 @@ interface Props {
   subtitle?: string
   size?: "xs" | "sm" | "md" | "lg" | "xl" | "full"
   variant?: "default" | "success" | "warning" | "danger" | "info"
-  icon?: string
+  // icon?: string; // Removed temporarily until a proper Vue icon component is integrated
   closable?: boolean
   minimizable?: boolean
   maximizable?: boolean
@@ -204,16 +204,17 @@ const sizeClasses = {
   md: 'max-w-2xl',
   lg: 'max-w-4xl',
   xl: 'max-w-6xl',
-  full: 'max-w-full h-full m-0 rounded-none'
+  full: 'max-w-full h-full m-0 rounded-none' // Added full-screen classes
 }
 
-const iconColorClasses = {
-  default: 'text-gray-500',
-  success: 'text-green-500',
-  warning: 'text-yellow-500',
-  danger: 'text-red-500',
-  info: 'text-blue-500'
-}
+// Removed iconColorClasses as icon prop is temporarily removed
+// const iconColorClasses = {
+//   default: 'text-gray-500',
+//   success: 'text-green-500',
+//   warning: 'text-yellow-500',
+//   danger: 'text-red-500',
+//   info: 'text-blue-500'
+// }
 
 const contentPaddingClasses = computed(() => {
   return props.size === 'full' ? 'p-4' : 'p-6'
@@ -248,104 +249,75 @@ const handleEscape = (e: KeyboardEvent) => {
   }
 }
 
-const trapFocus = (e: KeyboardEvent) => {
-  if (!modalRef.value || e.key !== 'Tab') return
-
-  const focusableElements = modalRef.value.querySelectorAll(
-    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-  )
-  
-  const firstElement = focusableElements[0] as HTMLElement
-  const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement
-
-  if (e.shiftKey) {
-    if (document.activeElement === firstElement) {
-      lastElement.focus()
-      e.preventDefault()
-    }
-  } else {
-    if (document.activeElement === lastElement) {
-      firstElement.focus()
-      e.preventDefault()
-    }
-  }
-}
-
-// Lifecycle
-watch(() => props.show, async (newShow) => {
-  if (newShow) {
-    await nextTick()
-    // Focus first focusable element
-    const firstFocusable = modalRef.value?.querySelector(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    ) as HTMLElement
-    firstFocusable?.focus()
-    
-    // Prevent body scroll
-    document.body.style.overflow = 'hidden'
-  } else {
-    // Restore body scroll
-    document.body.style.overflow = ''
-    isMaximized.value = false
-    isMinimized.value = false
-  }
-})
-
+// Keyboard event listener for escape key
 onMounted(() => {
-  document.addEventListener("keydown", handleEscape)
-  document.addEventListener("keydown", trapFocus)
+  document.addEventListener('keydown', handleEscape)
 })
 
 onUnmounted(() => {
-  document.removeEventListener("keydown", handleEscape)
-  document.removeEventListener("keydown", trapFocus)
-  document.body.style.overflow = ''
+  document.removeEventListener('keydown', handleEscape)
 })
+
+// Watch for show prop changes to manage scrollbar
+watch(() => props.show, (newVal) => {
+  if (newVal) {
+    document.body.style.overflow = 'hidden'
+  } else {
+    document.body.style.overflow = ''
+  }
+}, { immediate: true })
 </script>
 
-<style scoped>
-/* Modal Backdrop Transitions */
+<style>
+/* Transitions */
 .modal-backdrop-enter-active,
 .modal-backdrop-leave-active {
   transition: opacity 0.3s ease;
 }
-
 .modal-backdrop-enter-from,
 .modal-backdrop-leave-to {
   opacity: 0;
 }
 
-/* Modal Content Transitions */
-.modal-content-enter-active {
-  transition: all 0.3s ease;
-}
-
+.modal-content-enter-active,
 .modal-content-leave-active {
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
-.modal-content-enter-from {
-  opacity: 0;
-  transform: scale(0.9) translateY(-20px);
-}
-
+.modal-content-enter-from,
 .modal-content-leave-to {
   opacity: 0;
-  transform: scale(0.95) translateY(10px);
+  transform: translateY(-20px) scale(0.95);
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .dark\:bg-gray-800 {
-    background-color: #1f2937;
-  }
-  
-  .dark\:text-white {
-    color: #ffffff;
-  }
-  
-  .dark\:border-gray-700 {
-    border-color: #374151;
-  }
+/* Custom scrollbar for content area */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Light gray for track */
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #888; /* Dark gray for thumb */
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Even darker gray on hover */
+}
+
+/* Dark mode scrollbar */
+.dark .custom-scrollbar::-webkit-scrollbar-track {
+  background: #333; /* Darker track for dark mode */
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #bbb; /* Lighter thumb for dark mode */
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #ddd; /* Even lighter thumb on hover */
 }
 </style>

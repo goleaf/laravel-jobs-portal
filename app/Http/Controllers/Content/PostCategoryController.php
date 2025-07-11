@@ -7,6 +7,8 @@ use App\Repositories\PostCategoryRepository;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
+use App\Http\Requests\Content\CreatePostCategoryRequest;
+use App\Http\Requests\Content\UpdatePostCategoryUpdatePostCategoryRequest;
 
 class PostCategoryController extends AppBaseController
 {

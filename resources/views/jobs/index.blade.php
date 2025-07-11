@@ -6,13 +6,13 @@
 @section('content')
 <!-- Page Header -->
 <div class="bg-white dark:bg-gray-800 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="md:flex md:items-center md:justify-between">
             <div class="flex-1 min-w-0">
-                <h1 class="text-2xl font-bold leading-7 text-gray-900 dark:text-white sm:text-3xl sm:truncate">
+                <h1 class="text-4xl font-extrabold leading-tight text-gray-900 dark:text-white sm:text-5xl sm:truncate mb-2">
                     {{ __('jobs.all_jobs') }}
                 </h1>
-                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                <p class="mt-1 text-lg text-gray-500 dark:text-gray-400 max-w-3xl">
                     {{ trans_choice('jobs.jobs_count', $jobs->total(), ['count' => number_format($jobs->total())]) }}
                 </p>
             </div>
@@ -59,7 +59,7 @@
                             <x-ui.select 
                                 name="sort" 
                                 id="job-sort"
-                                class="w-auto"
+                                class="w-auto px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 onchange="window.JobFilters.updateSort(this.value)"
                             >
                                 <option value="created_at_desc" {{ request('sort') === 'created_at_desc' ? 'selected' : '' }}>
@@ -83,19 +83,19 @@
                                 <span class="text-sm text-gray-500 dark:text-gray-400">{{ __('jobs.view') }}:</span>
                                 <button 
                                     type="button" 
-                                    class="p-2 rounded-md {{ request('view') !== 'grid' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300' : 'text-gray-400 hover:text-gray-600' }}"
+                                    class="p-2 rounded-md transition duration-150 ease-in-out {{ request('view') !== 'grid' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700' }}"
                                     onclick="window.JobFilters.updateView('list')"
                                     title="{{ __('jobs.list_view') }}"
                                 >
-                                    <x-icon name="list" class="h-4 w-4" />
+                                    <x-icon name="list" class="h-5 w-5" />
                                 </button>
                                 <button 
                                     type="button" 
-                                    class="p-2 rounded-md {{ request('view') === 'grid' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300' : 'text-gray-400 hover:text-gray-600' }}"
+                                    class="p-2 rounded-md transition duration-150 ease-in-out {{ request('view') === 'grid' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700' }}"
                                     onclick="window.JobFilters.updateView('grid')"
                                     title="{{ __('jobs.grid_view') }}"
                                 >
-                                    <x-icon name="grid" class="h-4 w-4" />
+                                    <x-icon name="grid" class="h-5 w-5" />
                                 </button>
                             </div>
                         </div>

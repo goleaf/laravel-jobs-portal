@@ -12,6 +12,8 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
+use App\Http\Requests\Location\CreateStateRequest;
+use App\Http\Requests\Location\UpdateStateUpdateStateRequest;
 
 class StateController extends AppBaseController
 {

@@ -8,7 +8,7 @@
     <title>{{ $title ?? __('app.default_title') }}</title>
     
     <!-- Vite Assets (includes local fonts) -->
-    @vite(['resources/css/app.css', 'resources/js/main.js'])
+    @vite(['resources/css/app.css'])
     
     <!-- Additional Meta Tags -->
     <meta name="description" content="{{ __('app.meta_description') }}">
@@ -30,8 +30,8 @@
         </div>
     </div>
 
-    <!-- Vue.js SPA Mount Point -->
-    <div id="app"></div>
+    <!-- Page Content -->
+    @yield('content')
     
     <!-- Loading Fallback -->
     <noscript>

@@ -6,7 +6,7 @@
     <div class="min-h-screen bg-gray-100 p-6">
         {{-- Dashboard Header --}}
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-extrabold text-gray-900">{{ __('Welcome, User!') }}</h1>
+            <h1 class="text-3xl font-extrabold text-gray-900">{{ __('Welcome!') }}</h1>
             <x-button class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
                 {{ __('Post a New Job') }}
             </x-button>

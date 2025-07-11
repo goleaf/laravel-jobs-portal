@@ -31,7 +31,6 @@
                         id="conversation-search"
                         placeholder="{{ __('messages.search_conversations') }}"
                         icon="magnifying-glass"
-                        onkeyup="searchConversations(this.value)"
                     />
                 </div>
             </div>
@@ -75,8 +74,7 @@
                         <div class="conversation-item border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer {{ $conversation['unread'] ? 'bg-blue-50 dark:bg-blue-900/20' : '' }}"
                              data-conversation-id="{{ $conversation['id'] }}"
                              data-unread="{{ $conversation['unread'] ? 'true' : 'false' }}"
-                             data-archived="{{ $conversation['archived'] ? 'true' : 'false' }}"
-                             onclick="openConversation('{{ $conversation['id'] }}')">
+                             data-archived="{{ $conversation['archived'] ? 'true' : 'false' }}">
                             <div class="px-6 py-4">
                                 <div class="flex items-center space-x-3">
                                     <!-- Avatar -->
@@ -337,8 +335,6 @@
                                 rows="1"
                                 placeholder="{{ __('messages.type_message') }}"
                                 class="block w-full rounded-lg border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 resize-none"
-                                onkeydown="handleMessageKeydown(event)"
-                                oninput="autoResizeTextarea(this)"
                             ></textarea>
                             
                             <!-- File Preview -->

@@ -124,8 +124,8 @@ class DeepRelationshipService
     public function getCandidateAppliedJobSkills(User $candidate): Collection
     {
         $skillIds = DB::table('skills')
-            ->join('job_skill', 'skills.id', '=', 'job_skill.skill_id')
-            ->join('jobs', 'job_skill.job_id', '=', 'jobs.id')
+            ->join('jobs_skill', 'skills.id', '=', 'jobs_skill.skill_id')
+            ->join('jobs', 'jobs_skill.job_id', '=', 'jobs.id')
             ->join('job_applications', 'jobs.id', '=', 'job_applications.job_id')
             ->where('job_applications.candidate_id', $candidate->id)
             ->distinct()

@@ -125,7 +125,7 @@ class TranslationHelper
     public const JOB_COMPANY = 'job.job_company';
     public const JOB_POSTED_DATE = 'job.job_posted_date';
     public const JOB_DEADLINE = 'job.job_deadline';
-    public const JOB_SKILLS = 'job.job_skills';
+    public const JOB_SKILLS = 'job.jobs_skill';
     public const JOB_APPLICATIONS = 'job.job_applications';
     public const JOB_APPLICANTS = 'job.job_applicants';
     public const JOB_VACANCY = 'job.job_vacancy';

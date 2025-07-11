@@ -352,7 +352,7 @@
                                             <img class="mx-auto h-16 w-16 rounded-full" src="{{ $member->avatar }}" alt="{{ $member->name }}">
                                         @else
                                             <div class="mx-auto h-16 w-16 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
-                                                <x-icon name="user" class="h-8 w-8 text-gray-500 dark:text-gray-400" />
+                                                <x-icon name="building-office" class="h-8 w-8 text-gray-500 dark:text-gray-400" />
                                             </div>
                                         @endif
                                         

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $candidate->user->name . ' - ' . __('candidates.profile'))
+@section('title', $candidate->name . ' - ' . __('candidates.profile'))
 @section('description', Str::limit(strip_tags($candidate->bio), 160))
 
 @section('content')
@@ -11,13 +11,13 @@
             <x-ui.card>
                 <x-ui.card-content class="text-center p-6">
                     @if($candidate->profile_picture)
-                        <img class="h-24 w-24 rounded-full object-cover mx-auto mb-4 border-2 border-blue-400 shadow-sm" src="{{ asset('storage/' . $candidate->profile_picture) }}" alt="{{ $candidate->user->name }}">
+                        <img class="h-24 w-24 rounded-full object-cover mx-auto mb-4 border-2 border-blue-400 shadow-sm" src="{{ asset('storage/' . $candidate->profile_picture) }}" alt="{{ $candidate->name }}">
                     @else
                         <div class="h-24 w-24 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center text-blue-600 dark:text-blue-300 text-4xl font-semibold mx-auto mb-4">
-                            {{ substr($candidate->user->name ?? '?', 0, 1) }}
+                            {{ substr($candidate->name ?? '?', 0, 1) }}
                         </div>
                     @endif
-                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ $candidate->user->name ?? __('candidates.no_name') }}</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ $candidate->name ?? __('candidates.no_name') }}</h2>
                     @if($candidate->headline)
                         <p class="text-gray-600 dark:text-gray-400 text-lg mt-1">{{ $candidate->headline }}</p>
                     @endif
@@ -35,7 +35,7 @@
                 <x-ui.card-content class="space-y-3">
                     <div class="flex items-center text-gray-700 dark:text-gray-300">
                         <x-icon name="mail" class="h-5 w-5 mr-3 text-gray-500" />
-                        <span>{{ $candidate->user->email ?? __('candidates.not_provided') }}</span>
+                        <span>{{ $candidate->email ?? __('candidates.not_provided') }}</span>
                     </div>
                     @if($candidate->phone_number)
                         <div class="flex items-center text-gray-700 dark:text-gray-300">

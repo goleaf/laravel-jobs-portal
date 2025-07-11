@@ -218,6 +218,16 @@ class SQLiteOptimizedSeeder extends Seeder
             }
         }
 
+        // Prevent duplicate required_degree_levels
+        if (RequiredDegreeLevel::count() == 0) {
+            RequiredDegreeLevel::factory(8)->create();
+            $this->seedingProgress['required_degree_levels'] = 8;
+            $this->command->info('✅ required_degree_levels: 8');
+        } else {
+            $this->seedingProgress['required_degree_levels'] = RequiredDegreeLevel::count();
+            $this->command->info('✅ required_degree_levels already exist');
+        }
+
         $this->command->info('✅ Master data seeded');
     }
 

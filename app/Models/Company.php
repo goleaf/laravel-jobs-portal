@@ -715,11 +715,11 @@ class Company extends Model implements HasMedia
     {
         return $this->hasManyDeep(
             \App\Models\Skill::class,
-            [\App\Models\Job::class, 'job_skill'],
+            [\App\Models\Job::class, 'jobs_skill'],
             [
                 'company_id', // Company.id = Job.company_id
-                'job_id',     // Job.id = job_skill.job_id
-                'skill_id',    // job_skill.skill_id = Skill.id
+                'job_id',     // Job.id = jobs_skill.job_id
+                'skill_id',    // jobs_skill.skill_id = Skill.id
             ],
             [
                 'id',         // Company.id

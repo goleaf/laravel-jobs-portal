@@ -149,12 +149,12 @@ trait HasDeepJobPortalRelationships
     {
         return $this->hasManyDeep(
             Skill::class,
-            [JobApplication::class, Job::class, 'job_skill'],
+            [JobApplication::class, Job::class, 'jobs_skill'],
             [
                 'id',      // User.id = JobApplication.candidate_id
                 'job_id',  // JobApplication.job_id = Job.id
-                'job_id',  // Job.id = job_skill.job_id
-                'skill_id', // job_skill.skill_id = Skill.id
+                'job_id',  // Job.id = jobs_skill.job_id
+                'skill_id', // jobs_skill.skill_id = Skill.id
             ],
             [
                 'id',          // User.id
@@ -176,12 +176,12 @@ trait HasDeepJobPortalRelationships
     {
         return $this->hasManyDeep(
             Company::class,
-            ['candidates', 'candidate_skill', 'job_skill', Job::class],
+            ['candidates', 'candidate_skill', 'jobs_skill', Job::class],
             [
                 'id',         // User.id = candidates.user_id
                 'candidate_id', // candidates.id = candidate_skill.candidate_id
-                'skill_id',   // candidate_skill.skill_id = job_skill.skill_id
-                'job_id',     // job_skill.job_id = Job.id
+                'skill_id',   // candidate_skill.skill_id = jobs_skill.skill_id
+                'job_id',     // jobs_skill.job_id = Job.id
                 'company_id',  // Job.company_id = Company.id
             ],
             [

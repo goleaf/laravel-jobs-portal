@@ -34,7 +34,6 @@
                             class="h-20 w-20 rounded-full object-cover shadow-sm border border-gray-200 dark:border-gray-700" 
                             src="{{ $job->company->logo_url }}" 
                             alt="{{ $job->company->name }}"
-                            onerror="this.src='{{ asset('images/default-company.png') }}'"
                         >
                     </div>
                     <div class="ml-5">

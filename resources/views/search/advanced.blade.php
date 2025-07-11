@@ -112,7 +112,6 @@
                                     max="200" 
                                     value="{{ request('radius', 25) }}"
                                     class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
-                                    oninput="updateRadiusDisplay(this.value)"
                                 >
                                 <span id="radius-display" class="text-sm font-medium text-gray-900 dark:text-white min-w-0">
                                     {{ request('radius', 25) }} km
@@ -254,7 +253,6 @@
                                 id="skill-input" 
                                 placeholder="{{ __('search.type_skill_press_enter') }}"
                                 class="flex-1 rounded-l-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                onkeypress="addSkill(event)"
                             >
                             <button 
                                 type="button" 

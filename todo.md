@@ -413,4 +413,61 @@
 
 
 
-start work with 1 point in todo task. yes. and then remove vue. remove vue  frameworks. make working frontend and backend. i need to create all blades for frontend and backend. create seeds via factories. create request files and tests for all project. request files make with subfolders for frontend and backend. make tests with subfolders for frontend and backend. do working project on browser
+make working frontend and backend. i need to create all blades for frontend and backend. create seeds via factories. create request files and tests for all project. request files make with subfolders for frontend and backend. make tests with subfolders for frontend and backend. do working project on browser
+
+
+
+
+Are all CRUD pages present for jobs, companies, candidates, etc.?
+Are all admin/management pages present for backend features?
+Are all forms, modals, and components (in resources/views/components/) implemented and used in the blades?
+Are all routes pointing to these blades and tested in the browser?
+Next Steps
+Audit for missing CRUD or management pages (e.g., edit, show, delete for jobs/companies/candidates and another).
+Scaffold any missing Blade files for both frontend and backend.
+Ensure all routes are defined and point to the correct blades.
+Test in the browser for navigation and feature completeness.
+Continue with seeds, request files, and tests as previously planned.
+
+Refactor all API and web controllers to use Form Request classes (with subfolders for frontend/backend)
+Ensure all validation and error messages are multi-language (JSON)
+Implement multi-language system using JSON files for all strings
+Refactor all Blade files to use translation functions
+Remove Bootstrap and all CDN references from Blade files
+Rewrite all Blade files to use TailwindCSS
+Ensure all CSS/JS is in resources and built via npm (no inline or CDN)
+Ensure only one layout is used; remove extras
+Maximize use of Blade components, but minimize number of UI component files
+Refactor to use components where possible
+Create/complete tests for all controllers and functions (frontend/backend subfolders)
+Run all tests and fix any errors
+Ensure all data is generated via factories/seeders
+Remove any user/auth-related code, files, and relations
+
+# TODO: Comprehensive Laravel Refactor & QA
+
+## 1. Controller Refactor
+- [ ] Refactor all API controllers to use Form Request classes (resources/requests/api)
+- [ ] Refactor all Web controllers to use Form Request classes (resources/requests/web)
+- [ ] Organize Form Requests into frontend/backend subfolders
+- [ ] Ensure all validation and error messages are multi-language (JSON)
+
+## 2. Multi-language System
+- [ ] Implement multi-language system using JSON files for all strings
+- [ ] Refactor all Blade files to use translation functions for all strings
+
+## 3. Blade & UI Refactor
+- [ ] Remove Bootstrap and all CDN references from Blade files
+- [ ] Rewrite all Blade files to use TailwindCSS
+- [ ] Ensure all CSS/JS is in resources and built via npm (no inline or CDN)
+- [ ] Ensure only one layout is used; remove extras
+- [ ] Maximize use of Blade components, but minimize number of UI component files
+- [ ] Refactor to use components where possible
+
+## 4. Testing
+- [ ] Create/complete tests for all controllers and functions (frontend/backend subfolders)
+- [ ] Run all tests and fix any errors
+
+## 5. Data & Auth Cleanup
+- [ ] Ensure all data is generated via factories/seeders
+- [ ] Remove any user/auth-related code, files, and relations

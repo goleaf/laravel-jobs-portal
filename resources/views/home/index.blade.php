@@ -27,14 +27,12 @@
             <!-- Call to Action Buttons -->
             <div class="flex justify-center gap-4 mt-8">
                 <x-button 
-                    href="{{ route('register') }}?type=candidate" 
                     class="bg-white text-blue-600 px-6 py-3 rounded-md font-semibold hover:bg-gray-100"
                 >
                     {{ __('home.join_as_candidate') }}
                 </x-button>
                 
                 <x-button 
-                    href="{{ route('register') }}?type=employer" 
                     class="border border-white text-white px-6 py-3 rounded-md font-semibold hover:bg-white hover:text-blue-600"
                 >
                     {{ __('home.join_as_employer') }}

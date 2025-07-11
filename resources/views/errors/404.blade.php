@@ -41,10 +41,11 @@
 
             <!-- Search Bar -->
             <div class="mb-8">
-                <form onsubmit="searchSite(event)" class="max-w-md mx-auto">
+                <form action="{{ route('search') }}" method="GET" class="max-w-md mx-auto">
                     <div class="relative">
                         <x-ui.input
                             type="text"
+                            name="q"
                             id="site-search"
                             placeholder="{{ __('errors.search_placeholder') }}"
                             icon="magnifying-glass"
@@ -288,16 +289,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
-function searchSite(event) {
-    event.preventDefault();
-    
-    const query = document.getElementById('site-search').value.trim();
-    if (!query) return;
-    
-    // Redirect to search page
-    window.location.href = `/search?q=${encodeURIComponent(query)}`;
-}
 
 function goBack() {
     if (window.history.length > 1) {

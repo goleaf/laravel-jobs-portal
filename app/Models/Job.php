@@ -683,7 +683,7 @@ class Job extends Model
      */
     public function jobsSkill()
     {
-        return $this->belongsToMany(Skill::class, 'job_skill');
+        return $this->belongsToMany(Skill::class, 'jobs_skill');
     }
 
     /**

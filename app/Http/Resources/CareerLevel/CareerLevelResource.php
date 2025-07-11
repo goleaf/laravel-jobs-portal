@@ -190,7 +190,7 @@ class CareerLevelResource extends JsonResource
     private function getTopSkills(): array
     {
         return cache()->remember("career_level.{$this->id}.top_skills", 3600, function () {
-            // This would require a more complex query joining through job_skills
+            // This would require a more complex query joining through jobs_skill
             return [];
         });
     }

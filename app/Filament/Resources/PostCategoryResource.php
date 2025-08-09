@@ -14,39 +14,16 @@ class PostCategoryResource extends Resource
 {
     protected static ?string $model = PostCategory::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Content';
-
-    public static function getNavigationGroup(): ?string
-    {
-        return __('Content');
-    }
-
-    public static function getNavigationLabel(): string
-    {
-        return __('Post Categories');
-    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Section::make(__('Details'))
-                    ->columns(3)
-                    ->schema([
-                        Forms\Components\TextInput::make('name')->label(__('Name'))->required()->maxLength(255)
-                            ->live(onBlur: true)
-                            ->afterStateUpdated(fn ($state, callable $set) => $set('slug', \Str::slug((string) $state))),
-                        Forms\Components\TextInput::make('slug')->label(__('Slug'))->maxLength(255)->unique(ignoreRecord: true),
-                        Forms\Components\Textarea::make('description')->label(__('Description'))->columnSpanFull(),
-                        Forms\Components\TextInput::make('sort_order')->label(__('Sort Order'))->numeric()->default(0),
-                        Forms\Components\ColorPicker::make('color')->label(__('Color')),
-                        Forms\Components\TextInput::make('icon')->label(__('Icon'))->maxLength(50),
-                        Forms\Components\Toggle::make('is_active')->label(__('Active'))->inline(false)->default(true),
-                        Forms\Components\Toggle::make('is_default')->label(__('Default'))->inline(false)->default(false),
-                        Forms\Components\Toggle::make('is_featured')->label(__('Featured'))->inline(false)->default(false),
-                    ]),
+                Forms\Components\TextInput::make('name')->required()->maxLength(255),
+                Forms\Components\TextInput::make('slug')->maxLength(255)->helperText(__('Auto-generated if empty')),
             ]);
     }
 
@@ -54,24 +31,15 @@ class PostCategoryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->label(__('Name'))->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('slug')->label(__('Slug'))->toggleable(),
-                Tables\Columns\TextColumn::make('sort_order')->label(__('Sort'))->numeric()->sortable()->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\ColorColumn::make('color')->label(__('Color'))->toggleable(),
-                Tables\Columns\TextColumn::make('icon')->label(__('Icon'))->toggleable(),
-                Tables\Columns\IconColumn::make('is_active')->label(__('Active'))->boolean()->sortable(),
-                Tables\Columns\IconColumn::make('is_default')->label(__('Default'))->boolean()->sortable()->toggleable(),
-                Tables\Columns\IconColumn::make('is_featured')->label(__('Featured'))->boolean()->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('created_at')->label(__('Created'))->dateTime()->since()->sortable()->toggleable(),
+                Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('slug')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('created_at')->since()->sortable(),
             ])
-            ->filters([
-                Tables\Filters\TernaryFilter::make('is_active')->label(__('Active')),
-                Tables\Filters\TernaryFilter::make('is_default')->label(__('Default')),
-                Tables\Filters\TernaryFilter::make('is_featured')->label(__('Featured')),
-            ])
+            ->filters([])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

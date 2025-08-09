@@ -12,6 +12,8 @@ use Illuminate\Support\ServiceProvider;
 use Laracasts\Flash\Flash;
 use Laravel\Socialite\Facades\Socialite;
 
+$testing = env('APP_ENV') === 'testing';
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -199,19 +201,31 @@ return [
     |
     */
 
-    'providers' => ServiceProvider::defaultProviders()->merge([
-        // Package Service Providers...
-        // Barryvdh\Debugbar\ServiceProvider::class,
-        // Application Service Providers...
-        AppServiceProvider::class,
-        AuthServiceProvider::class,
-        EventServiceProvider::class,
-        RouteServiceProvider::class,
-        TranslationServiceProvider::class,
-        // \App\Providers\SettingsServiceProvider::class, // Temporarily disabled to fix function redeclaration
-        App\Providers\Filament\AdminPanelProvider::class,
-        App\Providers\Filament\PublicPanelProvider::class,
-    ])->toArray(),
+    'providers' => $testing
+        ? [
+            AppServiceProvider::class,
+            AuthServiceProvider::class,
+            EventServiceProvider::class,
+            RouteServiceProvider::class,
+            TranslationServiceProvider::class,
+            Illuminate\Filesystem\FilesystemServiceProvider::class,
+            Illuminate\View\ViewServiceProvider::class,
+            Illuminate\Mail\MailServiceProvider::class,
+        ]
+        : ServiceProvider::defaultProviders()->merge(array_values(array_filter([
+            // Package Service Providers...
+            // Barryvdh\Debugbar\ServiceProvider::class,
+            // Application Service Providers...
+            AppServiceProvider::class,
+            AuthServiceProvider::class,
+            EventServiceProvider::class,
+            RouteServiceProvider::class,
+            TranslationServiceProvider::class,
+            // \App\Providers\SettingsServiceProvider::class, // Temporarily disabled to fix function redeclaration
+            // Disable Filament providers when running tests to avoid boot issues
+            App\Providers\Filament\AdminPanelProvider::class,
+            App\Providers\Filament\PublicPanelProvider::class,
+        ])))->toArray(),
 
     /*
     |--------------------------------------------------------------------------
@@ -224,13 +238,15 @@ return [
     |
     */
 
-    'aliases' => Facade::defaultAliases()->merge([
-        // 'Debugbar' => Barryvdh\Debugbar\Facade::class,
-        'Flash' => Flash::class,
-        'Redis' => Redis::class,
-        'Socialite' => Socialite::class,
-        'Form' => Form::class,
-    ])->toArray(),
+    'aliases' => $testing
+        ? []
+        : Facade::defaultAliases()->merge([
+            // 'Debugbar' => Barryvdh\Debugbar\Facade::class,
+            'Flash' => Flash::class,
+            'Redis' => Redis::class,
+            'Socialite' => Socialite::class,
+            'Form' => Form::class,
+        ])->toArray(),
 
     'is_version' => env('IS_VERSION', true),
 ];

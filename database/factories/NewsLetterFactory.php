@@ -17,7 +17,7 @@ class NewsLetterFactory extends Factory
     public function definition(): array
     {
         return [
-            'email' => $this->faker->unique()->safeEmail,
+            'email' => $this->faker->safeEmail,
             'name' => $this->faker->name,
             'is_subscribed' => $this->faker->boolean(80),
         ];

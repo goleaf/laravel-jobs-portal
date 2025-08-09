@@ -802,6 +802,24 @@ class Job extends Model
     }
 
     /**
+     * Backward-compatible accessor: prefer 'job_title' but fall back to 'title'.
+     */
+    public function getJobTitleAttribute(): ?string
+    {
+        $rawJobTitle = $this->attributes['job_title'] ?? null;
+        if (is_string($rawJobTitle) && $rawJobTitle !== '') {
+            return $rawJobTitle;
+        }
+
+        $rawTitle = $this->attributes['title'] ?? null;
+        if (is_string($rawTitle) && $rawTitle !== '') {
+            return $rawTitle;
+        }
+
+        return null;
+    }
+
+    /**
      * Humanized time since job was posted.
      */
     public function getTimeSincePostedAttribute(): ?string
@@ -810,6 +828,38 @@ class Job extends Model
             return $this->created_at->diffForHumans();
         }
         return null;
+    }
+
+    /**
+     * Determine whether the job is currently active/open for applications.
+     */
+    public function isActive(): bool
+    {
+        $statusOpen = (int) ($this->status ?? 0) === self::STATUS_OPEN;
+        $flagActive = (bool) ($this->attributes['is_active'] ?? false);
+
+        return $statusOpen || $flagActive;
+    }
+
+    /**
+     * Determine whether the job is expired.
+     */
+    public function isExpired(): bool
+    {
+        $expiresAt = $this->expires_at instanceof Carbon ? $this->expires_at : null;
+        if ($expiresAt instanceof Carbon) {
+            return $expiresAt->isPast();
+        }
+
+        if (! empty($this->job_expiry_date)) {
+            try {
+                return Carbon::parse($this->job_expiry_date)->isPast();
+            } catch (\Throwable $e) {
+                return false;
+            }
+        }
+
+        return false;
     }
 
     /**

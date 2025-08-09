@@ -3,9 +3,6 @@
 namespace Database\Factories;
 
 use App\Models\Company;
-use App\Models\Industry;
-use App\Models\State;
-// Users/auth removed
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -27,9 +24,9 @@ class CompanyFactory extends Factory
             'user_id' => null,
             'ceo' => fake()->name(),
             'no_of_offices' => fake()->numberBetween(1, 10),
-            'industry_id' => 1, // Default industry
-            'ownership_type_id' => 1, // Default ownership type
-            'company_size_id' => 1, // Default company size
+            'industry_id' => 1,
+            'ownership_type_id' => 1,
+            'company_size_id' => 1,
             'established_in' => fake()->year(),
             'details' => fake()->text(500),
             'website' => fake()->url(),

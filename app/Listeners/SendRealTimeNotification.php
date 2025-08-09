@@ -4,6 +4,8 @@ namespace App\Listeners;
 
 use App\Events\JobApplicationStatusChanged;
 use App\Models\Notification;
+use App\Models\User;
+use Filament\Notifications\Notification as FilamentNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Cache;
@@ -47,40 +49,71 @@ class SendRealTimeNotification implements ShouldQueue
     private function createNotification(JobApplicationStatusChanged $event): void
     {
         try {
-            // Create notification for candidate
-            Notification::create([
+            // Create notification for candidate in our Notification model
+            $candidateNotification = Notification::create([
                 'user_id' => $event->jobApplication->candidate_id,
-                'title' => 'Application Status Update',
-                'message' => $event->message,
-                'type' => 'job_application_status',
-                'data' => json_encode([
+                'type' => Notification::TYPE_JOB_APPLICATION,
+                'notification_for' => Notification::NOTIFICATION_FOR_CANDIDATE,
+                'title' => __('events.application.status_update.title'),
+                'text' => __(
+                    'events.application.status_update.message',
+                    [
+                        'job' => $event->jobApplication->job->job_title ?? $event->jobApplication->job->title,
+                        'old' => $event->oldStatus,
+                        'new' => $event->newStatus,
+                    ]
+                ),
+                'meta' => json_encode([
                     'application_id' => $event->jobApplication->id,
-                    'job_title' => $event->jobApplication->job->title,
-                    'company_name' => $event->jobApplication->job->company->name,
+                    'job_title' => $event->jobApplication->job->job_title ?? $event->jobApplication->job->title,
+                    'company_name' => $event->jobApplication->job->company->name ?? null,
                     'old_status' => $event->oldStatus,
                     'new_status' => $event->newStatus,
                 ]),
                 'read_at' => null,
             ]);
 
+            // Send Filament database notification to candidate user if available
+            $candidateUser = $event->jobApplication->candidate->user ?? User::find($event->jobApplication->candidate_id);
+            if ($candidateUser) {
+                FilamentNotification::make()
+                    ->title(__('events.application.status_update.title'))
+                    ->body($candidateNotification->text)
+                    ->color($this->mapStatusToColor($event->newStatus))
+                    ->sendToDatabase($candidateUser);
+            }
+
             // Create notification for employer if status is candidate-initiated
             if (in_array($event->newStatus, ['withdrawn'])) {
                 $employer = $event->jobApplication->job->company->user;
                 if ($employer) {
-                    Notification::create([
+                    $employerNotification = Notification::create([
                         'user_id' => $employer->id,
-                        'title' => 'Application Withdrawn',
-                        'message' => "Candidate {$event->jobApplication->candidate->first_name} {$event->jobApplication->candidate->last_name} withdrew their application for {$event->jobApplication->job->title}",
-                        'type' => 'job_application_status',
-                        'data' => json_encode([
+                        'type' => Notification::TYPE_JOB_APPLICATION,
+                        'notification_for' => Notification::NOTIFICATION_FOR_COMPANY,
+                        'title' => __('events.application.withdrawn.title'),
+                        'text' => __(
+                            'events.application.withdrawn.message',
+                            [
+                                'candidate' => trim(($event->jobApplication->candidate->first_name ?? '').' '.($event->jobApplication->candidate->last_name ?? '')),
+                                'job' => $event->jobApplication->job->job_title ?? $event->jobApplication->job->title,
+                            ]
+                        ),
+                        'meta' => json_encode([
                             'application_id' => $event->jobApplication->id,
-                            'job_title' => $event->jobApplication->job->title,
-                            'candidate_name' => $event->jobApplication->candidate->first_name.' '.$event->jobApplication->candidate->last_name,
+                            'job_title' => $event->jobApplication->job->job_title ?? $event->jobApplication->job->title,
+                            'candidate_name' => trim(($event->jobApplication->candidate->first_name ?? '').' '.($event->jobApplication->candidate->last_name ?? '')),
                             'old_status' => $event->oldStatus,
                             'new_status' => $event->newStatus,
                         ]),
                         'read_at' => null,
                     ]);
+
+                    FilamentNotification::make()
+                        ->title(__('events.application.withdrawn.title'))
+                        ->body($employerNotification->text)
+                        ->color('warning')
+                        ->sendToDatabase($employer);
                 }
             }
         } catch (\Exception $e) {
@@ -89,6 +122,16 @@ class SendRealTimeNotification implements ShouldQueue
                 'error' => $e->getMessage(),
             ]);
         }
+    }
+
+    private function mapStatusToColor(string $status): string
+    {
+        return match ($status) {
+            'shortlisted', 'hired' => 'success',
+            'interview_scheduled' => 'warning',
+            'rejected' => 'danger',
+            default => 'info',
+        };
     }
 
     /**

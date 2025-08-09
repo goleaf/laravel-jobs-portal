@@ -70,11 +70,11 @@ class SendJobApplicationNotification
             'job_title' => $job->job_title,
             'candidate_name' => $candidate->first_name.' '.$candidate->last_name,
             'candidate_email' => $candidate->email,
-            'application_date' => $application->applied_at->format('M d, Y'),
+            'application_date' => optional($application->applied_at)->format('M d, Y'),
             'cover_letter' => $application->cover_letter,
             'expected_salary' => $application->expected_salary,
             'company_name' => $company->name,
-            'application_url' => route('employer.applications.show', $application->id),
+            'application_url' => function_exists('route') ? route('filament.admin.resources.job-applications.view', $application->id) : null,
             'resume_url' => $application->resume_path ? asset($application->resume_path) : null,
         ];
 
@@ -102,10 +102,10 @@ class SendJobApplicationNotification
             'candidate_name' => $candidate->first_name.' '.$candidate->last_name,
             'job_title' => $job->job_title,
             'company_name' => $company->name,
-            'application_date' => $application->applied_at->format('M d, Y'),
-            'application_status' => $application->getStatusDisplayName(),
-            'job_url' => route('jobs.show', $job->slug ?? $job->id),
-            'application_tracking_url' => route('candidate.applications.show', $application->id),
+            'application_date' => optional($application->applied_at)->format('M d, Y'),
+            'application_status' => method_exists($application, 'getStatusDisplayName') ? $application->getStatusDisplayName() : $application->status,
+            'job_url' => function_exists('route') ? route('filament.admin.resources.jobs.view', $job->id) : null,
+            'application_tracking_url' => function_exists('route') ? route('filament.admin.resources.job-applications.view', $application->id) : null,
         ];
 
         // Send confirmation email
@@ -129,7 +129,7 @@ class SendJobApplicationNotification
         // Integrate with SMS service (Twilio, AWS SNS, etc.)
         Log::info('SMS notification queued', [
             'phone' => $phoneNumber,
-            'job_title' => $data['job_title'],
+            'job_title' => $data['job_title'] ?? null,
         ]);
     }
 }

@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Candidate;
 // Users/auth removed
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Candidate>
@@ -22,7 +23,7 @@ class CandidateFactory extends Factory
     {
         return [
             'user_id' => null,
-            'unique_id' => 'CND-'.fake()->unique()->numberBetween(100000, 999999),
+            'unique_id' => 'CND-'.strtoupper(Str::random(10)),
             'father_name' => fake()->name('male'),
             'marital_status_id' => null, // Nullable to avoid foreign key constraints
             'nationality' => fake()->country(),

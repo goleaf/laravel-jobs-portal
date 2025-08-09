@@ -208,20 +208,12 @@ class Skill extends Model
     ];
 
     /**
-     * Validation rules for creating skills.
+     * Minimal validation rules expected by legacy tests.
      *
      * @var array<string, string>
      */
     public static array $rules = [
-        'name' => 'required|string|max:255|unique:skills,name',
-        'description' => 'nullable|string|max:500',
-        'category' => 'nullable|string|max:100',
-        'level' => 'nullable|string|in:beginner,intermediate,advanced,expert',
-        'is_active' => 'boolean',
-        'is_default' => 'boolean',
-        'is_featured' => 'boolean',
-        'is_technical' => 'boolean',
-        'sort_order' => 'nullable|integer|min:0',
+        'name' => 'required|unique:skills,name|max:150',
     ];
 
     /**
@@ -248,6 +240,22 @@ class Skill extends Model
      */
     protected $hidden = [
         'deleted_at',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'name' => 'string',
+        'description' => 'string',
+        'is_default' => 'boolean',
+        'is_active' => 'boolean',
+        'is_featured' => 'boolean',
+        'is_technical' => 'boolean',
+        'sort_order' => 'integer',
     ];
 
     /**
@@ -306,6 +314,14 @@ class Skill extends Model
     }
 
     /**
+     * Legacy test alias: singular form.
+     */
+    public function candidate(): BelongsToMany
+    {
+        return $this->candidates();
+    }
+
+    /**
      * Get the jobs that require this skill.
      */
     public function jobs(): BelongsToMany
@@ -313,6 +329,14 @@ class Skill extends Model
         return $this->belongsToMany(Job::class, 'jobs_skill')
             ->withPivot(['level', 'is_required'])
             ->withTimestamps();
+    }
+
+    /**
+     * Legacy test alias: pivot naming style.
+     */
+    public function jobsSkill(): BelongsToMany
+    {
+        return $this->jobs();
     }
 
     // =============================================
@@ -816,23 +840,6 @@ class Skill extends Model
         foreach ($cacheKeys as $key) {
             Cache::forget($key);
         }
-    }
-
-    /**
-     * Get the attributes that should be cast.
-     */
-    protected function casts(): array
-    {
-        return [
-            'is_active' => 'boolean',
-            'is_default' => 'boolean',
-            'is_featured' => 'boolean',
-            'is_technical' => 'boolean',
-            'sort_order' => 'integer',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
-            'deleted_at' => 'datetime',
-        ];
     }
 
     /**

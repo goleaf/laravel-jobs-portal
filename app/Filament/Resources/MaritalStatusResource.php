@@ -18,6 +18,11 @@ class MaritalStatusResource extends Resource
 
     protected static ?string $navigationGroup = 'References';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return __('References');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -25,7 +30,7 @@ class MaritalStatusResource extends Resource
                 Forms\Components\Section::make()
                     ->columns(2)
                     ->schema([
-                        Forms\Components\TextInput::make('marital_status')->label('Name')->required()->maxLength(100),
+                        Forms\Components\TextInput::make('marital_status')->label(__('Name'))->required()->maxLength(100),
                         Forms\Components\TextInput::make('display_name')->maxLength(100),
                         Forms\Components\TextInput::make('short_code')->maxLength(10),
                         Forms\Components\Textarea::make('description')->columnSpanFull(),
@@ -43,14 +48,14 @@ class MaritalStatusResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('marital_status')->label('Name')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('marital_status')->label(__('Name'))->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('display_name')->toggleable()->toggledHiddenByDefault(),
                 Tables\Columns\TextColumn::make('short_code')->toggleable()->toggledHiddenByDefault(),
                 Tables\Columns\IconColumn::make('is_active')->boolean()->sortable(),
                 Tables\Columns\IconColumn::make('is_default')->boolean()->sortable(),
                 Tables\Columns\IconColumn::make('is_featured')->boolean()->sortable(),
                 Tables\Columns\TextColumn::make('sort_order')->numeric()->sortable(),
-                Tables\Columns\TextColumn::make('created_at')->dateTime()->since()->sortable(),
+                Tables\Columns\TextColumn::make('created_at')->label(__('Created'))->dateTime()->since()->sortable(),
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_active'),

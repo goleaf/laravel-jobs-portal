@@ -346,17 +346,17 @@ class FunctionalArea extends Model
         // Clear cache when functional area is updated
         static::updated(function ($functionalArea) {
             cache()->forget("functional_area.{$functionalArea->id}");
-            cache()->forget('functional_areas.popular');
-            cache()->forget('functional_areas.trending');
-            cache()->tags(['functional_areas', 'functional_area-'.$functionalArea->id])->flush();
+            try {
+                cache()->tags(['functional_areas', 'functional_area-'.$functionalArea->id])->flush();
+            } catch (\Exception $e) {}
         });
 
         // Clear cache when functional area is deleted
         static::deleted(function ($functionalArea) {
             cache()->forget("functional_area.{$functionalArea->id}");
-            cache()->forget('functional_areas.popular');
-            cache()->forget('functional_areas.trending');
-            cache()->tags(['functional_areas', 'functional_area-'.$functionalArea->id])->flush();
+            try {
+                cache()->tags(['functional_areas', 'functional_area-'.$functionalArea->id])->flush();
+            } catch (\Exception $e) {}
         });
     }
 

@@ -31,7 +31,7 @@ class StateResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Section::make()
-                    ->columns(2)
+                    ->columns(3)
                     ->schema([
                         Forms\Components\Select::make('country_id')
                             ->label(__('Country'))
@@ -43,9 +43,23 @@ class StateResource extends Resource
                             ->label(__('Name'))
                             ->required()
                             ->maxLength(255),
+                        Forms\Components\TextInput::make('code')
+                            ->label(__('Code'))
+                            ->maxLength(10),
+                        Forms\Components\TextInput::make('latitude')
+                            ->label(__('Latitude'))
+                            ->numeric()->minValue(-90)->maxValue(90),
+                        Forms\Components\TextInput::make('longitude')
+                            ->label(__('Longitude'))
+                            ->numeric()->minValue(-180)->maxValue(180),
+                        Forms\Components\TextInput::make('timezone')
+                            ->label(__('Timezone'))
+                            ->maxLength(50),
+                        Forms\Components\TextInput::make('population')
+                            ->label(__('Population'))
+                            ->numeric()->minValue(0),
                         Forms\Components\Toggle::make('is_active')->label(__('Active'))->inline(false)->default(true),
                         Forms\Components\Toggle::make('is_featured')->label(__('Featured'))->inline(false)->default(false),
-                        Forms\Components\TextInput::make('sort_order')->label(__('Sort Order'))->numeric()->default(0),
                     ]),
             ]);
     }
@@ -56,6 +70,7 @@ class StateResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')->label(__('Name'))->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('country.name')->label(__('Country'))->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('code')->label(__('Code'))->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('is_active')->label(__('Active'))->boolean()->sortable(),
                 Tables\Columns\IconColumn::make('is_featured')->label(__('Featured'))->boolean()->sortable(),
                 Tables\Columns\TextColumn::make('created_at')->label(__('Created'))->dateTime()->since()->sortable()->toggleable(),

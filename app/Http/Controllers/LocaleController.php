@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Translation\Translator;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
@@ -265,6 +269,43 @@ class LocaleController extends Controller
             'supported' => $this->isValidLocale($preferredLocale),
             'locale_config' => self::AVAILABLE_LOCALES[$preferredLocale] ?? self::AVAILABLE_LOCALES['en'],
         ]);
+    }
+
+    /**
+     * Get merged translations for frontend consumption.
+     */
+    public function frontendBundle(Request $request): JsonResponse
+    {
+        $locale = $request->query('locale', app()->getLocale());
+        app()->setLocale($locale);
+
+        $cacheKey = "i18n:bundle:" . $locale;
+        $bundle = Cache::remember($cacheKey, 3600, function () use ($locale) {
+            $groups = [
+                'web', 'messages', 'js', 'auth', 'pagination', 'passwords', 'validation',
+            ];
+
+            $merged = [];
+            foreach ($groups as $group) {
+                if (Lang::has($group)) {
+                    $merged[$group] = Lang::get($group);
+                }
+            }
+
+            // Merge JSON translations from resources/lang/{locale}.json if exists
+            $jsonPath = resource_path("lang/{$locale}.json");
+            if (File::exists($jsonPath)) {
+                $json = json_decode(File::get($jsonPath), true) ?: [];
+                $merged['json'] = $json;
+            }
+
+            return [
+                'locale' => $locale,
+                'translations' => $merged,
+            ];
+        });
+
+        return response()->json($bundle);
     }
 
     /**

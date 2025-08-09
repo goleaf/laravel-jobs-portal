@@ -137,17 +137,12 @@ class RealTimeController extends AppBaseController
             // Clear related caches
             $this->clearRealTimeCaches($jobApplication);
 
-            // Broadcast the status change with enhanced data
-            $broadcastData = [
-                'application' => $jobApplication->fresh(['job', 'candidate.user', 'company']),
-                'old_status' => $oldStatus,
-                'new_status' => $newStatus,
-                'updated_by' => $user->only(['id', 'name', 'email']),
-                'timestamp' => now()->toISOString(),
-                'notify_candidate' => $request->boolean('notify_candidate', true),
-            ];
-
-            event(new JobApplicationStatusChanged($broadcastData));
+            // Broadcast the status change
+            event(new JobApplicationStatusChanged(
+                $jobApplication->fresh(['job', 'candidate', 'job.company']),
+                $oldStatus,
+                $newStatus
+            ));
 
             // Update real-time statistics
             $this->updateRealTimeStats('status_change', $newStatus);

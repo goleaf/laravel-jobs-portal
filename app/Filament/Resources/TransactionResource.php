@@ -21,11 +21,21 @@ class TransactionResource extends Resource
 
     protected static ?string $navigationGroup = 'Billing';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Billing');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                // Define fields when model schema is confirmed
+                Forms\Components\TextInput::make('amount')->numeric()->required()->prefix('$')->rule('decimal:0,2'),
+                Forms\Components\TextInput::make('currency')->maxLength(10)->required(),
+                Forms\Components\TextInput::make('gateway')->maxLength(50)->required(),
+                Forms\Components\Select::make('subscription_id')->relationship('subscription', 'id')->searchable()->preload(),
+                Forms\Components\Select::make('company_id')->relationship('company', 'name')->searchable()->preload(),
+                Forms\Components\TextInput::make('status')->maxLength(50)->required(),
             ]);
     }
 
@@ -34,27 +44,27 @@ class TransactionResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->label('#')->sortable(),
-                Tables\Columns\TextColumn::make('amount')->label('Amount')->sortable(),
-                Tables\Columns\TextColumn::make('currency')->label('Currency')->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('gateway')->label('Gateway')->toggleable(),
+                Tables\Columns\TextColumn::make('amount')->label(__('Amount'))->sortable(),
+                Tables\Columns\TextColumn::make('currency')->label(__('Currency'))->sortable()->toggleable(),
+                Tables\Columns\TextColumn::make('gateway')->label(__('Gateway'))->toggleable(),
                 Tables\Columns\BadgeColumn::make('status')->colors([
                     'success' => 'paid',
                     'warning' => 'pending',
                     'danger' => 'failed',
                 ])->sortable(),
-                Tables\Columns\TextColumn::make('created_at')->dateTime()->since()->sortable(),
+                Tables\Columns\TextColumn::make('created_at')->label(__('Created'))->dateTime()->since()->sortable(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('gateway')->options([
-                    'paypal' => 'PayPal',
-                    'paystack' => 'Paystack',
-                    'stripe' => 'Stripe',
+                    'paypal' => __('PayPal'),
+                    'paystack' => __('Paystack'),
+                    'stripe' => __('Stripe'),
                 ]),
                 Tables\Filters\SelectFilter::make('status')->options([
-                    'paid' => 'Paid',
-                    'pending' => 'Pending',
-                    'failed' => 'Failed',
-                    'refunded' => 'Refunded',
+                    'paid' => __('Paid'),
+                    'pending' => __('Pending'),
+                    'failed' => __('Failed'),
+                    'refunded' => __('Refunded'),
                 ]),
                 Tables\Filters\Filter::make('date_range')
                     ->form([

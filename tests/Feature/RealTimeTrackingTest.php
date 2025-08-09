@@ -43,21 +43,19 @@ class RealTimeTrackingTest extends TestCase
             'user_type' => 'employer',
         ]);
 
-        // Create test company with minimal required fields
-        $this->company = Company::create([
+        // Create test company and job using factories to satisfy schema constraints
+        $this->company = Company::factory()->create([
             'user_id' => $this->employer->id,
-            'name' => 'Test Company',
-            'unique_id' => 'test_company_'.uniqid(),
         ]);
 
-        // Create test job with minimal required fields
-        $this->job = Job::create([
+        $this->job = Job::factory()->create([
             'company_id' => $this->company->id,
-            'title' => 'Test Job Position',
+            'job_title' => 'Test Job Position',
+            'status' => Job::STATUS_OPEN,
         ]);
 
-        // Create test application with minimal required fields
-        $this->application = JobApplication::create([
+        // Create test application using factory
+        $this->application = JobApplication::factory()->create([
             'job_id' => $this->job->id,
             'candidate_id' => $this->candidate->id,
             'status' => 'pending',

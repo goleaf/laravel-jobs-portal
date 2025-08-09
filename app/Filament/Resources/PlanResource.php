@@ -21,6 +21,11 @@ class PlanResource extends Resource
 
     protected static ?string $navigationGroup = 'Billing';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Billing');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -33,7 +38,7 @@ class PlanResource extends Resource
                         Forms\Components\TextInput::make('amount')->numeric()->required()->prefix('$')->rule('decimal:0,2'),
                         Forms\Components\Select::make('salary_currency_id')
                             ->label('Currency')
-                            ->relationship('salaryCurrency', 'name')
+                            ->relationship('salaryCurrency', 'currency_name')
                             ->searchable()
                             ->preload(),
                         Forms\Components\TextInput::make('duration_days')->numeric()->label('Duration (days)')->default(30),
@@ -57,7 +62,7 @@ class PlanResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('amount')->money(fn ($record) => optional($record->salaryCurrency)->name ?? 'USD')->sortable(),
+                Tables\Columns\TextColumn::make('amount')->money(fn ($record) => optional($record->salaryCurrency)->currency_code ?? 'USD')->sortable(),
                 Tables\Columns\TextColumn::make('duration_days')->label('Days')->sortable(),
                 Tables\Columns\IconColumn::make('is_trial_plan')->boolean()->label('Trial')->sortable(),
                 Tables\Columns\IconColumn::make('is_active')->boolean()->label('Active')->sortable(),

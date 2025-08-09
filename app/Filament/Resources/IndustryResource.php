@@ -18,6 +18,11 @@ class IndustryResource extends Resource
 
     protected static ?string $navigationGroup = 'References';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return __('References');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -34,7 +39,7 @@ class IndustryResource extends Resource
                         Forms\Components\TextInput::make('icon')->maxLength(255),
                         Forms\Components\ColorPicker::make('color'),
                     ]),
-                Forms\Components\Section::make('SEO')->collapsed()->schema([
+                Forms\Components\Section::make(__('SEO'))->navigable(false)->collapsed()->schema([
                     Forms\Components\TextInput::make('meta_title')->maxLength(255),
                     Forms\Components\Textarea::make('meta_description')->rows(3),
                     Forms\Components\TextInput::make('meta_keywords')->maxLength(255),
@@ -49,7 +54,7 @@ class IndustryResource extends Resource
                 Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
                 Tables\Columns\IconColumn::make('is_active')->boolean()->sortable(),
                 Tables\Columns\IconColumn::make('is_default')->boolean()->sortable(),
-                Tables\Columns\TextColumn::make('companies_count')->counts('companies')->label('Companies'),
+                Tables\Columns\TextColumn::make('companies_count')->counts('companies')->label(__('Companies')),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->since()->sortable(),
             ])
             ->filters([

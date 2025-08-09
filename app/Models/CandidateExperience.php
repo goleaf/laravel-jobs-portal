@@ -804,12 +804,16 @@ class CandidateExperience extends Model
         // Clear related caches when experience is updated
         static::saved(function ($experience) {
             cache()->forget("candidate.{$experience->candidate_id}.profile_completion");
-            cache()->tags(['candidate-experience', 'candidate-'.$experience->candidate_id])->flush();
+            try {
+                cache()->tags(['candidate-experience', 'candidate-'.$experience->candidate_id])->flush();
+            } catch (\Exception $e) {}
         });
 
         static::deleted(function ($experience) {
             cache()->forget("candidate.{$experience->candidate_id}.profile_completion");
-            cache()->tags(['candidate-experience', 'candidate-'.$experience->candidate_id])->flush();
+            try {
+                cache()->tags(['candidate-experience', 'candidate-'.$experience->candidate_id])->flush();
+            } catch (\Exception $e) {}
         });
     }
 }

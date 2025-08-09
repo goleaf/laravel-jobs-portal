@@ -29,14 +29,24 @@ class JobShiftResource extends Resource
 
     protected static ?string $navigationLabel = 'Job Shifts';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Jobs');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Job Shifts');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Section::make('Details')
+                Section::make(__('Details'))
                     ->schema([
                         TextInput::make('shift')
-                            ->label('Shift')
+                            ->label(__('Shift'))
                             ->required()
                             ->maxLength(170),
                         Textarea::make('description')
@@ -45,7 +55,7 @@ class JobShiftResource extends Resource
                     ])
                     ->columns(2),
 
-                Section::make('Schedule')
+                Section::make(__('Schedule'))
                     ->schema([
                         TimePicker::make('start_time')->seconds(false)->withoutSeconds(),
                         TimePicker::make('end_time')->seconds(false)->withoutSeconds(),
@@ -54,7 +64,7 @@ class JobShiftResource extends Resource
                     ])
                     ->columns(4),
 
-                Section::make('Display')
+                Section::make(__('Display'))
                     ->schema([
                         TextInput::make('icon')->maxLength(50),
                         ColorPicker::make('color')->rgba(false),
@@ -75,16 +85,16 @@ class JobShiftResource extends Resource
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('formatted_time_range')
-                    ->label('Time Range')
+                    ->label(__('Time Range'))
                     ->toggleable(),
-                IconColumn::make('is_active')->boolean()->label('Active')->sortable(),
-                IconColumn::make('is_default')->boolean()->label('Default')->sortable(),
+                IconColumn::make('is_active')->boolean()->label(__('Active'))->sortable(),
+                IconColumn::make('is_default')->boolean()->label(__('Default'))->sortable(),
                 TextColumn::make('updated_at')->dateTime()->since()->sortable()->toggleable(),
             ])
             ->filters([
-                TernaryFilter::make('is_active')->label('Active'),
-                TernaryFilter::make('is_default')->label('Default'),
-                TernaryFilter::make('is_flexible')->label('Flexible'),
+                TernaryFilter::make('is_active')->label(__('Active')),
+                TernaryFilter::make('is_default')->label(__('Default')),
+                TernaryFilter::make('is_flexible')->label(__('Flexible')),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

@@ -18,6 +18,11 @@ class CompanySizeResource extends Resource
 
     protected static ?string $navigationGroup = 'References';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return __('References');
+    }
+
     public static function form(Form $form): Form
     {
         return $form

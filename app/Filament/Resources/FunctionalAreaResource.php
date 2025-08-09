@@ -18,6 +18,11 @@ class FunctionalAreaResource extends Resource
 
     protected static ?string $navigationGroup = 'References';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return __('References');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -44,7 +49,7 @@ class FunctionalAreaResource extends Resource
                         Forms\Components\Toggle::make('is_default')->inline(false)->default(false),
                         Forms\Components\Toggle::make('is_featured')->inline(false)->default(false),
                     ]),
-                Forms\Components\Section::make('SEO')
+                Forms\Components\Section::make(__('SEO'))
                     ->collapsed()
                     ->schema([
                         Forms\Components\TextInput::make('meta_title')->maxLength(255),

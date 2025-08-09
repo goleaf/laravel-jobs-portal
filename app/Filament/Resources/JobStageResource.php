@@ -26,11 +26,21 @@ class JobStageResource extends Resource
 
     protected static ?string $navigationLabel = 'Job Stages';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Jobs');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Job Stages');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Section::make('Details')
+                Section::make(__('Details'))
                     ->schema([
                         TextInput::make('name')
                             ->required()
@@ -38,15 +48,20 @@ class JobStageResource extends Resource
                         Textarea::make('description')
                             ->rows(3)
                             ->columnSpanFull(),
+                        TextInput::make('order')
+                            ->label(__('Order'))
+                            ->numeric()->default(0),
+                        Forms\Components\Toggle::make('is_active')->inline(false)->default(true),
+                        Forms\Components\Toggle::make('is_default')->inline(false)->default(false),
                     ])
-                    ->columns(2),
+                    ->columns(3),
 
-                Section::make('Assignment')
+                Section::make(__('Assignment'))
                     ->schema([
                         TextInput::make('company_id')
                             ->numeric()
-                            ->label('Company ID')
-                            ->helperText('Link to a company by its ID.'),
+                            ->label(__('Company ID'))
+                            ->helperText(__('Link to a company by its ID.')),
                     ])
                     ->columns(1),
             ]);
@@ -59,11 +74,15 @@ class JobStageResource extends Resource
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('company_id')->label('Company ID')->toggleable(),
+                TextColumn::make('company_id')->label(__('Company ID'))->toggleable(),
+                TextColumn::make('order')->label(__('Order'))->sortable()->toggleable(isToggledHiddenByDefault: true),
+                IconColumn::make('is_active')->boolean()->label(__('Active'))->sortable(),
+                IconColumn::make('is_default')->boolean()->label(__('Default'))->sortable()->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')->dateTime()->since()->sortable()->toggleable(),
             ])
             ->filters([
-                // No boolean flags present in base schema
+                TernaryFilter::make('is_active')->label(__('Active')),
+                TernaryFilter::make('is_default')->label(__('Default')),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

@@ -8,8 +8,8 @@ use App\Models\Job;
 use App\Models\JobApplication;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use LumoSolutions\Actionable\Concerns\IsDispatchable;
-use LumoSolutions\Actionable\Concerns\IsRunnable;
+use LumoSolutions\Actionable\Traits\IsDispatchable;
+use LumoSolutions\Actionable\Traits\IsRunnable;
 
 class ProcessJobApplication
 {
@@ -80,15 +80,17 @@ class ProcessJobApplication
             $candidate->touch('last_application_at');
 
             // 8. Log the application activity
-            activity('job_application')
-                ->performedOn($application)
-                ->causedBy($candidate)
-                ->withProperties([
-                    'job_title' => $job->job_title,
-                    'company_name' => $job->company->name,
-                    'application_source' => $applicationData->applicationSource,
-                ])
-                ->log('applied_for_job');
+            if (function_exists('activity')) {
+                activity('job_application')
+                    ->performedOn($application)
+                    ->causedBy($candidate)
+                    ->withProperties([
+                        'job_title' => $job->job_title,
+                        'company_name' => $job->company->name,
+                        'application_source' => $applicationData->applicationSource,
+                    ])
+                    ->log('applied_for_job');
+            }
 
             // 9. Dispatch notification actions (background processing)
             if ($job->settings('notifications.new_application', true)) {

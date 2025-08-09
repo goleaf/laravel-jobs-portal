@@ -444,17 +444,17 @@ class Industry extends Model
         // Clear cache when industry is updated
         static::updated(function ($industry) {
             cache()->forget("industry.{$industry->id}");
-            cache()->forget('industries.popular');
-            cache()->forget('industries.trending');
-            cache()->tags(['industries', 'industry-'.$industry->id])->flush();
+            try {
+                cache()->tags(['industries', 'industry-'.$industry->id])->flush();
+            } catch (\Exception $e) {}
         });
 
         // Clear cache when industry is deleted
         static::deleted(function ($industry) {
             cache()->forget("industry.{$industry->id}");
-            cache()->forget('industries.popular');
-            cache()->forget('industries.trending');
-            cache()->tags(['industries', 'industry-'.$industry->id])->flush();
+            try {
+                cache()->tags(['industries', 'industry-'.$industry->id])->flush();
+            } catch (\Exception $e) {}
         });
     }
 }

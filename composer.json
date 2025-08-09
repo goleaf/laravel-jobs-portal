@@ -122,7 +122,11 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [
+                "wireui/wireui",
+                "barryvdh/laravel-debugbar",
+                "blade-ui-kit/blade-icons"
+            ]
         }
     },
     "config": {

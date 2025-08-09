@@ -167,16 +167,55 @@ class SQLiteOptimizedSeeder extends Seeder
     {
         $this->command->info('⚙️ Seeding system settings...');
 
-        if (Setting::count() == 0) {
-            $settings = Setting::factory(15)->create();
-            $this->seedingProgress['settings'] = $settings->count();
-        } else {
-            $this->seedingProgress['settings'] = Setting::count();
+        // Use deterministic keys to avoid UNIQUE constraint violations
+        $defaultSettings = [
+            ['key' => 'site.name', 'value' => 'JobPortal'],
+            ['key' => 'site.locale', 'value' => 'en'],
+            ['key' => 'site.theme', 'value' => 'light'],
+            ['key' => 'seo.meta_title', 'value' => 'Jobs and Careers'],
+            ['key' => 'seo.meta_description', 'value' => 'Find your next job'],
+            ['key' => 'mail.from.address', 'value' => 'noreply@example.com'],
+            ['key' => 'mail.from.name', 'value' => 'JobPortal'],
+            ['key' => 'features.jobs.enabled', 'value' => '1'],
+            ['key' => 'features.companies.enabled', 'value' => '1'],
+            ['key' => 'features.blog.enabled', 'value' => '0'],
+            ['key' => 'branding.primary_color', 'value' => '#f59e0b'],
+            ['key' => 'branding.secondary_color', 'value' => '#111827'],
+            ['key' => 'analytics.enabled', 'value' => '0'],
+            ['key' => 'notifications.email.enabled', 'value' => '1'],
+            ['key' => 'jobs.per_page', 'value' => '12'],
+        ];
+
+        foreach ($defaultSettings as $row) {
+            Setting::updateOrCreate(
+                ['key' => $row['key']],
+                ['value' => $row['value']]
+            );
         }
+        $this->seedingProgress['settings'] = Setting::count();
 
         if (FrontSetting::count() == 0) {
-            $frontSettings = FrontSetting::factory(10)->create();
-            $this->seedingProgress['front_settings'] = $frontSettings->count();
+            // Ensure unique keys for front settings as well
+            $frontDefaults = [
+                ['key' => 'header.logo', 'value' => ''],
+                ['key' => 'footer.logo', 'value' => ''],
+                ['key' => 'homepage.hero_title', 'value' => 'Find Your Dream Job'],
+                ['key' => 'homepage.hero_subtitle', 'value' => 'Search thousands of listings'],
+                ['key' => 'homepage.cta_text', 'value' => 'Browse Jobs'],
+                ['key' => 'homepage.cta_url', 'value' => '/jobs'],
+                ['key' => 'homepage.show_featured_companies', 'value' => '1'],
+                ['key' => 'homepage.show_recent_jobs', 'value' => '1'],
+                ['key' => 'homepage.show_blog', 'value' => '0'],
+                ['key' => 'header.banner_enabled', 'value' => '0'],
+            ];
+
+            foreach ($frontDefaults as $row) {
+                FrontSetting::updateOrCreate(
+                    ['key' => $row['key']],
+                    ['value' => $row['value']]
+                );
+            }
+            $this->seedingProgress['front_settings'] = FrontSetting::count();
         } else {
             $this->seedingProgress['front_settings'] = FrontSetting::count();
         }
@@ -452,7 +491,7 @@ class SQLiteOptimizedSeeder extends Seeder
                 // Attach skills
                 if ($skills->isNotEmpty()) {
                     $candidateSkills = $skills->random(rand(3, min(8, $skills->count())));
-                    $user->candidateSkill()->attach($candidateSkills);
+                    $user->skills()->attach($candidateSkills);
                 }
 
                 // Add education (1-2 per candidate)

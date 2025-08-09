@@ -18,6 +18,11 @@ class CareerLevelResource extends Resource
 
     protected static ?string $navigationGroup = 'References';
 
+    public static function getNavigationGroup(): ?string
+    {
+        return __('References');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -26,7 +31,7 @@ class CareerLevelResource extends Resource
                     ->columns(2)
                     ->schema([
                         Forms\Components\TextInput::make('level_name')
-                            ->label('Name')
+                            ->label(__('Name'))
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
@@ -41,7 +46,7 @@ class CareerLevelResource extends Resource
                         Forms\Components\Toggle::make('is_active')->inline(false)->default(true),
                         Forms\Components\Toggle::make('is_default')->inline(false)->default(false),
                     ]),
-                Forms\Components\Section::make('SEO')
+                Forms\Components\Section::make(__('SEO'))
                     ->collapsed()
                     ->schema([
                         Forms\Components\TextInput::make('meta_title')->maxLength(255),
@@ -55,7 +60,7 @@ class CareerLevelResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('level_name')->label('Name')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('level_name')->label(__('Name'))->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('level_order')->numeric()->sortable(),
                 Tables\Columns\IconColumn::make('is_active')->boolean()->sortable(),
                 Tables\Columns\IconColumn::make('is_default')->boolean()->sortable(),

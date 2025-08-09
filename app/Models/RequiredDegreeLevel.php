@@ -566,17 +566,17 @@ class RequiredDegreeLevel extends Model
         // Clear cache when degree level is updated
         static::updated(function ($degreeLevel) {
             cache()->forget("required_degree_level.{$degreeLevel->id}");
-            cache()->forget('required_degree_levels.popular');
-            cache()->forget('required_degree_levels.trending');
-            cache()->tags(['required_degree_levels', 'required_degree_level-'.$degreeLevel->id])->flush();
+            try {
+                cache()->tags(['required_degree_levels', 'required_degree_level-'.$degreeLevel->id])->flush();
+            } catch (\Exception $e) {}
         });
 
         // Clear cache when degree level is deleted
         static::deleted(function ($degreeLevel) {
             cache()->forget("required_degree_level.{$degreeLevel->id}");
-            cache()->forget('required_degree_levels.popular');
-            cache()->forget('required_degree_levels.trending');
-            cache()->tags(['required_degree_levels', 'required_degree_level-'.$degreeLevel->id])->flush();
+            try {
+                cache()->tags(['required_degree_levels', 'required_degree_level-'.$degreeLevel->id])->flush();
+            } catch (\Exception $e) {}
         });
     }
 

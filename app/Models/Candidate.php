@@ -871,14 +871,23 @@ class Candidate extends Model
         static::updated(function ($candidate) {
             cache()->forget("candidate.{$candidate->id}");
             cache()->forget("candidate.{$candidate->id}.profile_completion");
-            cache()->tags(['candidates', 'candidate-'.$candidate->id])->flush();
+            // Some cache stores (array/file) do not support tags
+            try {
+                cache()->tags(['candidates', 'candidate-'.$candidate->id])->flush();
+            } catch (\Exception $e) {
+                // Ignore if tags not supported
+            }
         });
 
         // Clear cache when candidate is deleted
         static::deleted(function ($candidate) {
             cache()->forget("candidate.{$candidate->id}");
             cache()->forget("candidate.{$candidate->id}.profile_completion");
-            cache()->tags(['candidates', 'candidate-'.$candidate->id])->flush();
+            try {
+                cache()->tags(['candidates', 'candidate-'.$candidate->id])->flush();
+            } catch (\Exception $e) {
+                // Ignore if tags not supported
+            }
         });
     }
 

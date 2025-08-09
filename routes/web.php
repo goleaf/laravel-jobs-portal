@@ -39,6 +39,7 @@ Route::group(['prefix' => 'locale', 'as' => 'locale.'], function () {
     Route::get('current', [LocaleController::class, 'current'])->name('current');
     Route::get('available', [LocaleController::class, 'available'])->name('available');
     Route::get('translations/{locale?}', [LocaleController::class, 'translations'])->name('translations');
+    Route::get('bundle', [LocaleController::class, 'frontendBundle'])->name('bundle');
     Route::post('clear-cache', [LocaleController::class, 'clearCache'])->name('clear-cache');
 });
 

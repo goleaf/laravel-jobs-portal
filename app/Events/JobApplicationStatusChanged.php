@@ -73,18 +73,13 @@ class JobApplicationStatusChanged implements ShouldBroadcast
      */
     private function generateStatusMessage(string $oldStatus, string $newStatus): string
     {
-        $messages = [
-            'pending' => 'Your application is under review',
-            'reviewed' => 'Your application has been reviewed',
-            'shortlisted' => 'Congratulations! You have been shortlisted',
-            'interview_scheduled' => 'Interview has been scheduled',
-            'interview_completed' => 'Interview completed',
-            'rejected' => 'Application was not successful this time',
-            'hired' => 'Congratulations! You have been hired',
-            'withdrawn' => 'Application has been withdrawn',
-        ];
-
-        return $messages[$newStatus] ?? 'Application status updated';
+        return __(
+            'events.application.status_messages.' . $newStatus,
+            [
+                'old' => $oldStatus,
+                'new' => $newStatus,
+            ]
+        );
     }
 
     /**

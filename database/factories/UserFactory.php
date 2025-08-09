@@ -15,12 +15,21 @@ class UserFactory extends Factory
 
     public function definition(): array
     {
+        $firstName = $this->faker->firstName();
+        $lastName = $this->faker->lastName();
+
         return [
-            'name' => $this->faker->name(),
+            'first_name' => $firstName,
+            'last_name' => $lastName,
+            'name' => $firstName.' '.$lastName,
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => '\$2y\$12\$S1h16Ww8qgkCxm2Yt0QkIOgNQmG8i4Y0oWc7I1r2Z2H2qJp8z2mwy', // password
+            'password' => bcrypt('password'),
             'remember_token' => Str::random(10),
+            'user_type' => 'candidate',
+            'is_active' => true,
+            'is_verified' => true,
+            'language' => 'en',
         ];
     }
 
@@ -31,5 +40,4 @@ class UserFactory extends Factory
         ]);
     }
 }
-
 

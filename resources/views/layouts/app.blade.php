@@ -19,6 +19,36 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     
     @stack('head')
+
+    <script>
+    window.APP_LOCALE = '{{ app()->getLocale() }}';
+    window.I18N = { locale: window.APP_LOCALE, translations: {} };
+    window.t = function(key, fallback) {
+        const dict = window.I18N.translations || {};
+        // direct json key
+        if (dict.json && Object.prototype.hasOwnProperty.call(dict.json, key)) return dict.json[key];
+        // dot-notated group.key lookup e.g. 'web.home'
+        const parts = key.split('.');
+        if (parts.length > 1 && dict[parts[0]]) {
+            let cur = dict[parts[0]];
+            for (let i = 1; i < parts.length; i++) {
+                if (cur && Object.prototype.hasOwnProperty.call(cur, parts[i])) {
+                    cur = cur[parts[i]];
+                } else {
+                    cur = null; break;
+                }
+            }
+            if (typeof cur === 'string') return cur;
+        }
+        return fallback !== undefined ? fallback : key;
+    };
+    (function preloadTranslations(){
+        fetch("{{ route('locale.bundle') }}?locale={{ app()->getLocale() }}")
+            .then(r => r.json())
+            .then(data => { window.I18N = data; })
+            .catch(() => {});
+    })();
+    </script>
 </head>
 <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
     <!-- Loading Indicator -->

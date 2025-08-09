@@ -40,8 +40,21 @@ class TagResource extends Resource
                     ->label(__('Color'))
                     ->nullable(),
 
+                Forms\Components\TextInput::make('sort_order')
+                    ->label(__('Sort Order'))
+                    ->numeric(),
+
+                Forms\Components\Toggle::make('is_active')
+                    ->label(__('Active'))
+                    ->inline(false)
+                    ->default(true),
+
                 Forms\Components\Toggle::make('is_default')
                     ->label(__('Default'))
+                    ->inline(false),
+
+                Forms\Components\Toggle::make('is_featured')
+                    ->label(__('Featured'))
                     ->inline(false),
             ]);
     }
@@ -62,10 +75,27 @@ class TagResource extends Resource
                 Tables\Columns\ColorColumn::make('color')
                     ->label(__('Color')),
 
+                Tables\Columns\TextColumn::make('sort_order')
+                    ->label(__('Sort'))
+                    ->numeric()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+
+                Tables\Columns\IconColumn::make('is_active')
+                    ->label(__('Active'))
+                    ->boolean()
+                    ->sortable(),
+
                 Tables\Columns\IconColumn::make('is_default')
                     ->label(__('Default'))
                     ->boolean()
                     ->sortable(),
+
+                Tables\Columns\IconColumn::make('is_featured')
+                    ->label(__('Featured'))
+                    ->boolean()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('Created'))
@@ -75,6 +105,9 @@ class TagResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                Tables\Filters\TernaryFilter::make('is_active')->label(__('Active')),
+                Tables\Filters\TernaryFilter::make('is_featured')->label(__('Featured')),
+                Tables\Filters\TernaryFilter::make('is_default')->label(__('Default')),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

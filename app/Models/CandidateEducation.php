@@ -726,12 +726,16 @@ class CandidateEducation extends Model
         // Clear related caches when education is updated
         static::saved(function ($education) {
             cache()->forget("candidate.{$education->candidate_id}.profile_completion");
-            cache()->tags(['candidate-education', 'candidate-'.$education->candidate_id])->flush();
+            try {
+                cache()->tags(['candidate-education', 'candidate-'.$education->candidate_id])->flush();
+            } catch (\Exception $e) {}
         });
 
         static::deleted(function ($education) {
             cache()->forget("candidate.{$education->candidate_id}.profile_completion");
-            cache()->tags(['candidate-education', 'candidate-'.$education->candidate_id])->flush();
+            try {
+                cache()->tags(['candidate-education', 'candidate-'.$education->candidate_id])->flush();
+            } catch (\Exception $e) {}
         });
     }
 }

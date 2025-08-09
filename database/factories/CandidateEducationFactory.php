@@ -33,9 +33,11 @@ class CandidateEducationFactory extends Factory
             }
         }
 
+        $degreeLevelId = RequiredDegreeLevel::inRandomOrder()->value('id') ?? 1;
+
         return [
             'candidate_id' => Candidate::factory(),
-            'degree_level_id' => RequiredDegreeLevel::factory(),
+            'degree_level_id' => $degreeLevelId,
             'degree_title' => $this->faker->jobTitle.' Degree',
             'institute' => $this->faker->company.' University',
             'result' => $this->faker->randomElement(['A', 'B', 'C', 'D', 'Pass', 'Distinction', 'First Class', 'Second Class']),

@@ -655,19 +655,17 @@ class JobCategory extends Model
         // Clear cache when job category is updated
         static::updated(function ($jobCategory) {
             cache()->forget("job_category.{$jobCategory->id}");
-            cache()->forget('job_categories.popular');
-            cache()->forget('job_categories.trending');
-            cache()->forget('job_categories.featured');
-            cache()->tags(['job_categories', 'job_category-'.$jobCategory->id])->flush();
+            try {
+                cache()->tags(['job_categories', 'job_category-'.$jobCategory->id])->flush();
+            } catch (\Exception $e) {}
         });
 
         // Clear cache when job category is deleted
         static::deleted(function ($jobCategory) {
             cache()->forget("job_category.{$jobCategory->id}");
-            cache()->forget('job_categories.popular');
-            cache()->forget('job_categories.trending');
-            cache()->forget('job_categories.featured');
-            cache()->tags(['job_categories', 'job_category-'.$jobCategory->id])->flush();
+            try {
+                cache()->tags(['job_categories', 'job_category-'.$jobCategory->id])->flush();
+            } catch (\Exception $e) {}
         });
     }
 

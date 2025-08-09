@@ -145,6 +145,7 @@ class Notification extends Model
         'title',
         'text',
         'data',
+        'meta',
         'action_url',
         'icon',
         'read_at',

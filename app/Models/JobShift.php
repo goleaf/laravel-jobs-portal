@@ -626,17 +626,17 @@ class JobShift extends Model
         // Clear cache when job shift is updated
         static::updated(function ($jobShift) {
             cache()->forget("job_shift.{$jobShift->id}");
-            cache()->forget('job_shifts.popular');
-            cache()->forget('job_shifts.trending');
-            cache()->tags(['job_shifts', 'job_shift-'.$jobShift->id])->flush();
+            try {
+                cache()->tags(['job_shifts', 'job_shift-'.$jobShift->id])->flush();
+            } catch (\Exception $e) {}
         });
 
         // Clear cache when job shift is deleted
         static::deleted(function ($jobShift) {
             cache()->forget("job_shift.{$jobShift->id}");
-            cache()->forget('job_shifts.popular');
-            cache()->forget('job_shifts.trending');
-            cache()->tags(['job_shifts', 'job_shift-'.$jobShift->id])->flush();
+            try {
+                cache()->tags(['job_shifts', 'job_shift-'.$jobShift->id])->flush();
+            } catch (\Exception $e) {}
         });
     }
 

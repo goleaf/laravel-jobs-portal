@@ -14,9 +14,17 @@ class CityResource extends Resource
 {
     protected static ?string $model = City::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-building-office';
+    protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
 
-    protected static ?string $navigationGroup = 'References';
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Location');
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return __('Cities');
+    }
 
     public static function form(Form $form): Form
     {
@@ -26,18 +34,20 @@ class CityResource extends Resource
                     ->columns(2)
                     ->schema([
                         Forms\Components\Select::make('state_id')
+                            ->label(__('State'))
                             ->relationship('state', 'name')
                             ->searchable()
+                            ->preload()
                             ->required(),
-                        Forms\Components\TextInput::make('name')->required()->maxLength(180),
-                        Forms\Components\TextInput::make('timezone')->maxLength(50),
-                        Forms\Components\TextInput::make('population')->numeric(),
-                        Forms\Components\TextInput::make('latitude')->numeric(),
-                        Forms\Components\TextInput::make('longitude')->numeric(),
-                        Forms\Components\Toggle::make('is_active')->inline(false)->default(true),
-                        Forms\Components\Toggle::make('is_featured')->inline(false)->default(false),
-                        Forms\Components\Toggle::make('is_metropolitan')->inline(false)->default(false),
-                        Forms\Components\Toggle::make('is_major')->inline(false)->default(false),
+                        Forms\Components\TextInput::make('name')
+                            ->label(__('Name'))
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\Toggle::make('is_active')->label(__('Active'))->inline(false)->default(true),
+                        Forms\Components\Toggle::make('is_featured')->label(__('Featured'))->inline(false)->default(false),
+                        Forms\Components\Toggle::make('is_metropolitan')->label(__('Metropolitan'))->inline(false)->default(false),
+                        Forms\Components\Toggle::make('is_major')->label(__('Major City'))
+                            ->inline(false)->default(false),
                     ]),
             ]);
     }
@@ -46,19 +56,15 @@ class CityResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('state.name')->label('State')->sortable(),
-                Tables\Columns\TextColumn::make('timezone')->toggleable()->toggledHiddenByDefault(),
-                Tables\Columns\TextColumn::make('population')->numeric()->sortable(),
-                Tables\Columns\IconColumn::make('is_active')->boolean()->sortable(),
-                Tables\Columns\IconColumn::make('is_featured')->boolean()->sortable(),
-                Tables\Columns\IconColumn::make('is_metropolitan')->boolean()->sortable(),
-                Tables\Columns\IconColumn::make('is_major')->boolean()->sortable(),
-                Tables\Columns\TextColumn::make('created_at')->dateTime()->since()->sortable(),
+                Tables\Columns\TextColumn::make('name')->label(__('Name'))->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('state.name')->label(__('State'))->searchable()->sortable(),
+                Tables\Columns\IconColumn::make('is_active')->label(__('Active'))->boolean()->sortable(),
+                Tables\Columns\IconColumn::make('is_featured')->label(__('Featured'))->boolean()->sortable(),
+                Tables\Columns\TextColumn::make('created_at')->label(__('Created'))->dateTime()->since()->sortable()->toggleable(),
             ])
             ->filters([
-                Tables\Filters\TernaryFilter::make('is_active'),
-                Tables\Filters\TernaryFilter::make('is_featured'),
+                Tables\Filters\TernaryFilter::make('is_active')->label(__('Active')),
+                Tables\Filters\TernaryFilter::make('is_featured')->label(__('Featured')),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -69,11 +75,6 @@ class CityResource extends Resource
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [];
     }
 
     public static function getPages(): array

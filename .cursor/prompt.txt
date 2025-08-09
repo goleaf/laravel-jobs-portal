@@ -1,2 +1,3 @@
 annalyze all controllers and folder resources. read every file. create festures list file. create todo list file, move all project on filament laravel framework, use mcp servers
-read models, read migrations files. read seeds. merge in own memory and create system as portal using all features, fields, relations, andn create all based filament framework
+read models, read migrations files. read seeds. merge in own memory and create system as portal using all features, fields, relations, and create all based filament framework
+make all strings as translatable using laravel translation tools, do nont make static strings

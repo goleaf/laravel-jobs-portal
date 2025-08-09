@@ -2,19 +2,19 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\JobTypeResource\Pages;
-use App\Models\JobType;
+use App\Filament\Resources\IndustryResource\Pages;
+use App\Models\Industry;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-class JobTypeResource extends Resource
+class IndustryResource extends Resource
 {
-    protected static ?string $model = JobType::class;
+    protected static ?string $model = Industry::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-group';
+    protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
 
     protected static ?string $navigationGroup = 'References';
 
@@ -29,7 +29,16 @@ class JobTypeResource extends Resource
                         Forms\Components\TextInput::make('slug')->maxLength(255),
                         Forms\Components\Textarea::make('description')->columnSpanFull(),
                         Forms\Components\Toggle::make('is_active')->inline(false)->default(true),
+                        Forms\Components\Toggle::make('is_default')->inline(false)->default(false),
+                        Forms\Components\TextInput::make('sort_order')->numeric(),
+                        Forms\Components\TextInput::make('icon')->maxLength(255),
+                        Forms\Components\ColorPicker::make('color'),
                     ]),
+                Forms\Components\Section::make('SEO')->collapsed()->schema([
+                    Forms\Components\TextInput::make('meta_title')->maxLength(255),
+                    Forms\Components\Textarea::make('meta_description')->rows(3),
+                    Forms\Components\TextInput::make('meta_keywords')->maxLength(255),
+                ]),
             ]);
     }
 
@@ -39,10 +48,13 @@ class JobTypeResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
                 Tables\Columns\IconColumn::make('is_active')->boolean()->sortable(),
+                Tables\Columns\IconColumn::make('is_default')->boolean()->sortable(),
+                Tables\Columns\TextColumn::make('companies_count')->counts('companies')->label('Companies'),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->since()->sortable(),
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_active'),
+                Tables\Filters\TernaryFilter::make('is_default'),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -64,10 +76,10 @@ class JobTypeResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListJobTypes::route('/'),
-            'create' => Pages\CreateJobType::route('/create'),
-            'view' => Pages\ViewJobType::route('/{record}'),
-            'edit' => Pages\EditJobType::route('/{record}/edit'),
+            'index' => Pages\ListIndustries::route('/'),
+            'create' => Pages\CreateIndustry::route('/create'),
+            'view' => Pages\ViewIndustry::route('/{record}'),
+            'edit' => Pages\EditIndustry::route('/{record}/edit'),
         ];
     }
 }

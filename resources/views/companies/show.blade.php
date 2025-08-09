@@ -459,42 +459,42 @@
                                 @if($company->linkedin_url)
                                     <a href="{{ $company->linkedin_url }}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
                                         <span class="sr-only">{{ __('social.linkedin') }}</span>
-                                        <x-icon name="linkedin" class="h-6 w-6" />
+                                        <x-icon name="globe-alt" class="h-6 w-6" />
                                     </a>
                                 @endif
                                 
                                 @if($company->twitter_url)
                                     <a href="{{ $company->twitter_url }}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-blue-400 dark:hover:text-blue-300">
                                         <span class="sr-only">{{ __('social.twitter') }}</span>
-                                        <x-icon name="twitter" class="h-6 w-6" />
+                                        <x-icon name="globe-alt" class="h-6 w-6" />
                                     </a>
                                 @endif
                                 
                                 @if($company->facebook_url)
                                     <a href="{{ $company->facebook_url }}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-blue-800 dark:hover:text-blue-600">
                                         <span class="sr-only">{{ __('social.facebook') }}</span>
-                                        <x-icon name="facebook" class="h-6 w-6" />
+                                        <x-icon name="globe-alt" class="h-6 w-6" />
                                     </a>
                                 @endif
                                 
                                 @if($company->instagram_url)
                                     <a href="{{ $company->instagram_url }}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-pink-600 dark:hover:text-pink-400">
                                         <span class="sr-only">{{ __('social.instagram') }}</span>
-                                        <x-icon name="instagram" class="h-6 w-6" />
+                                        <x-icon name="globe-alt" class="h-6 w-6" />
                                     </a>
                                 @endif
                                 
                                 @if($company->youtube_url)
                                     <a href="{{ $company->youtube_url }}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-red-600 dark:hover:text-red-400">
                                         <span class="sr-only">{{ __('social.youtube') }}</span>
-                                        <x-icon name="youtube" class="h-6 w-6" />
+                                        <x-icon name="globe-alt" class="h-6 w-6" />
                                     </a>
                                 @endif
                                 
                                 @if($company->github_url)
                                     <a href="{{ $company->github_url }}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-gray-900 dark:hover:text-white">
                                         <span class="sr-only">{{ __('social.github') }}</span>
-                                        <x-icon name="github" class="h-6 w-6" />
+                                        <x-icon name="globe-alt" class="h-6 w-6" />
                                     </a>
                                 @endif
                             </div>

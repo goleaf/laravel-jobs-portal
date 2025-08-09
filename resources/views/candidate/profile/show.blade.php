@@ -80,14 +80,14 @@
                         @if($candidate->linkedin_url)
                             <a href="{{ $candidate->linkedin_url }}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400">
                                 <span class="sr-only">{{ __('social.linkedin') }}</span>
-                                <x-icon name="linkedin" class="h-6 w-6" />
+                                <x-icon name="globe-alt" class="h-6 w-6" />
                             </a>
                         @endif
                         
                         @if($candidate->github_url)
                             <a href="{{ $candidate->github_url }}" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-gray-900 dark:hover:text-white">
                                 <span class="sr-only">{{ __('social.github') }}</span>
-                                <x-icon name="github" class="h-6 w-6" />
+                                <x-icon name="globe-alt" class="h-6 w-6" />
                             </a>
                         @endif
                         

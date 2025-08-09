@@ -314,7 +314,7 @@
                                 <dd class="mt-1 text-gray-900 dark:text-white">
                                     <a href="{{ $job->website }}" target="_blank" class="hover:text-blue-600 transition-colors duration-200">
                                         {{ $job->website }}
-                                        <x-icon name="external-link" class="inline-block h-4 w-4 ml-1" />
+                                        <x-icon name="arrow-top-right-on-square" class="inline-block h-4 w-4 ml-1" />
                                     </a>
                                 </dd>
                             </div>

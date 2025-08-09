@@ -48,7 +48,7 @@
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 transform hover:scale-105 transition-transform duration-300">
-                    <x-icon name="lightbulb" class="h-12 w-12 text-blue-600 dark:text-blue-400 mx-auto mb-6" />
+                    <x-icon name="light-bulb" class="h-12 w-12 text-blue-600 dark:text-blue-400 mx-auto mb-6" />
                     <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">
                         {{ __('aboutus.value_innovation_title') }}
                     </h3>

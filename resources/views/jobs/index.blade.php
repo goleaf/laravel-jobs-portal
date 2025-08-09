@@ -86,7 +86,7 @@
                                     data-action="jobs-update-view" data-view="list"
                                     title="{{ __('jobs.list_view') }}"
                                 >
-                                    <x-icon name="list" class="h-5 w-5" />
+                                    <x-icon name="list-bullet" class="h-5 w-5" />
                                 </button>
                                 <button 
                                     type="button" 
@@ -94,7 +94,7 @@
                                     data-action="jobs-update-view" data-view="grid"
                                     title="{{ __('jobs.grid_view') }}"
                                 >
-                                    <x-icon name="grid" class="h-5 w-5" />
+                                    <x-icon name="squares-2x2" class="h-5 w-5" />
                                 </button>
                             </div>
                         </div>
@@ -105,7 +105,7 @@
                             class="lg:hidden inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
                             data-action="jobs-toggle-mobile-filters"
                         >
-                            <x-icon name="filter" class="h-4 w-4 mr-2" />
+                            <x-icon name="funnel" class="h-4 w-4 mr-2" />
                             {{ __('jobs.filters') }}
                         </button>
                     </div>

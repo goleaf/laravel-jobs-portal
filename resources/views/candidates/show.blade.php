@@ -34,7 +34,7 @@
                 </x-ui.card-header>
                 <x-ui.card-content class="space-y-3">
                     <div class="flex items-center text-gray-700 dark:text-gray-300">
-                        <x-icon name="mail" class="h-5 w-5 mr-3 text-gray-500" />
+                        <x-icon name="envelope" class="h-5 w-5 mr-3 text-gray-500" />
                         <span>{{ $candidate->email ?? __('candidates.not_provided') }}</span>
                     </div>
                     @if($candidate->phone_number)
@@ -51,7 +51,7 @@
                     @endif
                     @if($candidate->website)
                         <div class="flex items-center text-gray-700 dark:text-gray-300">
-                            <x-icon name="globe" class="h-5 w-5 mr-3 text-gray-500" />
+                            <x-icon name="globe-alt" class="h-5 w-5 mr-3 text-gray-500" />
                             <a href="{{ $candidate->website }}" target="_blank" class="text-blue-600 hover:underline">{{ $candidate->website }}</a>
                         </div>
                     @endif
@@ -140,7 +140,7 @@
                 <x-ui.card-content>
                     <p class="text-gray-700 dark:text-gray-300 mb-4">{{ __('candidates.portfolio_description') }}</p>
                     <x-button href="{{ $candidate->portfolio_url }}" target="_blank" variant="secondary">
-                        <x-icon name="external-link" class="h-5 w-5 mr-2" />
+                        <x-icon name="arrow-top-right-on-square" class="h-5 w-5 mr-2" />
                         {{ __('candidates.view_portfolio') }}
                     </x-button>
                 </x-ui.card-content>
@@ -156,7 +156,7 @@
                 <x-ui.card-content>
                     <p class="text-gray-700 dark:text-gray-300 mb-4">{{ __('candidates.resume_description') }}</p>
                     <x-button href="{{ $candidate->resume_url }}" target="_blank" variant="primary">
-                        <x-icon name="download" class="h-5 w-5 mr-2" />
+                        <x-icon name="arrow-down-tray" class="h-5 w-5 mr-2" />
                         {{ __('candidates.download_resume') }}
                     </x-button>
                 </x-ui.card-content>

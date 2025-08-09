@@ -46,7 +46,7 @@ class RequiredDegreeLevelResource extends Resource
                         Forms\Components\TextInput::make('icon')->maxLength(255),
                         Forms\Components\ColorPicker::make('color'),
                     ]),
-                Forms\Components\Section::make('SEO')->collapsed()->schema([
+                Forms\Components\Section::make(__('SEO'))->collapsed()->schema([
                     Forms\Components\TextInput::make('meta_title')->maxLength(255),
                     Forms\Components\Textarea::make('meta_description')->rows(3),
                     Forms\Components\TextInput::make('meta_keywords')->maxLength(255),

@@ -32,7 +32,7 @@ class EmailTemplateResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Details')
+                Forms\Components\Section::make(__('Details'))
                     ->columns(2)
                     ->schema([
                         Forms\Components\TextInput::make('template_name')->label(__('Name'))->required()->maxLength(255)->unique(ignoreRecord: true),
@@ -44,7 +44,7 @@ class EmailTemplateResource extends Resource
                         Forms\Components\Toggle::make('is_default')->label(__('Default'))->inline(false)->default(false),
                         Forms\Components\Toggle::make('is_system')->label(__('System'))->inline(false)->default(false),
                     ]),
-                Forms\Components\Section::make('Content')
+                Forms\Components\Section::make(__('Content'))
                     ->columns(1)
                     ->schema([
                         Forms\Components\Textarea::make('body')->label(__('Body'))->rows(12)->required()->columnSpanFull(),

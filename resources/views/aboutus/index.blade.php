@@ -35,7 +35,7 @@
                 </p>
             </div>
             <div class="order-1 md:order-2">
-                <img src="{{ asset('images/slider-3.jpg') }}" alt="Our Mission" class="rounded-xl shadow-lg w-full h-80 object-cover">
+                <img src="{{ asset('images/slider-3.jpg') }}" alt="{{ __('aboutus.mission_image_alt') }}" class="rounded-xl shadow-lg w-full h-80 object-cover">
             </div>
         </div>
     </section>
@@ -87,25 +87,25 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 <!-- Team Member 1 -->
                 <div class="flex flex-col items-center">
-                    <img class="h-32 w-32 rounded-full object-cover mb-4 shadow-md" src="{{ asset('images/profile.png') }}" alt="Team Member">
+                    <img class="h-32 w-32 rounded-full object-cover mb-4 shadow-md" src="{{ asset('images/profile.png') }}" alt="{{ __('aboutus.team_member_alt') }}">
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ __('aboutus.team_member_1_name') }}</h3>
                     <p class="text-blue-600 dark:text-blue-400">{{ __('aboutus.team_member_1_role') }}</p>
                 </div>
                 <!-- Team Member 2 -->
                 <div class="flex flex-col items-center">
-                    <img class="h-32 w-32 rounded-full object-cover mb-4 shadow-md" src="{{ asset('images/profile.png') }}" alt="Team Member">
+                    <img class="h-32 w-32 rounded-full object-cover mb-4 shadow-md" src="{{ asset('images/profile.png') }}" alt="{{ __('aboutus.team_member_alt') }}">
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ __('aboutus.team_member_2_name') }}</h3>
                     <p class="text-blue-600 dark:text-blue-400">{{ __('aboutus.team_member_2_role') }}</p>
                 </div>
                 <!-- Team Member 3 -->
                 <div class="flex flex-col items-center">
-                    <img class="h-32 w-32 rounded-full object-cover mb-4 shadow-md" src="{{ asset('images/profile.png') }}" alt="Team Member">
+                    <img class="h-32 w-32 rounded-full object-cover mb-4 shadow-md" src="{{ asset('images/profile.png') }}" alt="{{ __('aboutus.team_member_alt') }}">
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ __('aboutus.team_member_3_name') }}</h3>
                     <p class="text-blue-600 dark:text-blue-400">{{ __('aboutus.team_member_3_role') }}</p>
                 </div>
                 <!-- Team Member 4 -->
                 <div class="flex flex-col items-center">
-                    <img class="h-32 w-32 rounded-full object-cover mb-4 shadow-md" src="{{ asset('images/profile.png') }}" alt="Team Member">
+                    <img class="h-32 w-32 rounded-full object-cover mb-4 shadow-md" src="{{ asset('images/profile.png') }}" alt="{{ __('aboutus.team_member_alt') }}">
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ __('aboutus.team_member_4_name') }}</h3>
                     <p class="text-blue-600 dark:text-blue-400">{{ __('aboutus.team_member_4_role') }}</p>
                 </div>

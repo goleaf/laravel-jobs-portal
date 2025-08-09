@@ -1,0 +1,70 @@
+feat(actions+filament): integrate Actions with Filament, add JobApplicationResource, mailables, and stabilize factories/config for testing
+
+Summary
+- Implemented and wired comprehensive Actions into the Job portal flows
+- Integrated Actions with Filament resources and pages (create/publish/status actions)
+- Added new Filament JobApplicationResource with shortlist/reject actions
+- Created mailables + email templates for employer/candidate notifications
+- Fixed/normalized model helpers and factories
+- Adjusted config to minimize third-party provider boot during tests
+
+Actions (created/updated)
+- app/Actions/AdminNotification.php
+- app/Actions/AnalyzeJobApplicationMatch.php
+- app/Actions/AutoScreenJobApplication.php
+- app/Actions/CreateJob.php
+- app/Actions/GenerateJobStructuredData.php
+- app/Actions/PostJobToLinkedIn.php
+- app/Actions/ProcessJobApplication.php
+- app/Actions/PublishJob.php
+- app/Actions/RegisterCandidate.php
+- app/Actions/SendJobAlert.php
+- app/Actions/SendJobApplicationNotification.php
+- app/Actions/UpdateCandidateRecommendations.php
+- app/Actions/UpdateJobPopularityScore.php
+- app/Actions/UpdateJobSearchIndex.php
+
+Filament integration
+- app/Filament/Resources/JobResource.php (form/table updates with extra fields and localization)
+- app/Filament/Resources/JobResource/Pages/CreateJob.php (creation via CreateJob action)
+- app/Filament/Resources/JobResource/Pages/EditJob.php (header Publish action + auto slug/meta handling)
+- New JobApplication resource & pages:
+  - app/Filament/Resources/JobApplicationResource.php
+  - app/Filament/Resources/JobApplicationResource/Pages/ListJobApplications.php
+  - app/Filament/Resources/JobApplicationResource/Pages/CreateJobApplication.php
+  - app/Filament/Resources/JobApplicationResource/Pages/ViewJobApplication.php
+  - app/Filament/Resources/JobApplicationResource/Pages/EditJobApplication.php
+- Additional resource scaffolds aligned with existing structure (EmailTemplate, Inquiry, Language, RequiredDegreeLevel, NewsLetter, NotificationSetting)
+
+Mail
+- app/Mail/JobApplicationReceived.php
+- app/Mail/JobApplicationConfirmation.php
+- resources/views/emails/job-application-received.blade.php
+- resources/views/emails/job-application-confirmation.blade.php
+
+Models & Events
+- app/Models/Job.php (added isActive(), isExpired() helpers used by actions)
+- app/Models/JobApplication.php (leverage status constants across UI)
+- app/Events/JobApplicationStatusChanged.php (retained and compatible with actions)
+
+Factories & Seeds
+- database/factories/JobFactory.php (removed duplicate definition; stable IDs)
+- database/factories/CompanyFactory.php (deduplicated)
+- database/factories/CandidateFactory.php (ensured compatibility with tests)
+
+Testing & Config
+- tests/Feature/Actions/ActionsIntegrationTest.php (create/publish, process application)
+- phpunit.xml: sqlite :memory: config retained
+- config/app.php: testing-specific provider minimization (core Filesystem/View/Mail + app providers) to reduce boot conflicts from Filament and third-party packages during tests
+
+Touched files (non-exhaustive but high-signal)
+- Actions: AdminNotification.php, AnalyzeJobApplicationMatch.php, AutoScreenJobApplication.php, CreateJob.php, GenerateJobStructuredData.php, PostJobToLinkedIn.php, ProcessJobApplication.php, PublishJob.php, RegisterCandidate.php, SendJobAlert.php, SendJobApplicationNotification.php, UpdateCandidateRecommendations.php, UpdateJobPopularityScore.php, UpdateJobSearchIndex.php
+- Filament: JobResource (+ Create/Edit pages), JobApplicationResource (+ pages), EmailTemplateResource (+ pages), InquiryResource (+ pages), LanguageResource (+ pages), RequiredDegreeLevelResource (+ pages), NewsLetterResource (+ page), NotificationSettingResource (+ page)
+- Models: Job.php, JobApplication.php
+- Mail: JobApplicationReceived.php, JobApplicationConfirmation.php + email views
+- Factories: JobFactory.php, CompanyFactory.php, CandidateFactory.php, JobApplicationFactory.php
+- Config: config/app.php
+- Tests: tests/Feature/Actions/ActionsIntegrationTest.php
+
+Notes
+- Some third-party providers (icons/auth/etc.) can still affect test boot; the provider list was minimized in testing to improve stability. Further tuning or dont-discover may be applied if needed.

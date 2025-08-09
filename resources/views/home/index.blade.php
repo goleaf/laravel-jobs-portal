@@ -188,6 +188,4 @@
 @endif
 @endsection
 
-@push('scripts')
-    @vite('resources/js/home.js')
-@endpush 
+{{-- Script moved to centralized Vite entry via resources/js/app.js --}}

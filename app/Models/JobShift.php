@@ -289,7 +289,7 @@ class JobShift extends Model
         'is_active' => 'boolean',
         'is_featured' => 'boolean',
         'sort_order' => 'integer',
-        'duration_hours' => 'decimal:2',
+        'duration_hours' => 'integer',
         'start_time' => 'datetime:H:i',
         'end_time' => 'datetime:H:i',
         'created_at' => 'datetime',

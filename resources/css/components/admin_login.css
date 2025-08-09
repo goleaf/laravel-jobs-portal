@@ -3,12 +3,14 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
         }
+
         .login-card {
             backdrop-filter: blur(10px);
-            background: rgba(255, 255, 255, 0.95);
+            background: rgb(255 255 255 / 95%);
             border: none;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            box-shadow: 0 8px 32px rgb(31 38 135 / 37%);
         }
+
         .admin-badge {
             background: linear-gradient(45deg, #ff6b6b, #ee5a24);
             color: white;

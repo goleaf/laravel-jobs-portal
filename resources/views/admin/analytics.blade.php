@@ -59,7 +59,7 @@
                                 'custom' => __('admin.custom_range')
                             ]"
                             :selected="request('period', 'month')"
-                            onchange="this.form.submit()"
+                            data-auto-submit
                         />
                     </div>
 
@@ -79,7 +79,7 @@
                                 'performance' => __('admin.performance_metrics')
                             ]"
                             :selected="request('metric_type', 'all')"
-                            onchange="this.form.submit()"
+                            data-auto-submit
                         />
                     </div>
 
@@ -92,7 +92,7 @@
                             value="1"
                             {{ request('compare_previous') ? 'checked' : '' }}
                             class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                            onchange="this.form.submit()"
+                            data-auto-submit
                         >
                         <label for="compare_previous" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">
                             {{ __('admin.compare_previous_period') }}
@@ -227,7 +227,7 @@
                     </h3>
                 </div>
                 <div class="p-6">
-                    <div class="h-64" id="user-engagement-chart">
+                    <div class="h-64" id="user-engagement-chart" data-chart='@json($userEngagementData ?? [])'>
                         <!-- Chart will be rendered here -->
                         <div class="flex items-center justify-center h-full text-gray-500 dark:text-gray-400">
                             <div class="text-center">
@@ -247,7 +247,7 @@
                     </h3>
                 </div>
                 <div class="p-6">
-                    <div class="h-64" id="revenue-chart">
+                    <div class="h-64" id="revenue-chart" data-chart='@json($revenueData ?? [])'>
                         <!-- Chart will be rendered here -->
                         <div class="flex items-center justify-center h-full text-gray-500 dark:text-gray-400">
                             <div class="text-center">
@@ -616,172 +616,5 @@
 @endsection
 
 @push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize charts
-    initializeUserEngagementChart();
-    initializeRevenueChart();
-    
-    // Auto-refresh analytics every 10 minutes
-    setInterval(refreshAnalytics, 600000);
-});
-
-function initializeUserEngagementChart() {
-    const ctx = document.getElementById('user-engagement-chart');
-    if (!ctx) return;
-    
-    // Sample data - replace with actual data from backend
-    const chartData = @json($userEngagementData ?? []);
-    
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: chartData.labels || [],
-            datasets: [
-                {
-                    label: '{{ __("admin.daily_active_users") }}',
-                    data: chartData.dau || [],
-                    borderColor: 'rgb(59, 130, 246)',
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                    tension: 0.4
-                },
-                {
-                    label: '{{ __("admin.new_registrations") }}',
-                    data: chartData.registrations || [],
-                    borderColor: 'rgb(16, 185, 129)',
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                    tension: 0.4
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        color: 'rgba(156, 163, 175, 0.2)'
-                    }
-                },
-                x: {
-                    grid: {
-                        color: 'rgba(156, 163, 175, 0.2)'
-                    }
-                }
-            }
-        }
-    });
-}
-
-function initializeRevenueChart() {
-    const ctx = document.getElementById('revenue-chart');
-    if (!ctx) return;
-    
-    // Sample data - replace with actual data from backend
-    const chartData = @json($revenueData ?? []);
-    
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: chartData.labels || [],
-            datasets: [
-                {
-                    label: '{{ __("admin.revenue") }}',
-                    data: chartData.revenue || [],
-                    backgroundColor: 'rgba(147, 51, 234, 0.8)',
-                    borderColor: 'rgb(147, 51, 234)',
-                    borderWidth: 1
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'top',
-                },
-                title: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        color: 'rgba(156, 163, 175, 0.2)'
-                    },
-                    ticks: {
-                        callback: function(value) {
-                            return '$' + value.toLocaleString();
-                        }
-                    }
-                },
-                x: {
-                    grid: {
-                        color: 'rgba(156, 163, 175, 0.2)'
-                    }
-                }
-            }
-        }
-    });
-}
-
-function refreshAnalytics() {
-    // Refresh analytics data without page reload
-    fetch(window.location.href, {
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Update KPIs
-        updateKPIs(data.kpis);
-        
-        // Update charts
-        updateCharts(data.chartData);
-        
-        console.log('Analytics data refreshed');
-    })
-    .catch(error => {
-        console.error('Error refreshing analytics:', error);
-    });
-}
-
-function updateKPIs(kpis) {
-    // Update KPI values in the UI
-    Object.keys(kpis).forEach(key => {
-        const element = document.querySelector(`[data-kpi="${key}"]`);
-        if (element) {
-            element.textContent = kpis[key];
-        }
-    });
-}
-
-function updateCharts(chartData) {
-    // Update chart data
-    if (window.userEngagementChart) {
-        window.userEngagementChart.data.labels = chartData.userEngagement.labels;
-        window.userEngagementChart.data.datasets[0].data = chartData.userEngagement.dau;
-        window.userEngagementChart.data.datasets[1].data = chartData.userEngagement.registrations;
-        window.userEngagementChart.update();
-    }
-    
-    if (window.revenueChart) {
-        window.revenueChart.data.labels = chartData.revenue.labels;
-        window.revenueChart.data.datasets[0].data = chartData.revenue.revenue;
-        window.revenueChart.update();
-    }
-}
-</script>
-@endpush 
+{{-- Analytics scripts bundled via resources/js/app.js --}}
+@endpush

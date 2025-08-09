@@ -1,36 +1,36 @@
 /* FontAwesome Icons */
-@import '@fortawesome/fontawesome-free/css/all.min.css';
+@import url('@fortawesome/fontawesome-free/css/all.min.css');
 
 /* Select2 Styles */
-@import 'select2/dist/css/select2.css';
+@import url('select2/dist/css/select2.css');
 
 /* Flatpickr Date Picker */
-@import 'flatpickr/dist/flatpickr.css';
+@import url('flatpickr/dist/flatpickr.css');
 
 /* Toastr Notifications */
-@import 'toastr/build/toastr.css';
+@import url('toastr/build/toastr.css');
 
 /* SweetAlert2 */
-@import 'sweetalert2/dist/sweetalert2.css';
+@import url('sweetalert2/dist/sweetalert2.css');
 
 /* Slick Carousel */
-@import 'slick-carousel/slick/slick.css';
-@import 'slick-carousel/slick/slick-theme.css';
+@import url('slick-carousel/slick/slick.css');
+@import url('slick-carousel/slick/slick-theme.css');
 
 /* IziToast */
-@import 'izitoast/dist/css/iziToast.css';
+@import url('izitoast/dist/css/iziToast.css');
 
 /* Ion Range Slider */
-@import 'ion-rangeslider/css/ion.rangeSlider.css';
+@import url('ion-rangeslider/css/ion.rangeSlider.css');
 
 /* International Telephone Input */
-@import 'intl-tel-input/build/css/intlTelInput.css';
+@import url('intl-tel-input/build/css/intlTelInput.css');
 
 /* Summernote Editor */
-@import 'summernote/dist/summernote.css';
+@import url('summernote/dist/summernote.css');
 
 /* Date Range Picker */
-@import 'bootstrap-daterangepicker/daterangepicker.css';
+@import url('bootstrap-daterangepicker/daterangepicker.css');
 
 /* DataTables */
-@import 'datatables.net-dt/css/dataTables.dataTables.css'; 
+@import url('datatables.net-dt/css/dataTables.dataTables.css'); 

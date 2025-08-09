@@ -1,4 +1,5 @@
 /* index Component Styles */
+
 /* Enhanced for TailwindCSS compatibility */
 
 .table th {
@@ -6,12 +7,15 @@
         font-weight: 600;
         color: #495057;
     }
+
     .btn-group .btn {
         margin-right: 2px;
     }
+
     .btn-group .btn:last-child {
         margin-right: 0;
     }
+
     pre {
         background-color: #f8f9fa;
         padding: 1rem;

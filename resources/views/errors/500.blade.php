@@ -3,6 +3,7 @@
 @section('title', __('errors.server_error'))
 
 @section('content')
+    <meta name="error-id" content="{{ $errorId ?? 'ERR-' . time() }}">
 <div class="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-lg">
         <div class="text-center">
@@ -59,7 +60,7 @@
             <!-- Quick Actions -->
             <div class="space-y-4 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center mb-12">
                 <x-ui.button 
-                    data-action="refresh-page"
+                        data-action="refresh-page"
                     variant="primary"
                     icon="arrow-path"
                 >
@@ -75,7 +76,7 @@
                 </x-ui.button>
 
                 <x-ui.button 
-                    data-action="report-error"
+                        data-action="report-error"
                     variant="ghost"
                     icon="exclamation-triangle"
                 >
@@ -193,7 +194,7 @@
                     
                     <div class="space-y-3 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center">
                         <x-ui.button 
-                            data-action="open-support-modal"
+                                data-action="open-support-modal"
                             variant="secondary"
                             class="bg-white text-red-600 hover:bg-gray-50"
                         >
@@ -247,7 +248,7 @@
             {{ __('errors.report_error') }}
         </h3>
         
-        <form data-action="submit-error-report">
+            <form data-action="submit-error-report">
             <div class="space-y-6">
                 <!-- What were you doing? -->
                 <div>
@@ -328,8 +329,8 @@
             <div class="flex justify-end space-x-3 mt-8">
                 <x-ui.button 
                     type="button"
-                    data-action="close-modal"
-                    data-modal-id="error-report-modal"
+                        data-action="close-modal"
+                        data-modal-id="error-report-modal"
                     variant="secondary"
                 >
                     {{ __('errors.cancel') }}
@@ -354,7 +355,7 @@
         </h3>
         
         <div class="space-y-4">
-            <div class="flex items-center space-x-3 p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer" data-action="open-support-modal">
+                <div class="flex items-center space-x-3 p-4 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer" data-action="open-support-modal">
                 <x-icon name="envelope" class="h-6 w-6 text-blue-600 dark:text-blue-400" />
                 <div>
                     <h4 class="font-medium text-gray-900 dark:text-white">{{ __('errors.email_support') }}</h4>
@@ -395,8 +396,8 @@
         
         <div class="flex justify-end mt-6">
             <x-ui.button 
-                data-action="close-modal"
-                data-modal-id="support-modal"
+                    data-action="close-modal"
+                    data-modal-id="support-modal"
                 variant="primary"
             >
                 {{ __('errors.close') }}
@@ -407,201 +408,5 @@
 @endsection
 
 @push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Track server error for analytics
-    trackServerError();
-    
-    // Fill system information
-    fillSystemInfo();
-    
-    // Auto-retry after 30 seconds
-    setTimeout(() => {
-        showRetryNotification();
-    }, 30000);
-});
-
-function refreshPage() {
-    window.location.reload();
-}
-
-function reportError() {
-    openModal('error-report-modal');
-}
-
-function openSupportModal() {
-    openModal('support-modal');
-}
-
-function submitErrorReport(event) {
-    event.preventDefault();
-    
-    const formData = new FormData(event.target);
-    
-    // Add system information
-    formData.append('browser_info', getBrowserInfo());
-    formData.append('screen_info', getScreenInfo());
-    formData.append('url', window.location.href);
-    formData.append('timestamp', new Date().toISOString());
-    formData.append('error_id', '{{ $errorId ?? 'ERR-' . time() }}');
-    
-    fetch('/errors/report', {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            closeModal('error-report-modal');
-            showNotification('{{ __("errors.report_submitted") }}', 'success');
-            
-            // Reset form
-            event.target.reset();
-        } else {
-            showNotification(data.message || '{{ __("errors.report_failed") }}', 'error');
-        }
-    })
-    .catch(error => {
-        console.error('Error submitting report:', error);
-        showNotification('{{ __("errors.report_error") }}', 'error');
-    });
-}
-
-function fillSystemInfo() {
-    document.getElementById('browser-info').textContent = getBrowserInfo();
-    document.getElementById('screen-info').textContent = getScreenInfo();
-    document.getElementById('url-info').textContent = window.location.href;
-    document.getElementById('timestamp-info').textContent = new Date().toLocaleString();
-}
-
-function getBrowserInfo() {
-    const ua = navigator.userAgent;
-    let browser = 'Unknown';
-    
-    if (ua.includes('Chrome')) browser = 'Chrome';
-    else if (ua.includes('Firefox')) browser = 'Firefox';
-    else if (ua.includes('Safari')) browser = 'Safari';
-    else if (ua.includes('Edge')) browser = 'Edge';
-    
-    return `${browser} (${navigator.platform})`;
-}
-
-function getScreenInfo() {
-    return `${screen.width}x${screen.height} (${window.innerWidth}x${window.innerHeight})`;
-}
-
-function trackServerError() {
-    // Track server error for analytics
-    if (typeof gtag !== 'undefined') {
-        gtag('event', 'server_error', {
-            'error_id': '{{ $errorId ?? 'ERR-' . time() }}',
-            'page_location': window.location.href
-        });
-    }
-    
-    // Send to internal analytics
-    fetch('/analytics/500', {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            error_id: '{{ $errorId ?? 'ERR-' . time() }}',
-            url: window.location.href,
-            user_agent: navigator.userAgent,
-            timestamp: new Date().toISOString()
-        })
-    })
-    .catch(error => {
-        console.error('Error tracking 500:', error);
-    });
-}
-
-function showRetryNotification() {
-    const notification = document.createElement('div');
-    notification.className = 'fixed bottom-4 left-4 bg-blue-600 text-white p-4 rounded-lg shadow-lg z-50 max-w-sm';
-    notification.innerHTML = `
-        <div class="flex items-center space-x-3">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <div class="flex-1">
-                <p class="text-sm font-medium">{{ __('errors.ready_to_retry') }}</p>
-                <p class="text-xs opacity-90">{{ __('errors.issue_might_be_resolved') }}</p>
-            </div>
-            <button onclick="refreshPage()" class="text-xs bg-white bg-opacity-20 hover:bg-opacity-30 px-2 py-1 rounded">
-                {{ __('errors.retry') }}
-            </button>
-            <button onclick="this.parentElement.parentElement.remove()" class="text-white hover:text-gray-200">
-                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-        </div>
-    `;
-    
-    document.body.appendChild(notification);
-    
-    // Auto-remove after 10 seconds
-    setTimeout(() => {
-        if (notification.parentElement) {
-            notification.remove();
-        }
-    }, 10000);
-}
-
-function startLiveChat() {
-    // Implementation for live chat
-    showNotification('{{ __("errors.live_chat_starting") }}', 'info');
-    closeModal('support-modal');
-}
-
-function showNotification(message, type = 'info') {
-    const toast = document.createElement('div');
-    toast.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
-        type === 'success' ? 'bg-green-500 text-white' :
-        type === 'error' ? 'bg-red-500 text-white' :
-        'bg-blue-500 text-white'
-    }`;
-    toast.textContent = message;
-    
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-        toast.remove();
-    }, 3000);
-}
-
-// Automatic retry mechanism
-let retryCount = 0;
-const maxRetries = 3;
-
-function autoRetry() {
-    if (retryCount < maxRetries) {
-        retryCount++;
-        
-        fetch(window.location.href, { method: 'HEAD' })
-        .then(response => {
-            if (response.ok) {
-                showNotification('{{ __("errors.service_restored") }}', 'success');
-                setTimeout(() => {
-                    window.location.reload();
-                }, 2000);
-            } else {
-                setTimeout(autoRetry, 60000); // Retry in 1 minute
-            }
-        })
-        .catch(() => {
-            setTimeout(autoRetry, 60000); // Retry in 1 minute
-        });
-    }
-}
-
-// Start auto-retry after 2 minutes
-setTimeout(autoRetry, 120000);
-</script>
-@endpush 
+    {{-- Script handled via resources/js/app.js (pages/errors/500.js) --}}
+@endpush

@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Schema;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
@@ -343,9 +344,11 @@ class Job extends Model
     public function scopeNotExpired($query)
     {
         return $query->where(function ($q) {
-            $q->whereNull('expires_at')
-                ->orWhere('expires_at', '>=', now())
-                ->orWhere('job_expiry_date', '>=', now()->format('Y-m-d'));
+            if (Schema::hasColumn($this->getTable(), 'expires_at')) {
+                $q->whereNull('expires_at')
+                    ->orWhere('expires_at', '>=', now());
+            }
+            $q->orWhere('job_expiry_date', '>=', now()->format('Y-m-d'));
         });
     }
 
@@ -357,9 +360,13 @@ class Job extends Model
      */
     public function scopeExpired($query)
     {
-        return $query->whereNotNull('expires_at')
-            ->where('expires_at', '<', now())
-            ->orWhere('job_expiry_date', '<', now()->format('Y-m-d'));
+        return $query->where(function ($q) {
+            if (Schema::hasColumn($this->getTable(), 'expires_at')) {
+                $q->whereNotNull('expires_at')
+                    ->where('expires_at', '<', now());
+            }
+            $q->orWhere('job_expiry_date', '<', now()->format('Y-m-d'));
+        });
     }
 
     /**
@@ -411,6 +418,30 @@ class Job extends Model
     }
 
     /**
+     * Backward-compatible wrapper: byLocation → prefer relational name match.
+     * Falls back to text columns if present.
+     */
+    public function scopeByLocation($query, $location)
+    {
+        return $query->where(function ($q) use ($location) {
+            $q->whereHas('city', function ($sub) use ($location) {
+                $sub->where('name', 'like', '%'.$location.'%');
+            })
+            ->orWhereHas('state', function ($sub) use ($location) {
+                $sub->where('name', 'like', '%'.$location.'%');
+            })
+            ->orWhereHas('country', function ($sub) use ($location) {
+                $sub->where('name', 'like', '%'.$location.'%');
+            })
+            // Fallback: if text columns exist in the schema
+            ->orWhere('location', 'like', '%'.$location.'%')
+            ->orWhere('country', 'like', '%'.$location.'%')
+            ->orWhere('state', 'like', '%'.$location.'%')
+            ->orWhere('city', 'like', '%'.$location.'%');
+        });
+    }
+
+    /**
      * Scope a query to only include jobs within a salary range.
      *
      * @param  Builder  $query
@@ -439,6 +470,14 @@ class Job extends Model
     }
 
     /**
+     * Filter by employment type string (e.g., full_time, part_time).
+     */
+    public function scopeByEmploymentType($query, string $employmentType)
+    {
+        return $query->where('employment_type', $employmentType);
+    }
+
+    /**
      * Scope a query to only include jobs in a specific industry.
      *
      * @param  Builder  $query
@@ -461,6 +500,14 @@ class Job extends Model
     public function scopeFromCompany($query, $companyId)
     {
         return $query->where('company_id', $companyId);
+    }
+
+    /**
+     * Backward-compatible wrapper: byCompany → fromCompany.
+     */
+    public function scopeByCompany($query, $companyId)
+    {
+        return $this->scopeFromCompany($query, $companyId);
     }
 
     /**
@@ -733,6 +780,36 @@ class Job extends Model
         }
 
         return implode(', ', $location) ?: __('common.location_not_specified');
+    }
+
+    /**
+     * Get a human-friendly formatted salary string.
+     */
+    public function getFormattedSalaryAttribute(): string
+    {
+        $salaryFrom = $this->salary_from ?? $this->salary_min;
+        $salaryTo = $this->salary_to ?? $this->salary_max;
+
+        if (is_numeric($salaryFrom) && is_numeric($salaryTo)) {
+            return '$'.number_format((int) $salaryFrom). ' - $'. number_format((int) $salaryTo);
+        }
+
+        if (is_numeric($salaryFrom)) {
+            return 'From $'.number_format((int) $salaryFrom);
+        }
+
+        return 'Competitive';
+    }
+
+    /**
+     * Humanized time since job was posted.
+     */
+    public function getTimeSincePostedAttribute(): ?string
+    {
+        if ($this->created_at instanceof Carbon) {
+            return $this->created_at->diffForHumans();
+        }
+        return null;
     }
 
     /**

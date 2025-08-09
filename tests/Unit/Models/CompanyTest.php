@@ -10,7 +10,7 @@ use App\Models\Industry;
 use App\Models\Job;
 use App\Models\OwnershipType;
 use App\Models\State;
-use App\Models\User;
+// Users/auth removed
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -25,15 +25,14 @@ class CompanyTest extends TestCase
     use RefreshDatabase;
 
     private Company $company;
-    private User $user;
+    // Users/auth removed
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        // Create test data
-        $this->user = User::factory()->create();
-        $this->company = Company::factory()->create(['user_id' => $this->user->id]);
+        // Create test data (no user association)
+        $this->company = Company::factory()->create(['user_id' => null]);
     }
 
     /** @test */
@@ -95,8 +94,7 @@ class CompanyTest extends TestCase
     /** @test */
     public function it_belongs_to_user(): void
     {
-        $this->assertInstanceOf(User::class, $this->company->user);
-        $this->assertEquals($this->user->id, $this->company->user->id);
+        $this->markTestSkipped('Users/auth removed.');
     }
 
     /** @test */

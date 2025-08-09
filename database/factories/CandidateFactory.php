@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Candidate;
-use App\Models\User;
+// Users/auth removed
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +21,7 @@ class CandidateFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
+            'user_id' => null,
             'unique_id' => 'CND-'.fake()->unique()->numberBetween(100000, 999999),
             'father_name' => fake()->name('male'),
             'marital_status_id' => null, // Nullable to avoid foreign key constraints

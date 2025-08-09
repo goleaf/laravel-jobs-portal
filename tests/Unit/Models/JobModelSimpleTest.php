@@ -145,7 +145,7 @@ class JobModelSimpleTest extends TestCase
         // Test that relationship methods exist by checking they are callable
         $this->assertTrue(method_exists($job, 'company'));
         $this->assertTrue(method_exists($job, 'jobType'));
-        $this->assertTrue(method_exists($job, 'category'));
+        $this->assertTrue(method_exists($job, 'jobCategory'));
         $this->assertTrue(method_exists($job, 'careerLevel'));
         $this->assertTrue(method_exists($job, 'functionalArea'));
         $this->assertTrue(method_exists($job, 'jobShift'));

@@ -7,8 +7,8 @@
     
     <title>{{ $title ?? __('app.default_title') }}</title>
     
-    <!-- Vite Assets (includes local fonts) -->
-    @vite(['resources/css/app.css'])
+    <!-- Vite Assets (CSS + JS) -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     <!-- Additional Meta Tags -->
     <meta name="description" content="{{ __('app.meta_description') }}">
@@ -31,7 +31,7 @@
     </div>
 
     <!-- Mobile menu overlay -->
-    <div id="mobile-menu-overlay" class="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 hidden lg:hidden" onclick="toggleMobileMenu()"></div>
+    <div id="mobile-menu-overlay" class="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 hidden lg:hidden" data-action="toggle-mobile-menu"></div>
 
         <div class="min-h-screen flex flex-col">
         <!-- Conditional Sidebar for Admin Pages -->
@@ -49,7 +49,7 @@
                             <h1 class="text-lg font-semibold text-white">{{ __('admin.panel_title') }}</h1>
                         </div>
                     </div>
-                    <button onclick="toggleMobileMenu()" class="lg:hidden text-white hover:text-gray-200">
+                    <button class="lg:hidden text-white hover:text-gray-200" data-action="toggle-mobile-menu">
                         <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
@@ -112,7 +112,7 @@
                     <div class="flex justify-between items-center h-16">
                         <!-- Mobile menu button -->
                         @if(request()->is('admin/*') || request()->is('admin'))
-                            <button onclick="toggleMobileMenu()" class="lg:hidden p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                            <button class="lg:hidden p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" data-action="toggle-mobile-menu">
                                 <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                                 </svg>
@@ -143,7 +143,7 @@
                         <!-- Right side -->
                         <div class="flex items-center space-x-4">
                             <!-- Theme Toggle -->
-                            <button onclick="toggleTheme()" class="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                            <button class="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" data-action="toggle-theme">
                                 <svg id="theme-icon-light" class="h-5 w-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
                                 </svg>
@@ -174,7 +174,7 @@
                         <div id="success-toast" class="mb-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
                             <strong class="font-bold">{{ __('Success') }}!</strong>
                             <span class="block sm:inline">{{ session('success') }}</span>
-                            <span class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="this.parentElement.style.display='none'">
+                            <span class="absolute top-0 bottom-0 right-0 px-4 py-3" data-action="close-toast">
                                 <svg class="fill-current h-6 w-6 text-green-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <title>{{ __('Close') }}</title>
                                     <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>
@@ -187,7 +187,7 @@
                         <div id="error-toast" class="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                             <strong class="font-bold">{{ __('Error') }}!</strong>
                             <span class="block sm:inline">{{ session('error') }}</span>
-                            <span class="absolute top-0 bottom-0 right-0 px-4 py-3" onclick="this.parentElement.style.display='none'">
+                            <span class="absolute top-0 bottom-0 right-0 px-4 py-3" data-action="close-toast">
                                 <svg class="fill-current h-6 w-6 text-red-500" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                                     <title>{{ __('Close') }}</title>
                                     <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z"/>
@@ -205,49 +205,7 @@
     <!-- Toast Notification Container -->
     <div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
 
-    <!-- Scripts -->
-    <script>
-        // Mobile menu toggle
-        function toggleMobileMenu() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('mobile-menu-overlay');
-            
-            sidebar.classList.toggle('-translate-x-full');
-            overlay.classList.toggle('hidden');
-        }
-
-        // Theme toggle
-        function toggleTheme() {
-            const html = document.documentElement;
-            const currentTheme = html.classList.contains('dark') ? 'dark' : 'light';
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            html.classList.toggle('dark');
-            
-            // Save theme preference
-            fetch('/locale/switch', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({ theme: newTheme })
-            });
-        }
-
-        // Auto-hide flash messages after 5 seconds
-        setTimeout(() => {
-            const toast = document.getElementById('success-toast') || document.getElementById('error-toast');
-            if (toast) {
-                toast.style.display = 'none';
-            }
-        }, 5000);
-
-        // Hide initial loader once page is loaded
-        window.addEventListener('load', () => {
-            document.getElementById('initial-loader').style.display = 'none';
-        });
-        </script>
+    <!-- Scripts handled via Vite (resources/js/app.js) -->
 
     @stack('scripts')
 </body>

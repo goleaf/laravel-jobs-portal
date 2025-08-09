@@ -112,7 +112,7 @@
                         variant="primary" 
                         size="lg"
                         class="w-full sm:w-auto lg:w-full py-3"
-                        onclick="window.JobApplication.apply({{ $job->id }})"
+                        data-action="job-apply" data-job-id="{{ $job->id }}"
                     >
                         <x-icon name="paper-airplane" class="mr-2 h-5 w-5" />
                         {{ __('jobs.apply_now') }}
@@ -122,7 +122,7 @@
                         variant="outline" 
                         size="lg"
                         class="w-full sm:w-auto lg:w-full py-3"
-                        onclick="window.JobActions.toggleSave({{ $job->id }})"
+                        data-action="job-toggle-save" data-job-id="{{ $job->id }}"
                     >
                         <x-icon name="heart" class="mr-2 h-5 w-5" />
                         <span>{{ __('jobs.save_job') }}</span>
@@ -132,7 +132,7 @@
                         variant="secondary" 
                         size="lg"
                         class="w-full sm:w-auto lg:w-full py-3"
-                        onclick="window.JobActions.share({{ $job->id }})"
+                        data-action="job-share" data-job-id="{{ $job->id }}"
                     >
                         <x-icon name="share" class="mr-2 h-5 w-5" />
                         {{ __('jobs.share_job') }}
@@ -142,7 +142,7 @@
                         variant="danger" 
                         size="lg"
                         class="w-full sm:w-auto lg:w-full py-3"
-                        onclick="window.JobActions.report({{ $job->id }})"
+                        data-action="job-report" data-job-id="{{ $job->id }}"
                     >
                         <x-icon name="flag" class="mr-2 h-5 w-5" />
                         {{ __('jobs.report_job') }}
@@ -382,24 +382,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('js/job-application.js') }}"></script>
-<script src="{{ asset('js/job-actions.js') }}"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize job application functionality
-    window.JobApplication?.init();
-    
-    // Initialize job actions (save, share, report)
-    window.JobActions?.init();
-
-    // Track job view
-    if (window.Analytics) {
-        window.Analytics.track('job_view', {
-            job_id: {{ $job->id }},
-            job_title: '{{ $job->title }}',
-            company_name: '{{ $job->company->name }}'
-        });
-    }
-});
-</script>
-@endpush 
+    {{-- Scripts handled globally via Vite/app.js; page-specific hooks use data-action attributes --}}
+@endpush

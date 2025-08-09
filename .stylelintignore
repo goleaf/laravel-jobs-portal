@@ -1,0 +1,8 @@
+# Ignore third-party/vendor CSS and legacy asset bundles
+resources/assets/**
+resources/theme/**
+resources/assets/front_web_css/**
+resources/css/vendor.css
+public/**
+
+

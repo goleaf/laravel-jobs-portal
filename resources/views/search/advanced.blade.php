@@ -665,5 +665,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('js/advanced-search.js') }}"></script>
-@endpush 
+{{-- Advanced search logic is bundled via resources/js/app.js --}}
+@endpush

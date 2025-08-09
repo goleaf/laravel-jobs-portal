@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Candidate\ApplicationController;
-use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\Enhanced\CompanyController as EnhancedCompanyController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\RealTimeController;
@@ -83,10 +83,8 @@ Route::post('/contact', function (Request $request) {
     return back()->with('success', 'Thank you for your message! We will get back to you soon.');
 })->name('contact.submit');
 
-// Company management routes (API will handle data, these serve the SPA)
-Route::get('/companies', function () {
-    return view('app', ['title' => 'Companies | Job Portal']);
-})->name('companies.index');
+// Company management routes
+Route::get('/companies', [EnhancedCompanyController::class, 'index'])->name('companies.index');
 
 Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
 
@@ -161,10 +159,7 @@ Route::get('/jobs/{id}', function ($id) {
     return view('jobs.show', ['id' => $id]);
 })->name('jobs.show');
 
-// Companies
-Route::get('/companies', function () {
-    return view('companies.index');
-})->name('companies.index');
+// Companies (handled above)
 Route::get('/companies/{id}', function ($id) {
     return view('companies.show', ['id' => $id]);
 })->name('companies.show');

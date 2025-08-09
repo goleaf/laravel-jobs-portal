@@ -5,6 +5,7 @@
 /* Base lazy image styles */
 [data-lazy] {
   @apply block w-full h-auto;
+
   opacity: 0;
   transition: opacity 0.3s ease-in-out, filter 0.3s ease-in-out;
   background-color: #f3f4f6;
@@ -15,10 +16,11 @@
 /* Placeholder state */
 .lazy-placeholder {
   @apply bg-gray-200;
+
   background-image: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.4),
+    rgb(255 255 255 / 40%),
     transparent
   );
   background-size: 200% 100%;
@@ -32,8 +34,9 @@
 
 .lazy-loading::after {
   @apply absolute inset-0 flex items-center justify-center;
+
   content: '';
-  background: rgba(0, 0, 0, 0.1);
+  background: rgb(0 0 0 / 10%);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' stroke='currentColor' stroke-width='4' class='opacity-25'/%3E%3Cpath fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z' class='opacity-75'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: center;
@@ -50,13 +53,15 @@
 /* Error state */
 .lazy-error {
   @apply bg-red-100 border-2 border-red-300 border-dashed;
+
   opacity: 1;
 }
 
 .lazy-error::after {
   @apply absolute inset-0 flex items-center justify-center text-red-500 text-sm;
+
   content: 'Failed to load image';
-  background: rgba(254, 226, 226, 0.8);
+  background: rgb(254 226 226 / 80%);
 }
 
 /* Progressive loading blur effect */
@@ -74,6 +79,7 @@
 /* Responsive image container */
 .responsive-image-container {
   @apply relative overflow-hidden;
+
   background: #f3f4f6;
 }
 
@@ -105,6 +111,7 @@
 
 .webp-supported [data-webp]::before {
   @apply absolute top-1 right-1 bg-green-500 text-white text-xs px-1 rounded;
+
   content: 'WebP';
   z-index: 10;
   opacity: 0;
@@ -118,6 +125,7 @@
 /* Performance indicators */
 .perf-indicator {
   @apply absolute top-2 left-2 px-2 py-1 bg-black bg-opacity-50 text-white text-xs rounded;
+
   font-family: monospace;
   z-index: 10;
 }
@@ -139,6 +147,7 @@
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
@@ -148,6 +157,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -158,6 +168,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -169,6 +180,7 @@
     opacity: 0;
     transform: translateX(-20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -193,19 +205,19 @@
   column-gap: 1rem;
 }
 
-@media (min-width: 640px) {
+@media (width >= 640px) {
   .masonry-grid {
     columns: 2;
   }
 }
 
-@media (min-width: 768px) {
+@media (width >= 768px) {
   .masonry-grid {
     columns: 3;
   }
 }
 
-@media (min-width: 1024px) {
+@media (width >= 1024px) {
   .masonry-grid {
     columns: 4;
   }
@@ -262,16 +274,17 @@
   
   .lazy-placeholder {
     @apply bg-gray-700;
+
     background-image: linear-gradient(
       90deg,
       transparent,
-      rgba(255, 255, 255, 0.1),
+      rgb(255 255 255 / 10%),
       transparent
     );
   }
   
   .lazy-loading::after {
-    background: rgba(0, 0, 0, 0.3);
+    background: rgb(0 0 0 / 30%);
   }
 }
 

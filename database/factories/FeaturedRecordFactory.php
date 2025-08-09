@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Company;
-use App\Models\User;
+// Users/auth removed
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +21,7 @@ class FeaturedRecordFactory extends Factory
         return [
             'owner_id' => Company::factory(),
             'owner_type' => 'App\\Models\\Company',
-            'user_id' => User::factory(),
+            'user_id' => null,
             'stripe_id' => $this->faker->uuid(),
             'start_time' => $this->faker->dateTimeBetween('-1 month', 'now'),
             'end_time' => $this->faker->dateTimeBetween('now', '+1 month'),

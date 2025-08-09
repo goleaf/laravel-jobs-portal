@@ -1,0 +1,1 @@
+annalyze all controllers and folder resources. read every file. create festures list file. create todo list file, move all project on filament laravel framework, use mcp servers

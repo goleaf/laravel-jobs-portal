@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="40" viewBox="0 0 180 40" role="img" aria-label="JobPortal Logo">
+  <title>JobPortal</title>
+  <rect width="180" height="40" fill="transparent" rx="6"/>
+  <g font-family="Inter, Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#111827">
+    <text x="20" y="26">Job</text>
+    <text x="72" y="26" fill="#2563eb">Portal</text>
+  </g>
+</svg>
+

@@ -309,19 +309,5 @@
 @endpush
 
 @push('scripts')
-<script src="{{ asset('js/maintenance.js') }}"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize countdown timer
-    initializeCountdown();
-    
-    // Update progress periodically
-    updateMaintenanceProgress();
-    
-    // Check maintenance status periodically
-    setInterval(checkMaintenanceStatus, 60000); // Check every minute
-});
-
-// Remove all <script>, <style>, and inline JS event handlers. Move logic to resources/js and reference only external scripts via <script src>. Use Tailwind for all styling.
-</script>
-@endpush 
+{{-- Logic is bundled via resources/js/app.js (pages/maintenance.js) --}}
+@endpush

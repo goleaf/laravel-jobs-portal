@@ -3,7 +3,7 @@ body.dark-mode {
         background-color: #1b1b29;
     }
 
-    .select2-container--bootstrap5.select2-container--focus .form-select:not(.form-select-solid):not(.form-select-transparent), .select2-container--bootstrap5.select2-container--open .form-select:not(.form-select-solid):not(.form-select-transparent) {
+    .select2-container--bootstrap5.select2-container--focus .form-select:not(.form-select-solid, .form-select-transparent), .select2-container--bootstrap5.select2-container--open .form-select:not(.form-select-solid, .form-select-transparent) {
         border-color: #474761;
     }
 
@@ -67,7 +67,7 @@ body.dark-mode {
 
     .fc-button.fc-button-active {
         background-color: #2b2b40 !important;
-        color: #FFFFFF !important;
+        color: #FFF !important;
     }
 
     .fc-toolbar-chunk {
@@ -77,14 +77,14 @@ body.dark-mode {
 
             &:hover {
                 background-color: #1b1b29;
-                color: #FFFFFF !important;
+                color: #FFF !important;
             }
         }
 
         .fc-prev-button, .fc-next-button {
             span {
                 &:hover {
-                    color: #FFFFFF !important;
+                    color: #FFF !important;
                 }
             }
         }
@@ -104,7 +104,7 @@ body.dark-mode {
 
         .swal2-cancel {
             background-color: #3699FF;
-            color: #FFFFFF;
+            color: #FFF;
 
 
             &:hover {
@@ -118,7 +118,7 @@ body.dark-mode {
     }
 
     .fc-daygrid-day-number {
-        color: #FFFFFF !important;
+        color: #FFF !important;
     }
 
     .fc-daygrid-bg-harness {
@@ -128,10 +128,10 @@ body.dark-mode {
     .flatpickr-innerContainer {
         display: block;
         display: -webkit-box;
-        display: -webkit-flex;
-        display: -ms-flexbox;
         display: flex;
-        -webkit-box-sizing: border-box;
+        display: flexbox;
+        display: flex;
+        box-sizing: border-box;
         box-sizing: border-box;
         overflow: hidden;
         background: #1e1e2c;
@@ -144,8 +144,8 @@ body.dark-mode {
 
     .flatpickr-current-month .flatpickr-monthDropdown-months {
         appearance: none;
-        -moz-appearance: none;
-        -webkit-appearance: none;
+        appearance: none;
+        appearance: none;
         background-color: #1e1e2c;
         border: 0 !important;
         border-radius: 0.475rem;
@@ -199,7 +199,7 @@ body.dark-mode {
 
     .select2-selection__choice {
         background-color: #3699ff !important;
-        color: #FFFFFF !important;
+        color: #FFF !important;
     }
 
     .d-flex .flex-column {
@@ -214,7 +214,7 @@ body.dark-mode {
             border-radius: 4px;
 
             .text-inverse-dark {
-                color: #FFFFFF !important;
+                color: #FFF !important;
             }
 
             &:hover {
@@ -236,16 +236,16 @@ body.dark-mode {
         background-color: #f1416c;
     }
 
-    .svg-icon.svg-icon-success svg [fill]:not(.permanent):not(g) {
+    .svg-icon.svg-icon-success svg [fill]:not(.permanent, g) {
         fill: #fff !important;
     }
 
-    .svg-icon.svg-icon-danger svg [fill]:not(.permanent):not(g) {
+    .svg-icon.svg-icon-danger svg [fill]:not(.permanent, g) {
         fill: #fff !important;
     }
 
     .aside-dark .menu .menu-item .menu-link.active .menu-title {
-        color: #FFFFFF !important;
+        color: #FFF !important;
     }
 
     #termConditionId, #privacyPolicyId {
@@ -278,7 +278,7 @@ body.dark-mode {
         border: 0;
         border-radius: 0.475rem;
         box-shadow: 0 0 50px 0 rgb(82 63 105 / 10%);
-        font-family: Poppins, Helvetica, "sans-serif";
+        font-family: Poppins, Helvetica, sans-serif;
         margin: 0;
         padding: 0;
         width: auto;
@@ -307,7 +307,7 @@ body.dark-mode {
         padding-right: 8px;
     }
 
-    .daterangepicker .drp-calendar td.in-range.available:not(.active):not(.off):not(.today), .daterangepicker .drp-calendar td:hover {
+    .daterangepicker .drp-calendar td.in-range.available:not(.active, .off, .today), .daterangepicker .drp-calendar td:hover {
         background-color: #213f7a;
         color: #1569bf;
     }
@@ -369,7 +369,7 @@ body.dark-mode {
                 & > .menu-item {
                     &.show {
                         & > .menu-link {
-                            background-color: rgba(27, 27, 41, 0.8) !important;
+                            background-color: rgb(27 27 41 / 80%) !important;
                         }
                     }
 
@@ -377,7 +377,7 @@ body.dark-mode {
                         background-color: transparent !important;
 
                         &:hover {
-                            background-color: rgba(27, 27, 41, 0.8) !important;
+                            background-color: rgb(27 27 41 / 80%) !important;
                         }
                     }
                 }
@@ -385,7 +385,7 @@ body.dark-mode {
         }
     }
 
-    .menu-state-primary .menu-item.hover > .menu-link:not(.disabled):not(.active), .menu-state-primary .menu-item .menu-link:hover:not(.disabled):not(.active) {
+    .menu-state-primary .menu-item.hover > .menu-link:not(.disabled, .active), .menu-state-primary .menu-item .menu-link:hover:not(.disabled, .active) {
         background-color: #212e48 !important;
     }
 
@@ -489,7 +489,7 @@ body.dark-mode {
     .card {
         .card-header {
             h1 {
-                color: #FFFFFF !important;
+                color: #FFF !important;
             }
         }
     }
@@ -510,7 +510,7 @@ body.dark-mode {
     //    #kt_toolbar_container {
     //        div {
     //            h1{
-    //                color: #6D6D80 !important;
+    //                color: #6D6D80 !important;color
     //            }
     //        }
     //    }

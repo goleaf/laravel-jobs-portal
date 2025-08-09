@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Job;
-use App\Models\User;
+// Users/auth removed
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +19,7 @@ class FavouriteJobFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
+            'user_id' => null,
             'job_id' => Job::factory(),
             'is_active' => $this->faker->boolean(90),
         ];

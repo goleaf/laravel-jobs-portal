@@ -209,6 +209,8 @@ return [
         RouteServiceProvider::class,
         TranslationServiceProvider::class,
         // \App\Providers\SettingsServiceProvider::class, // Temporarily disabled to fix function redeclaration
+        App\Providers\Filament\AdminPanelProvider::class,
+        App\Providers\Filament\PublicPanelProvider::class,
     ])->toArray(),
 
     /*

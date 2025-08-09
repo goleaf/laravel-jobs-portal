@@ -34,19 +34,19 @@
                 color: #009ef7;
                 background-color: #ebedf3;
                 border-color: #e9ecef;
-                box-shadow: 0 0 0 0.15rem rgba(0, 158, 247, 0.1);
+                box-shadow: 0 0 0 0.15rem rgb(0 158 247 / 10%);
             }
             
             &:focus {
                 z-index: 3;
                 outline: 0;
-                box-shadow: 0 0 0 0.15rem rgba(0, 158, 247, 0.1);
+                box-shadow: 0 0 0 0.15rem rgb(0 158 247 / 10%);
             }
         }
         
         &.active .page-link {
             z-index: 3;
-            color: #ffffff;
+            color: #fff;
             background-color: #009ef7;
             border-color: #009ef7;
             font-weight: 600;

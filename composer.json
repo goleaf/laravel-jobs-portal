@@ -3,16 +3,14 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": [
-        "framework",
-        "laravel"
-    ],
+    "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
         "php": "^8.2",
         "blade-ui-kit/blade-heroicons": "^2.6",
         "blade-ui-kit/blade-icons": "^1.8",
         "darkaonline/l5-swagger": "^9.0",
+        "filament/filament": "^3.3",
         "glorand/laravel-model-settings": "^8.0",
         "guzzlehttp/guzzle": "^7.9",
         "justbetter/laravel-unique-values": "^1.0",
@@ -81,7 +79,8 @@
     },
     "scripts": {
         "post-autoload-dump": [
-            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump"
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan filament:upgrade"
         ],
         "post-update-cmd": [],
         "post-root-package-install": [
@@ -95,28 +94,6 @@
         ],
         "_original_post_update_cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
-        ],
-        "lint": [
-            "@lint:phpstan",
-            "@lint:phpcs",
-            "@lint:phpmd"
-        ],
-        "lint:phpstan": "vendor/bin/phpstan analyse --memory-limit=2G",
-        "lint:phpcs": "vendor/bin/phpcs --standard=PSR12 app/ config/ database/ routes/ tests/",
-        "lint:phpmd": "vendor/bin/phpmd app,config,database,routes text phpmd.xml",
-        "lint:fix": [
-            "@lint:fix:phpcs",
-            "@lint:fix:php-cs-fixer"
-        ],
-        "lint:fix:phpcs": "vendor/bin/phpcbf --standard=PSR12 app/ config/ database/ routes/ tests/",
-        "lint:fix:php-cs-fixer": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php",
-        "quality": [
-            "@lint",
-            "@test"
-        ],
-        "quality:fix": [
-            "@lint:fix",
-            "@test"
         ],
         "lint": [
             "@lint:phpstan",

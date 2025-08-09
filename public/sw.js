@@ -6,18 +6,28 @@ const STATIC_CACHE = 'jobportal-static-v1.2.1';
 const DYNAMIC_CACHE = 'jobportal-dynamic-v1.2.1';
 const API_CACHE = 'jobportal-api-v1.2.1';
 
-// Assets to cache on install (updated from latest build)
-const STATIC_ASSETS = [
-  '/',
-  '/build/assets/main-B82xsCq1.js',
-  '/build/styles/main-T-oL49QB.css',
-  '/build/styles/app-DkzJi6LJ.css',
-  '/build/auth/auth-chunk-CR3SY8LN.js',
-  '/build/chunks/chunk-DAfKnozS.js', // vendor-vue
-  '/build/chunks/chunk-DWz9A8Xh.js', // utils-chunk
-  '/build/chunks/chunk-BYJP1jeu.js', // vendor-ui
-  '/offline.html',
-];
+// Resolve assets to cache dynamically from Vite manifest
+async function getStaticAssetsFromManifest() {
+  try {
+    const response = await fetch('/build/manifest.json', { cache: 'no-store' });
+    if (!response.ok) throw new Error('Manifest fetch failed');
+    const manifest = await response.json();
+    const assets = new Set(['/','/offline.html']);
+    Object.values(manifest).forEach((entry) => {
+      if (entry && entry.file) assets.add('/build/' + entry.file);
+      if (Array.isArray(entry.css)) {
+        entry.css.forEach((css) => assets.add('/build/' + css));
+      }
+      if (Array.isArray(entry.assets)) {
+        entry.assets.forEach((asset) => assets.add('/build/' + asset));
+      }
+    });
+    return Array.from(assets);
+  } catch (e) {
+    // Fallback minimal shell
+    return ['/', '/offline.html'];
+  }
+}
 
 // API endpoints to cache with TTL
 const API_CACHE_CONFIG = {
@@ -46,15 +56,12 @@ self.addEventListener('install', (event) => {
   
   event.waitUntil(
     Promise.all([
-      // Cache static assets
-      caches.open(STATIC_CACHE).then((cache) => {
-        console.log('[SW] Caching static assets');
-        return cache.addAll(STATIC_ASSETS.map(url => new Request(url, {
-          mode: 'cors',
-          credentials: 'omit'
-        })));
-      }),
-      
+      // Cache static assets from manifest
+      (async () => {
+        const urls = await getStaticAssetsFromManifest();
+        const cache = await caches.open(STATIC_CACHE);
+        await cache.addAll(urls.map(url => new Request(url, { mode: 'cors', credentials: 'omit' })));
+      })(),
       // Create other cache stores
       caches.open(DYNAMIC_CACHE),
       caches.open(API_CACHE),

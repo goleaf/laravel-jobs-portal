@@ -5,7 +5,7 @@ namespace Database\Factories;
 use App\Models\Company;
 use App\Models\Industry;
 use App\Models\State;
-use App\Models\User;
+// Users/auth removed
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -24,7 +24,7 @@ class CompanyFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(),
+            'user_id' => null,
             'ceo' => fake()->name(),
             'no_of_offices' => fake()->numberBetween(1, 10),
             'industry_id' => 1, // Default industry

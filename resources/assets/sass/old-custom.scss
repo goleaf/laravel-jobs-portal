@@ -1,4 +1,4 @@
-@import "infy-loader";
+@import url("infy-loader");
 
 /* width */
 ::-webkit-scrollbar {
@@ -26,7 +26,7 @@
 }
 
 .ml-0 {
-    margin-left: 0px;
+    margin-left: 0;
 }
 
 .pl-0 {
@@ -42,7 +42,7 @@
 }
 
 .box-shadow {
-    box-shadow: 1px 0px 20px rgba(0, 0, 0, 0.07);
+    box-shadow: 1px 0 20px rgb(0 0 0 / 7%);
 }
 
 .dataTable {
@@ -57,15 +57,16 @@
 }
 
 .action-btn {
-    padding: 0px 4px !important;
+    padding: 0 4px !important;
     width: 25px;
     display: inline-block;
-    @media screen and (max-width: 768px) {
+
+    @media screen and (width <= 768px) {
         font-size: 9px;
     }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (width <= 768px) {
     .feature-btn {
         font-size: 7px;
     }
@@ -73,13 +74,14 @@
 
 .candidate-edit-btn {
     margin-left: 3rem;
-    @media screen and (width: 768px) {
+
+    @media screen and (width <= 768px) {
         margin-left: 2rem;
     }
 }
 
 #jobApplicationsTbl {
-    @media screen and (max-width: 768px) {
+    @media screen and (width <= 768px) {
         min-height: 150px;
     }
 }
@@ -102,10 +104,10 @@
     border-color: #6777ef;
 
     //&:hover {
-    //    cursor: pointer;
-    //    background-color: #007bff;
+    //    cursor: pointer;cursor
+    //    background-color: #007bff;background-color
     //    border-color: #007bff
-    //}
+    //border-color}
 }
 
 
@@ -143,11 +145,11 @@ table .thumbnail-rounded {
 
 .profile-header {
     font-size: 21px !important;
-    margin: -4px 0 0 0 !important;
+    margin: -4px 0 0 !important;
 }
 
 .profile .profile-body {
-    @media (max-width: 1024px) {
+    @media (width <= 1024px) {
         padding-top: 75px !important;
     }
 }
@@ -207,7 +209,7 @@ table .thumbnail-rounded {
     border-radius: 4px;
     width: 19%;
     height: 350px;
-    background-color: #ffffff;
+    background-color: #fff;
 }
 
 .card-img-top {
@@ -288,7 +290,7 @@ table .thumbnail-rounded {
     border-radius: .25rem;
     box-shadow: 0 10px 40px 0 rgb(51 73 94 / 15%);
 
-    @media (max-width: 757px) {
+    @media (width <= 757px) {
         margin-top: 22em;
     }
 }
@@ -325,11 +327,11 @@ table .thumbnail-rounded {
 }
 
 #blogTbl td p {
-    margin-bottom: 0em !important;
+    margin-bottom: 0 !important;
 }
 
 #blogCategoryTbl td p {
-    margin-bottom: 0em !important;
+    margin-bottom: 0 !important;
 }
 
 .required {
@@ -385,13 +387,13 @@ footer .footer-info .footer-about .app-name {
 }
 
 .candidate-experience .article .article-details {
-    padding: 5px 10px 0px 10px;
+    padding: 5px 10px 0;
     min-height: 90%;
     border: 1px solid #cecece;
 }
 
 .candidate-education .article .article-details {
-    padding: 5px 10px 0px 10px;
+    padding: 5px 10px 0;
     min-height: 90%;
     border: 1px solid #cecece;
 }
@@ -400,23 +402,25 @@ footer .footer-info .footer-about .app-name {
     position: absolute;
     top: 10px;
     right: 15px;
-    @media screen and (max-width: 767px) {
+
+    @media screen and (width <= 767px) {
         bottom: 5px;
         top: auto;
     }
-    @media screen and (max-width: 414px) {
+
+    @media screen and (width <= 414px) {
         bottom: 5px;
         top: auto;
     }
 }
 
-@media screen and (max-width: 992px) {
+@media screen and (width <= 992px) {
     .login-button {
         padding-top: 5px;
     }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (width <= 320px) {
     .extra-info {
         padding-bottom: 20px;
     }
@@ -437,11 +441,13 @@ footer .footer-info .footer-about .app-name {
     position: absolute;
     top: 10px;
     right: 15px;
-    @media screen and (max-width: 767px) {
+
+    @media screen and (width <= 767px) {
         bottom: 5px;
         top: auto;
     }
-    @media screen and (max-width: 414px) {
+
+    @media screen and (width <= 414px) {
         bottom: 5px;
         top: auto;
     }
@@ -478,13 +484,16 @@ footer .footer-info .footer-about .app-name {
         width: 180px !important;
     }
 }
+
 #recent-employee-scroll{
     overflow-x: hidden;
 }
+
 .nicescroll-rails.nicescroll-rails-vr {
     opacity: 0 !important;
     display:none;
 }
+
 div.dataTables_wrapper {
     div.dataTables_processing {
         top: 120px;
@@ -502,7 +511,7 @@ div.dataTables_wrapper {
         .paginate_button.current {
             color: white !important;
             background: #0719eb !important;
-            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
+            box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
             border: 1px solid #6777ef !important;
             padding: .5rem .75rem !important;
             font-weight: 600 !important;
@@ -534,7 +543,7 @@ div.dataTables_wrapper {
 }
 
 .dataTables_wrapper.no-footer .dataTables_scrollBody {
-    border-bottom: 0px solid #111111;
+    border-bottom: 0 solid #111;
 }
 
 .dataTables_paginate {
@@ -598,23 +607,22 @@ div.dataTables_wrapper {
 
 .ui-autocomplete {
     max-height: 170px !important;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden auto;
 }
 
 .ui-state-hover, .ui-state-active {
-    color: #ffffff;
+    color: #fff;
     text-decoration: none;
     background: linear-gradient(130deg, #6777ef 38%, #3ae2f0 123%) !important;
-    border-radius: 0px;
+    border-radius: 0;
     border-color: #e1e7ef !important;
-    -webkit-border-radius: 0px;
-    -moz-border-radius: 0px;
+    border-radius: 0;
+    border-radius: 0;
     background-image: none;
 }
 
 .user-thumbnail {
-    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px 5px rgb(0 0 0 / 20%);
     object-fit: contain;
 }
 
@@ -626,7 +634,7 @@ div.dataTables_wrapper {
 
 .admin-sidebar-brand img {
     max-height: 80px;
-    margin: 5% 5%;
+    margin: 5%;
 }
 
 .section-header .public-profile {
@@ -640,7 +648,7 @@ div.dataTables_wrapper {
 }
 
 .candidate-resume-btn {
-    padding: 1px 8px 1px 8px !important;
+    padding: 1px 8px !important;
 }
 
 .candidate-img {
@@ -668,15 +676,15 @@ div.dataTables_wrapper {
     background: #edf2f7;
     font-weight: 600;
     position: absolute;
-    bottom: 0px;
-    right: 0px;
-    -webkit-transition: all .3s ease-in-out;
-    -moz-transition: all .3s ease-in-out;
-    -o-transition: all .3s ease-in-out;
+    bottom: 0;
+    right: 0;
+    transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
     transition: all .3s ease-in-out;
 
     &:hover {
-        box-shadow: 0 3px 9px rgba(96, 94, 94, .17);
+        box-shadow: 0 3px 9px rgb(96 94 94 / 17%);
     }
 }
 
@@ -692,7 +700,8 @@ div.dataTables_wrapper {
 .skillbar {
     width: 80%;
     margin: 0 auto;
-    @media screen and (max-width: 767px) {
+
+    @media screen and (width <= 767px) {
         width: 100%;
         margin: 0;
     }
@@ -707,14 +716,14 @@ div.dataTables_wrapper {
     text-align: center;
     font-size: 17px;
     color: #fff;
-    margin-left: 0px;
+    margin-left: 0;
     width: 90%;
     border-radius: 30px;
     padding: 5px;
     transition: all 0.3s ease-in-out;
-    box-shadow: 0px 5px 20px rgb(196 219 243 / 78%);
-    -webkit-border-radius: 0px 5px 20px rgb(196 219 243 / 78%);
-    -moz-border-radius: 0px 5px 20px rgb(196 219 243 / 78%);
+    box-shadow: 0 5px 20px rgb(196 219 243 / 78%);
+    border-radius: 0 5px 20px rgb(196 219 243 / 78%);
+    border-radius: 0 5px 20px rgb(196 219 243 / 78%);
 
     &:hover {
         width: 95%;
@@ -737,7 +746,8 @@ div.dataTables_wrapper {
 
 .job-header .contentbox {
     padding: 35px;
-    @media screen and (max-width: 767px) {
+
+    @media screen and (width <= 767px) {
         padding: 20px;
     }
 }
@@ -756,8 +766,9 @@ div.dataTables_wrapper {
 
 .educationList, .experienceList {
     margin-bottom: 0 !important;
-    @media screen and (max-width: 767px) {
-        padding-left: 0px;
+
+    @media screen and (width <= 767px) {
+        padding-left: 0;
     }
 }
 
@@ -862,7 +873,7 @@ section#job-page .company-info, section#job-page .job-sidebar, section#job-page 
     width: 49% !important;
 }
 
-.range-inputs input[type=text] {
+.range-inputs input[type="text"] {
     width: 100%;
     max-width: 570px;
     border: 1px solid #e0e0e0;
@@ -906,12 +917,12 @@ section#login .login-box {
     margin-top: 2px;
 }
 
-section#login .login-box .login-title:before {
+section#login .login-box .login-title::before {
     content: none;
 }
 
 section#login .login-box .login-title {
-    border-radius: 0px;
+    border-radius: 0;
 }
 
 .social-login-buttons a {
@@ -961,14 +972,14 @@ section#login .login-box .login-title {
     border: 1px solid #e0e0e0 !important;
 }
 
-@media screen and (min-width: 992px) {
+@media screen and (width >= 992px) {
     .single-candidate {
         margin-left: 15px;
         width: calc(50% - 15px);
     }
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (width >= 768px) {
     .single-candidate {
         margin-left: 15px;
         width: calc(50% - 15px);
@@ -984,7 +995,7 @@ section#login .login-box .login-title {
 }
 
 .pricing .pricing-padding {
-    padding: 1rem 0px 1rem 0px;
+    padding: 1rem 0;
 }
 
 .pricing:hover {
@@ -992,11 +1003,11 @@ section#login .login-box .login-title {
     opacity: 1;
 }
 
-@media (min-width: 992px) {
+@media (width >= 992px) {
     .pricing:hover {
         margin-top: -.25rem;
         margin-bottom: .25rem;
-        box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.2)
+        box-shadow: 0 8px 12px 0 rgb(0 0 0 / 20%)
     }
 }
 
@@ -1015,8 +1026,8 @@ section#login .login-box .login-title {
     font-weight: 700;
     text-decoration: none;
     border-radius: 0 0 3px 3px;
-    -webkit-transition: all .5s;
-    margin: 15px -1px -1px -1px !important;
+    transition: all .5s;
+    margin: 15px -1px -1px !important;
     position: absolute;
     width: 100%;
 }
@@ -1029,6 +1040,7 @@ section#login .login-box .login-title {
     a.purchase-subscription {
         background-color: #6777ef;
         color: #fff;
+
         :hover {
             background-color: #6777ef;
         }
@@ -1037,6 +1049,7 @@ section#login .login-box .login-title {
     .current-subscription {
         background-color: #47c363 !important;
         color: #fff !important;
+
         :hover {
             background-color: #47c363 !important;
         }
@@ -1051,8 +1064,8 @@ section#login .login-box .login-title {
     color: #dc3545 !important;
     background-color: #ffff !important;
     border: 1px solid #dc3545 !important;
-    -webkit-transition: all .5s;
-    margin: 15px -1px -1px -1px !important;
+    transition: all .5s;
+    margin: 15px -1px -1px !important;
     position: absolute;
     width: 100%;
 }
@@ -1099,7 +1112,7 @@ body.layout-3 .navbar.navbar-secondary .navbar-nav > .nav-item > .nav-link i {
     width: 49% !important;
 }
 
-.range-inputs input[type=text] {
+.range-inputs input[type="text"] {
     width: 100%;
     max-width: 570px;
     border: 1px solid #e0e0e0;
@@ -1124,14 +1137,14 @@ body.layout-3 .navbar.navbar-secondary .navbar-nav > .nav-item > .nav-link i {
     border: 1px solid #e0e0e0 !important;
 }
 
-@media screen and (min-width: 992px) {
+@media screen and (width >= 992px) {
     .single-candidate {
         margin-left: 15px;
         width: calc(50% - 15px);
     }
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (width >= 768px) {
     .single-candidate {
         margin-left: 15px;
         width: calc(50% - 15px);
@@ -1147,7 +1160,7 @@ body.layout-3 .navbar.navbar-secondary .navbar-nav > .nav-item > .nav-link i {
 }
 
 .pricing .pricing-padding {
-    padding: 1rem 0px 1rem 0px;
+    padding: 1rem 0;
 }
 
 .pricing:hover {
@@ -1155,15 +1168,15 @@ body.layout-3 .navbar.navbar-secondary .navbar-nav > .nav-item > .nav-link i {
     opacity: 1;
 }
 
-@media (min-width: 992px) {
+@media (width >= 992px) {
     .pricing:hover {
         margin-top: -.25rem;
         margin-bottom: .25rem;
-        box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.2)
+        box-shadow: 0 8px 12px 0 rgb(0 0 0 / 20%)
     }
 }
 
-@media (max-width: 576px) and (min-width: 250px) {
+@media (width <= 576px) and (width >= 250px) {
     .section-header-breadcrumb {
         flex-wrap: wrap;
 
@@ -1209,7 +1222,7 @@ body.layout-3 .navbar.navbar-secondary .navbar-nav > .nav-item > .nav-link i {
     page-break-after: avoid;
 }
 
-.resumes .section_title:before {
+.resumes .section_title::before {
     content: "";
     position: absolute;
     top: 50%;
@@ -1218,7 +1231,7 @@ body.layout-3 .navbar.navbar-secondary .navbar-nav > .nav-item > .nav-link i {
     border-bottom: 1px dashed #6777ef;
 }
 
-.resumes .section_title:after {
+.resumes .section_title::after {
     content: "";
     position: absolute;
     top: 50%;
@@ -1241,30 +1254,34 @@ body.layout-3 .navbar.navbar-secondary .navbar-nav > .nav-item > .nav-link i {
     white-space: nowrap;
 }
 
-@media screen and (max-width: 575px) {
+@media screen and (width <= 575px) {
     #filter_featured + .select2-container, #filter_suspended + .select2-container {
         width: 100% !important;
     }
+
     .jobAddBtn {
         flex: none !important;
         max-width: inherit !important;
         margin-top: 1rem !important;
     }
+
     #favouriteJobsId {
         margin-bottom: .50em;
     }
 }
 
-@media screen and (max-width: 575px) {
+@media screen and (width <= 575px) {
     #filter_featured + .select2-container {
         width: 100% !important;
         margin-bottom: .5rem;
         margin-left: -10px;
     }
+
     #filter_status + .select2-container {
         width: 100% !important;
         margin-left: -10px;
     }
+
     .jobAddBtn {
         flex: none !important;
         max-width: inherit !important;
@@ -1277,13 +1294,13 @@ body.layout-3 .navbar.navbar-secondary .navbar-nav > .nav-item > .nav-link i {
     height: 40px !important;
 }
 
-@media screen and (max-width: 540px) {
+@media screen and (width <= 540px) {
     .width-40px {
-        margin-top: 0px !important;
+        margin-top: 0 !important;
     }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (width <= 320px) {
     #editGeneralDiv #editGeneralForm #skillId + .select2.select2-container .select2-selection__rendered {
         padding: 0 !important;
 
@@ -1315,7 +1332,7 @@ body.layout-3 .navbar.navbar-secondary .navbar-nav > .nav-item > .nav-link i {
     position: absolute;
 }
 
-@media screen and (max-width: 375px) {
+@media screen and (width <= 375px) {
     #startDate + .bootstrap-datetimepicker-widget.dropdown-menu, #endDate + .bootstrap-datetimepicker-widget.dropdown-menu {
         right: -2em !important;
     }
@@ -1329,13 +1346,13 @@ body.layout-3 .navbar.navbar-secondary .navbar-nav > .nav-item > .nav-link i {
     }
 }
 
-@media screen and (max-width: 414px) {
+@media screen and (width <= 414px) {
     .education-card {
         padding-left: 35%;
     }
 }
 
-@media screen and (width: 320px) {
+@media screen and (width <= 320px) {
     .education-card {
         padding-left: 47%;
     }
@@ -1361,7 +1378,7 @@ body.layout-3 .navbar.navbar-secondary .navbar-nav > .nav-item > .nav-link i {
 }
 
 .mobileLoginButton {
-    @media (max-width: 992px) {
+    @media (width <= 992px) {
         width: 80%;
         margin: auto;
     }
@@ -1391,9 +1408,11 @@ a.register-selection:hover {
     min-width: 135px;
     border-top: solid 3px #6777ef;
     text-transform: uppercase;
-    @media (max-width: 992px) {
+
+    @media (width <= 992px) {
         left: 0%;
     }
+
     left: 48%;
 }
 
@@ -1405,7 +1424,7 @@ a.register-selection:hover {
     text-transform: uppercase !important;
 }
 
-@media screen and (min-width: 1268px) {
+@media screen and (width >= 1268px) {
     .main-width {
         display: flex;
     }
@@ -1414,12 +1433,13 @@ a.register-selection:hover {
 .language-menu {
     margin-right: 5px;
     margin-left: 5px;
-    @media screen and (max-width: 992px) {
+
+    @media screen and (width <= 992px) {
         margin-left: 0;
     }
 }
 
-@media screen and (max-width: 540px) {
+@media screen and (width <= 540px) {
     .switch-label {
         flex-wrap: nowrap;
         padding: 0;
@@ -1434,10 +1454,11 @@ a.register-selection:hover {
     margin-bottom: 30px !important;
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (width <= 320px) {
     .select2-container--default .select2-selection--multiple .select2-selection__arrow, .select2-container--default .select2-selection--single .select2-selection__arrow {
         margin-right: -10px;
     }
+
     .favorite-companies-delete {
         transform: translateX(-5px);
     }
@@ -1455,7 +1476,7 @@ a.register-selection:hover {
     height: 93px !important;
 }
 
-.overlay-white:before {
+.overlay-white::before {
     background: white !important;
     width: 100%;
     height: 100%;
@@ -1479,9 +1500,9 @@ a.register-selection:hover {
 
 .content {
     position: absolute;
-    bottom: 0px;
-    background: rgb(0, 0, 0);
-    background: rgba(0, 0, 0, 0.6);
+    bottom: 0;
+    background: rgb(0 0 0);
+    background: rgb(0 0 0 / 60%);
     width: 100%;
     padding: 15px;
     height: 23%;
@@ -1503,9 +1524,9 @@ a.register-selection:hover {
     }
 }
 
-@-moz-document url-prefix() {
+@document url-prefix() {
     .card.card-statistic-1 .card-header h4 {
-        letter-spacing: 0px !important;
+        letter-spacing: 0 !important;
     }
 }
 
@@ -1547,14 +1568,14 @@ a.register-selection:hover {
     margin-bottom: 1em !important;
 }
 
-.notification-content:after {
+.notification-content::after {
     background-image: none !important;
     height: 0 !important;
 }
 
 .notification-for-text {
     vertical-align: baseline !important;
-    padding: 3px 3px !important;
+    padding: 3px !important;
 }
 
 a.login-btn {
@@ -1564,7 +1585,8 @@ a.login-btn {
     border-color: #6777ef !important;
     letter-spacing: 0.8px;
     text-transform: capitalize;
-    @media screen and (max-width: 992px) {
+
+    @media screen and (width <= 992px) {
         margin: 10px;
     }
 
@@ -1586,10 +1608,10 @@ section.main .wrapper {
     position: relative;
     z-index: 99;
     top: 50%;
-    -webkit-transform: translateY(-50%);
-    -moz-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    transform: translateY(-50%);
+    transform: translateY(-50%);
+    transform: translateY(-50%);
     transform: translateY(-50%);
 
     h1 {
@@ -1600,11 +1622,11 @@ section.main .wrapper {
 .overlay-black > div, .overlay-blue > div .overlay-gradient > div {
     position: absolute;
     z-index: 4;
-    top: 0px;
+    top: 0;
 }
 
 .search-middle-image {
-    background: #000000;
+    background: #000;
     position: absolute !important;
     height: 100%;
     width: 100%;
@@ -1648,12 +1670,13 @@ section.main .wrapper {
     }
 }
 
-@media screen and (max-width: 576px) {
+@media screen and (width <= 576px) {
     .image-slider .owl-stage-outer .owl-stage .owl-item .item .full-width-height {
         height: 300px !important;
         object-fit: contain !important;
         margin-top: 50px;
     }
+
     .image-slider .owl-stage-outer .owl-stage .owl-item .item .image-height {
         height: 300px !important;
         object-fit: contain !important;
@@ -1674,7 +1697,7 @@ section.main {
 }
 
 .search-jobs {
-    @media screen and (max-width: 991px) {
+    @media screen and (width <= 991px) {
         .collapse {
             display: none !important;
         }
@@ -1755,21 +1778,21 @@ body #app {
     display: none;
 }
 
-.plan__price:before {
+.plan__price::before {
     display: inline-block;
     font-size: 20px;
     vertical-align: top;
     font-weight: bolder !important;
 }
 
-.plan__price:after {
+.plan__price::after {
     content: "/month";
     display: inline-block;
     font-size: 14px;
     margin-left: 10px;
 }
 
-.list li:before {
+.list li::before {
     left: 30px !important;
 }
 
@@ -1816,33 +1839,38 @@ body #app {
 }
 
 .post-box .article .article-details {
-    padding: 25px 25px 3px 25px;
+    padding: 25px 25px 3px;
     min-height: 185px;
-    @media screen and (min-width: 320px) and (max-width: 568px) {
+
+    @media screen and (width >= 320px) and (width <= 568px) {
         padding: 40px;
     }
-    @media screen and (min-width: 360px) and (max-width: 640px) {
+
+    @media screen and (width >= 360px) and (width <= 640px) {
         padding: 7px;
     }
-    @media screen and (min-width: 1024px) and (max-width: 1366px) {
+
+    @media screen and (width >= 1024px) and (width <= 1366px) {
         padding: 38px;
     }
 }
 
 .web-post-box .article .article-details {
-    padding: 25px 25px 25px 25px;
+    padding: 25px;
     min-height: 185px;
 
     img {
         object-fit: cover;
     }
 
-    @media screen and (min-width: 320px) and (max-width: 568px) {
+    @media screen and (width >= 320px) and (width <= 568px) {
     }
-    @media screen and (min-width: 360px) and (max-width: 640px) {
+
+    @media screen and (width >= 360px) and (width <= 640px) {
         padding: 7px;
     }
-    @media screen and (min-width: 1024px) and (max-width: 1366px) {
+
+    @media screen and (width >= 1024px) and (width <= 1366px) {
         padding: 38px;
     }
 }
@@ -1885,7 +1913,7 @@ body #app {
     margin-bottom: 20px;
 }
 
-.text-left.line-height-20px.blog-post-description:after {
+.text-left.line-height-20px.blog-post-description::after {
     content: '';
     position: absolute;
     height: 100%;
@@ -1893,7 +1921,7 @@ body #app {
     bottom: 0;
     z-index: 1;
     left: 0;
-    // background: linear-gradient(transparent, #fff 95%);
+    // background: linear-gradient(transparent, #fff 95%);background
 }
 
 .post-box .article .article-details .article-cta small {
@@ -1904,7 +1932,7 @@ body #app {
 
 .post-box {
     margin-bottom: 25px;
-    box-shadow: 6px 2px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 6px 2px 20px rgb(0 0 0 / 30%);
 }
 
 .hover-border {
@@ -1915,7 +1943,7 @@ body #app {
     &:hover {
         transform: translateY(-5px);
         border: 1px solid #6777ef;
-        box-shadow: 0 8px 12px 0 rgba(0,0,0,0.1);
+        box-shadow: 0 8px 12px 0 rgb(0 0 0 / 10%);
     }
 
     .border-top-15 {
@@ -1927,15 +1955,16 @@ body #app {
     }
 }
 
-@media screen and (width: 768px) {
+@media screen and (width <= 768px) {
     #searchByPost {
-        padding-right: 0px;
+        padding-right: 0;
     }
 }
 
 .web-post-box {
     margin-bottom: 0;
-    @media screen and (max-width: 576px) {
+
+    @media screen and (width <= 576px) {
         margin-top: 80px !important;
         margin: 10px;
     }
@@ -1993,9 +2022,9 @@ body #app {
 
     .background-badges {
         position: absolute;
-        transform: translate3d(250px, 222px, 0px);
-        top: 0px;
-        left: 0px;
+        transform: translate3d(250px, 222px, 0);
+        top: 0;
+        left: 0;
         will-change: transform;
     }
 
@@ -2036,25 +2065,30 @@ body #app {
 
 .admin-post-category-label {
     padding-right: 215px;
-    @media screen and (min-width: 320px) and (max-width: 568px) {
+
+    @media screen and (width >= 320px) and (width <= 568px) {
         padding-right: 25px !important;
     }
-    @media screen and (min-width: 360px) and (max-width: 640px) {
+
+    @media screen and (width >= 360px) and (width <= 640px) {
         padding-right: 60px !important;
     }
-    @media screen and (min-width: 411px) and (max-width: 823px) {
+
+    @media screen and (width >= 411px) and (width <= 823px) {
         padding-right: 105px !important;
     }
-    @media screen and (min-width: 768px) and (max-width: 1024px) {
-        padding-right: 0px !important;
+
+    @media screen and (width >= 768px) and (width <= 1024px) {
+        padding-right: 0 !important;
     }
-    @media screen and (min-width: 1024px) and (max-width: 1366px) {
+
+    @media screen and (width >= 1024px) and (width <= 1366px) {
         padding-right: 40px !important;
     }
 }
 
 .notification-setting {
-    @media screen and (min-width: 576px) {
+    @media screen and (width >= 576px) {
         margin-left: -40px !important;
     }
 }
@@ -2066,7 +2100,8 @@ li.language-menu {
     border-color: #6777ef !important;
     letter-spacing: 0.8px;
     text-transform: capitalize;
-    @media screen and (max-width: 992px) {
+
+    @media screen and (width <= 992px) {
         margin: 10px;
         width: 80% !important;
     }
@@ -2091,7 +2126,8 @@ li.dropdown.open a > span.caret {
 a.language-text {
     bottom: -4px;
     height: 38px;
-    @media screen and (max-width: 992px) {
+
+    @media screen and (width <= 992px) {
         right: -2.2rem !important;
         bottom: -2px;
     }
@@ -2106,7 +2142,7 @@ a.language-text {
     border-radius: 4px;
     background-color: #fff;
     border: 1px solid #e4e4e4;
-    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .05);
+    box-shadow: 0 1px 4px 0 rgb(0 0 0 / 5%);
     margin-top: 30px;
     position: relative;
 }
@@ -2115,7 +2151,7 @@ a.language-text {
     display: block;
     border-radius: 4px;
     background-color: #fff;
-    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .05);
+    box-shadow: 0 1px 4px 0 rgb(0 0 0 / 5%);
     margin-top: 30px;
     position: relative;
 }
@@ -2130,26 +2166,26 @@ a.language-text {
 
 .dashboard-box .content-favorite-company-header.with-padding {
     padding: 30px;
-    padding-top: 0px;
+    padding-top: 0;
     padding-left: 16px;
     padding-right: 16px;
 }
 
 .dashboard-box-favoutite-job .content-favorite-company-header.with-padding {
     padding: 30px;
-    padding-top: 0px;
+    padding-top: 0;
     padding-left: 16px;
     padding-right: 16px;
 }
 
 .dashboard-box .content-favorite-company.with-padding {
     padding: 30px;
-    padding-top: 0px;
+    padding-top: 0;
 }
 
 .dashboard-box-favoutite-job .content-favorite-company.with-padding {
     padding: 30px;
-    padding-top: 0px;
+    padding-top: 0;
 }
 
 .dashboard-box-list {
@@ -2177,7 +2213,7 @@ a.language-text {
     border: none;
     width: 100%;
 
-    @media screen and (width: 768px) {
+    @media screen and (width <= 768px) {
         max-width: 550px !important;
     }
 }
@@ -2299,7 +2335,7 @@ a.language-text {
     vertical-align: top;
     font-weight: 500;
     padding: 15px 28px;
-    border-radius: 4px 4px 4px 4px;
+    border-radius: 4px;
 }
 
 .action-btn-group {
@@ -2308,23 +2344,23 @@ a.language-text {
 
 .hover-effect {
     transition-duration: 1s;
-    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 12px 0 rgb(0 0 0 / 20%);
 }
 
 .hover-effect:hover {
-    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 12px 0 rgb(0 0 0 / 20%);
     transform: translateY(-5px);
     opacity: 1.0;
 }
 
 .hover-effect-applied-jobs {
     transition-duration: 1s;
-    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 12px 0 rgb(0 0 0 / 20%);
+    border: 1px solid rgb(0 0 0 / 10%);
 }
 
 .hover-effect-applied-jobs:hover {
-    box-shadow: 0 8px 12px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 12px 0 rgb(0 0 0 / 20%);
     transform: translateY(-5px);
     opacity: 1.0;
 }
@@ -2354,7 +2390,7 @@ a.language-text {
 .jobs-status {
     position: absolute;
     right: -4%;
-    top: 0px;
+    top: 0;
 }
 
 .ribbon.float-right.favorite-companies-ribbon {
@@ -2365,7 +2401,8 @@ a.language-text {
     bottom: -5px;
     z-index: 1;
     top: inherit;
-    @media screen and (max-width: 320px) {
+
+    @media screen and (width <= 320px) {
         bottom: -10px !important;
     }
 
@@ -2408,15 +2445,15 @@ a.language-text {
 }
 
 .ribbon-black {
-    background: #000000;
+    background: #000;
 }
 
 .ribbon {
     clear: both;
     padding: 5px 12px;
     margin-bottom: 15px;
-    -webkit-box-shadow: 2px 5px 10px rgba(49, 58, 70, .15);
-    box-shadow: 2px 5px 10px rgba(49, 58, 70, .15);
+    box-shadow: 2px 5px 10px rgb(49 58 70 / 15%);
+    box-shadow: 2px 5px 10px rgb(49 58 70 / 15%);
     color: #fff;
     font-size: 13px;
     font-weight: 600;
@@ -2426,35 +2463,35 @@ a.language-text {
     float: right !important;
 }
 
-.ribbon.float-right:before {
+.ribbon.float-right::before {
     right: 0;
 }
 
-.ribbon-success:before {
+.ribbon-success::before {
     border-color: #47c363 transparent transparent;
 }
 
-.ribbon-warning:before {
+.ribbon-warning::before {
     border-color: #ffa426 transparent transparent;
 }
 
-.ribbon-primary:before {
+.ribbon-primary::before {
     border-color: #6777ef transparent transparent;
 }
 
-.ribbon-info:before {
+.ribbon-info::before {
     border-color: #3abaf4 transparent transparent;
 }
 
-.ribbon-danger:before {
+.ribbon-danger::before {
     border-color: #fc544b transparent transparent !important;
 }
 
-.ribbon.favorite-companies-ribbon:before {
-    border-left-width: 0px !important;
+.ribbon.favorite-companies-ribbon::before {
+    border-left-width: 0 !important;
 }
 
-.ribbon:before {
+.ribbon::before {
     content: " ";
     border-style: solid;
     border-width: 10px;
@@ -2465,13 +2502,13 @@ a.language-text {
     z-index: -1;
 }
 
-.ribbon:hover:before {
+.ribbon:hover::before {
     left: 1;
 }
 
 .favorite-companies-header {
     background-color: #6777ef !important;
-    border-radius: 4px 4px 4px 4px;
+    border-radius: 4px;
     padding: 15px 28px;
     color: #fff;
     font-weight: 500;
@@ -2480,7 +2517,7 @@ a.language-text {
 .hover-effect-favorite-company {
     border-radius: 5px;
     border-top-width: medium;
-    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, 0.1) !important;
+    box-shadow: 0 .5rem 1rem rgb(0 0 0 / 10%) !important;
     padding: 15px 15px 2px !important;
 }
 
@@ -2502,7 +2539,7 @@ a.language-text {
     display: block;
     border-radius: 4px;
     background-color: #fff;
-    box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .05);
+    box-shadow: 0 1px 4px 0 rgb(0 0 0 / 5%);
     margin-top: 30px;
     position: relative;
 }
@@ -2535,7 +2572,7 @@ img.favorite-company-image {
     height: 50px;
     width: 50px;
     border: 1px solid #c1c0c0;
-    box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 10px rgb(0 0 0 / 10%);
     object-fit: contain;
 }
 
@@ -2549,39 +2586,48 @@ img.favorite-company-image {
     margin-left: 10px;
 }
 
-@media screen and (max-width: 425px) {
+@media screen and (width <= 425px) {
     .followers-body, .favourite-companies-body {
         padding: 0 !important;
     }
+
     .favorite-company-dashboard-box {
         margin-top: 0 !important;
     }
+
     .favorite-company-data {
         margin-top: 7px !important;
     }
+
     .follower-avatar, .favourite-companies-avatar {
         position: absolute !important;
         transform: translateY(-45px);
-        -webkit-transform: translateY(-45px);
-        -moz-transform: translateY(-45px);
-        -o-transform: translateY(-45px);
-        background: #ffffff;
+        transform: translateY(-45px);
+        transform: translateY(-45px);
+        transform: translateY(-45px);
+        background: #fff;
     }
+
     .follower-avatar img, .favourite-companies-avatar img {
         margin-right: 0 !important;
     }
+
     .favorite-job-details {
         margin-top: 2em;
     }
+
     .followers-data .job-listing-title-favorite-company, .favourite-companies-data .job-listing-title-favorite-company {
         font-size: 0.85rem !important;
     }
+
     .followers-margin, .favourite-companies-margin {
         margin-bottom: 2.4rem !important;
     }
+
     .favourite-jobs {
         padding: 0 !important;
     }
+
     .heart-size {
         top: inherit !important;
         bottom: -16px !important;
@@ -2605,7 +2651,7 @@ h3.job-listing-title-favorite-company {
 }
 
 .hover-effect-applied-jobs .dropdown-menu {
-    box-shadow: 0 10px 40px 0 rgba(51, 73, 94, 0.15);
+    box-shadow: 0 10px 40px 0 rgb(51 73 94 / 15%);
     border: none;
     width: 134px;
 }
@@ -2631,7 +2677,7 @@ h3.job-listing-title-favorite-company {
     list-style: none;
     background-color: #fff;
     background-clip: padding-box;
-    border: 1px solid rgba(0, 0, 0, .15);
+    border: 1px solid rgb(0 0 0 / 15%);
     border-radius: .25rem;
 }
 
@@ -2662,18 +2708,18 @@ h3.job-listing-title-applied-jobs a {
 }
 
 .plan__price {
-    @media screen and (max-width: 320px) {
+    @media screen and (width <= 320px) {
         font-size: 40px !important;
     }
 }
 
-@media screen and (max-width: 420px) {
-    .pricing-body .list li:before {
+@media screen and (width <= 420px) {
+    .pricing-body .list li::before {
         left: inherit !important;
     }
 }
 
-.list li:before {
+.list li::before {
     display: none !important;
 }
 
@@ -2685,7 +2731,7 @@ h3.job-listing-title-applied-jobs a {
     }
 }
 
-@media screen and (width: 320px) {
+@media screen and (width <= 320px) {
     .pricing-body {
         margin-top: -20px;
     }
@@ -2695,19 +2741,20 @@ div #main-nav ul li .current-language {
     border-bottom: none !important;
 }
 
-@media screen and (width: 768px) {
+@media screen and (width <= 768px) {
     .search-box-placeholder {
         width: 123% !important;
         font-size: small !important;
     }
+
     .search-box-post-placeholder {
         width: 123% !important;
         font-size: small !important;
-        padding-left: 0px !important;
+        padding-left: 0 !important;
     }
 }
 
-@media screen and (max-width: 540px) {
+@media screen and (width <= 540px) {
     #searchByAppliedJob, #searchByJob {
         margin-top: 10px !important;
     }
@@ -2758,7 +2805,7 @@ div #main-nav ul li .current-language {
 }
 
 .owl-carousel {
-    -ms-touch-action: none;
+    touch-action: none;
     touch-action: none;
 }
 
@@ -2796,8 +2843,8 @@ div #main-nav ul li .current-language {
 
 // candidate & employer login buttons focus css.
 .btn-login:focus {
-    background: #ffffff !important;
-    color: #000000 !important;
+    background: #fff !important;
+    color: #000 !important;
 }
 
 #jobsSearchResults {
@@ -2806,7 +2853,7 @@ div #main-nav ul li .current-language {
 
     ul {
         padding-left: 0 !important;
-        background: #ffffff !important;
+        background: #fff !important;
         transform: translateY(-1em) !important;
         border: 1px solid #e3e3e3;
 
@@ -2822,11 +2869,12 @@ div#timeRange {
     cursor: pointer;
     padding: 9px 8px;
     border: 1px solid #ccc;
+
     /* width: 100%; */
     border-radius: 5px;
 }
 
-@media screen and (max-width: 540px) {
+@media screen and (width <= 540px) {
     div#timeRange {
         margin-top: 15px !important;
     }
@@ -2834,7 +2882,7 @@ div#timeRange {
 
 .candidate-index {
     &__menu {
-        transform: translate3d(-45px, 28px, 0px) !important;
+        transform: translate3d(-45px, 28px, 0) !important;
         width: auto !important;
     }
 }
@@ -2857,7 +2905,7 @@ div#timeRange {
 }
 
 .sa-button-container > button {
-    color: #000000 !important;
+    color: #000 !important;
 }
 
 // admin - candidate filters
@@ -2888,11 +2936,11 @@ div#timeRange {
     border-radius: .25rem;
     box-shadow: 0 10px 40px 0 rgb(51 73 94 / 15%);
 
-    @media (max-width: 575px) {
+    @media (width <= 575px) {
         margin-top: 4.5em;
     }
 
-    @media (max-width: 490px) {
+    @media (width <= 490px) {
         margin-top: 7.5em;
     }
 }
@@ -2902,7 +2950,7 @@ div#timeRange {
     margin-left: 0 !important;
 }
 
-@media (max-width: 540px) {
+@media (width <= 540px) {
     .translation-controls {
         width: 100% !important;
         margin-left: 0 !important;
@@ -2970,11 +3018,11 @@ div#timeRange {
     height: 100px;
     width: 100px;
     overflow: hidden;
-    -o-object-fit: cover;
+    object-fit: cover;
     object-fit: cover;
 }
 
-@media screen and (min-width: 1500px) {
+@media screen and (width >= 1500px) {
     .employee-card .col-xl-4 {
         max-width: 25%;
     }
@@ -3054,9 +3102,9 @@ div#timeRange {
     left: -15px !important;
 }
 
-@media (max-width: 540px) {
+@media (width <= 540px) {
     .candidate-card {
-        padding: 0px !important;
+        padding: 0 !important;
     }
 }
 
@@ -3091,7 +3139,7 @@ div#timeRange {
     height: 100px;
     width: 100px;
     overflow: hidden;
-    -o-object-fit: cover;
+    object-fit: cover;
     object-fit: cover;
 }
 
@@ -3102,7 +3150,6 @@ div#timeRange {
 
 .employee-listing-details {
     box-shadow: none;
-    padding: 10px 0;
     flex: auto;
     display: flex;
     flex-wrap: wrap;
@@ -3111,7 +3158,7 @@ div#timeRange {
     padding: 15px !important;
 }
 
-@media screen and (min-width: 1500px) {
+@media screen and (width >= 1500px) {
     .employee-card .col-xl-4 {
         max-width: 25%;
     }
@@ -3269,7 +3316,8 @@ div#timeRange {
 .blog-category-sm {
     padding-left: 30px;
     margin: 0 !important;
-    @media screen and (max-width: 992px) {
+
+    @media screen and (width <= 992px) {
         padding-left: 0;
     }
 }
@@ -3287,10 +3335,10 @@ div#timeRange {
 }
 
 .event-date {
-    border: 1px dashed #ffffff;
+    border: 1px dashed #fff;
     margin: 8px;
     padding: 4px 0;
-    color: #ffffff;
+    color: #fff;
     font-weight: 500;
 }
 
@@ -3307,8 +3355,8 @@ div#timeRange {
     width: 90px !important;
     height: 80px;
     border: 3px solid #fff;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
+    border-radius: 50%;
+    border-radius: 50%;
     border-radius: 50%;
 }
 
@@ -3328,7 +3376,8 @@ div#timeRange {
 
     .note-image-input {
         width: 43%;
-        @media (max-width: 350px) {
+
+        @media (width <= 350px) {
             width: 100%;
         }
     }
@@ -3336,7 +3385,7 @@ div#timeRange {
 
 .note-editor .panel-heading.note-toolbar .btn-group .btn.active {
     background-color: #6777ef !important;
-    color: #FFFFFF;
+    color: #FFF;
 }
 
 .note-editor {
@@ -3347,7 +3396,7 @@ div#timeRange {
 
 /** end summer note modal UI scss **/
 
-@media (max-width: 375px) {
+@media (width <= 375px) {
     .featured-badge-margin h1 {
         margin-bottom: 10px !important;
     }
@@ -3358,109 +3407,109 @@ div#timeRange {
 }
 
 .custom-pb-30 {
-    @media (max-width: 768px) {
+    @media (width <= 768px) {
         padding-bottom: 30px;
     }
 
-    @media (max-width: 540px) {
+    @media (width <= 540px) {
         padding-bottom: 15px;
     }
 }
 
 .custom-pb-40 {
-    @media (max-width: 768px) {
+    @media (width <= 768px) {
         padding-bottom: 40px;
     }
 }
 
 .custom-pt-40 {
-    @media (max-width: 768px) {
-        padding: 40px 0 0 0;
+    @media (width <= 768px) {
+        padding: 40px 0 0;
     }
 }
 
 .custom-ptb-40 {
-    @media (max-width: 768px) {
+    @media (width <= 768px) {
         padding: 40px 0;
     }
 
-    @media (max-width: 540px) {
+    @media (width <= 540px) {
         padding: 20px 0;
     }
 }
 
 .custom-pt-20 {
-    @media (max-width: 768px) {
-        padding: 0 0 20px 0;
+    @media (width <= 768px) {
+        padding: 0 0 20px;
     }
 }
 
 .custom-ptb-20 {
-    @media (max-width: 768px) {
+    @media (width <= 768px) {
         padding: 20px 0;
     }
 }
 
 .custom-ptb-60 {
-    @media (max-width: 768px) {
+    @media (width <= 768px) {
         padding: 60px 0;
     }
 
-    @media (max-width: 540px) {
+    @media (width <= 540px) {
         padding: 50px 0;
     }
 }
 
 .custom-ptb-30 {
-    @media (max-width: 768px) {
-        padding: 30px 0 60px 0;
+    @media (width <= 768px) {
+        padding: 30px 0 60px;
     }
 
-    @media (max-width: 540px) {
-        padding: 10px 0 30px 0;
+    @media (width <= 540px) {
+        padding: 10px 0 30px;
     }
 }
 
 .custom-ptb-60-30 {
-    @media (max-width: 768px) {
+    @media (width <= 768px) {
         padding: 60px 0;
     }
 
-    @media (max-width: 540px) {
+    @media (width <= 540px) {
         padding: 30px 0;
     }
 }
 
 .custom-pb-15 {
-    @media (max-width: 768px) {
+    @media (width <= 768px) {
         padding-bottom: 15px;
     }
 }
 
 .custom-pb-70 {
-    @media (max-width: 768px) {
+    @media (width <= 768px) {
         padding-bottom: 70px;
     }
 }
 
 .custom-mt-40 {
-    @media (max-width: 768px) {
+    @media (width <= 768px) {
         margin-top: 40px;
     }
 
-    @media (max-width: 540px) {
+    @media (width <= 540px) {
         margin-top: 0;
     }
 }
 
 .custom-mb-30 {
-    @media (max-width: 768px) {
+    @media (width <= 768px) {
         margin-bottom: 30px !important;
     }
 }
 
 .custom-mb-20 {
-    @media (max-width: 540px) {
+    @media (width <= 540px) {
         margin-bottom: 20px !important;
     }
 }
@@ -3476,12 +3525,12 @@ div#timeRange {
 }
 
 .custom-flex-12 {
-    @media (max-width: 592px) {
+    @media (width <= 592px) {
         width: 100% !important;
     }
 }
 
-@media screen and (max-width: 540px) {
+@media screen and (width <= 540px) {
     .bootstrap-select.open {
         .dropdown-backdrop {
             display: none;
@@ -3498,17 +3547,17 @@ div#timeRange {
 }
 
 .custom-row-pl-3 {
-    @media (max-width: 700px) {
+    @media (width <= 700px) {
         padding-left: 20px;
     }
 }
 
 .custom-add-mt {
-    @media (max-width: 767px) {
+    @media (width <= 767px) {
         margin-top: 16px !important;
     }
 
-    @media (max-width: 576px) {
+    @media (width <= 576px) {
         margin-top: 6px !important;
         text-align: right;
         margin-right: 24px !important;
@@ -3516,13 +3565,13 @@ div#timeRange {
 }
 
 .custom-select-mt-2 {
-    @media (max-width: 576px) {
+    @media (width <= 576px) {
         margin-top: 11px !important;
     }
 }
 
 .section .section-header .float-right, .back-btn-right {
-    @media  (max-width: 575.98px) {
+    @media  (width <= 575.98px) {
         margin-left: auto!important;
         width: auto!important;
     }
@@ -3543,7 +3592,7 @@ div#timeRange {
 }
 
 .grid-center {
-    @media (max-width: 490px) {
+    @media (width <= 490px) {
         max-width: 100% !important;
         flex: 0 0 100% !important;
         text-align: center !important;
@@ -3551,20 +3600,20 @@ div#timeRange {
 }
 
 .pad-x-15 {
-    @media (max-width: 490px) {
+    @media (width <= 490px) {
         padding-left: 15px !important;
         padding-right: 15px !important;
     }
 }
 
 .grid-width-100 {
-    @media (max-width: 700px) {
+    @media (width <= 700px) {
         width: 100%;
     }
 }
 
 .grid-add-end {
-    @media (max-width: 575px) {
+    @media (width <= 575px) {
         display: flex;
         justify-content: flex-end;
         margin-right: 12px;
@@ -3572,13 +3621,13 @@ div#timeRange {
 }
 
 .flex-basis-unset {
-    @media (max-width: 575px) {
+    @media (width <= 575px) {
         flex-basis: unset !important;
     }
 }
 
 .grid-flex-end {
-    @media (max-width: 575px) {
+    @media (width <= 575px) {
         width: 100% !important;
         display: flex!important;
         justify-content: center!important;
@@ -3610,52 +3659,53 @@ div#timeRange {
 }
 
 .custom-datepicker .bootstrap-datetimepicker-widget.dropdown-menu {
-    @media (max-width: 450px) {
+    @media (width <= 450px) {
         left: 10px !important;
     }
 
-    @media (max-width: 400px) {
+    @media (width <= 400px) {
         left: -8px !important;
     }
 
-    @media (max-width: 370px) {
+    @media (width <= 370px) {
         left: -25px !important;
     }
 
-    @media (max-width: 350px) {
+    @media (width <= 350px) {
         left: -34px !important;
     }
 
-    @media (max-width: 320px) {
+    @media (width <= 320px) {
         left: -45px !important;
     }
 }
 
 .custom-candidate-datepicker .bootstrap-datetimepicker-widget.dropdown-menu {
-    @media (max-width: 450px) {
+    @media (width <= 450px) {
         left: 10px !important;
     }
 
-    @media (max-width: 400px) {
+    @media (width <= 400px) {
         left: -8px !important;
     }
 
-    @media (max-width: 370px) {
+    @media (width <= 370px) {
         left: -25px !important;
     }
 
-    @media (max-width: 350px) {
+    @media (width <= 350px) {
         left: -34px !important;
     }
 
-    @media (max-width: 320px) {
+    @media (width <= 320px) {
         left: -33px !important;
     }
 }
 
 .flex-content-center {
     justify-content: flex-end;
-    @media (max-width: 490px) {
+
+    @media (width <= 490px) {
         justify-content: center;
     }
 }
@@ -3665,33 +3715,33 @@ div#timeRange {
 }
 
 .flex-center {
-    @media (max-width: 700px) {
+    @media (width <= 700px) {
        margin: auto !important;
     }
 
-    @media (max-width: 575px) {
+    @media (width <= 575px) {
        flex-basis: auto !important;
     }
 }
 
 .w-700 {
-    @media (max-width: 700px) {
+    @media (width <= 700px) {
         width: 100% !important;
     }
 }
 
 .mx-width {
-    @media (max-width: 1199px) {
+    @media (width <= 1199px) {
         flex: 0 0 30% !important;
         max-width: 30% !important;
     }
 
-    @media (max-width: 991px) {
+    @media (width <= 991px) {
         flex: 0 0 40% !important;
         max-width: 40% !important;
     }
 
-    @media (max-width: 767px) {
+    @media (width <= 767px) {
         flex: 0 0 100% !important;
         max-width: 100% !important;
     }
@@ -3701,14 +3751,14 @@ div#timeRange {
         margin: auto !important;
 
     span {
-        @media (max-width: 591px) {
+        @media (width <= 591px) {
             font-size: 15px !important;
         }
     }
 }
 
 .one-line-truncate {
-    @media (max-width: 591px) {
+    @media (width <= 591px) {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -3733,7 +3783,7 @@ div#timeRange {
     width: calc(100% - 44px) !important;
 }
 
-.select2-container--default .select2-selection--multiple .select2-selection__choice, .select2-container--default .select2-results__option[aria-selected=true], .select2-container--default .select2-results__option--highlighted[aria-selected] {
+.select2-container--default .select2-selection--multiple .select2-selection__choice, .select2-container--default .select2-results__option[aria-selected="true"], .select2-container--default .select2-results__option--highlighted[aria-selected] {
     margin-bottom: 2px;
 }
 
@@ -3754,19 +3804,19 @@ div#timeRange {
 }
 
 .width-75 {
-   @media (max-width: 768px) and (min-width: 592px){
+   @media (width <= 768px) and (width >= 592px){
        width: 75% !important;
    }
 }
 
 .width-25 {
-    @media (max-width: 768px) and (min-width: 592px){
+    @media (width <= 768px) and (width >= 592px){
         width: 25% !important;
     }
 }
 
 .mb-30px {
-    @media (max-width: 1200px ) {
+    @media (width <= 1200px ) {
         margin-bottom: 30px !important;
     }
 }
@@ -3779,13 +3829,13 @@ div#timeRange {
 }
 
 .mobile-width-100 {
-    @media (max-width: 767px) {
+    @media (width <= 767px) {
         width: 100% !important;
     }
 }
 
 .mt-mobile-0 {
-    @media (max-width: 576px) {
+    @media (width <= 576px) {
         margin: 0 !important;
     }
 }
@@ -3822,7 +3872,7 @@ div#timeRange {
                 overflow: hidden;
                 position: relative;
 
-                @media (max-width: 480px) {
+                @media (width <= 480px) {
                     flex-direction: column;
                 }
 
@@ -3830,10 +3880,12 @@ div#timeRange {
                     display: none;
 
                 }
+
                 .delete-comment-btn{
                     display: none;
                 }
             }
+
             .date-color{
                 color: #7474d6;
                 font-weight: 600;
@@ -3841,12 +3893,14 @@ div#timeRange {
                 margin-right: 10px;
             }
         }
+
         .comment-count{
             font-size: 24px;
             margin-bottom: 20px !important;
             font-family: inherit;
 
         }
+
         .widget-content{
             .with-border{
                 height: 48px;
@@ -3876,14 +3930,17 @@ div#timeRange {
                 &:hover {
                     .edit-comment-btn{
                         display: block;
+
                         .edit-comment{
                             color: #ffc107;
                             margin-left: 3px;
                             font-size: 16px;
                         }
                     }
+
                     .delete-comment-btn{
                         display: block;
+
                         .delete-comment{
                             color: #dc3545;
                             padding-left: 7px !important;
@@ -3893,11 +3950,13 @@ div#timeRange {
                 }
             }
         }
+
         .widget-title{
             font-family: inherit;
             text-transform: none !important;
         }
     }
+
     textarea{
         height: auto;
         line-height: 27px;
@@ -3915,6 +3974,7 @@ div#timeRange {
 .btn-color{
     background: #6777ef;
 }
+
 .ui-timepicker-wrapper {
     width: 15%;
 }
@@ -3930,7 +3990,7 @@ div#timeRange {
 }
 
 .slot-box-inner{
-    box-shadow: 0 4px 12px rgba(103, 119, 239, 0.2);
+    box-shadow: 0 4px 12px rgb(103 119 239 / 20%);
     padding: 20px;
     border-radius: 10px;
 
@@ -3943,9 +4003,9 @@ div#timeRange {
         display: inline-block;
         font-size: 24px;
         margin-top: 3px;
-        color: rgba(52, 57, 94, 0.7);
+        color: rgb(52 57 94 / 70%);
 
-            @media (max-width: 576px) {
+            @media (width <= 576px) {
                 font-size: 18px;
             }
         }
@@ -3998,16 +4058,20 @@ div#timeRange {
 
 .bootstrap-select.btn-group .dropdown-menu li.selected.active a{
     color: #6777ef;
+
     &:hover{
         color: #f6f8f8 !important;
     }
 }
+
 .irs-from, .irs-to, .irs--round .irs-single {
     background: #6777ef !important;
 }
+
 .irs--round .irs-handle{
     border-color: #6777ef !important;
 }
+
 .irs--round .irs-bar{
     background: #6777ef !important;
 }
@@ -4039,39 +4103,40 @@ div#timeRange {
 
 .slot-screen {
     .pl-mobile-0 {
-        @media (max-width: 576px) {
+        @media (width <= 576px) {
            padding-left: 0 !important;
         }
     }
 
     .select2-container {
-        @media (max-width: 576px) {
+        @media (width <= 576px) {
             width: 100% !important;
         }
     }
 
     .schedule-interview {
-        @media (max-width: 576px) {
+        @media (width <= 576px) {
             margin-top: 10px !important;
         }
     }
 }
 
 .desktop-close {
-    @media (max-width: 575px) {
+    @media (width <= 575px) {
         display: none;
     }
 }
 
 .mobile-close {
     display: none;
-    @media (max-width: 575px) {
+
+    @media (width <= 575px) {
         display: block;
     }
 }
 
 .mt-25 {
-    @media (max-width: 575px) {
+    @media (width <= 575px) {
         margin-top: 25px !important;
     }
 }
@@ -4084,12 +4149,12 @@ div#timeRange {
 }
 
 .comment-listing {
-    @media (max-width: 768px) {
+    @media (width <= 768px) {
        padding-left: 10px !important;
     }
 
     .comments-box {
-        @media (max-width: 480px) {
+        @media (width <= 480px) {
             display: flex;
             flex-direction: column;
         }
@@ -4104,6 +4169,7 @@ div#timeRange {
 
 .job-cat-switch {
     width: 100%;
+
     .employee-label {
         width: calc(100% - 50px);
     }

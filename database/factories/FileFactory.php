@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\User;
+// Users/auth removed
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,7 +19,7 @@ class FileFactory extends Factory
     {
         return [
             'model_type' => 'App\\Models\\User',
-            'model_id' => User::factory(),
+            'model_id' => null,
             'collection_name' => $this->faker->randomElement(['documents', 'images', 'avatars']),
             'name' => $this->faker->word(),
             'file_name' => $this->faker->uuid().'.pdf',

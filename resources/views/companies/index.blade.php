@@ -82,7 +82,7 @@
                                 <button 
                                     type="button" 
                                     class="p-2 rounded-md {{ request('view') !== 'grid' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300' : 'text-gray-400 hover:text-gray-600' }}"
-                                    onclick="window.CompanyFilters.updateView('list')"
+                                    data-action="companies-update-view" data-view="list"
                                     title="{{ __('companies.list_view') }}"
                                 >
                                     <x-icon name="list" class="h-4 w-4" />
@@ -90,7 +90,7 @@
                                 <button 
                                     type="button" 
                                     class="p-2 rounded-md {{ request('view') === 'grid' ? 'bg-blue-100 text-blue-600 dark:bg-blue-900 dark:text-blue-300' : 'text-gray-400 hover:text-gray-600' }}"
-                                    onclick="window.CompanyFilters.updateView('grid')"
+                                    data-action="companies-update-view" data-view="grid"
                                     title="{{ __('companies.grid_view') }}"
                                 >
                                     <x-icon name="grid" class="h-4 w-4" />
@@ -102,7 +102,7 @@
                         <button 
                             type="button" 
                             class="lg:hidden inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
-                            onclick="window.CompanyFilters.toggleMobileFilters()"
+                            data-action="companies-toggle-mobile-filters"
                         >
                             <x-icon name="filter" class="h-4 w-4 mr-2" />
                             {{ __('companies.filters') }}
@@ -144,7 +144,7 @@
                     <x-ui.button 
                         href="{{ route('companies.index') }}" 
                         variant="primary"
-                        onclick="window.CompanyFilters.clearFilters()"
+                        data-action="companies-clear-filters"
                     >
                         {{ __('companies.clear_filters') }}
                     </x-ui.button>
@@ -188,30 +188,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ mix('js/company-filters.js') }}"></script>
-<script src="{{ mix('js/company-interactions.js') }}"></script>
-<script src="{{ mix('js/analytics.js') }}"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize company filters
-    window.CompanyFilters?.init({
-        baseUrl: '{{ route('companies.index') }}',
-        currentFilters: @json($filters),
-        currentSort: '{{ request('sort', 'name_asc') }}',
-        currentView: '{{ request('view', 'grid') }}'
-    });
-
-    // Initialize company interactions (follow, etc.)
-    window.CompanyInteractions?.init();
-
-    // Track companies page visit
-    if (window.Analytics) {
-        window.Analytics.track('companies_page_view', {
-            total_companies: {{ $companies->total() }},
-            current_page: {{ $companies->currentPage() }},
-            filters: @json($filters)
-        });
-    }
-});
-</script>
+    {{-- Scripts handled globally via Vite/app.js; page-specific hooks use data-action attributes --}}
 @endpush

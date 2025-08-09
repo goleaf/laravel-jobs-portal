@@ -4,7 +4,7 @@ header .language-dropdown-menu {
             width: auto !important
         }
 
-        @media(max-width: 991px) {
+        @media(width <= 991px) {
             header .language-dropdown-menu {
                 width: 100% !important
             }
@@ -14,25 +14,28 @@ header .language-dropdown-menu {
             font-weight: 500;
             color: #777a7d;
             padding: 8px 10px !important;
-            background-color: rgba(0, 0, 0, 0) !important
+            background-color: rgb(0 0 0 / 0%) !important
         }
 
         header .language-dropdown-menu .dropdown-item:active,
         header .language-dropdown-menu .dropdown-item:hover {
-            background-color: rgba(0, 0, 0, 0) !important;
+            background-color: rgb(0 0 0 / 0%) !important;
             color: #1967d2 !important
         }
 
         header .language-dropdown-menu .dropdown-item .country-flag {
             width: 20px
         }
+
         .language-dropdown-btn{
             background-color: #1967d2;
         }
-        .dropdown-toggle:after{
+
+        .dropdown-toggle::after{
             border: solid white;
             border-width: 0 2px 2px 0;
         }
+
         .language-dropdown-menu {
             position: absolute;
             min-width: 200px;
@@ -40,7 +43,7 @@ header .language-dropdown-menu {
             padding: 10px;
             background: #fff;
             border-radius: 5px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, .18);
+            box-shadow: 0 6px 12px rgb(0 0 0 / 18%);
             height: auto;
             display: inline-block;
             top: 55px;

@@ -2,8 +2,8 @@
 // Modern TailwindCSS Components with Dark Mode Support
 
 @import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+@import url('tailwindcss/components');
+@import url('tailwindcss/utilities');
 
 // Base Layer - Theme Variables
 @layer base {
@@ -12,7 +12,6 @@
     --color-primary-500: theme('colors.primary.500');
     --color-primary-600: theme('colors.primary.600');
     --color-primary-700: theme('colors.primary.700');
-    
     --shadow-sm: theme('boxShadow.sm');
     --shadow-md: theme('boxShadow.md');
     --shadow-lg: theme('boxShadow.lg');
@@ -105,6 +104,7 @@
       
       .ripple {
         @apply absolute bg-white/30 rounded-full pointer-events-none;
+
         animation: ripple 0.6s linear;
         transform: scale(0);
       }
@@ -238,6 +238,7 @@
     
     &.active {
       @apply block;
+
       animation: fadeIn 0.3s ease-out;
     }
     
@@ -245,6 +246,7 @@
       @apply bg-white dark:bg-gray-800 rounded-lg shadow-xl;
       @apply w-full max-w-md mx-auto;
       @apply transform transition-all duration-300;
+
       animation: slideUp 0.3s ease-out;
     }
     
@@ -281,6 +283,7 @@
       
       &.active {
         @apply block;
+
         animation: slideDown 0.2s ease-out;
       }
       
@@ -364,6 +367,7 @@
     
     .progress-fill {
       @apply h-2 bg-primary-600 rounded-full transition-all duration-1000 ease-out;
+
       width: 0%;
     }
   }
@@ -459,7 +463,7 @@
   }
   
   .text-shadow {
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    text-shadow: 0 1px 3px rgb(0 0 0 / 12%), 0 1px 2px rgb(0 0 0 / 24%);
   }
   
   .scrollbar-hide {
@@ -488,6 +492,7 @@
     opacity: 0; 
     transform: translateY(10px); 
   }
+
   to { 
     opacity: 1; 
     transform: translateY(0); 
@@ -499,6 +504,7 @@
     opacity: 0; 
     transform: translateY(-10px); 
   }
+
   to { 
     opacity: 1; 
     transform: translateY(0); 

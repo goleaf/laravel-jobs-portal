@@ -8,8 +8,9 @@ use App\Models\Company;
 use App\Models\Country;
 use App\Models\Job;
 use App\Models\Notification;
+use App\Models\Industry;
+use App\Models\CompanySize;
 use App\Models\State;
-use App\Models\User;
 use App\Repositories\CompanyRepository;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -62,23 +64,67 @@ class CompanyController extends AppBaseController
     public function index(Request $request): View
     {
         try {
-            $filters = $request->only([
-                'search', 'status', 'industry', 'size', 'location',
-                'featured', 'verified', 'sort_by', 'sort_direction',
-            ]);
+            // Basic filters aligned with Blade props
+            $query = Company::query();
 
-            $cacheKey = $this->buildCacheKey('companies.index', $filters);
+            if ($request->filled('q')) {
+                $query->where('name', 'like', '%'.$request->get('q').'%');
+            }
+            if ($request->filled('industry')) {
+                $query->where('industry_id', (int) $request->get('industry'));
+            }
+            if ($request->filled('size')) {
+                $query->where('company_size_id', (int) $request->get('size'));
+            }
+            if ($request->filled('location')) {
+                $query->where('city_id', (int) $request->get('location'));
+            }
 
-            $data = Cache::remember($cacheKey, self::CACHE_TTL, function () use ($filters) {
-                return [
-                    'companies' => $this->getFilteredCompanies($filters),
-                    'statistics' => $this->getCompanyStatistics(),
-                    'filters' => $this->getFilterOptions(),
-                    'analytics' => $this->getCompanyAnalytics(),
-                ];
-            });
+            switch ($request->get('sort')) {
+                case 'name_asc':
+                    $query->orderBy('name');
+                    break;
+                case 'name_desc':
+                    $query->orderByDesc('name');
+                    break;
+                case 'created_at_desc':
+                    $query->orderByDesc('created_at');
+                    break;
+                case 'jobs_count_desc':
+                    if (Schema::hasColumn('companies', 'jobs_count')) {
+                        $query->orderByDesc('jobs_count');
+                    } else {
+                        $query->latest();
+                    }
+                    break;
+                case 'employees_desc':
+                    if (Schema::hasColumn('companies', 'no_of_employees')) {
+                        $query->orderByDesc('no_of_employees');
+                    } else {
+                        $query->latest();
+                    }
+                    break;
+                default:
+                    $query->latest();
+            }
 
-            return view('companies.index', $data);
+            $companies = $query->paginate(12)->appends($request->query());
+
+            // Option lists
+            $industries = class_exists(Industry::class)
+                ? (Industry::query()->select('id', 'name')->orderBy('name')->pluck('name', 'id')->toArray())
+                : [];
+            $companySizes = class_exists(CompanySize::class)
+                ? (CompanySize::query()->select('id', 'size')->orderBy('size')->pluck('size', 'id')->toArray())
+                : [];
+            $locations = City::query()->select('id', 'name')->orderBy('name')->pluck('name', 'id')->toArray();
+            $filters = $request->only(['q', 'industry', 'size', 'location', 'sort', 'view']);
+            $activeFilters = array_filter($filters, fn ($v) => filled($v));
+            $featuredCompanies = Company::query()->where('is_featured', 1)->limit(8)->get();
+
+            return view('companies.index', compact(
+                'companies', 'industries', 'companySizes', 'locations', 'filters', 'activeFilters', 'featuredCompanies'
+            ));
         } catch (\Exception $e) {
             Log::error('Error loading companies index', [
                 'error' => $e->getMessage(),
@@ -87,6 +133,12 @@ class CompanyController extends AppBaseController
 
             return view('companies.index', [
                 'companies' => collect(),
+                'industries' => [],
+                'companySizes' => [],
+                'locations' => [],
+                'filters' => [],
+                'activeFilters' => [],
+                'featuredCompanies' => collect(),
                 'error' => 'Unable to load companies. Please try again.',
             ]);
         }

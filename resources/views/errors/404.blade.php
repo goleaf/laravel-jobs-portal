@@ -264,6 +264,4 @@
 </x-ui.modal>
 @endsection
 
-@push('scripts')
-<script src="{{ asset('js/404.js') }}"></script>
-@endpush 
+{{-- Script handled via resources/js/app.js --}}

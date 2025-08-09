@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Todo;
-use App\Models\User;
+// Users/auth removed
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class TodoFactory extends Factory
@@ -23,7 +23,7 @@ class TodoFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => User::factory(),
+            'user_id' => null,
             'title' => $this->faker->sentence(4),
             'description' => $this->faker->paragraph(3),
             'due_date' => $this->faker->dateTimeBetween('now', '+30 days'),

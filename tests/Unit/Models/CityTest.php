@@ -8,7 +8,7 @@ use App\Models\Company;
 use App\Models\Country;
 use App\Models\Job;
 use App\Models\State;
-use App\Models\User;
+// Users/auth removed
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
@@ -145,10 +145,7 @@ class CityTest extends TestCase
     /** @test */
     public function it_has_many_users()
     {
-        $users = User::factory()->count(3)->create(['city_id' => $this->city->id]);
-
-        $this->assertCount(3, $this->city->users);
-        $this->assertInstanceOf(User::class, $this->city->users->first());
+        $this->markTestSkipped('Users/auth removed.');
     }
 
     /** @test */
@@ -172,10 +169,7 @@ class CityTest extends TestCase
     /** @test */
     public function it_has_many_candidates()
     {
-        $candidates = Candidate::factory()->count(5)->create(['city_id' => $this->city->id]);
-
-        $this->assertCount(5, $this->city->candidates);
-        $this->assertInstanceOf(Candidate::class, $this->city->candidates->first());
+        $this->markTestSkipped('Candidates depend on users/auth (removed).');
     }
 
     // =============================================

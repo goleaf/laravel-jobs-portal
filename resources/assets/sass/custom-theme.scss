@@ -14,7 +14,7 @@ $blue-color: #6777ef;
 
 //Home page
 .overlay-black {
-    &:before {
+    &::before {
         background-image: linear-gradient(130deg, #6777ef 38%, #3ae2f0 123%) !important;
     }
 }
@@ -81,7 +81,7 @@ section#job-page .company-info .job-company {
 .btn-purple,
 .btn-red {
     border-radius: 18px;
-    padding: 1px 15px 0 15px;
+    padding: 1px 15px 0;
     letter-spacing: 0.8px;
 }
 
@@ -136,14 +136,14 @@ section.page-header:after {
 section#login .login-box .login-title {
     background: $blue-color;
 
-    &:before {
+    &::before {
         background: $blue-color;
     }
 }
 
 //Footer style
 footer {
-    .footer-info:before {
+    .footer-info::before {
         background: rgb(41 46 90);
     }
 
@@ -154,7 +154,7 @@ footer {
     .footer-info {
         form {
             input.form-control {
-                background: rgba(237, 237, 237, 1) !important;
+                background: rgb(237 237 237 / 100%) !important;
                 box-shadow: none !important;
             }
 
@@ -180,14 +180,14 @@ footer .footer-info p, footer .footer-info a, footer .footer-info ul li, footer 
     margin-right: 12px;
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (width <= 1024px) {
     .search-job-location {
         margin-bottom: 10px !important;
     }
 }
 
 .front-thumbnail {
-    box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px 5px rgb(0 0 0 / 20%);
     object-fit: contain;
 }
 

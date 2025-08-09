@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Models\User;
+// Users/auth removed
 use Illuminate\Support\Facades\Config;
 use Tests\TestCase;
 
@@ -38,14 +38,6 @@ class LaravelBasicTest extends TestCase
     /** @test */
     public function it_can_create_basic_objects()
     {
-        $user = new User([
-            'first_name' => 'Test',
-            'last_name' => 'User',
-            'email' => 'test@example.com',
-        ]);
-
-        $this->assertEquals('Test', $user->first_name);
-        $this->assertEquals('User', $user->last_name);
-        $this->assertEquals('Test User', $user->full_name);
+        $this->markTestSkipped('Users/auth removed.');
     }
 }

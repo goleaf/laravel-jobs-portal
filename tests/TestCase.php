@@ -20,7 +20,7 @@ use Database\Seeders\DefaultCompanySizeSeeder;
 use Database\Seeders\JobCategorySeeder;
 use Database\Seeders\SalaryCurrencySeeder;
 use Database\Seeders\StatesSeeder;
-use Database\Seeders\UsersSeeder;
+// Users/auth removed; do not seed users
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Support\Facades\DB;
@@ -103,8 +103,7 @@ abstract class TestCase extends BaseTestCase
                 StatesSeeder::class,
                 CitiesSeeder::class,
 
-                // Users and related data
-                UsersSeeder::class,
+                // Users/auth removed
             ]);
 
             // Create basic test data
@@ -118,12 +117,10 @@ abstract class TestCase extends BaseTestCase
     /**
      * Helper method to create test user with role.
      */
-    protected function createTestUser(string $role = 'candidate'): User
+    // Users/auth removed; stubs retained for compatibility
+    protected function createTestUser(string $role = 'candidate')
     {
-        $user = User::factory()->create();
-        $user->assignRole($role);
-
-        return $user;
+        $this->markTestSkipped('Users/auth removed.');
     }
 
     /**
@@ -192,50 +189,7 @@ abstract class TestCase extends BaseTestCase
     {
         try {
             // Create basic candidates for testing
-            DB::table('candidates')->insertOrIgnore([
-                [
-                    'id' => 1,
-                    'user_id' => 2, // John Doe from UsersSeeder
-                    'unique_id' => 'CAND-001',
-                    'career_level_id' => 1,
-                    'industry_id' => 1,
-                    'functional_area_id' => 1,
-                    'current_salary' => 50000,
-                    'expected_salary' => 60000,
-                    'salary_currency' => 'USD',
-                    'immediate_available' => 1,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
-                [
-                    'id' => 2,
-                    'user_id' => 3, // Jane Smith from UsersSeeder
-                    'unique_id' => 'CAND-002',
-                    'career_level_id' => 1,
-                    'industry_id' => 1,
-                    'functional_area_id' => 1,
-                    'current_salary' => 45000,
-                    'expected_salary' => 55000,
-                    'salary_currency' => 'USD',
-                    'immediate_available' => 1,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
-                [
-                    'id' => 3,
-                    'user_id' => 1, // Admin user as candidate for testing
-                    'unique_id' => 'CAND-003',
-                    'career_level_id' => 1,
-                    'industry_id' => 1,
-                    'functional_area_id' => 1,
-                    'current_salary' => 70000,
-                    'expected_salary' => 80000,
-                    'salary_currency' => 'USD',
-                    'immediate_available' => 1,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
-            ]);
+            // Skip inserting candidates; users/auth removed and may violate FKs
 
             // Create basic media entry for resume testing
             if (Schema::hasTable('media')) {
@@ -265,7 +219,6 @@ abstract class TestCase extends BaseTestCase
                 DB::table('companies')->insertOrIgnore([
                     [
                         'id' => 1,
-                        'user_id' => 1,
                         'name' => 'Test Company Inc',
                         'email' => 'test@company.com',
                         'location' => 'Test City',

@@ -153,10 +153,8 @@ class CompanyShowResource extends JsonResource
             return asset('storage/'.$this->logo);
         }
 
-        // Default logo with company initial
-        $initial = substr($this->name, 0, 1);
-
-        return "https://ui-avatars.com/api/?name={$initial}&size=200&background=random&format=svg";
+        // Default local logo
+        return asset('images/logo.png');
     }
 
     /**

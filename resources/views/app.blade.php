@@ -7,8 +7,8 @@
     
     <title>{{ $title ?? __('app.default_title') }}</title>
     
-    <!-- Vite Assets (includes local fonts) -->
-    @vite(['resources/css/app.css'])
+    <!-- Vite Assets (CSS + JS) -->
+    @vite(['resources/css/app.css','resources/js/app.js'])
     
     <!-- Additional Meta Tags -->
     <meta name="description" content="{{ __('app.meta_description') }}">

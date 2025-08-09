@@ -20,6 +20,9 @@ $variants = [
     'danger' => 'bg-red-600 hover:bg-red-700 text-white border border-transparent focus:ring-red-500 shadow-sm',
     'success' => 'bg-green-600 hover:bg-green-700 text-white border border-transparent focus:ring-green-500 shadow-sm',
     'warning' => 'bg-yellow-600 hover:bg-yellow-700 text-white border border-transparent focus:ring-yellow-500 shadow-sm',
+    // Added variants used in views
+    'link' => 'bg-transparent text-blue-600 hover:text-blue-700 border border-transparent focus:ring-blue-500 underline-offset-2 hover:underline',
+    'light' => 'bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 focus:ring-blue-500',
 ];
 
 $sizes = [
@@ -30,7 +33,7 @@ $sizes = [
     'xl' => 'px-8 py-4 text-lg gap-3',
 ];
 
-$classes = $baseClasses . ' ' . $variants[$variant] . ' ' . $sizes[$size];
+$classes = $baseClasses . ' ' . ($variants[$variant] ?? $variants['primary']) . ' ' . $sizes[$size];
 
 $tag = $href ? 'a' : 'button';
 $attributes = $href ? ['href' => $href] : ['type' => $type];

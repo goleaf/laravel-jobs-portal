@@ -83,7 +83,7 @@
                                 <button 
                                     type="button" 
                                     class="p-2 rounded-md transition duration-150 ease-in-out {{ request('view') !== 'grid' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700' }}"
-                                    onclick="window.JobFilters.updateView('list')"
+                                    data-action="jobs-update-view" data-view="list"
                                     title="{{ __('jobs.list_view') }}"
                                 >
                                     <x-icon name="list" class="h-5 w-5" />
@@ -91,7 +91,7 @@
                                 <button 
                                     type="button" 
                                     class="p-2 rounded-md transition duration-150 ease-in-out {{ request('view') === 'grid' ? 'bg-blue-600 text-white shadow-md' : 'text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700' }}"
-                                    onclick="window.JobFilters.updateView('grid')"
+                                    data-action="jobs-update-view" data-view="grid"
                                     title="{{ __('jobs.grid_view') }}"
                                 >
                                     <x-icon name="grid" class="h-5 w-5" />
@@ -103,7 +103,7 @@
                         <button 
                             type="button" 
                             class="lg:hidden inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 text-sm leading-4 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
-                            onclick="window.JobFilters.toggleMobileFilters()"
+                            data-action="jobs-toggle-mobile-filters"
                         >
                             <x-icon name="filter" class="h-4 w-4 mr-2" />
                             {{ __('jobs.filters') }}
@@ -145,7 +145,7 @@
                     <x-ui.button 
                         href="{{ route('jobs.index') }}" 
                         variant="primary"
-                        onclick="window.JobFilters.clearFilters()"
+                        data-action="jobs-clear-filters"
                     >
                         {{ __('jobs.clear_filters') }}
                     </x-ui.button>
@@ -167,29 +167,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('js/job-filters.js') }}"></script>
-<script src="{{ asset('js/job-interactions.js') }}"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize job filters
-    window.JobFilters?.init({
-        baseUrl: '{{ route('jobs.index') }}',
-        currentFilters: @json($filters),
-        currentSort: '{{ request('sort', 'created_at_desc') }}',
-        currentView: '{{ request('view', 'list') }}'
-    });
-
-    // Initialize job interactions (save, apply, etc.)
-    window.JobInteractions?.init();
-
-    // Track jobs page visit
-    if (window.Analytics) {
-        window.Analytics.track('jobs_page_view', {
-            total_jobs: {{ $jobs->total() }},
-            current_page: {{ $jobs->currentPage() }},
-            filters: @json($filters)
-        });
-    }
-});
-</script>
+    {{-- Scripts handled globally via Vite/app.js; page-specific hooks use data-action attributes --}}
 @endpush

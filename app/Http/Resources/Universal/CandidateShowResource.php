@@ -200,10 +200,8 @@ class CandidateShowResource extends JsonResource
             return asset('storage/'.$this->avatar);
         }
 
-        // Default avatar with initials
-        $initials = substr($this->first_name, 0, 1).substr($this->last_name, 0, 1);
-
-        return "https://ui-avatars.com/api/?name={$initials}&size=200&background=random";
+        // Default local avatar
+        return asset('images/avatar.png');
     }
 
     /**

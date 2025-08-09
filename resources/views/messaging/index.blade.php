@@ -34,7 +34,7 @@
                 <div class="conversation-item bg-indigo-50 border-l-4 border-indigo-500 p-4 cursor-pointer hover:bg-indigo-100">
                     <div class="flex items-center space-x-3">
                         <div class="relative">
-                            <img src="https://ui-avatars.com/api/?name=Sarah+Wilson&color=7c3aed&background=ede9fe" alt="Sarah Wilson" class="w-12 h-12 rounded-full">
+                            <img src="{{ asset('images/avatar.png') }}" alt="Sarah Wilson" class="w-12 h-12 rounded-full">
                             <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
                         </div>
                         <div class="flex-1 min-w-0">
@@ -55,7 +55,7 @@
                 <div class="conversation-item p-4 cursor-pointer hover:bg-gray-50 border-b border-gray-100">
                     <div class="flex items-center space-x-3">
                         <div class="relative">
-                            <img src="https://ui-avatars.com/api/?name=John+Doe&color=059669&background=d1fae5" alt="John Doe" class="w-12 h-12 rounded-full">
+                            <img src="{{ asset('images/avatar.png') }}" alt="John Doe" class="w-12 h-12 rounded-full">
                             <div class="absolute bottom-0 right-0 w-3 h-3 bg-gray-400 border-2 border-white rounded-full"></div>
                         </div>
                         <div class="flex-1 min-w-0">
@@ -74,7 +74,7 @@
                 <div class="conversation-item p-4 cursor-pointer hover:bg-gray-50 border-b border-gray-100">
                     <div class="flex items-center space-x-3">
                         <div class="relative">
-                            <img src="https://ui-avatars.com/api/?name=Tech+Corp&color=dc2626&background=fee2e2" alt="Tech Corp" class="w-12 h-12 rounded-full">
+                            <img src="{{ asset('images/avatar.png') }}" alt="Tech Corp" class="w-12 h-12 rounded-full">
                             <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
                         </div>
                         <div class="flex-1 min-w-0">
@@ -98,7 +98,7 @@
             <div class="bg-white p-4 border-b border-gray-200">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-3">
-                        <img src="https://ui-avatars.com/api/?name=Sarah+Wilson&color=7c3aed&background=ede9fe" alt="Sarah Wilson" class="w-10 h-10 rounded-full">
+                        <img src="{{ asset('images/avatar.png') }}" alt="Sarah Wilson" class="w-10 h-10 rounded-full">
                         <div>
                             <h3 class="text-sm font-semibold text-gray-900">Sarah Wilson</h3>
                             <p class="text-xs text-green-600">{{ __('messaging.online') }}</p>
@@ -128,7 +128,7 @@
             <div class="flex-1 overflow-y-auto p-4 space-y-4" id="messagesContainer">
                 {{-- Received Message --}}
                 <div class="flex items-start space-x-3">
-                    <img src="https://ui-avatars.com/api/?name=Sarah+Wilson&color=7c3aed&background=ede9fe" alt="Sarah Wilson" class="w-8 h-8 rounded-full">
+                    <img src="{{ asset('images/avatar.png') }}" alt="Sarah Wilson" class="w-8 h-8 rounded-full">
                     <div class="flex-1">
                         <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
                             <p class="text-sm text-gray-900">{{ __('messaging.conversation_types.hr_manager') }}</p>
@@ -144,7 +144,7 @@
                             <p class="text-sm text-white">{{ __('messaging.conversation_types.senior_developer') }}</p>
                         </div>
                     </div>
-                    <img src="https://ui-avatars.com/api/?name=You&color=ffffff&background=6366f1" alt="You" class="w-8 h-8 rounded-full">
+                    <img src="{{ asset('images/avatar.png') }}" alt="You" class="w-8 h-8 rounded-full">
                 </div>
 
                 {{-- System Message --}}
@@ -156,7 +156,7 @@
 
                 {{-- File Message --}}
                 <div class="flex items-start space-x-3">
-                    <img src="https://ui-avatars.com/api/?name=Sarah+Wilson&color=7c3aed&background=ede9fe" alt="Sarah Wilson" class="w-8 h-8 rounded-full">
+                    <img src="{{ asset('images/avatar.png') }}" alt="Sarah Wilson" class="w-8 h-8 rounded-full">
                     <div class="flex-1">
                         <div class="bg-gray-100 rounded-lg p-3 max-w-xs">
                             <div class="flex items-center space-x-2">
@@ -179,7 +179,7 @@
                 <div class="flex items-end space-x-3">
                     <div class="flex-1">
                         <div class="border border-gray-300 rounded-lg">
-                            <textarea class="w-full p-3 border-0 rounded-lg resize-none focus:ring-0 focus:border-transparent" rows="2" placeholder="{{ __('messaging.type_message') }}"></textarea>
+                            <textarea id="messageInput" class="w-full p-3 border-0 rounded-lg resize-none focus:ring-0 focus:border-transparent" rows="2" placeholder="{{ __('messaging.type_message') }}"></textarea>
                             <div class="flex items-center justify-between p-3 border-t border-gray-200">
                                 <div class="flex items-center space-x-2">
                                     <button class="p-1 text-gray-400 hover:text-gray-600 rounded">
@@ -198,7 +198,7 @@
                                         </svg>
                                     </button>
                                 </div>
-                                <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors duration-200">
+                                <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors duration-200" data-action="message-send">
                                     {{ __('messaging.send') }}
                                 </button>
                             </div>
@@ -210,65 +210,5 @@
     </div>
 </div>
 
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Auto-scroll to bottom of messages
-    const messagesContainer = document.getElementById('messagesContainer');
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    
-    // Handle conversation switching
-    const conversationItems = document.querySelectorAll('.conversation-item');
-    conversationItems.forEach(item => {
-        item.addEventListener('click', function() {
-            // Remove active state from all items
-            conversationItems.forEach(i => {
-                i.classList.remove('bg-indigo-50', 'border-l-4', 'border-indigo-500');
-                i.classList.add('hover:bg-gray-50');
-            });
-            
-            // Add active state to clicked item
-            this.classList.add('bg-indigo-50', 'border-l-4', 'border-indigo-500');
-            this.classList.remove('hover:bg-gray-50');
-        });
-    });
-    
-    // Handle send message
-    const sendButton = document.querySelector('button:contains("Send")');
-    const messageInput = document.querySelector('textarea');
-    
-    function sendMessage() {
-        const message = messageInput.value.trim();
-        if (message) {
-            // Add message to chat (simplified)
-            const messageElement = document.createElement('div');
-            messageElement.className = 'flex items-start space-x-3 justify-end';
-            messageElement.innerHTML = `
-                <div class="flex-1 flex justify-end">
-                    <div class="bg-indigo-600 rounded-lg p-3 max-w-xs">
-                        <p class="text-sm text-white">${message}</p>
-                    </div>
-                </div>
-                <img src="https://ui-avatars.com/api/?name=You&color=ffffff&background=6366f1" alt="You" class="w-8 h-8 rounded-full">
-            `;
-            
-            messagesContainer.appendChild(messageElement);
-            messageInput.value = '';
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        }
-    }
-    
-    // Send on button click
-    document.querySelector('button:last-child').addEventListener('click', sendMessage);
-    
-    // Send on Enter (but allow Shift+Enter for new line)
-    messageInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
-});
-</script>
-@endpush
+{{-- Script loaded via resources/js/app.js centralized imports --}}
 @endsection

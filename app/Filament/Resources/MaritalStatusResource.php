@@ -1,0 +1,87 @@
+<?php
+
+namespace App\Filament\Resources;
+
+use App\Filament\Resources\MaritalStatusResource\Pages;
+use App\Models\MaritalStatus;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
+
+class MaritalStatusResource extends Resource
+{
+    protected static ?string $model = MaritalStatus::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-heart';
+
+    protected static ?string $navigationGroup = 'References';
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\Section::make()
+                    ->columns(2)
+                    ->schema([
+                        Forms\Components\TextInput::make('marital_status')->label('Name')->required()->maxLength(100),
+                        Forms\Components\TextInput::make('display_name')->maxLength(100),
+                        Forms\Components\TextInput::make('short_code')->maxLength(10),
+                        Forms\Components\Textarea::make('description')->columnSpanFull(),
+                        Forms\Components\TextInput::make('sort_order')->numeric(),
+                        Forms\Components\TextInput::make('icon')->maxLength(50),
+                        Forms\Components\ColorPicker::make('color'),
+                        Forms\Components\Toggle::make('is_active')->inline(false)->default(true),
+                        Forms\Components\Toggle::make('is_default')->inline(false)->default(false),
+                        Forms\Components\Toggle::make('is_featured')->inline(false)->default(false),
+                    ]),
+            ]);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                Tables\Columns\TextColumn::make('marital_status')->label('Name')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('display_name')->toggleable()->toggledHiddenByDefault(),
+                Tables\Columns\TextColumn::make('short_code')->toggleable()->toggledHiddenByDefault(),
+                Tables\Columns\IconColumn::make('is_active')->boolean()->sortable(),
+                Tables\Columns\IconColumn::make('is_default')->boolean()->sortable(),
+                Tables\Columns\IconColumn::make('is_featured')->boolean()->sortable(),
+                Tables\Columns\TextColumn::make('sort_order')->numeric()->sortable(),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->since()->sortable(),
+            ])
+            ->filters([
+                Tables\Filters\TernaryFilter::make('is_active'),
+                Tables\Filters\TernaryFilter::make('is_default'),
+                Tables\Filters\TernaryFilter::make('is_featured'),
+            ])
+            ->actions([
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+            ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListMaritalStatuses::route('/'),
+            'create' => Pages\CreateMaritalStatus::route('/create'),
+            'view' => Pages\ViewMaritalStatus::route('/{record}'),
+            'edit' => Pages\EditMaritalStatus::route('/{record}/edit'),
+        ];
+    }
+}
+
+

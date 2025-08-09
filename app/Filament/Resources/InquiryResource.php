@@ -32,20 +32,20 @@ class InquiryResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Contact')
+                Forms\Components\Section::make(__('Contact'))
                     ->columns(3)
                     ->schema([
                         Forms\Components\TextInput::make('name')->required()->maxLength(255),
                         Forms\Components\TextInput::make('email')->email()->required()->maxLength(255),
                         Forms\Components\TextInput::make('phone_no')->label(__('Phone'))->maxLength(20),
                     ]),
-                Forms\Components\Section::make('Message')
+                Forms\Components\Section::make(__('Message'))
                     ->columns(1)
                     ->schema([
                         Forms\Components\TextInput::make('subject')->required()->maxLength(255),
                         Forms\Components\Textarea::make('message')->rows(8)->required()->columnSpanFull(),
                     ]),
-                Forms\Components\Section::make('Status')
+                Forms\Components\Section::make(__('Status'))
                     ->columns(4)
                     ->schema([
                         Forms\Components\Toggle::make('is_read')->inline(false)->default(false),
@@ -90,7 +90,7 @@ class InquiryResource extends Resource
                 Tables\Columns\IconColumn::make('is_read')->label(__('Read'))->boolean()->sortable()->toggleable(),
                 Tables\Columns\IconColumn::make('is_resolved')->label(__('Resolved'))->boolean()->sortable(),
                 Tables\Columns\TextColumn::make('assignedUser.name')->label(__('Assigned'))->toggleable(),
-                Tables\Columns\TextColumn::make('created_at')->since()->sortable(),
+                Tables\Columns\TextColumn::make('created_at')->label(__('Created'))->since()->sortable(),
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_read')->label(__('Read')),

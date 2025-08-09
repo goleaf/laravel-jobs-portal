@@ -9,6 +9,8 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Notifications\Notification;
+use Illuminate\Database\Eloquent\Model;
 
 class InquiryResource extends Resource
 {
@@ -81,16 +83,63 @@ class InquiryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('email')->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('subject')->limit(40)->searchable()->sortable(),
-                Tables\Columns\TextColumn::make('priority')->badge()->sortable(),
-                Tables\Columns\TextColumn::make('status')->badge()->sortable(),
-                Tables\Columns\TextColumn::make('category')->badge()->sortable()->toggleable(),
-                Tables\Columns\IconColumn::make('is_read')->label(__('Read'))->boolean()->sortable()->toggleable(),
-                Tables\Columns\IconColumn::make('is_resolved')->label(__('Resolved'))->boolean()->sortable(),
-                Tables\Columns\TextColumn::make('assignedUser.name')->label(__('Assigned'))->toggleable(),
-                Tables\Columns\TextColumn::make('created_at')->label(__('Created'))->since()->sortable(),
+                Tables\Columns\TextColumn::make('name')
+                    ->label(__('Name'))
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('email')
+                    ->label(__('Email'))
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('subject')
+                    ->label(__('Subject'))
+                    ->limit(40)
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('priority_label')
+                    ->label(__('Priority'))
+                    ->badge()
+                    ->color(fn (Inquiry $record): string => match ($record->priority) {
+                        Inquiry::PRIORITY_URGENT => 'danger',
+                        Inquiry::PRIORITY_HIGH => 'warning',
+                        Inquiry::PRIORITY_MEDIUM => 'info',
+                        Inquiry::PRIORITY_LOW => 'success',
+                        default => 'gray',
+                    })
+                    ->sortable('priority'),
+                Tables\Columns\TextColumn::make('status_label')
+                    ->label(__('Status'))
+                    ->badge()
+                    ->color(fn (Inquiry $record): string => match ($record->status) {
+                        Inquiry::STATUS_RESOLVED => 'success',
+                        Inquiry::STATUS_IN_PROGRESS => 'warning',
+                        Inquiry::STATUS_CLOSED => 'gray',
+                        Inquiry::STATUS_PENDING => 'info',
+                        default => 'gray',
+                    })
+                    ->sortable('status'),
+                Tables\Columns\TextColumn::make('category_label')
+                    ->label(__('Category'))
+                    ->badge()
+                    ->color('info')
+                    ->sortable('category')
+                    ->toggleable(),
+                Tables\Columns\IconColumn::make('is_read')
+                    ->label(__('Read'))
+                    ->boolean()
+                    ->sortable()
+                    ->toggleable(),
+                Tables\Columns\IconColumn::make('is_resolved')
+                    ->label(__('Resolved'))
+                    ->boolean()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('assignedUser.name')
+                    ->label(__('Assigned'))
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label(__('Created'))
+                    ->since()
+                    ->sortable(),
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_read')->label(__('Read')),
@@ -110,77 +159,32 @@ class InquiryResource extends Resource
                 ]),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('mark_read')
-                    ->label(__('Mark Read'))
-                    ->icon('heroicon-o-envelope-open')
-                    ->visible(fn (Inquiry $record) => ! $record->is_read)
+                    ->label(__('Mark as Read'))
+                    ->icon('heroicon-o-check')
+                    ->visible(fn (Inquiry $record): bool => ! $record->is_read)
                     ->action(function (Inquiry $record) {
                         $record->markAsRead();
-                        \Filament\Notifications\Notification::make()->title(__('Inquiry marked as read'))->success()->send();
+                        Notification::make()->title(__('Marked as read'))->success()->send();
                     }),
-                Tables\Actions\Action::make('mark_unread')
-                    ->label(__('Mark Unread'))
-                    ->icon('heroicon-o-envelope')
-                    ->visible(fn (Inquiry $record) => $record->is_read)
-                    ->action(function (Inquiry $record) {
-                        $record->markAsUnread();
-                        \Filament\Notifications\Notification::make()->title(__('Inquiry marked as unread'))->success()->send();
-                    }),
-                Tables\Actions\Action::make('resolve')
-                    ->label(__('Resolve'))
-                    ->color('success')
+                Tables\Actions\Action::make('mark_resolved')
+                    ->label(__('Mark as Resolved'))
                     ->icon('heroicon-o-check-circle')
-                    ->visible(fn (Inquiry $record) => ! $record->is_resolved)
-                    ->requiresConfirmation()
+                    ->visible(fn (Inquiry $record): bool => ! $record->is_resolved)
                     ->action(function (Inquiry $record) {
                         $record->markAsResolved();
-                        \Filament\Notifications\Notification::make()->title(__('Inquiry resolved'))->success()->send();
+                        Notification::make()->title(__('Marked as resolved'))->success()->send();
                     }),
-                Tables\Actions\Action::make('assign_to_me')
-                    ->label(__('Assign to me'))
-                    ->icon('heroicon-o-user-plus')
-                    ->visible(fn (Inquiry $record) => auth()->check() && ($record->assigned_to !== auth()->id()))
-                    ->action(function (Inquiry $record) {
-                        if (auth()->check()) {
-                            $record->assignTo(auth()->id());
-                            \Filament\Notifications\Notification::make()->title(__('Inquiry assigned to you'))->success()->send();
-                        }
-                    }),
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\BulkAction::make('bulk_mark_read')
-                        ->label(__('Mark Read'))
-                        ->icon('heroicon-o-envelope-open')
-                        ->action(function ($records) {
-                            foreach ($records as $record) {
-                                $record->markAsRead();
-                            }
-                        }),
-                    Tables\Actions\BulkAction::make('bulk_mark_unread')
-                        ->label(__('Mark Unread'))
-                        ->icon('heroicon-o-envelope')
-                        ->action(function ($records) {
-                            foreach ($records as $record) {
-                                $record->markAsUnread();
-                            }
-                        }),
-                    Tables\Actions\BulkAction::make('bulk_resolve')
-                        ->label(__('Resolve'))
-                        ->color('success')
-                        ->icon('heroicon-o-check-circle')
-                        ->requiresConfirmation()
-                        ->action(function ($records) {
-                            foreach ($records as $record) {
-                                $record->markAsResolved();
-                            }
-                        }),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getPages(): array
@@ -191,5 +195,15 @@ class InquiryResource extends Resource
             'view' => Pages\ViewInquiry::route('/{record}'),
             'edit' => Pages\EditInquiry::route('/{record}/edit'),
         ];
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'email', 'subject', 'message'];
+    }
+
+    public static function getGlobalSearchResultTitle(Model $record): string
+    {
+        return (string) ($record->subject ?? $record->name);
     }
 }

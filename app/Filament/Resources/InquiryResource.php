@@ -112,10 +112,72 @@ class InquiryResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('mark_read')
+                    ->label(__('Mark Read'))
+                    ->icon('heroicon-o-envelope-open')
+                    ->visible(fn (Inquiry $record) => ! $record->is_read)
+                    ->action(function (Inquiry $record) {
+                        $record->markAsRead();
+                        \Filament\Notifications\Notification::make()->title(__('Inquiry marked as read'))->success()->send();
+                    }),
+                Tables\Actions\Action::make('mark_unread')
+                    ->label(__('Mark Unread'))
+                    ->icon('heroicon-o-envelope')
+                    ->visible(fn (Inquiry $record) => $record->is_read)
+                    ->action(function (Inquiry $record) {
+                        $record->markAsUnread();
+                        \Filament\Notifications\Notification::make()->title(__('Inquiry marked as unread'))->success()->send();
+                    }),
+                Tables\Actions\Action::make('resolve')
+                    ->label(__('Resolve'))
+                    ->color('success')
+                    ->icon('heroicon-o-check-circle')
+                    ->visible(fn (Inquiry $record) => ! $record->is_resolved)
+                    ->requiresConfirmation()
+                    ->action(function (Inquiry $record) {
+                        $record->markAsResolved();
+                        \Filament\Notifications\Notification::make()->title(__('Inquiry resolved'))->success()->send();
+                    }),
+                Tables\Actions\Action::make('assign_to_me')
+                    ->label(__('Assign to me'))
+                    ->icon('heroicon-o-user-plus')
+                    ->visible(fn (Inquiry $record) => auth()->check() && ($record->assigned_to !== auth()->id()))
+                    ->action(function (Inquiry $record) {
+                        if (auth()->check()) {
+                            $record->assignTo(auth()->id());
+                            \Filament\Notifications\Notification::make()->title(__('Inquiry assigned to you'))->success()->send();
+                        }
+                    }),
                 Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\BulkAction::make('bulk_mark_read')
+                        ->label(__('Mark Read'))
+                        ->icon('heroicon-o-envelope-open')
+                        ->action(function ($records) {
+                            foreach ($records as $record) {
+                                $record->markAsRead();
+                            }
+                        }),
+                    Tables\Actions\BulkAction::make('bulk_mark_unread')
+                        ->label(__('Mark Unread'))
+                        ->icon('heroicon-o-envelope')
+                        ->action(function ($records) {
+                            foreach ($records as $record) {
+                                $record->markAsUnread();
+                            }
+                        }),
+                    Tables\Actions\BulkAction::make('bulk_resolve')
+                        ->label(__('Resolve'))
+                        ->color('success')
+                        ->icon('heroicon-o-check-circle')
+                        ->requiresConfirmation()
+                        ->action(function ($records) {
+                            foreach ($records as $record) {
+                                $record->markAsResolved();
+                            }
+                        }),
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);

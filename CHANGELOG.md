@@ -1,5 +1,13 @@
 # 📋 **CHANGELOG**
 
+## Merged Pull Requests (from GitHub) — 2025-06-08
+
+- [#7](https://github.com/goleaf/laravel-jobs-portal/pull/7) — Read todo list and run tests — merged 2025-06-08
+- [#5](https://github.com/goleaf/laravel-jobs-portal/pull/5) — Make all system components translatable — merged 2025-06-08
+- [#4](https://github.com/goleaf/laravel-jobs-portal/pull/4) — Refactor frontend design completely — merged 2025-06-08
+- [#3](https://github.com/goleaf/laravel-jobs-portal/pull/3) — Refactor all backend design elements — merged 2025-06-08
+- [#2](https://github.com/goleaf/laravel-jobs-portal/pull/2) — Create seeds for all tables — merged 2025-06-08
+
 ## [3.0.7] - 2024-07-03
 
 ### 🏢 **ADDED - SETTINGS REQUEST VALIDATION SYSTEM IMPLEMENTATION**
